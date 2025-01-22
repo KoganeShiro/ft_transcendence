@@ -1,17 +1,18 @@
 <template>
   <div class="welcome-template">
     <HeaderOrganism />
-
     <div class="welcome-content">
-      <TextAtom className="welcome-text">Welcome</TextAtom>
-
-      <ButtonGroupMolecule>
-        <ButtonAtom variant="primary">Login</ButtonAtom>
-        <ButtonAtom variant="secondary">Register</ButtonAtom>
-        <ButtonAtom variant="ghost">Play as guest</ButtonAtom>
+      <TextAtom class="welcome-text">Welcome</TextAtom>
+      <ButtonGroupMolecule class="button-group">
+        <router-link to="/login" class="button-link">
+          <ButtonAtom variant="primary">Login</ButtonAtom>
+        </router-link>
+        <router-link to="/register" class="button-link">
+          <ButtonAtom variant="secondary">Register</ButtonAtom>
+        </router-link>
+        <!-- <ButtonAtom variant="ghost">Play as guest</ButtonAtom> -->
       </ButtonGroupMolecule>
     </div>
-
     <FooterOrganism />
   </div>
 </template>
@@ -20,7 +21,8 @@
 import HeaderOrganism from "@/components/header/navbar.vue";
 import TextAtom from "@/components/atoms/Text.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
-import ButtonGroupMolecule from "@/components/molecules/ButtonGroup.vue";
+import ButtonGroupMolecule from "@/components/atoms/ButtonGroup.vue";
+import FooterOrganism from "@/components/footer.vue";
 
 export default {
   components: {
@@ -28,6 +30,7 @@ export default {
     TextAtom,
     ButtonAtom,
     ButtonGroupMolecule,
+    FooterOrganism,
   },
 };
 </script>
@@ -44,19 +47,37 @@ export default {
 }
 
 .welcome-content {
-  margin-top: 50px;
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .welcome-text {
-  font-size: 2rem;
+  font-size: 5rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 150px;
 }
 
-.footer {
-  background-color: #333;
-  padding: 10px 20px;
-  color: white;
-  font-size: 0.9rem;
+.button-group {
+  display: flex;
+  gap: 15px;
 }
+
+.button-group >>> * {
+  font-size: 30px;
+  padding: 35px 100px;
+  transition: transform 0.2s;
+}
+
+.button-group >>> *:hover {
+  transform: scale(1.05);
+}
+
+.button-link {
+  display: contents;
+}
+
 </style>

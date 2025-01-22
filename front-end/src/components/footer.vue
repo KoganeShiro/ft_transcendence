@@ -1,11 +1,13 @@
 <template>
   <footer class="footer">
-    <p>Copyright © 2025 &lt;nom de la team&gt;</p>
-    <p>
-      <router-link to="/terms-and-conditions" class="footer-link">
-        Mentions légales – Politique de confidentialité
-      </router-link>
-    </p>
+    <div class="footer-content">
+      <p>&copy; 2025 &lt;team name&gt;</p>
+      <p>
+        <router-link to="/privacy" class="footer-link">
+          Legal Notices – Privacy Policy
+        </router-link>
+      </p>
+    </div>
   </footer>
 </template>
 
@@ -16,10 +18,22 @@ export default {};
 <style scoped>
 .footer {
   background-color: #333;
-  padding: 10px 20px;
+  padding: 5px 10px;
   color: white;
   font-size: 0.9rem;
   text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-content p {
+  margin: 0;
 }
 
 .footer-link {
@@ -29,5 +43,11 @@ export default {};
 
 .footer-link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+  }
 }
 </style>

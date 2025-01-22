@@ -1,8 +1,8 @@
 <template>
-  <div class="terms-page">
+  <div class="privacy-page">
     <HeaderOrganism />
 
-    <div class="terms-content">
+    <div class="privacy-content">
       <h1>Terms and Conditions</h1>
       <p>Here, you can add your legal notices and privacy policy text.</p>
     </div>
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style scoped>
-.terms-page {
+.privacy-page {
   text-align: center;
   color: white;
   background-color: #222;
@@ -34,7 +34,7 @@ export default {
   justify-content: space-between;
 }
 
-.terms-content {
+.privacy-content {
   margin: 50px auto;
   padding: 20px;
   max-width: 800px;

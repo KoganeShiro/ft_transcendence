@@ -3,9 +3,9 @@
 ### Table of Content
 - [Mandatory Rules](#mandatory)
 - [Modules](#modules)
-
     - [Notes](#notes)
 	- [Roadmap](#roadmap)
+- [Launch](#launch)
 
 
 [trello](https://trello.com/b/r4gjArPg/fttranscendence)
@@ -189,6 +189,7 @@ Deployment & Hosting:
 
 ## Directory listing
 
+```
 /project_root
 ├── /backend                # Django backend
 │   ├── /users              # User authentication microservice
@@ -219,10 +220,11 @@ Deployment & Hosting:
 │
 ├── docker-compose.yml      # Docker Compose for full stack
 └── README.md               # Documentation
-
+```
 
 ## Roadmap
 Week 1: Project Setup and Basics
+
     Georg:
         Set up Docker environment for local development and deployment.
         Create the Django project structure with microservices (e.g., user management, game logic).
@@ -240,6 +242,7 @@ Week 1: Project Setup and Basics
         Design a basic frontend layout for Pong.
 
 Week 2: Core Game Implementation
+
     Georg:
         Implement backend game history storage:
             Track wins, losses, and stats.
@@ -259,6 +262,7 @@ Week 2: Core Game Implementation
             Integrate real-time data via WebSocket (basic 2-player mode).
 
 Week 3: Advanced Features
+
     Georg:
         Implement game customization options (e.g., paddle size, ball speed).
         Finalize microservices (deploy each separately in Docker containers).
@@ -274,6 +278,7 @@ Week 3: Advanced Features
             Game stats, match history, and user profile.
 
 Week 4: Final Features and Deployment
+
     Georg:
         (**Add support for multiplayer (3-4 players):
             Update backend game state logic for more paddles and interactions.
@@ -304,12 +309,12 @@ https://github.com/C-est-quand-la-prochaine-reu-han
 https://github.com/LaTeam-Trancendence/transcendence
 
 
-
+```
 /project_root
 ├── docker-compose.yml      # Orchestrates the backend, frontend, database, and AI services
 ├── README.md               # Documentation for the project setup and usage
-
-
+```
+```
 /backend
 ├── Dockerfile               # Docker image definition for the backend
 ├── requirements.txt         # Python dependencies for Django (Django, DRF, etc.)
@@ -348,8 +353,9 @@ https://github.com/LaTeam-Trancendence/transcendence
 │   ├── tests.py             # Unit tests for stats endpoints
 │   └── migrations           # Auto-generated database schema migrations for stats
 │       └── <auto_generated_migration_files>.py
+```
 
-
+```
 /frontend
 ├── Dockerfile               # Docker image definition for the frontend
 ├── package.json             # Node.js dependencies for Vue.js
@@ -371,15 +377,17 @@ https://github.com/LaTeam-Trancendence/transcendence
 │   │   └── index.js         # Vuex store configuration (e.g., user, game states)
 │   └── /router              # Vue Router for navigation
 │       └── index.js         # Routing configuration for frontend views
+```
 
-
+```
 /database
 ├── Dockerfile               # Docker image definition for PostgreSQL
 ├── init.sql                 # Initial SQL script for setting up the database schema
 ├── /migrations              # Auto-generated database schema migrations
 │   └── <auto_generated_migration_files>.py
+```
 
-
+```
 /ai
 ├── Dockerfile               # Docker image definition for AI microservice
 ├── requirements.txt         # Python dependencies for AI (e.g., numpy)
@@ -391,3 +399,18 @@ https://github.com/LaTeam-Trancendence/transcendence
 │   ├── ai_logic.py          # Minimax algorithm or other logic for Tic Tac Toe AI
 │   ├── tests.py             # Unit tests for Tic Tac Toe AI
 │   └── __init__.py          # Python package initialization
+```
+
+
+## Launch
+
+clone the repo
+
+cd in the repo, cd front-end
+
+```
+npm install
+npm run dev
+```
+
+You may have to install nodejs
