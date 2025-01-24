@@ -1,11 +1,21 @@
 <template>
     <div :class="['burger-menu', { active: isActive }]">
-      <ButtonGroupMolecule>
-        <ButtonAtom variant="menu">Play</ButtonAtom>
-        <ButtonAtom variant="menu">Profile</ButtonAtom>
-        <ButtonAtom variant="menu">Settings</ButtonAtom>
-        <ButtonAtom variant="menu">Log out</ButtonAtom>
-        <ButtonAtom variant="menu">Credits</ButtonAtom>
+      <ButtonGroupMolecule class="btn-group">
+        <router-link to="/game-choice" class="button-link">
+          <ButtonAtom variant="menu">Play</ButtonAtom>
+        </router-link>
+        <router-link to="/profile" class="button-link">
+          <ButtonAtom variant="menu">Profile</ButtonAtom>
+        </router-link>
+        <router-link to="/settings" class="button-link">
+          <ButtonAtom variant="menu">Settings</ButtonAtom>
+        </router-link>
+        <router-link to="/logout" class="button-link">
+          <ButtonAtom variant="menu">Log out</ButtonAtom>
+        </router-link>
+        <router-link to="/credits" class="button-link">
+          <ButtonAtom variant="menu">Credits</ButtonAtom>
+        </router-link>
     </ButtonGroupMolecule>
 
     </div>
@@ -52,13 +62,18 @@ import TextAtom from "@/components/atoms/Text.vue";
   .burger-menu.active {
     transform: translateX(0);
   }
-  .button-group > * {
+  .btn-group >>> * {
     display: flex;
     flex-direction: column;
     font-size: 20px;
     padding: 15px 50px;
   }
-  .button-group > *:hover {
+  .btn-group >>> *:hover {
     transform: scale(1.05);
   }
+
+  .button-link {
+    display: contents;
+  }
+
   </style>

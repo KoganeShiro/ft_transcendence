@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2025 &lt;team name&gt;</p>
+      <p>&copy; 2025 Transcendental Teapot</p>
       <p>
         <router-link to="/privacy" class="footer-link">
           Legal Notices – Privacy Policy
@@ -34,11 +34,6 @@ export default {};
 
 .footer-content p {
   margin: 0;
-}
-
-.footer-link {
-  color: #00aaff;
-  text-decoration: none;
 }
 
 .footer-link:hover {

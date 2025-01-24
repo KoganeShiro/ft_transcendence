@@ -1,6 +1,6 @@
 <template>
   <div class="welcome-template">
-    <HeaderOrganism />
+    <HeaderOrganism :showBurgerMenu="false"/>
     <div class="welcome-content">
       <TextAtom class="welcome-text">Welcome</TextAtom>
       <ButtonGroupMolecule class="button-group">

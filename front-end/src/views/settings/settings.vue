@@ -1,10 +1,10 @@
 <template>
-    <div class="game-choice-page">
+    <div class="settings-page">
       <HeaderOrganism />
   
-      <div class="game-choice-content">
-        <h1>game-choice</h1>
-        <p>game-choice stuff</p>
+      <div class="settings-content">
+        <h1>settings</h1>
+        <p>settings stuff (if the device is a phone, show the sidebar view, else show account)</p>
       </div>
   
       <FooterOrganism />
@@ -25,7 +25,7 @@
 
 
 <style scoped>
-.game-choice-page {
+.settings-page {
   text-align: center;
   color: white;
   background-color: #222;
@@ -35,7 +35,7 @@
   justify-content: space-between;
 }
 
-.game-choice-content {
+.settings-content {
   margin: 50px auto;
   padding: 20px;
   max-width: 800px;

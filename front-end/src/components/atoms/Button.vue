@@ -44,7 +44,9 @@ export default {
 </script>
 
 <style scoped>
-.btn-primary, .btn-secondary, .btn-ghost, .btn-menu {
+.btn-primary, .btn-secondary, .btn-ghost,
+.btn-menu, .btn-delete, .btn-42,
+.btn-fr-lang, .btn-en-lang, .btn-de-lang {
   transition: all 0.3s ease;
 }
 
@@ -88,6 +90,26 @@ export default {
 }
 
 .btn-menu {
+  background-color: #3a3a3a;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: auto;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btn-42 {
+  background-color: #3a3a3a;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: auto;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.btn-delete {
   background-color: #3a3a3a;
   color: white;
   border: none;
