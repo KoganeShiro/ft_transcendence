@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Welcome from '../views/welcome.vue';
-import TermsAndConditions from '../views/terms_and_conditions.vue';
-import PrivacyPolicy from '../views/privacy_policy.vue';
-import Login from '../views/login.vue';
-import Register from '../views/register.vue';
+import TermsAndConditions from '../views/RGPD/terms_and_conditions.vue';
+import PrivacyPolicy from '../views/RGPD/privacy_policy.vue';
+import Login from '../views/sign/login.vue';
+import Register from '../views/sign/register.vue';
+import Logout from '../views/sign/logout.vue';
 import Avatar from '../components/atoms/avatar.vue';
 import Profile from '../views/profile.vue';
 import Play from '../views/game/game_choice.vue'
 import Settings from '../views/settings/settings.vue';
-// import Logout from '../components/sign/logout.vue';
 import credits from '../views/credits.vue';
 
 const routes = [
@@ -36,6 +36,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
   },
   {
     path: '/avatar',

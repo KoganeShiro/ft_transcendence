@@ -25,6 +25,12 @@ export default {
       return `btn-${this.variant}`;
     },
     buttonStyle() {
+      // const style = {
+      //   width: this.width,
+      //   fontSize: this.fontSize,
+      //   backgroundColor: "var(--button-bg)",
+      //   color: "var(--button-text-color)",
+      // };
       const style = {};
       if (this.width && this.variant !== 'menu') {
         style.width = this.width;
@@ -45,17 +51,25 @@ export default {
 
 <style scoped>
 .btn-primary, .btn-secondary, .btn-ghost,
-.btn-menu, .btn-delete, .btn-42,
+.btn-menu, .btn-attention, .btn-42,
 .btn-fr-lang, .btn-en-lang, .btn-de-lang {
   transition: all 0.3s ease;
 }
 
-.btn-primary:hover, .btn-secondary:hover, .btn-ghost:hover {
-  opacity: 0.8;
+.btn-primary:hover {
+  background-color: #016adb;
+}
+
+.btn-secondary:hover {
+  background-color: #633bad;
 }
 
 .btn-menu:hover {
   background-color: #252424;
+}
+
+.btn-42:hover {
+  background-color: #000000;
 }
 
 .btn-primary, .btn-secondary, .btn-ghost {
@@ -100,7 +114,7 @@ export default {
 }
 
 .btn-42 {
-  background-color: #3a3a3a;
+  background-color: #131313;
   color: white;
   border: none;
   width: 100%;
@@ -109,8 +123,8 @@ export default {
   cursor: pointer;
 }
 
-.btn-delete {
-  background-color: #3a3a3a;
+.btn-attention {
+  background-color: #bb1111;
   color: white;
   border: none;
   width: 100%;

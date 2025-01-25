@@ -1,6 +1,6 @@
 <template>
     <div :class="['burger-menu', { active: isActive }]">
-      <ButtonGroupMolecule class="btn-group">
+      <ButtonGroupMolecule class="menu-btn-group">
         <router-link to="/game-choice" class="button-link">
           <ButtonAtom variant="menu">Play</ButtonAtom>
         </router-link>
@@ -50,7 +50,6 @@ import TextAtom from "@/components/atoms/Text.vue";
     bottom: 0;
     width: 270px;
     height: 300px;
-    padding: 20px;
     background-color: #333;
     color: #ffffff;
     overflow-y: auto;
@@ -62,14 +61,11 @@ import TextAtom from "@/components/atoms/Text.vue";
   .burger-menu.active {
     transform: translateX(0);
   }
-  .btn-group >>> * {
+  .menu-btn-group :deep(*) {
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    padding: 15px 50px;
-  }
-  .btn-group >>> *:hover {
-    transform: scale(1.05);
+    padding: 15px 0px;
   }
 
   .button-link {

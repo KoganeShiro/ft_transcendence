@@ -48,6 +48,7 @@ export default {
 <style scoped>
 .header-container {
   position: relative;
+  margin-bottom: 20px;
 }
 
 .header {

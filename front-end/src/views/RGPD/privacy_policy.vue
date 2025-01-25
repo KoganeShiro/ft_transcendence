@@ -8,7 +8,7 @@
 
       <!-- Should change the text by the language -->
       <router-link to="/terms" class="footer-link">
-        Terms and Condition
+        <TextAtom class="terms-link">Terms and Conditions</TextAtom>
       </router-link>
 
       <section
@@ -36,6 +36,7 @@
 <script>
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
+import TextAtom from "@/components/atoms/Text.vue";
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -43,6 +44,7 @@ export default {
   components: {
     HeaderOrganism,
     FooterOrganism,
+    TextAtom,
   },
   setup() {
     const { t, messages, locale } = useI18n();

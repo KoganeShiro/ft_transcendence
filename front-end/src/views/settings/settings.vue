@@ -5,6 +5,7 @@
       <div class="settings-content">
         <h1>settings</h1>
         <p>settings stuff (if the device is a phone, show the sidebar view, else show account)</p>
+        <p>sidebar: account, appearence, languages</p>
       </div>
   
       <FooterOrganism />
