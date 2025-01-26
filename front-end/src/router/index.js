@@ -10,6 +10,9 @@ import Profile from '../views/profile.vue';
 import Play from '../views/game/game_choice.vue'
 import Settings from '../views/settings/settings.vue';
 import credits from '../views/credits.vue';
+import Stats from '../components/profile/Stats.vue';
+import History from '../components/profile/History.vue';
+import Friends from '../components/profile/Friends.vue';
 
 const routes = [
   {
@@ -71,6 +74,21 @@ const routes = [
     path: '/game-choice',
     name: 'GameChoice',
     component: Play,
+  },
+  {
+    path: '/stats',
+    name: 'Stats',
+    component: Stats,
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: History,
+  },
+  {
+    path: '/friends',
+    name: 'Friends',
+    component: Friends,
   }
 ];
 

@@ -24,6 +24,16 @@ export default {
   text-decoration: none;
 }
 
+.template {
+  text-align: center;
+  color: white;
+  background-color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #app.dark {
   color: #ffffff;
   background-color: #222;

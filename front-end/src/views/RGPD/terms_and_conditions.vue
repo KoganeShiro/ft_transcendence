@@ -1,6 +1,6 @@
 <template>
   <div class="terms-page">
-    <HeaderOrganism />
+    <HeaderOrganism :showBurgerMenu="false" />
 
     <main class="terms-content">
       <h1 class="terms-title">{{ t('terms.title') }}</h1>

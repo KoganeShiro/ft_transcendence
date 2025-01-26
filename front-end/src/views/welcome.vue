@@ -1,5 +1,5 @@
 <template>
-  <div class="welcome-template">
+  <div class="template">
     <HeaderOrganism :showBurgerMenu="false"/>
     <div class="welcome-content">
       <TextAtom class="welcome-text">Welcome</TextAtom>
@@ -19,10 +19,10 @@
 
 <script>
 import HeaderOrganism from "@/components/header/navbar.vue";
+import FooterOrganism from "@/components/footer.vue";
 import TextAtom from "@/components/atoms/Text.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import ButtonGroupMolecule from "@/components/atoms/ButtonGroup.vue";
-import FooterOrganism from "@/components/footer.vue";
 
 export default {
   components: {
@@ -36,15 +36,6 @@ export default {
 </script>
 
 <style scoped>
-.welcome-template {
-  text-align: center;
-  color: white;
-  background-color: #222;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
 .welcome-content {
   margin-top: -100px;
@@ -56,7 +47,7 @@ export default {
 }
 
 .welcome-text {
-  font-size: 5rem;
+  font-size: 300%;
   font-weight: bold;
   margin-bottom: 150px;
 }
@@ -66,13 +57,13 @@ export default {
   gap: 15px;
 }
 
-.button-group >>> * {
+.button-group :deep(*) {
   font-size: 30px;
   padding: 35px 100px;
   transition: transform 0.2s;
 }
 
-.button-group >>> *:hover {
+.button-group :deep(*:hover) {
   transform: scale(1.05);
 }
 

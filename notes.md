@@ -280,7 +280,7 @@ Week 3: Advanced Features
 Week 4: Final Features and Deployment
 
     Georg:
-        (**Add support for multiplayer (3-4 players):
+        (**Add support for multiplayer (4 players):
             Update backend game state logic for more paddles and interactions.
             Modify WebSocket broadcasts for additional players.**)
 

@@ -1,6 +1,6 @@
 <template>
   <div class="privacy-page">
-    <HeaderOrganism />
+    <HeaderOrganism :showBurgerMenu="false" />
 
     <main class="privacy-content">
       <h1 class="privacy-title">{{ t('privacy.title') }}</h1>
