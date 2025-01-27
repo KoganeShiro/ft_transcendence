@@ -11,7 +11,25 @@ services:
     volumes:
       - webserver_data:/usr/share/nginx/html    
     restart: always
+    networks:
+      - pong-network
+    
   
+  back-end:
+    build:      
+      dockerfile: back-end/Dockerfile
+    container_name: back-end
+    expose:      
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - back-end_data:/usr/src/app  
+    restart: always
+    networks:
+      - pong-network
+
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -23,17 +41,10 @@ services:
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     volumes:
-      - postgres_data:/var/lib/postgresql/data    
-#    environment:
-#     POSTGRES_USER: ${POSTGRES_USER}
-#     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#     POSTGRES_DB: ${POSTGRES_DB}      
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pong-network  
 
-#  adminer:
-#    image: adminer
-#    restart: always
-#    ports:
-#      - 8080:8080
 
 networks:
   pong-network:
@@ -42,6 +53,7 @@ networks:
 volumes:
   postgres_data:
   webserver_data:
+  back-end_data:
 
 #volumes:
 #  database:
