@@ -21,7 +21,6 @@ help:
 	@echo "  clean          Remove all unused Docker resources"
 	@echo "  fclean         Remove all unused Docker resources and volumes"
 
-# Build the Docker images
 .PHONY: ssl
 ssl:
 	mkdir -p webserver/certs
