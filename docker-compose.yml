@@ -1,5 +1,17 @@
 # Use postgres/example user/password credentials
 services:
+  nginx:
+    build:      
+      dockerfile: webserver/Dockerfile
+    container_name: nginx
+    ports:      
+      - "443:443"
+    depends_on:
+      - postgres
+    volumes:
+      - webserver_data:/usr/share/nginx/html    
+    restart: always
+  
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -11,7 +23,7 @@ services:
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     volumes:
-      - /home/gkubina/postgres_data:/var/lib/postgresql/data    
+      - postgres_data:/var/lib/postgresql/data    
 #    environment:
 #     POSTGRES_USER: ${POSTGRES_USER}
 #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,12 +40,16 @@ networks:
     driver: bridge
 
 volumes:
-  database:
-    driver: local
-    driver_opts:
-      type: 'none' 
-      o: 'bind'
-      device: '/home/${LOGIN}/data/postgres' 
+  postgres_data:
+  webserver_data:
+
+#volumes:
+#  database:
+#    driver: local
+#    driver_opts:
+#      type: 'none' 
+#      o: 'bind'
+#      device: '/home/${LOGIN}/data/postgres' 
 
 #     user_service:
 #        driver: local # specify the driver for the volume 
