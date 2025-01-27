@@ -4,7 +4,7 @@
 */obj
 frontend/node_modules/*
 frontend/node_modules/.*
-back-end/bin
-back-end/include
-back-end/lib
-back-end/lib64
+back-end/bin/*
+back-end/include/*
+back-end/lib/*
+back-end/lib64/*
