@@ -1,38 +1,43 @@
 # Use postgres/example user/password credentials
 services:
-
   postgres:
-    image: postgres
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
     restart: always
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     volumes:
-      - database:/var/lib/postgresql/data    
-    environment:
-     POSTGRES_USER: ${POSTGRES_USER}
-     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     POSTGRES_DB: ${POSTGRES_DB}      
+      - /home/gkubina/postgres_data:/var/lib/postgresql/data    
+#    environment:
+#     POSTGRES_USER: ${POSTGRES_USER}
+#     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#     POSTGRES_DB: ${POSTGRES_DB}      
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8080:8080
 
 networks:
-         pong-network:
-           driver: bridge
+  pong-network:
+    driver: bridge
 
 volumes:
-      user_service:
-        driver: local # specify the driver for the volume 
-        driver_opts:
-          type: 'none'
-          o: 'bind'
-          device: '.'  # Ou stocker le dossier sur votre ordinateur en local
-      database:
-        driver: local
-        driver_opts:
-          type: 'none' 
-          o: 'bind'
-          device: './postgres-data' # Ou stocker le dossier sur votre ord
+  database:
+    driver: local
+    driver_opts:
+      type: 'none' 
+      o: 'bind'
+      device: '/home/${LOGIN}/data/postgres' 
+
+#     user_service:
+#        driver: local # specify the driver for the volume 
+#        driver_opts:
+#          type: 'none'
+#          o: 'bind'
+#          device: '.'  # Ou stocker le dossier sur votre ordinateur en local
