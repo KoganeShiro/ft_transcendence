@@ -1,13 +1,11 @@
 <template>
     <div class="appearence-page">
-      <HeaderOrganism />
-  
+
       <div class="appearence-content">
         <h1>appearence</h1>
         <p>appearence stuff</p>
       </div>
   
-      <FooterOrganism />
     </div>
   </template>
   

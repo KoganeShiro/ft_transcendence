@@ -14,6 +14,11 @@
           placeholder="Enter your password"
         />
       </InputGroup>
+      <!--
+      If login success, token in cookie (auth et refresh)
+        when auth token expired, should send refresh token to get a new auth token
+      if error, show error
+      -->
       <ButtonGroup class="button-group">
         <Button variant="primary" class="login-button" @click="onLogin" >Login</Button>
         <Button variant="42" class="login-button" @click="onLogin">Login with 42</Button>
@@ -39,7 +44,7 @@ export default {
   },
   methods: {
     onLogin() {
-      // alert("Logging in...");
+      // check if the username/mail and password is ok
       this.$router.push("/profile");
     },
   },

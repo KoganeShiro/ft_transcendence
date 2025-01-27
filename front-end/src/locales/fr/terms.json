@@ -1,11 +1,257 @@
 {
-    "terms": {
-      "title": "Conditions Générales",
-      "content": [
-        "Dernière mise à jour le 23 janvier 2025.",
-        "Nous sommes la Transcendental Teapot Corporation...",
-        "... (translated text here)."
-      ]
-    }
+  "terms": {
+    "title": "Conditions Générales",
+    "lastUpdated": "2025-01-24 12:26:52",
+    "sections": [
+      {
+        "title": "ACCORD SUR NOS CONDITIONS JURIDIQUES",
+        "content": [
+          "Nous sommes Transcendental Teapot Corporation ('Société', 'nous', 'notre').",
+          "Nous exploitons le site web http://www.transcendental-teapot.com (le 'Site'), ainsi que tout autre produit et service connexe qui se réfère ou renvoie à ces conditions juridiques (les 'Conditions Juridiques') (collectivement, les 'Services').",
+          "Vous pouvez nous contacter par email à transcendental-teapot@mail.com.",
+          "Ces Conditions Juridiques constituent un accord juridiquement contraignant conclu entre vous, que ce soit à titre personnel ou au nom d'une entité ('vous'), et Transcendental Teapot Corporation, concernant votre accès et votre utilisation des Services.",
+          "Vous acceptez qu'en accédant aux Services, vous avez lu, compris et accepté d'être lié par toutes ces Conditions Juridiques. SI VOUS N'ACCEPTEZ PAS TOUTES CES CONDITIONS JURIDIQUES, VOUS ÊTES EXPRESSÉMENT INTERDIT D'UTILISER LES SERVICES ET VOUS DEVEZ CESSER DE LES UTILISER IMMÉDIATEMENT.",
+          "Les conditions supplémentaires ou les documents qui peuvent être publiés sur les Services de temps à autre sont par la présente expressément incorporés aux présentes par référence. Nous nous réservons le droit, à notre seule discrétion, de modifier ou de réviser ces Conditions Juridiques à tout moment et pour toute raison.",
+          "Nous vous informerons de tout changement en mettant à jour la date de 'Dernière mise à jour' de ces Conditions Juridiques, et vous renoncez à tout droit de recevoir un avis spécifique de chaque changement.",
+          "Il est de votre responsabilité de revoir périodiquement ces Conditions Juridiques pour rester informé des mises à jour. Vous serez soumis aux changements des Conditions Juridiques révisées et serez réputé les avoir acceptés par votre utilisation continue des Services après la date de publication de ces Conditions Juridiques révisées.",
+          "Tous les utilisateurs mineurs dans la juridiction où ils résident (généralement âgés de moins de 18 ans) doivent avoir la permission de, et être directement supervisés par, leur parent ou tuteur pour utiliser les Services. Si vous êtes mineur, vous devez demander à votre parent ou tuteur de lire et d'accepter ces Conditions Juridiques avant d'utiliser les Services.",
+          "Nous vous recommandons d'imprimer une copie de ces Conditions Juridiques pour vos dossiers."
+        ]
+      },
+      {
+        "title": "TABLE DES MATIÈRES",
+        "content": [
+          "1. NOS SERVICES",
+          "2. DROITS DE PROPRIÉTÉ INTELLECTUELLE",
+          "3. DÉCLARATIONS DE L'UTILISATEUR",
+          "4. INSCRIPTION DE L'UTILISATEUR",
+          "5. ACTIVITÉS INTERDITES",
+          "6. CONTRIBUTIONS GÉNÉRÉES PAR LES UTILISATEURS",
+          "7. LICENCE DE CONTRIBUTION",
+          "8. SITES WEB ET CONTENUS TIERS",
+          "9. GESTION DES SERVICES",
+          "10. POLITIQUE DE CONFIDENTIALITÉ",
+          "11. DURÉE ET RÉSILIATION",
+          "12. MODIFICATIONS ET INTERRUPTIONS",
+          "13. DROIT APPLICABLE",
+          "14. RÉSOLUTION DES LITIGES",
+          "15. CORRECTIONS",
+          "16. AVERTISSEMENT",
+          "17. LIMITATIONS DE RESPONSABILITÉ",
+          "18. INDEMNISATION",
+          "19. DONNÉES UTILISATEUR",
+          "20. COMMUNICATIONS ÉLECTRONIQUES, TRANSACTIONS ET SIGNATURES",
+          "21. DIVERS",
+          "22. CONTACTEZ-NOUS"
+        ]
+      },
+      {
+        "title": "1. NOS SERVICES",
+        "content": [
+          "Les informations fournies lors de l'utilisation des Services ne sont pas destinées à être distribuées ou utilisées par une personne ou une entité dans une juridiction ou un pays où une telle distribution ou utilisation serait contraire à la loi ou à la réglementation ou qui nous soumettrait à toute exigence d'enregistrement dans une telle juridiction ou pays.",
+          "En conséquence, les personnes qui choisissent d'accéder aux Services depuis d'autres lieux le font de leur propre initiative et sont seules responsables du respect des lois locales, dans la mesure où les lois locales sont applicables."
+        ]
+      },
+      {
+        "title": "2. DROITS DE PROPRIÉTÉ INTELLECTUELLE",
+        "content": [
+          "Notre propriété intellectuelle",
+          "Nous sommes le propriétaire ou le licencié de tous les droits de propriété intellectuelle sur nos Services, y compris tout code source, bases de données, fonctionnalités, logiciels, conceptions de sites Web, audio, vidéo, textes, photographies et graphiques dans les Services (collectivement, le \"Contenu\"), ainsi que les marques, marques de services et logos qu'ils contiennent (les \"Marques\").",
+          "Notre Contenu et nos Marques sont protégés par les lois sur le droit d'auteur et les marques de commerce (et divers autres droits de propriété intellectuelle et lois sur la concurrence déloyale) et traités dans le monde entier.",
+          "Le Contenu et les Marques sont fournis dans ou via les Services \"TELS QUELS\" pour votre usage personnel et non commercial ou à des fins commerciales internes uniquement.",
+          "Votre utilisation de nos Services",
+          "Sous réserve de votre respect de ces Conditions Juridiques, y compris la section \"ACTIVITÉS INTERDITES\" ci-dessous, nous vous accordons une licence non exclusive, non transférable et révocable pour :",
+          "⚫ accéder aux Services; et",
+          "• télécharger ou imprimer une copie de toute partie du Contenu à laquelle vous avez correctement accédé,",
+          "uniquement pour votre usage personnel et non commercial ou à des fins commerciales internes.",
+          "Sauf disposition contraire énoncée dans cette section ou ailleurs dans nos Conditions Juridiques, aucune partie des Services ni aucun Contenu ou Marques ne peut être copié, reproduit, agrégé, republié, téléchargé, affiché publiquement, encodé, traduit, transmis, distribué, vendu, sous licence ou autrement exploité à des fins commerciales sans notre permission écrite préalable expresse.",
+          "Si vous souhaitez utiliser les Services, le Contenu ou les Marques autrement que comme prévu dans cette section ou ailleurs dans nos Conditions Juridiques, veuillez adresser votre demande à : Si nous vous accordons jamais la permission de publier, reproduire ou afficher publiquement une partie de nos Services ou de notre Contenu, vous devez nous identifier en tant que propriétaires ou licenciés des Services, du Contenu ou des Marques et veiller à ce que tout avis de droit d'auteur ou de propriété apparaisse ou soit visible lors de la publication, de la reproduction ou de l'affichage de notre Contenu.",
+          "Nous nous réservons tous les droits qui ne vous sont pas expressément accordés sur et dans les Services, le Contenu et les Marques.",
+          "Toute violation de ces Droits de Propriété Intellectuelle constituera une violation matérielle de nos Conditions Juridiques et votre droit d'utiliser nos Services prendra fin immédiatement.",
+          "Vos soumissions",
+          "Veuillez lire attentivement cette section et la section \"ACTIVITÉS INTERDITES\" avant d'utiliser nos Services pour comprendre (a) les droits que vous nous accordez et (b) les obligations que vous avez lorsque vous publiez ou téléchargez tout contenu via les Services.",
+          "Soumissions: En nous envoyant directement toute question, commentaire, suggestion, idée, retour d'information ou autre information sur les Services (\"Soumissions\"), vous acceptez de nous céder tous les droits de propriété intellectuelle sur cette Soumission. Vous acceptez que nous possédions cette Soumission et que nous ayons le droit de l'utiliser et de la diffuser librement à toute fin légale, commerciale ou autre, sans reconnaissance ni compensation pour vous.",
+          "Vous êtes responsable de ce que vous publiez ou téléchargez: En nous envoyant des Soumissions via toute partie des Services, vous:",
+          "• confirmez que vous avez lu et acceptez nos \"ACTIVITÉS INTERDITES\" et que vous ne publierez, n'enverrez, ne mettrez en ligne ou ne transmettrez via les Services aucune Soumission illégale, harcelante, haineuse, nuisible, diffamatoire, obscène, intimidante, abusive, discriminatoire, menaçante envers toute personne ou groupe, sexuellement explicite, fausse, inexacte, trompeuse ou mensongère;",
+          "• dans la mesure permise par la loi applicable, renoncez à tous les droits moraux sur une telle Soumission;",
+          "• garantissez que de telles Soumissions sont originales pour vous ou que vous avez les droits et licences nécessaires pour soumettre de telles Soumissions et que vous avez pleine autorité pour nous accorder les droits susmentionnés en relation avec vos Soumissions; et",
+          "• garantissez et représentez que vos Soumissions ne constituent pas des informations confidentielles.",
+          "Vous êtes seul responsable de vos Soumissions et vous acceptez expressément de nous indemniser pour toute perte que nous pourrions subir en raison de votre violation de (a) cette section, (b) des droits de propriété intellectuelle de tout tiers, ou (c) de la loi applicable."
+        ]
+      },
+      {
+        "title": "3. DÉCLARATIONS DE L'UTILISATEUR",
+        "content": [
+          "En utilisant les Services, vous déclarez et garantissez que : (1) toutes les informations d'inscription que vous soumettez seront vraies, exactes, actuelles et complètes ; (2) vous maintiendrez l'exactitude de ces informations et mettrez rapidement à jour ces informations d'inscription si nécessaire ; (3) vous avez la capacité juridique et vous acceptez de vous conformer à ces Conditions Juridiques ; (4) vous n'êtes pas mineur dans la juridiction dans laquelle vous résidez, ou si vous êtes mineur, vous avez obtenu la permission parentale pour utiliser les Services ; (5) vous n'accéderez pas aux Services par des moyens automatisés ou non humains, que ce soit par un bot, un script ou autrement ; (6) vous n'utiliserez pas les Services à des fins illégales ou non autorisées ; et (7) votre utilisation des Services ne violera aucune loi ou réglementation applicable.",
+          "Si vous fournissez des informations qui sont fausses, inexactes, non actuelles ou incomplètes, nous avons le droit de suspendre ou de résilier votre compte et de refuser toute utilisation actuelle ou future des Services (ou de toute partie de ceux-ci)."
+        ]
+      },
+      {
+        "title": "4. INSCRIPTION DE L'UTILISATEUR",
+        "content": [
+          "Vous pouvez être tenu de vous inscrire pour utiliser les Services. Vous acceptez de garder votre mot de passe confidentiel et serez responsable de toute utilisation de votre compte et de votre mot de passe. Nous nous réservons le droit de retirer, de récupérer ou de modifier un nom d'utilisateur que vous sélectionnez si nous déterminons, à notre seule discrétion, que ce nom d'utilisateur est inapproprié, obscène ou autrement répréhensible."
+        ]
+      },
+      {
+        "title": "5. ACTIVITÉS INTERDITES",
+        "content": [
+          "Vous ne pouvez pas accéder ou utiliser les Services à des fins autres que celles pour lesquelles nous mettons les Services à disposition. Les Services ne peuvent pas être utilisés dans le cadre d'activités commerciales, sauf celles qui sont spécifiquement approuvées ou approuvées par nous.",
+          "En tant qu'utilisateur des Services, vous acceptez de ne pas :",
+          "• Récupérer systématiquement des données ou d'autres contenus des Services pour créer ou compiler, directement ou indirectement, une collection, une compilation, une base de données ou un répertoire sans notre autorisation écrite.",
+          "• Tromper, frauder ou induire en erreur nous et les autres utilisateurs, en particulier dans toute tentative d'apprendre des informations sensibles sur les comptes tels que les mots de passe des utilisateurs.",
+          "• Contourner, désactiver ou interférer avec les fonctionnalités de sécurité des Services, y compris les fonctionnalités qui empêchent ou restreignent l'utilisation ou la copie de tout Contenu ou imposent des limitations sur l'utilisation des Services et/ou du Contenu qu'ils contiennent. Discréditer, ternir ou nuire, à notre avis, nous et/ou les Services.",
+          "• Utiliser toute information obtenue des Services afin de harceler, abuser ou nuire à une autre personne.",
+          "• Faire une utilisation inappropriée de nos services de support ou soumettre de faux rapports d'abus ou de mauvaise conduite.",
+          "• Utiliser les Services d'une manière incompatible avec toute loi ou réglementation applicable.",
+          "• Participer à un encadrement ou à un lien non autorisé vers les Services.",
+          "• Télécharger ou transmettre (ou tenter de télécharger ou de transmettre) des virus, chevaux de Troie ou autres matériels, y compris l'utilisation excessive de lettres majuscules et le spam (publication continue de texte répétitif), qui interfèrent avec l'utilisation et la jouissance ininterrompues des Services par toute partie ou modifient, altèrent, perturbent ou interfèrent avec l'utilisation, les fonctionnalités, le fonctionnement ou l'entretien des Services.",
+          "• Participer à toute utilisation automatisée du système, telle que l'utilisation de scripts pour envoyer des commentaires ou des messages, ou l'utilisation de toute extraction de données, robots ou outils similaires de collecte et d'extraction de données.",
+          "• Supprimer l'avis de droit d'auteur ou d'autres droits de propriété de tout Contenu.",
+          "• Tenter de se faire passer pour un autre utilisateur ou une autre personne ou d'utiliser le nom d'utilisateur d'un autre utilisateur.",
+          "• Télécharger ou transmettre (ou tenter de télécharger ou de transmettre) tout matériel qui agit comme un mécanisme de collecte ou de transmission passive ou active d'informations, y compris, sans limitation, les formats d'échange d'images clairs ('gifs'), les pixels 1x1, les bogues web, les cookies ou autres dispositifs similaires (parfois appelés 'spyware' ou 'mécanismes de collecte passive' ou 'pcms').",
+          "• Interférer avec, perturber ou créer une charge excessive sur les Services ou les réseaux ou services connectés aux Services.",
+          "• Harceler, ennuyer, intimider ou menacer l'un de nos employés ou agents engagés dans la fourniture de toute partie des Services à vous.",
+          "• Tenter de contourner toute mesure des Services conçue pour empêcher ou restreindre l'accès aux Services ou à toute partie des Services.",
+          "• Copier ou adapter les logiciels des Services, y compris, mais sans s'y limiter, Flash, PHP, HTML, JavaScript ou autre code.",
+          "• Sauf autorisation par la loi applicable, déchiffrer, décompiler, désassembler ou rétroconcevoir tout logiciel composant ou de quelque manière que ce soit faisant partie des Services.",
+          "• Sauf si cela peut résulter de l'utilisation standard d'un moteur de recherche ou d'un navigateur Internet, utiliser, lancer, développer ou distribuer tout système automatisé, y compris, sans limitation, tout araignée, robot, utilitaire de triche, grattoir ou lecteur hors ligne qui accède aux Services, ou utiliser ou lancer tout script non autorisé ou autre logiciel.",
+          "• Utiliser un agent d'achat ou un agent d'achat pour effectuer des achats sur les Services.",
+          "• Faire une utilisation non autorisée des Services, y compris la collecte de noms d'utilisateur et/ou d'adresses e-mail d'utilisateurs par des moyens électroniques ou autres dans le but d'envoyer des e-mails non sollicités, ou de créer des comptes d'utilisateurs par des moyens automatisés ou sous de faux prétextes.",
+          "• Utiliser les Services dans le cadre de tout effort pour nous concurrencer ou autrement utiliser les Services et/ou le Contenu à des fins génératrices de revenus ou commerciales."
+        ]
+      },
+      {
+        "title": "6. CONTRIBUTIONS GÉNÉRÉES PAR LES UTILISATEURS",
+        "content": [
+          "Les Services ne permettent pas aux utilisateurs de soumettre ou de publier du contenu. Nous pouvons vous offrir la possibilité de créer, soumettre, publier, afficher, transmettre, exécuter, publier, distribuer ou diffuser du contenu et des matériaux à nous ou sur les Services, y compris, mais sans s'y limiter, des textes, écrits, vidéos, audios, photographies, graphiques, commentaires, suggestions ou informations personnelles ou autres matériaux (collectivement, les 'Contributions'). Les Contributions peuvent être visibles par d'autres utilisateurs des Services et via des sites Web tiers.",
+          "Lorsque vous créez ou mettez à disposition des Contributions, vous déclarez et garantissez que :",
+          "• La création, la distribution, la transmission, l'affichage public ou l'exécution, et l'accès, le téléchargement ou la copie de vos Contributions ne violent pas et ne violeront pas les droits de propriété, y compris, mais sans s'y limiter, les droits d'auteur, les brevets, les marques de commerce, les secrets commerciaux ou les droits moraux de tout tiers.",
+          "• Vous êtes le créateur et le propriétaire ou vous avez les licences, droits, consentements, autorisations et permissions nécessaires pour utiliser et autoriser nous, les Services et les autres utilisateurs des Services à utiliser vos Contributions de toute manière envisagée par les Services et ces Conditions Juridiques.",
+          "• Vous avez le consentement écrit, l'autorisation et/ou la permission de chaque personne identifiable dans vos Contributions pour utiliser le nom ou l'image de chaque personne identifiable afin de permettre l'inclusion et l'utilisation de vos Contributions de toute manière envisagée par les Services et ces Conditions Juridiques.",
+          "• Vos Contributions ne sont pas fausses, inexactes ou trompeuses.",
+          "• Vos Contributions ne sont pas des publicités non sollicitées ou non autorisées, des matériels promotionnels, des systèmes pyramidaux, des chaînes de lettres, des spams, des envois en masse ou d'autres formes de sollicitation.",
+          "• Vos Contributions ne sont pas obscènes, lubriques, lascives, sales, violentes, harcelantes, diffamatoires, calomnieuses ou autrement répréhensibles (selon notre jugement).",
+          "• Vos Contributions ne ridiculisent, ne se moquent, ne dénigrent, n'intimident ou n'abusent personne.",
+          "• Vos Contributions ne servent pas à harceler ou menacer (au sens légal de ces termes) toute autre personne et ne promeuvent pas la violence contre une personne ou une classe de personnes spécifique.",
+          "• Vos Contributions ne violent aucune loi, réglementation ou règle applicable.",
+          "• Vos Contributions ne violent pas les droits de confidentialité ou de publicité de tout tiers.",
+          "• Vos Contributions ne violent aucune loi applicable concernant la pornographie enfantine, ou ne sont pas autrement destinées à protéger la santé ou le bien-être des mineurs.",
+          "• Vos Contributions n'incluent aucun commentaire offensant lié à la race, à l'origine nationale, au sexe, à la préférence sexuelle ou au handicap physique.",
+          "• Vos Contributions ne violent pas autrement, ou ne renvoient pas à du matériel qui viole, toute disposition de ces Conditions Juridiques, ou toute loi ou réglementation applicable.",
+          "Toute utilisation des Services en violation des dispositions ci-dessus viole ces Conditions Juridiques et peut entraîner, entre autres, la résiliation ou la suspension de vos droits d'utiliser les Services."
+        ]
+      },
+      {
+        "title": "7. LICENCE DE CONTRIBUTION",
+        "content": [
+          "Vous et les Services convenez que nous pouvons accéder, stocker, traiter et utiliser toute information et donnée personnelle que vous fournissez et vos choix (y compris les paramètres).",
+          "En soumettant des suggestions ou d'autres commentaires concernant les Services, vous acceptez que nous puissions utiliser et partager ces commentaires à toute fin sans compensation pour vous.",
+          "Nous ne revendiquons aucun droit de propriété sur vos Contributions. Vous conservez la pleine propriété de toutes vos Contributions et de tout droit de propriété intellectuelle ou autre droit de propriété associé à vos Contributions.",
+          "Nous ne sommes pas responsables des déclarations ou représentations contenues dans vos Contributions fournies par vous dans toute zone des Services. Vous êtes seul responsable de vos Contributions aux Services et vous acceptez expressément de nous exonérer de toute responsabilité et de vous abstenir de toute action en justice contre nous concernant vos Contributions."
+        ]
+      },
+      {
+        "title": "8. SITES WEB ET CONTENUS TIERS",
+        "content": [
+          "Les Services peuvent contenir (ou vous pouvez être envoyé via le Site) des liens vers d'autres sites Web ('Sites Tiers') ainsi que des articles, photographies, textes, graphiques, images, conceptions, musiques, sons, vidéos, informations, applications, logiciels et autres contenus ou éléments appartenant à ou provenant de tiers ('Contenus Tiers'). Ces Sites Tiers et Contenus Tiers ne sont pas examinés, surveillés ou vérifiés par nous pour leur exactitude, leur pertinence ou leur exhaustivité, et nous ne sommes pas responsables des Sites Tiers auxquels vous accédez via les Services ou des Contenus Tiers publiés sur, disponibles via ou installés à partir des Services, y compris le contenu, l'exactitude, les opinions, la fiabilité, les pratiques de confidentialité ou autres politiques des Sites Tiers ou des Contenus Tiers. L'inclusion de, le lien vers ou l'autorisation de l'utilisation ou de l'installation de tout Site Tiers ou Contenu Tiers n'implique pas notre approbation ou notre soutien. Si vous décidez de quitter les Services et d'accéder aux Sites Tiers ou d'utiliser ou d'installer tout Contenu Tiers, vous le faites à vos propres risques, et vous devez être conscient que ces Conditions Juridiques ne s'appliquent plus. Vous devez examiner les conditions et politiques applicables, y compris les pratiques de confidentialité et de collecte de données, de tout site Web vers lequel vous naviguez depuis les Services ou concernant toute application que vous utilisez ou installez depuis les Services. Tout achat que vous effectuez via des Sites Tiers se fera via d'autres sites Web et auprès d'autres entreprises, et nous n'assumons aucune responsabilité à cet égard, ces achats étant exclusivement entre vous et le tiers concerné.",
+          "Vous acceptez et reconnaissez que nous n'approuvons pas les produits ou services offerts sur les Sites Tiers et vous nous déchargez de tout préjudice causé par votre achat de tels produits ou services. De plus, vous nous déchargez de toute perte subie par vous ou de tout préjudice causé à vous, résultant de quelque manière que ce soit de tout Contenu Tiers ou de tout contact avec des Sites Tiers."
+        ]
+      },
+      {
+        "title": "9. GESTION DES SERVICES",
+        "content": [
+          "Nous nous réservons le droit, mais sans obligation, de : (1) surveiller les Services pour les violations de ces Conditions Juridiques ; (2) prendre les mesures légales appropriées contre toute personne qui, à notre seule discrétion, viole la loi ou ces Conditions Juridiques, y compris, sans s'y limiter, en signalant cet utilisateur aux autorités chargées de l'application de la loi ; (3) à notre seule discrétion et sans limitation, refuser, restreindre l'accès à, limiter la disponibilité de, ou désactiver (dans la mesure technologiquement faisable) l'une de vos Contributions ou toute partie de celles-ci ; (4) à notre seule discrétion et sans limitation, préavis ou responsabilité, retirer des Services ou désactiver autrement tous les fichiers et contenus de taille excessive ou qui sont en quelque sorte contraignants pour nos systèmes ; et (5) gérer autrement les Services de manière conçue pour protéger nos droits et propriétés et pour faciliter le bon fonctionnement des Services."
+        ]
+      },
+      {
+        "title": "10. POLITIQUE DE CONFIDENTIALITÉ",
+        "content": [
+          "Nous nous soucions de la confidentialité et de la sécurité des données. En utilisant les Services, vous acceptez d'être lié par notre Politique de Confidentialité affichée sur les Services, qui est incorporée dans ces Conditions Juridiques. Veuillez noter que les Services sont hébergés en France. Si vous accédez aux Services depuis une autre région du monde avec des lois ou des exigences régissant la collecte, l'utilisation ou la divulgation de données personnelles qui diffèrent des lois applicables en France, alors par votre utilisation continue des Services, vous transférez vos données en France, et vous consentez expressément à ce que vos données soient transférées et traitées en France."
+        ]
+      },
+      {
+        "title": "11. DURÉE ET RÉSILIATION",
+        "content": [
+          "Ces Conditions Juridiques resteront en vigueur pendant que vous utilisez les Services. SANS LIMITER TOUTE AUTRE DISPOSITION DE CES CONDITIONS JURIDIQUES, NOUS NOUS RÉSERVONS LE DROIT, À NOTRE SEULE DISCRÉTION ET SANS PRÉAVIS OU RESPONSABILITÉ, DE REFUSER L'ACCÈS ET L'UTILISATION DES SERVICES (Y COMPRIS LE BLOCAGE DE CERTAINES ADRESSES IP), À TOUTE PERSONNE POUR TOUTE RAISON OU SANS RAISON, Y COMPRIS, SANS LIMITATION, POUR VIOLATION DE TOUTE DÉCLARATION, GARANTIE OU ENGAGEMENT CONTENU DANS CES CONDITIONS JURIDIQUES OU DE TOUTE LOI OU RÉGLEMENTATION APPLICABLE. NOUS POUVONS RÉSILIER VOTRE UTILISATION OU PARTICIPATION AUX SERVICES OU SUPPRIMER VOTRE COMPTE ET TOUT CONTENU OU INFORMATION QUE VOUS AVEZ PUBLIÉ À TOUT MOMENT, SANS AVERTISSEMENT, À NOTRE SEULE DISCRÉTION.",
+          "Si nous résilions ou suspendons votre compte pour quelque raison que ce soit, vous êtes interdit de vous inscrire et de créer un nouveau compte sous votre nom, un nom fictif ou emprunté, ou le nom de tout tiers, même si vous pouvez agir au nom du tiers. En plus de résilier ou de suspendre votre compte, nous nous réservons le droit de prendre les mesures légales appropriées, y compris, sans s'y limiter, de poursuivre en justice civile, pénale et injonctive."
+        ]
+      },
+      {
+        "title": "12. MODIFICATIONS ET INTERRUPTIONS",
+        "content": [
+          "Nous nous réservons le droit de changer, modifier ou supprimer le contenu des Services à tout moment ou pour toute raison à notre seule discrétion sans préavis. Cependant, nous n'avons aucune obligation de mettre à jour les informations sur nos Services. Nous ne serons pas responsables envers vous ou un tiers pour toute modification, changement de prix, suspension ou interruption des Services.",
+          "Nous ne pouvons garantir que les Services seront disponibles à tout moment. Nous pouvons rencontrer des problèmes matériels, logiciels ou autres ou avoir besoin d'effectuer une maintenance liée aux Services, ce qui entraîne des interruptions, des délais ou des erreurs. Nous nous réservons le droit de changer, réviser, mettre à jour, suspendre, interrompre ou modifier de toute autre manière les Services à tout moment ou pour toute raison sans préavis. Vous acceptez que nous n'ayons aucune responsabilité pour toute perte, dommage ou inconvénient causé par votre incapacité à accéder ou à utiliser les Services pendant toute période d'indisponibilité ou d'interruption des Services. Rien dans ces Conditions Juridiques ne sera interprété comme nous obligeant à maintenir et à soutenir les Services ou à fournir des corrections, des mises à jour ou des versions en relation avec ceux-ci."
+        ]
+      },
+      {
+        "title": "13. DROIT APPLICABLE",
+        "content": [
+          "Ces Conditions Juridiques sont régies et interprétées conformément aux lois de la France, et l'application de la Convention des Nations Unies sur les Contrats de Vente Internationale de Marchandises est expressément exclue. Si votre résidence habituelle est dans l'UE, et que vous êtes un consommateur, vous bénéficiez également de la protection offerte par les dispositions impératives de la loi de votre pays de résidence. Transcendental Teapot Corporation et vous-même acceptez de soumettre à la juridiction non exclusive des tribunaux de Normandie, ce qui signifie que vous pouvez faire valoir vos droits de protection des consommateurs en relation avec ces Conditions Juridiques en France, ou dans l'UE dans le pays où vous résidez."
+        ]
+      },
+      {
+        "title": "14. RÉSOLUTION DES LITIGES",
+        "content": [
+          "Négociations Informelles",
+          "Pour accélérer la résolution et contrôler le coût de tout différend, controverse ou réclamation lié à ces Conditions Juridiques (chacun un 'Litige' et collectivement, les 'Litiges') intenté par vous ou par nous (individuellement, une 'Partie' et collectivement, les 'Parties'), les Parties conviennent de tenter d'abord de négocier tout Litige (sauf ceux expressément prévus ci-dessous) de manière informelle pendant au moins trente (30) jours avant d'engager une procédure d'arbitrage. Ces négociations informelles commencent dès la réception d'un avis écrit d'une Partie à l'autre Partie.",
+          "Arbitrage Contraignant",
+          "Tout litige découlant des relations entre les Parties à ces Conditions Juridiques sera déterminé par un arbitre qui sera choisi conformément aux Règles d'Arbitrage et Internes de la Cour Européenne d'Arbitrage faisant partie du Centre Européen d'Arbitrage ayant son siège à Strasbourg, et qui sont en vigueur au moment du dépôt de la demande d'arbitrage, et dont l'adoption de cette clause constitue acceptation. Le siège de l'arbitrage sera Le Havre, France. La langue des procédures sera le français. Les règles de droit matériel applicables seront le droit français.",
+          "Restrictions",
+          "Les Parties conviennent que tout arbitrage sera limité au Litige entre les Parties individuellement. Dans toute la mesure permise par la loi, (a) aucun arbitrage ne sera joint à une autre procédure ; (b) il n'y a aucun droit ou autorité pour qu'un Litige soit arbitré sur une base de recours collectif ou d'utiliser des procédures de recours collectif ; et (c) il n'y a aucun droit ou autorité pour qu'un Litige soit intenté dans une capacité représentative au nom du public général ou de toute autre personne.",
+          "Exceptions aux Négociations Informelles et à l'Arbitrage",
+          "Les Parties conviennent que les Litiges suivants ne sont pas soumis aux dispositions ci-dessus concernant les négociations informelles et l'arbitrage contraignant : (a) tout Litige visant à faire valoir ou protéger, ou concernant la validité de, tout droit de propriété intellectuelle d'une Partie ; (b) tout Litige lié à, ou découlant d'allégations de vol, piratage, invasion de la vie privée ou utilisation non autorisée ; et (c) toute demande de mesure injonctive. Si cette disposition est jugée illégale ou inapplicable, alors aucune des Parties ne choisira d'arbitrer tout Litige relevant de cette partie de la disposition jugée illégale ou inapplicable et ce Litige sera décidé par un tribunal de juridiction compétente au sein des tribunaux listés pour juridiction ci-dessus, et les Parties conviennent de se soumettre à la juridiction personnelle de ce tribunal."
+        ]
+      },
+      {
+        "title": "15. CORRECTIONS",
+        "content": [
+          "Il peut y avoir des informations sur les Services qui contiennent des erreurs typographiques, des inexactitudes ou des omissions, y compris des descriptions, des prix, des disponibilités et diverses autres informations. Nous nous réservons le droit de corriger toute erreur, inexactitude ou omission et de changer ou mettre à jour les informations sur les Services à tout moment, sans préavis."
+        ]
+      },
+      {
+        "title": "16. AVERTISSEMENT",
+        "content": [
+          "les services sont fournis 'en l'état' et 'selon disponibilité'. vous acceptez que votre utilisation des services se fasse à vos risques et périls. dans toute la mesure permise par la loi, nous déclinons toutes garanties, expresses ou implicites, concernant les services et votre utilisation de ceux-ci, y compris, sans s'y limiter, les garanties implicites de qualité marchande, d'adéquation à un usage particulier et de non-contrefaçon. nous ne faisons aucune garantie ou déclaration quant à l'exactitude ou à l'exhaustivité du contenu des services ou du contenu de tout site web ou application mobile lié aux services et nous n'assumons aucune responsabilité pour (1) des erreurs, des inexactitudes ou des fautes dans le contenu et les matériaux, (2) des blessures corporelles ou des dommages matériels, de quelque nature que ce soit, résultant de votre accès et de votre utilisation des services, (3) tout accès non autorisé à ou utilisation de nos serveurs sécurisés et/ou toute information personnelle et/ou financière stockée, (4) toute interruption ou cessation de transmission vers ou depuis les services, (5) tout bogue, virus, cheval de Troie ou autre, qui peut être transmis à ou via les services par tout tiers, et/ou (6) toute erreur ou omission dans tout contenu et matériel ou pour toute perte ou dommage de quelque nature que ce soit résultant de l'utilisation de tout contenu publié, transmis ou autrement mis à disposition via les services. nous ne garantissons, n'approuvons, n'assurons ou n'assumons aucune responsabilité pour tout produit ou service annoncé ou offert par un tiers via les services, tout site web hyperlié, ou tout site web ou application mobile figurant dans toute bannière ou autre publicité, et nous ne serons pas une partie ou d'aucune manière responsable de surveiller toute transaction entre vous et tout fournisseur tiers de produits ou services. comme pour l'achat d'un produit ou d'un service par tout moyen ou dans tout environnement, vous devez utiliser votre meilleur jugement et faire preuve de prudence lorsque cela est approprié."
+        ]
+      },
+      {
+        "title": "17. LIMITATIONS DE RESPONSABILITÉ",
+        "content": [
+          "en aucun cas nous ou nos directeurs, employés ou agents ne serons responsables envers vous ou un tiers pour tout dommage direct, indirect, consécutif, exemplaire, accessoire, spécial ou punitif, y compris le manque à gagner, la perte de revenus, la perte de données ou d'autres dommages résultant de votre utilisation des services, même si nous avons été informés de la possibilité de tels dommages. nonobstant toute disposition contraire contenue dans les présentes, notre responsabilité envers vous pour toute cause, quelle qu'elle soit et quelle que soit la forme de l'action, sera toujours limitée au moindre montant payé, le cas échéant, par vous à nous ou $0. certaines lois des états-unis et lois internationales ne permettent pas les limitations sur les garanties implicites ou l'exclusion ou la limitation de certains dommages. si ces lois s'appliquent à vous, certaines ou toutes les limitations de responsabilité ci-dessus peuvent ne pas s'appliquer à vous, et vous pouvez avoir des droits supplémentaires."
+        ]
+      },
+      {
+        "title": "18. INDEMNISATION",
+        "content": [
+          "vous acceptez de défendre, d'indemniser et de nous tenir indemnes, y compris nos filiales, affiliés et tous nos dirigeants, agents, partenaires et employés respectifs, de et contre toute perte, dommage, responsabilité, réclamation ou demande, y compris les honoraires d'avocat raisonnables et les frais, formulée par un tiers en raison de ou résultant de : (1) utilisation des services ; (2) violation de ces conditions juridiques ; (3) toute violation de vos déclarations et garanties énoncées dans ces conditions juridiques ; (4) votre violation des droits d'un tiers, y compris mais sans s'y limiter les droits de propriété intellectuelle ; ou (5) tout acte nuisible intentionnel envers tout autre utilisateur des services avec lequel vous vous êtes connecté via les services. nonobstant ce qui précède, nous nous réservons le droit, à vos frais, d'assumer la défense et le contrôle exclusifs de toute affaire pour laquelle vous êtes tenu de nous indemniser, et vous acceptez de coopérer, à vos frais, avec notre défense de telles réclamations. nous ferons des efforts raisonnables pour vous informer de toute réclamation, action ou procédure faisant l'objet de cette indemnisation dès que nous en aurons connaissance."
+        ]
+      },
+      {
+        "title": "19. DONNÉES UTILISATEUR",
+        "content": [
+          "nous conserverons certaines données que vous transmettez aux services dans le but de gérer les performances des services, ainsi que les données relatives à votre utilisation des services. bien que nous effectuions des sauvegardes régulières de routine des données, vous êtes seul responsable de toutes les données que vous transmettez ou qui se rapportent à toute activité que vous avez entreprise en utilisant les services. vous acceptez que nous n'ayons aucune responsabilité envers vous pour toute perte ou corruption de ces données, et vous renoncez par la présente à tout droit d'action contre nous résultant de toute perte ou corruption de ces données."
+        ]
+      },
+      {
+        "title": "20. COMMUNICATIONS ÉLECTRONIQUES, TRANSACTIONS ET SIGNATURES",
+        "content": [
+          "visiter les services, nous envoyer des e-mails et remplir des formulaires en ligne constituent des communications électroniques. vous consentez à recevoir des communications électroniques, et vous acceptez que tous les accords, avis, divulgations et autres communications que nous vous fournissons par voie électronique, par e-mail et sur les services, satisfont à toute exigence légale que cette communication soit faite par écrit. vous acceptez par la présente l'utilisation de signatures électroniques, de contrats, de commandes et d'autres documents, ainsi que la livraison électronique d'avis, de politiques et d'enregistrements de transactions initiées ou complétées par nous ou via les services. vous renoncez par la présente à tous les droits ou exigences en vertu de toute loi, réglementation, règle, ordonnance ou autre législation dans toute juridiction qui exige une signature originale ou la livraison ou la conservation de documents non électroniques, ou à des paiements ou à l'octroi de crédits par tout autre moyen que par des moyens électroniques."
+        ]
+      },
+      {
+        "title": "21. DIVERS",
+        "content": [
+          "ces conditions juridiques et toutes les politiques ou règles de fonctionnement affichées par nous sur les services ou en ce qui concerne les services constituent l'intégralité de l'accord et de la compréhension entre vous et nous. notre incapacité à exercer ou à appliquer un droit ou une disposition de ces conditions juridiques ne constituera pas une renonciation à ce droit ou à cette disposition. ces conditions juridiques s'appliquent dans toute la mesure permise par la loi. nous pouvons céder tout ou partie de nos droits et obligations à d'autres à tout moment. nous ne serons pas responsables de toute perte, dommage, retard ou manquement à agir causé par une cause échappant à notre contrôle raisonnable. si une disposition ou une partie d'une disposition de ces conditions juridiques est jugée illégale, nulle ou inapplicable, cette disposition ou partie de disposition est réputée dissociable de ces conditions juridiques et n'affecte pas la validité et l'applicabilité des dispositions restantes. il n'y a aucune relation de coentreprise, de partenariat, d'emploi ou d'agence créée entre vous et nous à la suite de ces conditions juridiques ou de l'utilisation des services. vous acceptez que ces conditions juridiques ne soient pas interprétées contre nous en raison de leur rédaction par nous. vous renoncez par la présente à toutes les défenses que vous pourriez avoir en raison de la forme électronique de ces conditions juridiques et de l'absence de signature des parties aux présentes pour exécuter ces conditions juridiques."
+        ]
+      },
+      {
+        "title": "22. CONTACTEZ-NOUS",
+        "content": [
+          "afin de résoudre une plainte concernant les services ou pour recevoir de plus amples informations concernant l'utilisation des services, veuillez nous contacter à :",
+          "transcendental-teapot@mail.com",
+          "transcendental teapot corporation france"
+        ]
+      }
+    ]
   }
-  
+}

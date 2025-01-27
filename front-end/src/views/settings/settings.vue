@@ -1,29 +1,56 @@
 <template>
-    <div class="settings-page">
-      <HeaderOrganism />
-  
-      <div class="settings-content">
-        <h1>settings</h1>
-        <p>settings stuff (if the device is a phone, show the sidebar view, else show account)</p>
-        <p>sidebar: account, appearence, languages</p>
-      </div>
-  
-      <FooterOrganism />
-    </div>
-  </template>
-  
-  <script>
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-    },
-  };
-  </script>
+  <div class="settings-page">
+    <HeaderOrganism />
 
+    <div class="settings-body">
+      <Sidebar
+        class="sidebar"
+        @page-selected="setPage"
+      />
+      <div class="settings-content">
+        <component :is="currentPage" />
+      </div>
+    </div>
+
+    <FooterOrganism />
+  </div>
+</template>
+
+<script>
+import HeaderOrganism from "@/components/header/navbar.vue";
+import FooterOrganism from "@/components/footer.vue";
+import Sidebar from "@/components/settings/Sidebar.vue";
+import LanguagesPage from "@/components/settings/LanguageSwitcher.vue";
+import AccountPage from "@/views/settings/account.vue";
+import AppearancePage from "@/views/settings/appearence.vue";
+
+export default {
+  components: {
+    HeaderOrganism,
+    FooterOrganism,
+    Sidebar,
+    AccountPage,
+    AppearancePage,
+    LanguagesPage,
+  },
+  data() {
+    return {
+      currentPage: 'AccountPage',
+    };
+  },
+  methods: {
+    setPage(page) {
+      if (page === 'Account') {
+        this.currentPage = 'AccountPage';
+      } else if (page === 'Appearance') {
+        this.currentPage = 'AppearancePage';
+      } else if (page === 'Languages') {
+        this.currentPage = 'LanguagesPage';
+      }
+    },
+  },
+};
+</script>
 
 <style scoped>
 .settings-page {
@@ -36,12 +63,39 @@
   justify-content: space-between;
 }
 
+.settings-body {
+  display: flex;
+  flex: 1;
+}
+
 .settings-content {
-  margin: 50px auto;
   padding: 20px;
-  max-width: 800px;
   color: white;
-  font-size: 1rem;
+  font-size: 1.5rem;
   line-height: 1.6;
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 250px;
+}
+
+@media (max-width: 668px) {
+  .settings-content {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    align-items: center;
+  }
+
+  .settings-body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
 }
 </style>

@@ -5,7 +5,7 @@ import PrivacyPolicy from '../views/RGPD/privacy_policy.vue';
 import Login from '../views/sign/login.vue';
 import Register from '../views/sign/register.vue';
 import Logout from '../views/sign/logout.vue';
-import Avatar from '../components/atoms/avatar.vue';
+import Avatar from '../components/atoms/Avatar.vue';
 import Profile from '../views/profile.vue';
 import Play from '../views/game/game_choice.vue'
 import Settings from '../views/settings/settings.vue';
@@ -13,6 +13,14 @@ import credits from '../views/credits.vue';
 import Stats from '../components/profile/Stats.vue';
 import History from '../components/profile/History.vue';
 import Friends from '../components/profile/Friends.vue';
+import AddFriend from '../components/profile/AddFriend.vue';
+import Account from '../views/settings/account.vue';
+import Appearence from '../views/settings/appearence.vue';
+import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
+// import ThemeSwitcher from '../components/settings/ThemeSwitcher.vue';
+// import Theme from '../components/settings/Theme.vue';
+// import ModifyAvatar from '../components/profile/ModifyAvatar.vue';
+// import ModifyInformations from '../components/profile/ModifyInformations.vue';
 
 const routes = [
   {
@@ -89,6 +97,26 @@ const routes = [
     path: '/friends',
     name: 'Friends',
     component: Friends,
+  },
+  {
+    path: '/add-friend',
+    name: 'AddFriend',
+    component: AddFriend,
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account,
+  },
+  {
+    path: '/appearence',
+    name: 'Appearence',
+    component: Appearence,
+  },
+  {
+    path: '/language-switcher',
+    name: 'LanguageSwitcher',
+    component: LanguageSwitcher,
   }
 ];
 

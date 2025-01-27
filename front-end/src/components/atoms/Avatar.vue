@@ -19,7 +19,7 @@
       },
       pseudo: {
         type: String,
-        default: ''
+        default: 'Username42'
       },
       showPseudo: {
         type: Boolean,
@@ -28,7 +28,7 @@
       pseudoPosition: {
         type: String,
         default: 'bottom',
-        validator: (value) => ['top', 'bottom'].includes(value)
+        validator: (value) => ['top', 'bottom', 'right'].includes(value)
       }
     },
     computed: {
@@ -71,6 +71,10 @@
   .pseudo-top .pseudo {
     margin-top: 0;
     margin-bottom: 10px;
+  }
+
+  .pseudo-right {
+    flex-direction: row;
   }
   </style>
   

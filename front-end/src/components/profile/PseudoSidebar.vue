@@ -6,7 +6,6 @@
         :key="index"
         :class="{ active: activeItem === item.key }"
       >
-        <!-- Use router-link for navigation -->
         <router-link
           :to="item.route"
           class="button-link"
@@ -41,7 +40,7 @@ export default {
   emits: ["update:activeItem"],
   methods: {
     handleClick(key) {
-      this.$emit("update:activeItem", key); // Emit active item to parent for tracking
+      this.$emit("update:activeItem", key);
     },
   },
 };
@@ -49,13 +48,9 @@ export default {
 
 <style scoped>
 .pseudo-sidebar {
-  width: 20%;
-  background-color: #333;
+  /* width: auto; */
   padding: 20px;
-  border-right: 1px solid #444;
-  height: 100%;
   position: sticky;
-  top: 0;
 }
 
 .pseudo-sidebar ul {
@@ -73,16 +68,20 @@ export default {
 }
 
 .pseudo-sidebar .button-link {
-  width: 100%;
   display: block;
+  width: 100%;
 }
 
-.pseudo-sidebar .active .button-link > ButtonAtom {
-  background-color: #4caf50;
-  color: white;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pseudo-sidebar ul {
+    display: flex;
+    flex-direction: row; /* Display items in a row */
+    justify-content: center; /* Center items horizontally */
+  }
 
-.pseudo-sidebar ButtonAtom:hover {
-  background-color: #555;
+  .pseudo-sidebar li {
+    margin: 0 10px; /* Add horizontal spacing between items */
+  }
 }
 </style>

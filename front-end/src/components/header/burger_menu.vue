@@ -56,6 +56,7 @@ import TextAtom from "@/components/atoms/Text.vue";
     transition: transform 0.3s ease-in-out;
     transform: translateX(100%);
     border-radius: 10px;
+    z-index: 1000;
   }
   
   .burger-menu.active {

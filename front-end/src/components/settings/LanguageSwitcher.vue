@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <ButtonAtom variant="en-lang">English</ButtonAtom>
-    <ButtonAtom variant="fr-lang">Français</ButtonAtom>
-    <ButtonAtom variant="de-lang">Deutsch</ButtonAtom>
+  <div class="lang-btn-container">
+    <ButtonAtom variant="lang-en" class="lang-btn" @click="switchLang('en')">🇬🇧 English</ButtonAtom>
+    <ButtonAtom variant="lang-fr" class="lang-btn" @click="switchLang('fr')">🇫🇷 Français</ButtonAtom>
+    <ButtonAtom variant="lang-de" class="lang-btn" @click="switchLang('de')">🇩🇪 Deutsch</ButtonAtom>
   </div>
 </template>
 
@@ -22,3 +22,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.lang-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lang-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+}
+</style>

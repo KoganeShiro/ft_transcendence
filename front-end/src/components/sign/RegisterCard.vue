@@ -9,9 +9,9 @@
             placeholder="Enter your username"
           />
           <TextField
-            id="confirm-username"
-            label="Confirm Username"
-            placeholder="Confirm your username"
+            id="mail"
+            label="E-mail"
+            placeholder="Enter you e-mail"
           />
           <TextField
             id="password"
@@ -25,8 +25,10 @@
           />
         </InputGroup>
         <ButtonGroup class="button-group">
+          <!-- Send a POST Request with the informations in json format
+                Send back error or not -->
           <Button variant="primary" class="register-button" @click="onregister" >Register</Button>
-          <Button variant="42" class="register-button" @click="onregister">Register with 42</Button>
+          <Button variant="42" class="register-button" @click="on42register">Register with 42</Button>
         </ButtonGroup>
       </Card>
     </div>
@@ -52,11 +54,14 @@
         /* should have input in the TextField, check if
         the username and password are valid, then register
         Return login page if successful
-        If register with 42, should have a 42 API to register
-        and return account page
         */
-        alert("register...");
+        this.$router.push("/login");
       },
+      on42register() {
+        // If register with 42, should have a 42 API to register
+        // and return account page
+        this.$router.push("/profile");
+      }
     },
   };
   </script>

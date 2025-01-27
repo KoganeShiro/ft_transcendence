@@ -65,6 +65,8 @@ For obvious security reasons, any credentials, API keys, env variables etc... mu
 ### Modules
 ~~◦ Minor module: Use a front-end [Bootstrap toolkit](https://getbootstrap.com/) (with only vanilla js ?)~~
 
+JWT 2FA ??
+
 ◦ Major module: Use a Framework for the (Django)
 
 ◦ Minor module: Use a database for the backend. ([ProgreSQL](https://www.postgresql.org/))

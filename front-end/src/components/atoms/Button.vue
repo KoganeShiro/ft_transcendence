@@ -53,11 +53,7 @@ export default {
 <style scoped>
 /* Base Button Styles */
 .btn {
-  display: inline-block;
-  font-family: inherit;
   font-weight: bold;
-  text-align: center;
-  text-decoration: none;
   cursor: pointer;
   border: none;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -87,6 +83,7 @@ export default {
 .btn-ghost {
   background-color: transparent;
   color: white;
+  width: 150%;
 }
 
 .btn-ghost:hover {
@@ -111,9 +108,10 @@ export default {
 }
 
 .btn-sidebar:hover {
-  background-color: #000000ab;
+  background-color: #425042;
   color: white;
   width: 100%;
+  transform: scale(1.05);
 }
 
 /* 42 Theme Button */
@@ -133,7 +131,18 @@ export default {
 }
 
 .btn-attention:hover {
-  background-color: #a00d0d;
+  background-color: #313030c4;
+}
+
+.btn-lang-fr, .btn-lang-en, .btn-lang-de {
+  background-color: transparent;
+  color: white;
+}
+
+
+.btn-lang-fr:hover, .btn-lang-en:hover, .btn-lang-de:hover {
+  background-color: #7e7e7e81;
+  transform: scale(1.05);
 }
 
 /* Disabled State */

@@ -1,106 +1,77 @@
 <template>
-    <div class="template">
-        <HeaderOrganism />
-    <div class="page-container">
-      <h1>Friends</h1>
-      <div class="friends-list">
-        <ul>
-          <li v-for="(friend, index) in friends" :key="index">
-            {{ friend.name }}
-            <button @click="removeFriend(index)">Remove</button>
-          </li>
-        </ul>
-      </div>
-      <div class="add-friend">
-        <input
-          type="text"
-          v-model="newFriend"
-          placeholder="Add a friend"
-          @keyup.enter="addFriend"
-        />
-        <button @click="addFriend">Add</button>
-      </div>
+  <div class="page-container">
+    <h1>Friends</h1>
+    <div class="friends-list">
+      <ul>
+        <li v-for="(friend, index) in friends" :key="index">
+          {{ friend.name }}
+          <!-- <button @click="removeFriend(index)" class="remove-btn">Remove</button> -->
+          <ButtonAtom variant="attention" @click="removeFriend(index)" class="remove-btn">Remove</ButtonAtom>
+        </li>
+      </ul>
     </div>
-    <FooterOrganism />
+    <div class="add-friend">
+      <AddFriend :friends="friends" @add-friend="addFriend" />
     </div>
-  </template>
-  
-  <script>
-    import HeaderOrganism from "@/components/header/navbar.vue";
-    import FooterOrganism from "@/components/footer.vue";
+  </div>
+</template>
 
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
+<script>
+import AddFriend from "@/components/profile/AddFriend.vue";
+import ButtonAtom from "@/components/atoms/Button.vue";
+
+export default {
+  components: {
+    AddFriend,
+    ButtonAtom,
+  },
+  data() {
+    return {
+      friends: [
+        { name: "Alice" },
+        { name: "Bob" },
+        { name: "Charlie" },
+      ],
+    };
+  },
+  methods: {
+    addFriend(newFriend) {
+      this.friends.push(newFriend);
     },
-    data() {
-      return {
-        friends: [
-          { name: "Alice" },
-          { name: "Bob" },
-          { name: "Charlie" },
-        ],
-        newFriend: "",
-      };
+    removeFriend(index) {
+      this.friends.splice(index, 1);
     },
-    methods: {
-      addFriend() {
-        if (this.newFriend.trim()) {
-          this.friends.push({ name: this.newFriend.trim() });
-          this.newFriend = "";
-        }
-      },
-      removeFriend(index) {
-        this.friends.splice(index, 1);
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .page-container {
-    padding: 20px;
-    color: white;
-  }
-  
-  .friends-list ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .friends-list li {
-    padding: 10px;
-    background-color: #444;
-    margin: 10px 0;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .add-friend {
-    margin-top: 20px;
-  }
-  
-  .add-friend input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    margin-right: 10px;
-  }
-  
-  .add-friend button {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-friend button:hover {
-    background-color: #3e8e41;
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style scoped>
+.page-container {
+  padding: 20px;
+  color: white;
+}
+
+.friends-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.friends-list li {
+  padding: 10px;
+  background-color: #444;
+  margin: 10px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-btn {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+</style>

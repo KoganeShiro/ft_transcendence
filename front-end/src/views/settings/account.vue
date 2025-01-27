@@ -1,26 +1,14 @@
 <template>
-    <div class="account-page">
-      <HeaderOrganism />
-  
+    <div class="account-page">  
       <div class="account-content">
         <h1>account</h1>
         <p>account stuff</p>
       </div>
-  
-      <FooterOrganism />
-    </div>
+      </div>
   </template>
   
   <script>
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-    },
-  };
+
   </script>
 
 
