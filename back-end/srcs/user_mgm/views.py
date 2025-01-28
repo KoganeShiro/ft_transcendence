@@ -1,26 +1,39 @@
 from rest_framework import generics
 from .models import CustomUser
-from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
-from .permissions import IsAdminOrSelf
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view, permission_classes  
+from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer
 
-class UserList(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer    
-    
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            # Allow anyone to register (no authentication needed for POST)
-            return [AllowAny()]
-        else:
-            # Only admin users can list all users (GET)
-            return [IsAuthenticated()]
+#Login User
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+#Register User
+class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsAdminOrSelf]
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+
+#api/profile  and api/profile/update
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getProfile(request):
+    user = request.user
+    serializer = ProfileSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateProfile(request):
+    user = request.user
+    serializer = ProfileSerializer(user, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+

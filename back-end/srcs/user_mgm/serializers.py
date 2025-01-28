@@ -1,31 +1,60 @@
-from django.contrib.auth import password_validation
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
 from .models import CustomUser
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['email'] = user.email
+        # ...
+
+        return token
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
+#    password2 = serializers.CharField(write_only=True, required=True)
+    email = serializers.EmailField(
+        required=False,
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+    )
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'rank', 'password', 'avatar']
+        #fields = ('username', 'email', 'password', 'cover_photo')
+        fields = ('username', 'email', 'password')
+
+ #   def validate(self, attrs):
+ #       if attrs['password'] != attrs['password2']:
+ #           raise serializers.ValidationError(
+ #               {"password": "Password fields didn't match."})
+
+ #       return attrs
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
-        user = CustomUser(**validated_data)
-        user.set_password(password)  # Hash the password before saving
+        user = CustomUser.objects.create(
+            username=validated_data['username'],
+            email=validated_data['email'],
+          #  bio=validated_data['bio'],
+          #  cover_photo=validated_data['cover_photo']
+        )
+
+        user.set_password(validated_data['password'])
         user.save()
+
         return user
 
-    def update(self, instance, validated_data):
-        password = validated_data.pop('password', None)  # Get the password if provided
+class ProfileSerializer(serializers.ModelSerializer):    
 
-        # Update other fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        
-        # If a new password is provided, hash it and set it
-        if password:
-            instance.set_password(password)
-        
-        instance.save()  # Save the updated instance
-        return instance
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

@@ -76,8 +76,8 @@ fclean: down clean rm_ssl
 		echo "No volumes to prune."; \
 	fi	
 		
-.PHONY: rem_volume
-rem_volume: 	
+.PHONY: rm_volumes
+rm_volumes: 	
 	@if [ -n "$(shell docker volume ls -q)" ]; then \
 		echo "Removing unused volumes..."; \
 		docker volume ls -q | xargs docker volume rm; \
