@@ -5,10 +5,11 @@
     <main class="privacy-content">
       <h1 class="privacy-title">{{ t('privacy.title') }}</h1>
       <p class="last-updated">{{ t('privacy.lastUpdated') }}</p>
+      <p class="last-updated">{{ t('refresh') }}</p>
 
       <!-- Should change the text by the language -->
       <router-link to="/terms" class="footer-link">
-        <TextAtom class="terms-link">Terms and Conditions</TextAtom>
+        <TextAtom class="terms-link"> {{ t('terms-service') }} </TextAtom>
       </router-link>
 
       <section
@@ -37,7 +38,7 @@
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import TextAtom from "@/components/atoms/Text.vue";
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default {
@@ -48,11 +49,19 @@ export default {
   },
   setup() {
     const { t, messages, locale } = useI18n();
-    const rawPrivacySections = computed(() => {
+    const rawPrivacySections = ref([]);
+
+    const updateSections = computed(() => {
       const allMessages = messages.value;
       const currentLocaleMessages = allMessages[locale.value];
       return currentLocaleMessages?.privacy?.sections || [];
     });
+
+    watch(locale, () => {
+      rawPrivacySections.value = updateSections.value;
+    });
+
+    rawPrivacySections.value = updateSections.value;
 
     return {
       t,
@@ -61,7 +70,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .privacy-page {

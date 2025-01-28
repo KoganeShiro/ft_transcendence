@@ -1,7 +1,7 @@
 <template>
     <div class="account-page">  
       <div class="account-content">
-        <h1>account</h1>
+        <h1> {{ $t("account") }} </h1>
         <p>account stuff</p>
       </div>
       </div>
@@ -17,7 +17,6 @@
   text-align: center;
   color: white;
   background-color: #222;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

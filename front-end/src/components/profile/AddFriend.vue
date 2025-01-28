@@ -4,22 +4,29 @@
         <input
           type="text"
           v-model="newFriend"
-          placeholder="Add a friend"
+          :placeholder="$t('addFriend')"
           @keyup.enter="addFriend"
           class="add-friend-input"
         />
-        <ButtonAtom @click="addFriend" class="add-friend-btn">Add</ButtonAtom>
+        <ButtonAtom @click="addFriend" class="add-friend-btn">{{ $t("add") }}</ButtonAtom>
       </div>
     </div>
   </template>
   
   <script>
   import ButtonAtom from "@/components/atoms/Button.vue";
+  import { useLanguage } from '@/components/useLanguage.js';
 
   export default {
     components: {
       ButtonAtom,
     },
+    setup() {
+    const { changeLanguage } = useLanguage()
+    return {
+      changeLanguage
+    }
+  },
     name: "AddFriend",
     props: {
       friends: {

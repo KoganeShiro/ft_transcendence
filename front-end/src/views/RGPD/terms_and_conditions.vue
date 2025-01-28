@@ -5,10 +5,11 @@
     <main class="terms-content">
       <h1 class="terms-title">{{ t('terms.title') }}</h1>
       <p class="last-updated">{{ t('terms.lastUpdated') }}</p>
+      <p class="last-updated">{{ t('refresh') }}</p>
 
       <!-- Should change the text by the language -->
       <router-link to="/privacy" class="footer-link">
-        <TextAtom class="privacy-link">Privacy Policy</TextAtom>
+        <TextAtom class="privacy-link"> {{ t('privacy-policy') }} </TextAtom>
       </router-link>
 
       <section
@@ -33,12 +34,11 @@
   </div>
 </template>
 
-
 <script>
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import TextAtom from "@/components/atoms/Text.vue";
-import { computed } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default {
@@ -49,11 +49,19 @@ export default {
   },
   setup() {
     const { t, messages, locale } = useI18n();
-    const rawTermsSections = computed(() => {
+    const rawTermsSections = ref([]);
+
+    const updateSections = () => {
       const allMessages = messages.value;
       const currentLocaleMessages = allMessages[locale.value];
-      return currentLocaleMessages?.terms?.sections || [];
-    });
+      rawTermsSections.value = currentLocaleMessages?.terms?.sections || [];
+    };
+
+    watch(locale, updateSections);
+
+    watch(() => messages.value, updateSections, { deep: true });
+
+    onMounted(updateSections);
 
     return {
       t,

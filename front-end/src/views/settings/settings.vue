@@ -72,14 +72,12 @@ export default {
   padding: 20px;
   color: white;
   font-size: 1.5rem;
-  line-height: 1.6;
-  flex-grow: 1;
-  margin-left: 20px;
+  line-height: 0.5;
+  flex-grow: 0.5;
 }
 
 .sidebar {
   flex-shrink: 0;
-  width: 250px;
 }
 
 @media (max-width: 668px) {

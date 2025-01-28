@@ -1,38 +1,90 @@
 <template>
+  <div class="language-content">
+    <h2>{{ $t("language") }}</h2>
+  </div>
   <div class="lang-btn-container">
-    <ButtonAtom variant="lang-en" class="lang-btn" @click="switchLang('en')">🇬🇧 English</ButtonAtom>
-    <ButtonAtom variant="lang-fr" class="lang-btn" @click="switchLang('fr')">🇫🇷 Français</ButtonAtom>
-    <ButtonAtom variant="lang-de" class="lang-btn" @click="switchLang('de')">🇩🇪 Deutsch</ButtonAtom>
+    <ButtonAtom
+      variant="lang"
+      class="lang-btn"
+      :class="{ selected: currentLang === 'en' }"
+      @click="switchLang('en')"
+    >
+      {{ $t("english") }}
+    </ButtonAtom>
+    <ButtonAtom
+      variant="lang"
+      class="lang-btn"
+      :class="{ selected: currentLang === 'fr' }"
+      @click="switchLang('fr')"
+    >
+      {{ $t("french") }}
+    </ButtonAtom>
+    <ButtonAtom
+      variant="lang"
+      class="lang-btn"
+      :class="{ selected: currentLang === 'de' }"
+      @click="switchLang('de')"
+    >
+      {{ $t("german") }}
+    </ButtonAtom>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
+import { useI18n } from "vue-i18n";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
 export default {
   components: {
     ButtonAtom,
   },
+  setup() {
+    const { locale } = useI18n();
+    return { locale };
+  },
+  computed: {
+    ...mapGetters(["selectedLanguage"]),
+    currentLang() {
+      return this.selectedLanguage;
+    },
+  },
   methods: {
     ...mapActions(["changeLang"]),
     switchLang(lang) {
-      this.changeLang(lang); // Update Vuex state
-    },
-  },
+      if (lang !== this.currentLang) {
+        this.changeLang(lang);
+        this.locale = lang;
+      }
+    }
+  }
 };
 </script>
+
 
 <style scoped>
 .lang-btn-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
+  padding: 20px;
 }
 
 .lang-btn {
-  width: 100%;
+  width: 220px;
   text-align: left;
-  padding: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+  background-color: transparent;
+}
+
+.lang-btn:hover,
+.lang-btn.selected {
+  background-color: #505050;
+  transform: scale(1.05);
+  font-weight: bold;
 }
 </style>

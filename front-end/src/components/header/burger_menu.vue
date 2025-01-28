@@ -2,19 +2,19 @@
     <div :class="['burger-menu', { active: isActive }]">
       <ButtonGroupMolecule class="menu-btn-group">
         <router-link to="/game-choice" class="button-link">
-          <ButtonAtom variant="menu">Play</ButtonAtom>
+          <ButtonAtom variant="menu">{{ $t("play") }}</ButtonAtom>
         </router-link>
         <router-link to="/profile" class="button-link">
-          <ButtonAtom variant="menu">Profile</ButtonAtom>
+          <ButtonAtom variant="menu">{{ $t("profile") }}</ButtonAtom>
         </router-link>
         <router-link to="/settings" class="button-link">
-          <ButtonAtom variant="menu">Settings</ButtonAtom>
+          <ButtonAtom variant="menu">{{ $t("settings") }}</ButtonAtom>
         </router-link>
         <router-link to="/logout" class="button-link">
-          <ButtonAtom variant="menu">Log out</ButtonAtom>
+          <ButtonAtom variant="menu">{{ $t("logout") }}</ButtonAtom>
         </router-link>
         <router-link to="/credits" class="button-link">
-          <ButtonAtom variant="menu">Credits</ButtonAtom>
+          <ButtonAtom variant="menu">{{ $t("credits") }}</ButtonAtom>
         </router-link>
     </ButtonGroupMolecule>
 

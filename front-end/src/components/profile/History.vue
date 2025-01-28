@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <h1>History</h1>
+    <h1>{{ $t("history") }}</h1>
     <ul class="history-list">
       <li v-for="(item, index) in history" :key="index">
         {{ item }}

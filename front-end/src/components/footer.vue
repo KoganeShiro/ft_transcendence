@@ -4,7 +4,7 @@
       <p>&copy; 2025 Transcendental Teapot</p>
       <p>
         <router-link to="/privacy" class="footer-link">
-          Legal Notices – Privacy Policy
+          {{ $t("privacy-policy") }}
         </router-link>
       </p>
     </div>

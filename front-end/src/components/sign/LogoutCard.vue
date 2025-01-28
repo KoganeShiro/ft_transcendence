@@ -3,10 +3,10 @@
       <Card class="logout-card">
         <h3 class="logout-title">Oh no 🥺</h3>
         <h3 class="logout-title">
-            are you sure you want to logout ?
+          {{ $t("logout-msg") }}
         </h3>
-        <Button variant="attention" class="logout-button" @click="onlogout" >Yes, logout</Button>
-        <Button variant="42" class="logout-button" @click="ongoback">No, i miss clicked</Button>
+        <Button variant="attention" class="logout-button" @click="onlogout" >{{ $t("logout-confirm") }}</Button>
+        <Button variant="42" class="logout-button" @click="ongoback">{{ $t("logout-cancel") }}</Button>
       </Card>
     </div>
   </template>

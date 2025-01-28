@@ -1,67 +1,71 @@
 <template>
-    <div class="sidebar-container">
-      <div class="sidebar-arrow" @click="toggleSidebar" @touchstart="startDrag" @touchmove="drag" @touchend="endDrag">
-        <span>&#9656;</span>
-      </div>
-      <div :class="['sidebar', { 'open': isOpen }]">
-        <ButtonGroup class="sidebar-group-element">
-          <ButtonAtom variant="ghost" @click="selectPage('Account')">Account</ButtonAtom>
-          <ButtonAtom variant="ghost" @click="selectPage('Appearance')">Appearance</ButtonAtom>
-          <ButtonAtom variant="ghost" @click="selectPage('Languages')">Languages</ButtonAtom>
-        </ButtonGroup>
-      </div>
+  <div class="sidebar-container">
+    <div class="sidebar-arrow" @click="toggleSidebar">
+      <span>&#9656;</span>
     </div>
-  </template>
-  
-  <script>
-  import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
-  import ButtonAtom from "@/components/atoms/Button.vue";
-  
-  export default {
-    components: {
-      ButtonGroup,
-      ButtonAtom,
+    <div :class="['sidebar', { open: isOpen }]">
+      <ButtonGroup class="sidebar-group-element">
+        <ButtonAtom
+          variant="ghost"
+          class="sidebar-item"
+          :class="{ active: selectedPage === 'Account' }"
+          @click="selectPage('Account')"
+        >
+          {{ $t("account") }}
+        </ButtonAtom>
+        <ButtonAtom
+          variant="ghost"
+          class="sidebar-item"
+          :class="{ active: selectedPage === 'Appearance' }"
+          @click="selectPage('Appearance')"
+        >
+          {{ $t("appearance") }}
+        </ButtonAtom>
+        <ButtonAtom
+          variant="ghost"
+          class="sidebar-item"
+          :class="{ active: selectedPage === 'Languages' }"
+          @click="selectPage('Languages')"
+        >
+          {{ $t("language") }}
+        </ButtonAtom>
+      </ButtonGroup>
+    </div>
+  </div>
+</template>
+
+<script>
+import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
+import ButtonAtom from "@/components/atoms/Button.vue";
+
+export default {
+  components: {
+    ButtonGroup,
+    ButtonAtom,
+  },
+  name: "Sidebar",
+  data() {
+    return {
+      isOpen: false,
+      selectedPage: "Account", // Default active page
+    };
+  },
+  methods: {
+    toggleSidebar() {
+      this.isOpen = !this.isOpen;
     },
-    name: "Sidebar",
-    data() {
-      return {
-        isOpen: false,
-        startX: 0,
-        currentX: 0,
-      };
+    selectPage(page) {
+      this.selectedPage = page;
+      this.$emit("page-selected", page);
     },
-    methods: {
-      toggleSidebar() {
-        this.isOpen = !this.isOpen;
-      },
-      startDrag(e) {
-        this.startX = e.touches[0].clientX;
-        this.currentX = this.startX;
-      },
-      drag(e) {
-        this.currentX = e.touches[0].clientX;
-        const diff = this.currentX - this.startX;
-        if (diff > 50) {
-          this.isOpen = true;
-        } else if (diff < -50) {
-          this.isOpen = false;
-        }
-      },
-      endDrag() {
-        this.startX = 0;
-        this.currentX = 0;
-      },
-      selectPage(page) {
-        this.$emit('page-selected', page);
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
+  },
+};
+</script>
+
+<style scoped>
 .sidebar-container {
-  width: 150px;
-  height: 200px;
+  width: 200px;
+  height: 550px;
   background-color: #2c2c2c;
   color: #fff;
   border-radius: 10px;
@@ -100,16 +104,16 @@
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 10px;
-  background-color: #3a3a3a;
   color: #fff;
   text-align: left;
   border-radius: 8px;
   transition: background-color 0.2s ease;
 }
 
-.sidebar-item:hover {
+.sidebar-item:hover,
+.sidebar-item.active {
   background-color: #505050;
-  cursor: pointer;
+  transform: scale(1.05);
 }
 
 @media (max-width: 668px) {
@@ -134,4 +138,5 @@
     transform: translateX(0);
   }
 }
+
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="page-container">
-    <h1>Friends</h1>
+    <h1>{{ $t("friends") }}</h1>
     <div class="friends-list">
       <ul>
         <li v-for="(friend, index) in friends" :key="index">
           {{ friend.name }}
           <!-- <button @click="removeFriend(index)" class="remove-btn">Remove</button> -->
-          <ButtonAtom variant="attention" @click="removeFriend(index)" class="remove-btn">Remove</ButtonAtom>
+          <ButtonAtom variant="attention" @click="removeFriend(index)" class="remove-btn">{{ $t("remove") }}</ButtonAtom>
         </li>
       </ul>
     </div>

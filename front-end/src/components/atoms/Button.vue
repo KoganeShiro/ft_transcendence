@@ -134,13 +134,13 @@ export default {
   background-color: #313030c4;
 }
 
-.btn-lang-fr, .btn-lang-en, .btn-lang-de {
+.btn-lang {
   background-color: transparent;
   color: white;
 }
 
 
-.btn-lang-fr:hover, .btn-lang-en:hover, .btn-lang-de:hover {
+.btn-lang:hover {
   background-color: #7e7e7e81;
   transform: scale(1.05);
 }

@@ -40,7 +40,7 @@
     max-width: 800px;
     color: white;
     font-size: 1rem;
-    line-height: 5.6;
+    line-height: 4.6;
     width: 100%;
   }
   

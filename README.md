@@ -18,15 +18,16 @@
 - [x] Profile page (MIDDLE)
 - [x] (got the structure of it, stats component + history + friends)
 
-        ## Tuesday
-- [ ] Start Language page to be able to change language (MIDDLE)
+- [x] Start Language page to be able to change language (MIDDLE)
+- [x] Settings sidebar component (MIDDLE)
 
-- [ ] Credits page
+- [x] Credits page
+
+
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
 - [ ] Already fill text field component where i can modify it
+- [ ] Account page (IMPORTANT)
 
-
-        ## Wednesday
 - [ ] Game choice page (MIDDLE)
 - [ ] Game mode page (MIDDLE)
 - [ ] Pong page (IMPORTANT)
@@ -49,8 +50,6 @@
 - [ ] Tic Tac Toe page (IMPORTANT)
 - [ ] Tic Tac Toe multi page (IMPORTANT)
 
-- [ ] Settings sidebar component (MIDDLE)
-- [ ] Account page (IMPORTANT)
 
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
 # Ft_Transcendence

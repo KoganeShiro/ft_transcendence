@@ -60,9 +60,9 @@ export default {
   data() {
     return {
       menuItems: [
-        { key: "stats", label: "Stats", route: "#stats" },
-        { key: "history", label: "History", route: "#history" },
-        { key: "friends", label: "Friends", route: "#friends" },
+        { key: "stats", label: this.$t('stats'), route: "#stats" },
+        { key: "history", label: this.$t('history'), route: "#history" },
+        { key: "friends", label: this.$t('friends'), route: "#friends" },
       ],
       activeTab: "stats", // Default tab
     };

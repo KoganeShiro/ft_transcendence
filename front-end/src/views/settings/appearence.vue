@@ -2,7 +2,7 @@
     <div class="appearence-page">
 
       <div class="appearence-content">
-        <h1>appearence</h1>
+        <h1>{{ $t("appearance") }}</h1>
         <p>appearence stuff</p>
       </div>
   
@@ -27,7 +27,6 @@
   text-align: center;
   color: white;
   background-color: #222;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

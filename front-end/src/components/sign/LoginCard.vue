@@ -1,17 +1,17 @@
 <template>
   <div class="login-container">
     <Card class="login-card">
-      <h3 class="login-title">Welcome Back</h3>
+      <h3 class="login-title">{{ $t("welcome-back") }}</h3>
       <InputGroup class="input-group">
         <TextField
           id="username"
-          label="Username"
-          placeholder="Enter your username"
+          :label="$t('username')"
+          :placeholder="$t('enter-username')"
         />
         <TextField
           id="password"
-          label="Password"
-          placeholder="Enter your password"
+          :label="$t('password')"
+          :placeholder="$t('enter-password')"
         />
       </InputGroup>
       <!--
@@ -20,8 +20,8 @@
       if error, show error
       -->
       <ButtonGroup class="button-group">
-        <Button variant="primary" class="login-button" @click="onLogin" >Login</Button>
-        <Button variant="42" class="login-button" @click="onLogin">Login with 42</Button>
+        <Button variant="primary" class="login-button" @click="onLogin" >{{ $t("login") }}</Button>
+        <Button variant="42" class="login-button" @click="onLogin">{{ $t("login-42") }}</Button>
       </ButtonGroup>
     </Card>
   </div>

@@ -2,13 +2,13 @@
   <div class="template">
     <HeaderOrganism :showBurgerMenu="false"/>
     <div class="welcome-content">
-      <TextAtom class="welcome-text">Welcome</TextAtom>
+      <TextAtom class="welcome-text">{{ $t("welcome") }}</TextAtom>
       <ButtonGroupMolecule class="button-group">
         <router-link to="/login" class="button-link">
-          <ButtonAtom variant="primary">Login</ButtonAtom>
+          <ButtonAtom variant="primary"> {{ $t("login") }} </ButtonAtom>
         </router-link>
         <router-link to="/register" class="button-link">
-          <ButtonAtom variant="secondary">Register</ButtonAtom>
+          <ButtonAtom variant="secondary">{{ $t("register") }}</ButtonAtom>
         </router-link>
         <!-- <ButtonAtom variant="ghost">Play as guest</ButtonAtom> -->
       </ButtonGroupMolecule>
@@ -23,6 +23,7 @@ import FooterOrganism from "@/components/footer.vue";
 import TextAtom from "@/components/atoms/Text.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import ButtonGroupMolecule from "@/components/atoms/ButtonGroup.vue";
+import { useLanguage } from '@/components/useLanguage.js';
 
 export default {
   components: {
@@ -32,8 +33,15 @@ export default {
     ButtonGroupMolecule,
     FooterOrganism,
   },
+  setup() {
+    const { changeLanguage } = useLanguage()
+    return {
+      changeLanguage
+    }
+  },
 };
 </script>
+
 
 <style scoped>
 

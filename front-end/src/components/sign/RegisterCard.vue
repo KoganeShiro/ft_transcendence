@@ -1,34 +1,34 @@
 <template>
     <div class="register-container">
       <Card class="register-card">
-        <h3 class="register-title">Welcome</h3>
+        <h3 class="register-title">{{ $t("welcome") }}</h3>
         <InputGroup class="input-group">
           <TextField
             id="username"
-            label="Username"
-            placeholder="Enter your username"
+            :label="$t('username')"
+            :placeholder="$t('enter-username')"
           />
           <TextField
             id="mail"
-            label="E-mail"
-            placeholder="Enter you e-mail"
+            :label="$t('email')"
+            :placeholder="$t('enter-email')"
           />
           <TextField
             id="password"
-            label="Password"
-            placeholder="Enter your password"
+            :label="$t('password')"
+            :placeholder="$t('enter-password')"
           />
           <TextField
             id="confirm-password"
-            label="Confirm Password"
-            placeholder="Confirm your password"
+            :label="$t('confirmPassword')"
+            :placeholder="$t('confirmPassword')"
           />
         </InputGroup>
         <ButtonGroup class="button-group">
           <!-- Send a POST Request with the informations in json format
                 Send back error or not -->
-          <Button variant="primary" class="register-button" @click="onregister" >Register</Button>
-          <Button variant="42" class="register-button" @click="on42register">Register with 42</Button>
+          <Button variant="primary" class="register-button" @click="onregister" >{{ $t("register") }}</Button>
+          <Button variant="42" class="register-button" @click="on42register">{{ $t("register-42") }}</Button>
         </ButtonGroup>
       </Card>
     </div>
