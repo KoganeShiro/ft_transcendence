@@ -37,7 +37,7 @@ build: ssl
 
 # Start the services in detached mode
 .PHONY: up
-up:
+up: ssl
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
 
 # Stop and remove services
@@ -76,3 +76,11 @@ fclean: down clean rm_ssl
 		echo "No volumes to prune."; \
 	fi	
 		
+.PHONY: rem_volume
+rem_volume: 	
+	@if [ -n "$(shell docker volume ls -q)" ]; then \
+		echo "Removing unused volumes..."; \
+		docker volume ls -q | xargs docker volume rm; \
+	else \
+		echo "No volumes to prune."; \
+	fi	
