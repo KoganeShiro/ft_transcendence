@@ -12,7 +12,8 @@ FROM nginx:latest
 
 COPY webserver/nginx.conf /etc/nginx/nginx.conf
 
-COPY webserver/certs/ /etc/nginx/certs/
+COPY webserver/certs/ /etc/nginx/certs/ 
+#move the certs copy to run part with script
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 # COPY ../front-end/dist /usr/share/nginx/html

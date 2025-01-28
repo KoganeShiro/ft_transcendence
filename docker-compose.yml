@@ -12,7 +12,7 @@ services:
       - webserver_data:/usr/share/nginx/html    
     restart: always
     networks:
-      - pong-network
+      - pong
     
   
   back-end:
@@ -20,21 +20,27 @@ services:
       dockerfile: back-end/Dockerfile
     container_name: back-end
     expose:      
-      - "8000:8000"
+      - "8000"
     depends_on:
       - postgres
     volumes:
       - back-end_data:/usr/src/app  
     restart: always
     networks:
-      - pong-network
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 
   postgres:
     image: postgres:latest
     container_name: postgres
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     env_file:
       - .env
     restart: always
@@ -43,17 +49,28 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - pong-network  
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 
 networks:
-  pong-network:
+  pong:
     driver: bridge
 
 volumes:
   postgres_data:
   webserver_data:
   back-end_data:
+    driver: local # specify the driver for the volume 
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: 'back-end/src'  # Ou stocker le dossier sur votre ordinateur en local
 
 #volumes:
 #  database:

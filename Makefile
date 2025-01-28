@@ -32,12 +32,12 @@ rm_ssl:
 
 
 .PHONY: build
-build:
+build: ssl
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build
 
 # Start the services in detached mode
 .PHONY: up
-up: ssl
+up:
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
 
 # Stop and remove services
