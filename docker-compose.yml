@@ -4,10 +4,12 @@ services:
     build:      
       dockerfile: webserver/Dockerfile
     container_name: nginx
+    env_file:
+      - .env
     ports:      
-      - "443:443"
+      - "1443:443"
     depends_on:
-      - postgres
+      - back-end
     volumes:
       - webserver_data:/usr/share/nginx/html    
     restart: always
@@ -21,8 +23,11 @@ services:
     container_name: back-end
     expose:      
       - "8000"
+    env_file:
+      - .env
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     volumes:
       - ./back-end/srcs:/usr/src/app  
     restart: always
@@ -53,10 +58,10 @@ services:
       - pong
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 5s
 
 
 networks:

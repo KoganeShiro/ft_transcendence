@@ -21,23 +21,14 @@ help:
 	@echo "  clean          Remove all unused Docker resources"
 	@echo "  fclean         Remove all unused Docker resources and volumes"
 
-.PHONY: ssl
-ssl:
-	mkdir -p webserver/certs
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout webserver/certs/ft_transcendence.key -out webserver/certs/ft_transcendence.crt -subj "/C=FR/ST=S-M/L=LeHavre/O=42/OU=42/CN=localhost"
-
-.PHONY: rm_ssl
-rm_ssl:
-	rm -Rf webserver/certs	
-
 
 .PHONY: build
-build: ssl
+build: 
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build
 
 # Start the services in detached mode
 .PHONY: up
-up: ssl
+up: 
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
 
 # Stop and remove services
@@ -67,7 +58,7 @@ clean: down
 
 # Clean unused Docker resources
 .PHONY: fclean
-fclean: down clean rm_ssl
+fclean: down clean 
 	$(DOCKER) system prune -af --volumes
 	@if [ -n "$(shell docker volume ls -q)" ]; then \
 		echo "Removing unused volumes..."; \

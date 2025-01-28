@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -138,16 +139,29 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # }
 
 # remove the user details here...
+
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "django.db.backends.postgresql",
+#        "NAME": "pongdb",
+#        "USER": "postgres",
+#        "PASSWORD": "password",
+#        "HOST": "postgres",        
+#        "PORT": "5432",
+#    }
+#}
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "pongdb",
-        "USER": "postgres",
-        "PASSWORD": "password",
+        "NAME": os.environ.get('POSTGRES_DB'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
         "HOST": "postgres",        
         "PORT": "5432",
     }
 }
+
 
 
 # Password validation
