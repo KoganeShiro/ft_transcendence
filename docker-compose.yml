@@ -24,7 +24,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - back-end_data:/usr/src/app  
+      - ./back-end/srcs:/usr/src/app  
     restart: always
     networks:
       - pong
@@ -65,12 +65,12 @@ networks:
 volumes:
   postgres_data:
   webserver_data:
-  back-end_data:
-    driver: local # specify the driver for the volume 
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: 'back-end/src'  # Ou stocker le dossier sur votre ordinateur en local
+#  back-end_data:
+#    driver: local # specify the driver for the volume 
+#    driver_opts:
+#      type: 'none'
+#      o: 'bind'
+#      device: 'back-end/src'  # Ou stocker le dossier sur votre ordinateur en local
 
 #volumes:
 #  database:
