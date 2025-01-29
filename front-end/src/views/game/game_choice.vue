@@ -4,22 +4,18 @@
     <div class="game-choice-content">
       <h1>{{ $t("game-choice") }}</h1>
       <div class="game-cards-container">
-        <GameCard
-          backgroundImage="@/assets/pong.png"
-          gameName="Pong"
-          @game-chosen="handleGameChoice"
-          class="game-card"
-        >
-          <h2>Pong</h2>
-        </GameCard>
-        <GameCard
-          backgroundImage="@/assets/tic-tac-toe.png"
-          gameName="Tic-Tac-Toe"
-          @game-chosen="handleGameChoice"
-          class="game-card"
-        >
-          <h2>Tic-Tac-Toe</h2>
-        </GameCard>
+        <div class="game-card" v-for="(card, index) in cards" :key="index">
+          <GameCard
+            class="card"
+            :backgroundImage="card.image"
+            :gameName="card.name"
+            @game-chosen="handleGameChoice(card.name)"
+          >
+            <div class="card-overlay">
+              <span class="game-name">{{ card.name }}</span>
+            </div>
+          </GameCard>
+        </div>
       </div>
     </div>
     <FooterOrganism />
@@ -27,23 +23,38 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import GameCard from "@/components/game/GameChoice.vue";
+import pongImage from "@/assets/pong.png";
+import ticTacToeImage from "@/assets/tic-tac-toe.png";
 
 export default {
   components: {
     HeaderOrganism,
     FooterOrganism,
-    GameCard
+    GameCard,
   },
-  methods: {
-    handleGameChoice(gameName) {
-      // Handle game choice logic here
-      console.log(`${gameName} chosen!`);
-      // Add your game navigation logic here
-    }
-  }
+  data() {
+    return {
+      pongImage,
+      ticTacToeImage,
+      cards: [
+        { image: pongImage, name: "Pong" },
+        { image: ticTacToeImage, name: "Tic Tac Toe" },
+      ],
+    };
+  },
+  setup() {
+    const router = useRouter();
+
+    const handleGameChoice = (gameName) => {
+      router.push({ path: "/select-mode", query: { game: gameName } }); // Pass game name
+    };
+
+    return { handleGameChoice };
+  },
 };
 </script>
 
@@ -51,7 +62,6 @@ export default {
 .game-choice-page {
   text-align: center;
   color: white;
-  background-color: #222;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -69,20 +79,46 @@ export default {
 
 .game-cards-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
 }
 
 .game-card {
-  width: calc(50% - 20px);
-  max-width: 300px;
+  width: 500px;
+  height: 250px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
 }
 
-.game-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+.game-card .card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black;
+  border-radius: 15px;
+}
+
+@media (max-width: 600px) {
+  .game-cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-card {
+    width: 300px;
+    height: 150px;
+  }
 }
 </style>

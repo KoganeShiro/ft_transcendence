@@ -137,8 +137,8 @@ export default {
 .btn-lang {
   background-color: transparent;
   color: white;
+  width: 520px;
 }
-
 
 .btn-lang:hover {
   background-color: #7e7e7e81;

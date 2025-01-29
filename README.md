@@ -27,10 +27,11 @@
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
 - [ ] Already fill text field component where i can modify it
 - [ ] Account page (IMPORTANT)
+- [ ] Make the sidebar of the Parameter mobile friendly
 
-- [ ] Game choice page (MIDDLE)
-- [ ] Game mode page (MIDDLE)
-- [ ] Pong page (IMPORTANT)
+- [x] Game choice page (MIDDLE)
+- [x] Game mode page (MIDDLE)
+- [x] Pong page (IMPORTANT)
 - [ ] Pong multi local (IMPORTANT)
 - [ ] Searching opponent page
 
@@ -42,7 +43,6 @@
 - [ ] Call the back for account --> PATCH request to modify informations + avatar
 - [ ] Call the back for the game
 
-        ## Friday
 - [ ] Create Tournament page (IMPORTANT)
 - [ ] Matchmaking page (IMPORTANT)
 - [ ] More than 2 players game page (x2)

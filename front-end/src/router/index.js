@@ -19,8 +19,14 @@ import Appearence from '../views/settings/appearence.vue';
 import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
 // import ThemeSwitcher from '../components/settings/ThemeSwitcher.vue';
 // import Theme from '../components/settings/Theme.vue';
-// import ModifyAvatar from '../components/profile/ModifyAvatar.vue';
-// import ModifyInformations from '../components/profile/ModifyInformations.vue';
+
+// import Loose from '../views/game/loose.vue';
+// import Win from '../views/game/win.vue';
+import GameChoice from '../views/game/game_choice.vue';
+import ModeSelection from '../views/game/mode_selection.vue';
+import PongFront from '../views/game/pong.vue';
+import TicTacToe from '../views/game/tic_tac_toe.vue';
+
 
 const routes = [
   {
@@ -117,7 +123,27 @@ const routes = [
     path: '/language-switcher',
     name: 'LanguageSwitcher',
     component: LanguageSwitcher,
-  }
+  },
+  {
+    path: "/game-choice",
+    name: "gameChoice",
+    component: GameChoice,
+  },
+  {
+    path: "/select-mode",
+    name: "modeSelection",
+    component: ModeSelection,
+  },
+  {
+    path: "/pong/:mode",
+    name: "PongFront",
+    component: PongFront,
+  },
+  {
+    path: "/tic-tac-toe/:mode",
+    name: "TicTacToe",
+    component: TicTacToe,
+  },
 ];
 
 const router = createRouter({

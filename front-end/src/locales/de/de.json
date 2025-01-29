@@ -45,6 +45,8 @@
     "solo": "Solo",
     "multi-remote": "Multiplayer (Remote)",
     "multi-local": "Multiplayer (Lokal)",
-    "tournament": "Turnier"
+    "tournament": "Turnier",
+    "select-mode": "Wählen Sie den Modus für ",
+    "select-back": "Zurück zur Spielauswahl"
   }
   

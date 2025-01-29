@@ -131,6 +131,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
+  margin-right: 20px;
 }
 
 /* Responsive Design */
@@ -138,6 +139,10 @@ export default {
   .profile-page {
     flex-direction: column;
     position: relative; 
+  }
+
+  .card {
+    margin-left: 20px;
   }
 
   .left-section {

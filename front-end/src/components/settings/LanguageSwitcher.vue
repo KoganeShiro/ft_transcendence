@@ -68,10 +68,11 @@ export default {
   flex-direction: column;
   gap: 10px;
   padding: 20px;
+  align-items: center;
+  /* margin-left: 300px; */
 }
 
 .lang-btn {
-  width: 220px;
   text-align: left;
   padding: 14px;
   border-radius: 10px;

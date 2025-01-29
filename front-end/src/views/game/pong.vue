@@ -1,46 +1,54 @@
 <template>
-    <div class="pong-page">
-      <HeaderOrganism />
-  
-      <div class="pong-content">
-        <h1>pong</h1>
-        <p>pong stuff</p>
-      </div>
-  
-      <FooterOrganism />
+  <HeaderOrganism />
+  <div class="pong-page">
+    <div class="mobile-hide">
+      <h1>Pong - {{ mode }} mode</h1>
     </div>
-  </template>
-  
-  <script>
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-    },
-  };
-  </script>
+    <PongFront :mode="mode" />
+  </div>
+  <FooterOrganism />
+</template>
+
+<script>
+import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+import PongFront from "@/components/game/PongFront.vue";
+import HeaderOrganism from "@/components/header/navbar.vue";
+import FooterOrganism from "@/components/footer.vue";
+
+export default {
+  components: {
+    PongFront,
+    HeaderOrganism,
+    FooterOrganism,
+  },
+  setup() {
+  const route = useRoute();
+    
+  let mode = computed(() => {
+    console.log("Route params:", route.params);
+    return route.params.mode;
+  });
+  return { mode };
+},
+};
+</script>
 
 
 <style scoped>
 .pong-page {
-  text-align: center;
-  color: white;
-  background-color: #222;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  min-height: 85.5vh;
+  overflow: hidden;
 }
 
-.pong-content {
-  margin: 50px auto;
-  padding: 20px;
-  max-width: 800px;
-  color: white;
-  font-size: 1rem;
-  line-height: 1.6;
+@media screen and (max-width: 768px) {
+  .mobile-hide {
+    display: none;
+  }
 }
+
 </style>

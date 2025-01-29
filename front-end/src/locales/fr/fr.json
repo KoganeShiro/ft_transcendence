@@ -43,8 +43,10 @@
     "delete-account-msg": "Êtes-vous sûr de vouloir supprimer votre compte?",
     "game-choice": "Choisissez un jeu",
     "solo": "Solo",
-    "multi-remote": "Multijoueur (à distance)",
-    "multi-local": "Multijoueur (local)",
-    "tournament": "Tournoi"
+    "multi-remote": "Multijoueur (à Distance)",
+    "multi-local": "Multijoueur (Local)",
+    "tournament": "Tournoi",
+    "select-mode": "Sélectionnez le mode pour ",
+    "select-back": "Retour à la sélection de jeu"
   }
   
