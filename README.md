@@ -24,20 +24,24 @@
 - [x] Credits page
 
 
+- [x] Game choice page (MIDDLE)
+- [x] Game mode page (MIDDLE)
+- [x] Pong page (IMPORTANT)
+
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
 - [ ] Already fill text field component where i can modify it
 - [ ] Account page (IMPORTANT)
 - [ ] Make the sidebar of the Parameter mobile friendly
 
-- [x] Game choice page (MIDDLE)
-- [x] Game mode page (MIDDLE)
-- [x] Pong page (IMPORTANT)
-- [ ] Pong multi local (IMPORTANT)
 - [ ] Searching opponent page
 
-- [ ] Create tournament or Join tournament
+- [x] Create tournament or Join tournament
 - [ ] Waiting for players
 - [ ] Matchmaking page (IMPORTANT)
+
+
+- [ ] Tic Tac Toe page (IMPORTANT)
+- [ ] Tic Tac Toe multi page (IMPORTANT)
 
 
         ## When I can communicate with the back
@@ -49,8 +53,6 @@
 
 - [ ] More than 2 players game page (x2)
 
-- [ ] Tic Tac Toe page (IMPORTANT)
-- [ ] Tic Tac Toe multi page (IMPORTANT)
 
 
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))

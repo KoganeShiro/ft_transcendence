@@ -1,93 +1,100 @@
 <template>
     <h1> {{ $t("create-join") }} </h1>
     <div class="container">
-  
+      <!-- Create Tournament Card -->
       <Card class="card">
-        <!-- Player Count Selection -->
         <div class="section-nb">
-        <label class="label">{{ $t("number-players") }}</label>
+          <label class="label">{{ $t("number-players") }}</label>
           <PlayerCount v-model="playerCount" />
         </div>
   
-        <!-- Player Names Input Fields
-        <div class="section-player">
-          <label class="label">Name of the Players</label>
-          <div class="players-grid">
-            <TextField
-                class="player-name"
-              v-for="(player, index) in playerCount"
-              :key="index"
-              :placeholder="`${index + 1}/ Player name`"
-              v-model="playerNames[index]"
-            />
-          </div>
-        </div> -->
-        
-        <!-- Start Button -->
         <ButtonAtom
-            class="create-button"
+          class="create-button"
           variant="ghost"
           fontSize="20px"
           @click="createTournament"
         >
-        {{ $t("create-tournament") }}
+          {{ $t("create-tournament") }}
         </ButtonAtom>
       </Card>
+  
+      <!-- Join Tournament Card -->
       <Card class="card">
-        <!-- Player Count Selection -->
-        <div class="section-nb">
-        <label class="label">{{ $t("join") }}</label>
+        <div class="section">
+          <label class="label">{{ $t("join") }}</label>
           <TextField
             class="tournament-code"
             :placeholder="$t('tournament-id')"
-            v-model="playerNames[0]"
-            />
+            v-model="tournamentCode"
+          />
         </div>
   
-        <!-- Join Button -->
         <ButtonAtom
-            class="join-button"
+          class="join-button"
           variant="ghost"
           fontSize="20px"
-          @click="createTournament"
+          @click="joinTournament"
         >
-        {{ $t("join-tournament") }}
+          {{ $t("join-tournament") }}
         </ButtonAtom>
       </Card>
     </div>
   </template>
-  
+
+
   <script>
-  import Card from "@/components/atoms/Card.vue";
-  import TextField from "@/components/atoms/TextField.vue";
-  import PlayerCount from "@/components/game/PlayerCount.vue";
-  import ButtonAtom from "@/components/atoms/Button.vue";
-  
-  export default {
-    components: {
-      Card,
-      TextField,
-      PlayerCount,
-      ButtonAtom,
-    },
-    data() {
-      return {
-        playerCount: 4,
-        playerNames: Array(4).fill(""),
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+import Card from "@/components/atoms/Card.vue";
+import TextField from "@/components/atoms/TextField.vue";
+import PlayerCount from "@/components/game/PlayerCount.vue";
+import ButtonAtom from "@/components/atoms/Button.vue";
+
+export default {
+  components: {
+    Card,
+    TextField,
+    PlayerCount,
+    ButtonAtom,
+  },
+  setup() {
+    const router = useRouter();
+    const playerCount = ref(4);
+    const tournamentCode = ref("tournament"); //should be a table of tournament codes given by the back
+
+    const createTournament = () => {
+      const tournamentData = {
+        playerCount: playerCount.value,
+        isCreator: true,
       };
-    },
-    watch: {
-      playerCount(newCount) {
-        this.playerNames = Array(newCount).fill("");
-      },
-    },
-    methods: {
-        createTournament() {
-            console.log("Tournament Started with Players:", this.playerNames);
-      },
-    },
-  };
-  </script>
+      console.log("Creating Tournament:", tournamentData);
+      router.push({ name: "waitingPlayers", query: tournamentData });
+    };
+
+    const joinTournament = () => {
+      if (!tournamentCode.value) {
+        alert("Please enter a tournament code.");
+        return;
+      }
+      console.log("Joining Tournament with Code:", tournamentCode.value);
+      router.push({
+        name: "waitingPlayers",
+        query: { tournamentCode: tournamentCode.value, isCreator: false },
+      });
+    };
+
+    return {
+      router,
+      playerCount,
+      tournamentCode,
+      createTournament,
+      joinTournament,
+    };
+  },
+};
+</script>
+
+  
   
   <style scoped>
   /* Center the content */
@@ -127,17 +134,21 @@
     gap: 12px;
   }
 
-  .player-name {
-    width: 250px;
-  }
-
   .section-nb {
     margin-bottom: 50px;
+  }
+
+  .section {
+    margin-bottom: 30px;
   }
 
   .create-button {
     margin-top: 20px;
     padding: 15px 0;
+  }
+
+  .join-button {
+    padding: 15px;
   }
 
   .tournament-code {
