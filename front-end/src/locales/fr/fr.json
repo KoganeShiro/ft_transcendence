@@ -47,6 +47,14 @@
     "multi-local": "Multijoueur (Local)",
     "tournament": "Tournoi",
     "select-mode": "Sélectionnez le mode pour ",
-    "select-back": "Retour à la sélection de jeu"
+    "select-back": "Retour à la sélection de jeu",
+    "create-join": "Créez ou rejoignez un tournoi",
+    "create-tournament": "Créer le tournoi",
+    "join-tournament": "Rejoindre ce tournoi",
+    "tournament-id": "Entrez l'identifiant du tournoi",
+    "number-players": "Nombre de joueurs",
+    "waiting-players": "En attente du joueur ",
+    "start-tournament": "Démarrer le tournoi",
+    "join": "Rejoindre un tournoi"
   }
   

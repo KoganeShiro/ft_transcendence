@@ -74,7 +74,7 @@
   }
   
   .register-card {
-    width: 100%;
+    width: 500px;
     border-radius: 12px;
     background-color: #252525;
     color: #ffffff;

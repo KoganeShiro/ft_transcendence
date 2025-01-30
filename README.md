@@ -35,6 +35,10 @@
 - [ ] Pong multi local (IMPORTANT)
 - [ ] Searching opponent page
 
+- [ ] Create tournament or Join tournament
+- [ ] Waiting for players
+- [ ] Matchmaking page (IMPORTANT)
+
 
         ## When I can communicate with the back
 - [ ] Call the back for stats
@@ -43,8 +47,6 @@
 - [ ] Call the back for account --> PATCH request to modify informations + avatar
 - [ ] Call the back for the game
 
-- [ ] Create Tournament page (IMPORTANT)
-- [ ] Matchmaking page (IMPORTANT)
 - [ ] More than 2 players game page (x2)
 
 - [ ] Tic Tac Toe page (IMPORTANT)

@@ -26,6 +26,7 @@ import GameChoice from '../views/game/game_choice.vue';
 import ModeSelection from '../views/game/mode_selection.vue';
 import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
+import CreateTournament from '../components/game/CreateTournament.vue';
 
 
 const routes = [
@@ -143,6 +144,11 @@ const routes = [
     path: "/tic-tac-toe/:mode",
     name: "TicTacToe",
     component: TicTacToe,
+  },
+  {
+    path: "/create-tournament",
+    name: "CreateTournament",
+    component: CreateTournament,
   },
 ];
 

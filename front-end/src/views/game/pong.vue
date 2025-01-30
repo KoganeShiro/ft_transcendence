@@ -1,7 +1,7 @@
 <template>
   <HeaderOrganism />
   <div class="pong-page">
-    <div class="mobile-hide">
+    <div :class="['mobile-hide', { 'hide-heading': mode === 'tournament' }]">
       <h1>Pong - {{ mode }} mode</h1>
     </div>
     <PongFront :mode="mode" />
@@ -49,6 +49,10 @@ export default {
   .mobile-hide {
     display: none;
   }
+}
+
+.hide-heading {
+  display: none;
 }
 
 </style>

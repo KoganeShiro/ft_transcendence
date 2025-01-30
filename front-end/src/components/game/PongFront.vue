@@ -1,46 +1,48 @@
 <template>
-    <div class="pong-container">
-      <div class="controls" v-if="mode === 'local'">
-        <div class="player-controls left">
-          <h2 class="mobile-hide">Player 1</h2>
-          <p class="mobile-hide">Move Up: <span>W</span></p>
-          <p class="mobile-hide">Move Down: <span>S</span></p>
-        </div>
-        <div class="player-controls right">
-          <h2 class="mobile-hide">Player 2</h2>
-          <p class="mobile-hide">Move Up: <span>↑</span></p>
-          <p class="mobile-hide">Move Down: <span>↓</span></p>
-        </div>
-      </div>
-
-      <div class="player-controls left" v-else-if="mode === 'solo'">
+  <div class="pong-container">
+    <div class="controls" v-if="mode === 'local'">
+      <div class="player-controls left">
         <h2 class="mobile-hide">Player 1</h2>
         <p class="mobile-hide">Move Up: <span>W</span></p>
         <p class="mobile-hide">Move Down: <span>S</span></p>
       </div>
-
-      <div class="player-controls left" v-else-if="mode === 'remote'">
-        <h2 class="mobile-hide">Player 1</h2>
-        <p class="mobile-hide">Move Up: <span>W</span></p>
-        <p class="mobile-hide">Move Down: <span>S</span></p>
-      </div>
-
-      <div class="player-controls" v-else-if="mode === 'tournament'">
-        <h1 class="mobile-hide">Create tournament (todo)</h1>
-      </div>
-
-      <div class="game-container">
-        <PongGame :mode="mode" />
+      <div class="player-controls right">
+        <h2 class="mobile-hide">Player 2</h2>
+        <p class="mobile-hide">Move Up: <span>↑</span></p>
+        <p class="mobile-hide">Move Down: <span>↓</span></p>
       </div>
     </div>
+
+    <div class="player-controls left" v-else-if="mode === 'solo'">
+      <h2 class="mobile-hide">Player 1</h2>
+      <p class="mobile-hide">Move Up: <span>W</span></p>
+      <p class="mobile-hide">Move Down: <span>S</span></p>
+    </div>
+
+    <div class="player-controls left" v-else-if="mode === 'remote'">
+      <h2 class="mobile-hide">Player 1</h2>
+      <p class="mobile-hide">Move Up: <span>W</span></p>
+      <p class="mobile-hide">Move Down: <span>S</span></p>
+    </div>
+
+    <div class="tournament" v-else-if="mode === 'tournament'">
+      <CreateTournament />
+    </div>
+
+    <div v-if="mode !== 'tournament'" class="game-container">
+      <PongGame :mode="mode" />
+    </div>
+  </div>
 </template>
   
 <script>
 import PongGame from "@/components/game/PongGame.vue";
+import CreateTournament from "@/components/game/CreateTournament.vue";
 
 export default {
   components: {
     PongGame,
+    CreateTournament,
   },
   props: {
     mode: {

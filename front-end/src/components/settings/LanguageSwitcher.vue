@@ -68,8 +68,7 @@ export default {
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  align-items: center;
-  /* margin-left: 300px; */
+  margin-left: 300px;
 }
 
 .lang-btn {
@@ -88,4 +87,24 @@ export default {
   transform: scale(1.05);
   font-weight: bold;
 }
+
+@media (max-width: 1268px) {
+  .lang-btn-container {
+    margin-left: 100px;
+  }
+}
+
+@media (max-width: 968px) {
+  .lang-btn-container {
+    margin-left: 50px;
+  }
+}
+
+@media (max-width: 468px) {
+  .lang-btn-container {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+
 </style>
