@@ -28,16 +28,22 @@
 - [x] Game mode page (MIDDLE)
 - [x] Pong page (IMPORTANT)
 
+- [x] Searching opponent page
+
+- [x] Create tournament or Join tournament
+- [x] Waiting for players
+- [x] Matchmaking page (IMPORTANT)
+
+
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
+- [ ] In Appearence make power-up ?
+
 - [ ] Already fill text field component where i can modify it
 - [ ] Account page (IMPORTANT)
 - [ ] Make the sidebar of the Parameter mobile friendly
 
-- [ ] Searching opponent page
-
-- [x] Create tournament or Join tournament
-- [ ] Waiting for players
-- [ ] Matchmaking page (IMPORTANT)
+- [ ] Add the tournament id when creating the tournament
+- [ ] Make the tournament matchmaking page to game better
 
 
 - [ ] Tic Tac Toe page (IMPORTANT)
@@ -45,11 +51,30 @@
 
 
         ## When I can communicate with the back
+- [ ] Make each part into container
+
+- [ ] Call the back for the game
+- [ ] Matchmaking logic
+- [ ] Tournament logic
+- [ ] Games logic with following pages...
+
+- [ ] Can register
+- [ ] Can login
+- [ ] Can logout
+
 - [ ] Call the back for stats
 - [ ] Call the back for history (ten last battles)
 - [ ] Call the back for friends list (max of 10)
+- [ ] Add a component for the chat ?
+
 - [ ] Call the back for account --> PATCH request to modify informations + avatar
-- [ ] Call the back for the game
+        - [ ] Can modify avatar
+        - [ ] Can modify username
+        - [ ] Can modify password
+        - [ ] Can modify email
+
+
+
 
 - [ ] More than 2 players game page (x2)
 

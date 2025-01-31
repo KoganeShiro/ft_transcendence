@@ -5,7 +5,7 @@
       <h2> {{ $t("waiting-players") }}... </h2>
       <Card class="card">
         <div class="players-grid">
-          <TextField
+          <TextBox
           class="player-name"
             v-for="(player, index) in playerNames"
             :key="index"
@@ -13,6 +13,7 @@
             v-model="playerNames[index]"
             :disabled="!isCreator"
           />
+
           <!--
            Text box component (that will be used in account)
            Show the player name in the text box
@@ -44,15 +45,21 @@
   import TextField from "@/components/atoms/TextField.vue";
   import ButtonAtom from "@/components/atoms/Button.vue";
   import HeaderOrganism from "@/components/header/navbar.vue";
-    import FooterOrganism from "@/components/footer.vue";
+  import FooterOrganism from "@/components/footer.vue";
+  import TextBox from "@/components/atoms/ModifyInformations.vue";
+import { Text } from "vue";
+  import profile from "@/assets/profile.png";
   
   export default {
     components: {
       Card,
       TextField,
       ButtonAtom,
-        HeaderOrganism,
-        FooterOrganism,
+      HeaderOrganism,
+      FooterOrganism,
+      TextBox,
+      Text,
+      profile,
     },
     data() {
       return {
@@ -73,10 +80,7 @@
     },
     methods: {
       startTournament() {
-        alert("Tournament Started!");
-        // this.router.push("/matchmaking");
-        //since it will be a single elimination tournament, if a player loose,
-        //what will they do ?
+        this.router.push("/matchmaking");
       },
     },
   };

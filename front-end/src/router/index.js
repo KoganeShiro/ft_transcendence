@@ -5,7 +5,6 @@ import PrivacyPolicy from '../views/RGPD/privacy_policy.vue';
 import Login from '../views/sign/login.vue';
 import Register from '../views/sign/register.vue';
 import Logout from '../views/sign/logout.vue';
-import Avatar from '../components/atoms/Avatar.vue';
 import Profile from '../views/profile.vue';
 import Play from '../views/game/game_choice.vue'
 import Settings from '../views/settings/settings.vue';
@@ -28,12 +27,18 @@ import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
 import CreateTournament from '../components/game/CreateTournament.vue';
 import waitingPlayers from '../views/game/waiting_players.vue';
+import Matchmaking from '../views/game/matchmaking.vue';
 
 const routes = [
   {
     path: '/',
     name: 'welcome',
     component: Welcome,
+  },
+  {
+    path: '/matchmaking',
+    name: 'Matchmaking',
+    component: Matchmaking,
   },
   {
     path: '/privacy',
@@ -59,11 +64,6 @@ const routes = [
     path: '/logout',
     name: 'Logout',
     component: Logout,
-  },
-  {
-    path: '/avatar',
-    name: 'Avatar',
-    component: Avatar,
   },
   {
     path: '/profile',

@@ -7,6 +7,8 @@
           <label class="label">{{ $t("number-players") }}</label>
           <PlayerCount v-model="playerCount" />
         </div>
+        <!-- <h2> Tournament id:  </h2> -->
+        <!-- id that the back should send me -->
   
         <ButtonAtom
           class="create-button"

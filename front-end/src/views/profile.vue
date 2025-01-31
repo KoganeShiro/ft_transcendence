@@ -119,8 +119,6 @@ export default {
 
 /* Right section: Scrollable content */
 .content {
-  margin-left: 5%;
-  margin-right: 1%;
   flex-grow: 1;
   padding: 20px;
   overflow-y: auto; 
@@ -131,8 +129,7 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
-  margin-right: 20px;
-  width: 500px;
+  margin-right: 15px;
 }
 
 /* Responsive Design */
@@ -144,6 +141,7 @@ export default {
 
   .card {
     margin-left: 20px;
+    width: 90%;
   }
 
   .left-section {

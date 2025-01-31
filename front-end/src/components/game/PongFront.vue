@@ -30,19 +30,29 @@
     </div>
 
     <div v-if="mode !== 'tournament'" class="game-container">
-      <PongGame :mode="mode" />
+      <Versus
+        v-if="showVersus"
+        :player1="player1"
+        :player2="player2"
+        :duration="5000"
+        @time-up="startGame"
+      />
+      <PongGame v-else :mode="mode" />
     </div>
   </div>
 </template>
-  
+
 <script>
+import { ref } from "vue";
 import PongGame from "@/components/game/PongGame.vue";
 import CreateTournament from "@/components/game/CreateTournament.vue";
+import Versus from "@/components/game/Versus.vue";
 
 export default {
   components: {
     PongGame,
     CreateTournament,
+    Versus,
   },
   props: {
     mode: {
@@ -51,11 +61,33 @@ export default {
     },
   },
   setup(props) {
-    console.log("Received mode prop:", props.mode);
+    const showVersus = ref(true);
+
+    const player1 = ref({
+      // imageUrl: "path/to/player1/image.png",
+      pseudo: "Player1",
+    });
+
+    const player2 = ref({
+      // imageUrl: "path/to/player2/image.png",
+      pseudo: "Player2",
+    });
+
+    const startGame = () => {
+      showVersus.value = false;
+    };
+
+    return {
+      showVersus,
+      player1,
+      player2,
+      startGame,
+    };
   },
 };
 </script>
-  
+
+
 <style scoped>
 .pong-container {
   color: white;
