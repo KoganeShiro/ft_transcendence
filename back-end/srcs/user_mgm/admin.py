@@ -6,7 +6,5 @@ from .models import CustomUser
 class CustomUserAdmin(UserAdmin):
     # Add custom fields to the admin panel
     fieldsets = UserAdmin.fieldsets + (
-        ('Additional Info', {'fields': ('cover_photo', )}),
+        ('Additional Info', {'fields': ('cover_photo', 'online', 'friends')}),
     )
-
-# Register your models here.
