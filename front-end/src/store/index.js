@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    theme: "dark",
+    theme: localStorage.getItem("theme") || "dark",
     lang: localStorage.getItem("lang") || "en"
   },
   mutations: {
@@ -13,14 +13,24 @@ export default createStore({
       import("@/plugins/i18n").then(({ default: i18n }) => {
         i18n.global.locale = lang;
       });
+    },
+    setTheme(state, theme) {
+      state.theme = theme;
+      localStorage.setItem("theme", theme);
+      // Optionally, update the document's data attribute to allow CSS styling:
+      document.body.setAttribute("data-theme", theme);
     }
   },
   actions: {
     changeLang({ commit }, lang) {
       commit("setLang", lang);
+    },
+    changeTheme({ commit }, theme) {
+      commit("setTheme", theme);
     }
   },
   getters: {
-    selectedLanguage: (state) => state.lang
+    selectedLanguage: (state) => state.lang,
+    selectedTheme: (state) => state.theme
   }
 });

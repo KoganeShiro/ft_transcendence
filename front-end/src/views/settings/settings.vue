@@ -3,10 +3,10 @@
     <HeaderOrganism />
 
     <div class="settings-body">
-      <Sidebar
-        class="sidebar"
-        @page-selected="setPage"
-      />
+      <!-- Sidebar is always visible on desktop. On mobile, the Sidebar component handles its own toggle via the arrow. -->
+      <Sidebar @page-selected="setPage" />
+
+      <!-- Settings content area -->
       <div class="settings-content">
         <component :is="currentPage" />
       </div>
@@ -25,6 +25,7 @@ import AccountPage from "@/views/settings/account.vue";
 import AppearancePage from "@/views/settings/appearence.vue";
 
 export default {
+  name: "SettingsPage",
   components: {
     HeaderOrganism,
     FooterOrganism,
@@ -35,17 +36,17 @@ export default {
   },
   data() {
     return {
-      currentPage: 'AccountPage',
+      currentPage: "AccountPage",
     };
   },
   methods: {
     setPage(page) {
-      if (page === 'Account') {
-        this.currentPage = 'AccountPage';
-      } else if (page === 'Appearance') {
-        this.currentPage = 'AppearancePage';
-      } else if (page === 'Languages') {
-        this.currentPage = 'LanguagesPage';
+      if (page === "Account") {
+        this.currentPage = "AccountPage";
+      } else if (page === "Appearance") {
+        this.currentPage = "AppearancePage";
+      } else if (page === "Languages") {
+        this.currentPage = "LanguagesPage";
       }
     },
   },
@@ -72,28 +73,19 @@ export default {
   padding: 20px;
   color: white;
   font-size: 1.5rem;
-  line-height: 0.5;
-  flex-grow: 0.5;
+  line-height: 1.5;
+  flex-grow: 1;
 }
 
-.sidebar {
-  flex-shrink: 0;
-}
-
+/* Responsive styles for mobile */
 @media (max-width: 668px) {
-  .settings-content {
-    margin: 0;
-    padding: 0;
-    max-width: none;
-    align-items: center;
-  }
-
   .settings-body {
     flex-direction: column;
   }
-
-  .sidebar {
-    width: 100%;
+  .settings-content {
+    margin: 0;
+    padding: 10px;
+    align-items: center;
   }
 }
 </style>

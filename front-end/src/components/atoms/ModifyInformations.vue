@@ -72,7 +72,7 @@ export default {
 .editable-text-field {
   position: relative;
   width: 100%;
-  min-height: 40px; /* Ensure consistent height */
+  min-height: 40px;
 }
 
 .overlay {
@@ -84,7 +84,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
   border-radius: 8px;
   background: #333;
 }
@@ -104,6 +103,8 @@ export default {
 .text-value {
   font-style: italic;
   color: white;
+  font-size: 18px;
+  padding: 10px;
 }
 
 .edit-btn {
@@ -112,6 +113,7 @@ export default {
   border: none;
   cursor: pointer;
   font-style: italic;
+  margin-right: 10px;
 }
 
 .input-field {

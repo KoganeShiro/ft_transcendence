@@ -127,6 +127,7 @@ export default {
 /* Attention Button */
 .btn-attention {
   background-color: #bb1111;
+  padding: 10px;
   color: white;
 }
 

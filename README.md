@@ -34,13 +34,14 @@
 - [x] Waiting for players
 - [x] Matchmaking page (IMPORTANT)
 
+- [x] Already fill text field component where i can modify it
+- [x] Account page (IMPORTANT)
+- [x] Make the sidebar of the Parameter mobile friendly
+
 
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
 - [ ] In Appearence make power-up ?
 
-- [ ] Already fill text field component where i can modify it
-- [ ] Account page (IMPORTANT)
-- [ ] Make the sidebar of the Parameter mobile friendly
 
 - [ ] Add the tournament id when creating the tournament
 - [ ] Make the tournament matchmaking page to game better
@@ -48,6 +49,8 @@
 
 - [ ] Tic Tac Toe page (IMPORTANT)
 - [ ] Tic Tac Toe multi page (IMPORTANT)
+
+- [ ] Tic Tac Toe AI
 
 
         ## When I can communicate with the back
@@ -73,7 +76,7 @@
         - [ ] Can modify password
         - [ ] Can modify email
 
-
+- [ ] Pong AI
 
 
 - [ ] More than 2 players game page (x2)

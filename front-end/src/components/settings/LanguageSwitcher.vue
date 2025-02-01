@@ -69,6 +69,7 @@ export default {
   gap: 10px;
   padding: 20px;
   margin-left: 300px;
+  margin-right: 50px;
 }
 
 .lang-btn {

@@ -1,36 +1,29 @@
 <template>
-    <div class="appearence-page">
-
-      <div class="appearence-content">
-        <h1>{{ $t("appearance") }}</h1>
-        <p>appearence stuff</p>
-      </div>
-  
+    <div class="appearence-content">
+      <h1>{{ $t("appearance") }}</h1>
+      <ThemeSwitcher @theme-changed="onThemeChanged" />
     </div>
-  </template>
-  
-  <script>
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-    },
-  };
-  </script>
+</template>
 
+<script>
+import ThemeSwitcher from "@/components/settings/ThemeSwitcher.vue";
+
+export default {
+  name: "AppearancePage",
+  components: {
+    ThemeSwitcher,
+  },
+  methods: {
+    onThemeChanged(themeName) {
+      // Here you can implement the logic to apply the new theme
+      console.log("Theme changed to:", themeName);
+      // For example, you could update a CSS variable or call an API to save the preference.
+    },
+  },
+};
+</script>
 
 <style scoped>
-.appearence-page {
-  text-align: center;
-  color: white;
-  background-color: #222;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
 .appearence-content {
   margin: 50px auto;

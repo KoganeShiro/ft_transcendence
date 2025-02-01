@@ -1,9 +1,10 @@
 <template>
-  <div class="sidebar-container">
+  <div class="sidebar-container" :class="{ open: isOpen }">
     <div class="sidebar-arrow" @click="toggleSidebar">
-      <span>&#9656;</span>
+      <span v-if="!isOpen">&#9656;</span>
+      <span v-else>&#9666;</span>
     </div>
-    <div :class="['sidebar', { open: isOpen }]">
+    <div class="sidebar">
       <ButtonGroup class="sidebar-group-element">
         <ButtonAtom
           variant="ghost"
@@ -11,7 +12,7 @@
           :class="{ active: selectedPage === 'Account' }"
           @click="selectPage('Account')"
         >
-          {{ $t("account") }}
+          {{ $t('account') }}
         </ButtonAtom>
         <ButtonAtom
           variant="ghost"
@@ -19,7 +20,7 @@
           :class="{ active: selectedPage === 'Appearance' }"
           @click="selectPage('Appearance')"
         >
-          {{ $t("appearance") }}
+          {{ $t('appearance') }}
         </ButtonAtom>
         <ButtonAtom
           variant="ghost"
@@ -27,7 +28,7 @@
           :class="{ active: selectedPage === 'Languages' }"
           @click="selectPage('Languages')"
         >
-          {{ $t("language") }}
+          {{ $t('language') }}
         </ButtonAtom>
       </ButtonGroup>
     </div>
@@ -39,11 +40,11 @@ import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
 export default {
+  name: "Sidebar",
   components: {
     ButtonGroup,
     ButtonAtom,
   },
-  name: "Sidebar",
   data() {
     return {
       isOpen: false,
@@ -57,6 +58,8 @@ export default {
     selectPage(page) {
       this.selectedPage = page;
       this.$emit("page-selected", page);
+      // On mobile, hide the sidebar after selection.
+      this.isOpen = false;
     },
   },
 };
@@ -74,20 +77,21 @@ export default {
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   font-size: 1.5rem;
+  position: relative;
 }
 
+/* Sidebar arrow is hidden on desktop by default */
 .sidebar-arrow {
-    position: absolute;
-    top: 50%;
-    right: -20px;
-    transform: translateY(-50%);
-    background-color: #333;
-    color: white;
-    padding: 10px 5px;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    display: none;
-  }
+  margin-top: 100px;
+  position: absolute;
+  right: -25px;
+  background-color: #333;
+  color: white;
+  padding: 10px 5px;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  display: none;
+}
 
 .sidebar {
   display: flex;
@@ -95,7 +99,7 @@ export default {
   align-items: center;
 }
 
-.sidebar-group {
+.sidebar-group-element {
   width: 100%;
 }
 
@@ -107,7 +111,7 @@ export default {
   color: #fff;
   text-align: left;
   border-radius: 8px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .sidebar-item:hover,
@@ -116,27 +120,22 @@ export default {
   transform: scale(1.05);
 }
 
+/* Mobile Styles */
 @media (max-width: 668px) {
   .sidebar-container {
+    margin-top: 100px;
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
     z-index: 1000;
-  }
-
-  .sidebar-arrow {
-    display: block;
-  }
-
-  .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
   }
-
-  .sidebar.open {
+  .sidebar-container.open {
     transform: translateX(0);
   }
+  .sidebar-arrow {
+    display: block;
+  }
 }
-
 </style>

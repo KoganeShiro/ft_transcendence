@@ -17,7 +17,7 @@ const i18n = createI18n({
   fallbackLocale: "en",
   messages: {
     en: {
-      ...en, // ✅ Spread the entire translation JSON
+      ...en,
       terms: enTerms.terms,
       privacy: enPrivacy.privacy
     },
