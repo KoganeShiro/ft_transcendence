@@ -23,3 +23,12 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NDk1MjkyLCJpYXQiOjE3Mzg0OTQ5OTIsImp0aSI6ImY1Y2YyMTY0OTI5YjQ5YjNhZTFhM2E2N2NiYTQwMWI4IiwidXNlcl9pZCI6NSwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.ajLTiPysWyzKsq2wNvB9N8aOaK-TFOmcLZtPCKBHwFE
 
 { "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjgxNDk5MiwiaWF0IjoxNzM4NDk0OTkyLCJqdGkiOiI2MTNmMzA1OTc0Zjg0MTU0OTZjNDZlYmMwMTExMjYyNyIsInVzZXJfaWQiOjUsInVzZXJuYW1lIjoiYWRhc20xIiwiZW1haWwiOiJhZGFtc0Btc2FpbC5jb20ifQ.4BWag-hobUpLpGoBRUcTzj91Hdze8oJaF-wv2aDFn-4" }
+
+https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9&redirect_uri=https://localhost:1443/api/auth/complete/42/&response_type=code
+
+curl -X POST "https://api.intra.42.fr/oauth/token" \
+-d "grant_type=authorization_code" \
+-d "client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9" \
+-d "client_secret=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" \
+-d "redirect_uri=https://localhost:1443/api/auth/complete/42/" \
+-d "code=833c7c695db021656b88025dd48600c53c033d9694a430638ac21a905346fbb0"

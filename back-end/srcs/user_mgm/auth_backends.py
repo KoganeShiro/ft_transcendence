@@ -6,7 +6,20 @@ class FortyTwoOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
     USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
+    DEFAULT_SCOPE = ['profile']
+    REDIRECT_STATE = False
+    STATE_PARAMETER = False
 
+    def auth_extra_arguments(self):
+        """Ensure redirect_uri is always sent in the OAuth request"""
+        return {'redirect_uri': self.setting('REDIRECT_URI')}
+
+    def request_access_token(self, *args, **kwargs):
+        """Ensure access token is requested using POST"""
+        kwargs['method'] = 'POST'
+        return super().request_access_token(*args, **kwargs)
+
+    
     def get_user_details(self, response):
         """Extract user details from provider response"""
         return {

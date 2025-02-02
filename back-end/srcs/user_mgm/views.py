@@ -56,14 +56,31 @@ def updateProfile(request):
 
 # social login
 
+#from django.shortcuts import redirect
+#from django.conf import settings
+#from social_django.models import UserSocialAuth
+
+#def login(request):
+#    return redirect('social:begin', backend='42')
+
+#def callback(request):
+#    return redirect(settings.LOGIN_REDIRECT_URL)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.shortcuts import redirect
-from django.conf import settings
-from social_django.models import UserSocialAuth
+from social_django.utils import psa
 
-def login(request):
-    return redirect('social:begin', backend='42')
+class OAuth2Login(APIView):
+    def get(self, request, *args, **kwargs):
+        return redirect('social:begin', backend='custom')
 
-def callback(request):
-    return redirect(settings.LOGIN_REDIRECT_URL)
-
-
+class OAuth2Complete(APIView):
+    @psa('social:complete')
+    def get(self, request, backend):
+        user = request.backend.do_auth(request.GET.get('code'))
+        if user:
+            return Response({'token': user.auth_token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Authentication failed'}, status=status.HTTP_400_BAD_REQUEST)

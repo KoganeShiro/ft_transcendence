@@ -33,21 +33,49 @@ AUTH_USER_MODEL = 'user_mgm.CustomUser'
 
 # social login
 
-SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'
+# Add social-auth-app-django settings
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
+
+SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'                      
 SOCIAL_AUTH_42_SECRET = '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'
+SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
+SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
+SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
+SOCIAL_AUTH_42_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_42_OAUTH2_WHITELISTED_DOMAINS = ['api.intra.42.fr', 'localhost:1443']
+                         
 
 #SOCIAL_AUTH_42_KEY = os.environ.get('42KEY')
 #SOCIAL_AUTH_42_SECRET = os.environ.get('42SECRET')
 # SOCIAL_AUTH_TH2_ENDPOINT = os.environ.get('42URL')
-SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
-SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
-SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
-# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # Ensure HTTPS redirection
+#SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
+#SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
+#SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
+#SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # Ensure HTTPS redirection
+#SOCIAL_AUTH_42_REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
+#REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
+#REDIRECT_URI = 'http://127.0.0.1:1443/api/auth/complete/42/'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+#SOCIAL_AUTH_42_IGNORE_DEFAULT_SCOPE = True
+#SOCIAL_AUTH_42_SCOPE = ['public']
+#SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
+#SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 
+#LOGIN_REDIRECT_URL = '/'
+#LOGOUT_REDIRECT_URL = '/'
+
+#import logging
+
+#SOCIAL_AUTH_LOGGER = logging.getLogger('social')
+#SOCIAL_AUTH_LOGGER.setLevel(logging.DEBUG)
+#SOCIAL_AUTH_LOGGER.addHandler(logging.StreamHandler())
+
+#SOCIAL_AUTH_PIPELINE = ('user_mgm.pipeline.check_42_user_data',)
 
 # social login
 AUTHENTICATION_BACKENDS = (
@@ -60,7 +88,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
 ## social login
-        'rest_framework.authentication.SessionAuthentication',
+#        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
@@ -136,6 +164,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -239,3 +268,12 @@ MEDIA_ROOT = ('./transcendence/media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIAL_AUTH_PIPELINE = ('social_core.pipeline.debug.debug',)
+
+SOCIAL_AUTH_USER_MODEL = 'user_mgm.CustomUser'
+SOCIAL_AUTH_CREATE_USERS = True
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
