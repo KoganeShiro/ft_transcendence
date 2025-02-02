@@ -54,4 +54,16 @@ def updateProfile(request):
         serializer.save()
     return Response(serializer.data)
 
+# social login
+
+from django.shortcuts import redirect
+from django.conf import settings
+from social_django.models import UserSocialAuth
+
+def login(request):
+    return redirect('social:begin', backend='42')
+
+def callback(request):
+    return redirect(settings.LOGIN_REDIRECT_URL)
+
 

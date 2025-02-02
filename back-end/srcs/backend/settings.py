@@ -31,9 +31,36 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'user_mgm.CustomUser'
 
+# social login
+
+SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'
+SOCIAL_AUTH_42_SECRET = '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'
+
+#SOCIAL_AUTH_42_KEY = os.environ.get('42KEY')
+#SOCIAL_AUTH_42_SECRET = os.environ.get('42SECRET')
+# SOCIAL_AUTH_TH2_ENDPOINT = os.environ.get('42URL')
+SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
+SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
+SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
+# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # Ensure HTTPS redirection
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+
+# social login
+AUTHENTICATION_BACKENDS = (
+    #'social_core.backends.oauth.BaseOAuth2',
+    'user_mgm.auth_backends.FortyTwoOAuth2', # 42 login
+    'django.contrib.auth.backends.ModelBackend',  # Default Django auth
+)
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+## social login
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
@@ -51,6 +78,9 @@ INSTALLED_APPS = [
     'django.db.backends.postgresql',    
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+ # added for social login
+    'social_django', 
+
     #'user_mgm',
 
 ]
