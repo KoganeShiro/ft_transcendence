@@ -38,17 +38,25 @@
 - [x] Account page (IMPORTANT)
 - [x] Make the sidebar of the Parameter mobile friendly
 
+- [x] Tic Tac Toe page (IMPORTANT)
+- [x] Tic Tac Toe game page (IMPORTANT)
 
+- [x] Add in mode choice, 4 players games
+
+
+- [ ] Make the multi player icon
 - [ ] Start Appearence page to be able to change theme (MIDDLE)
-- [ ] In Appearence make power-up ?
+- [ ] Add Teapot theme to have power up
 
+- [ ] Add in Avatar component the possibility to modify the image
 
 - [ ] Add the tournament id when creating the tournament
 - [ ] Make the tournament matchmaking page to game better
 
+- [ ] How do we add a friend ?
+- [ ] In friend, add a chat component
+- [ ] In friend, add a way to tell if the friend is online
 
-- [ ] Tic Tac Toe page (IMPORTANT)
-- [ ] Tic Tac Toe multi page (IMPORTANT)
 
 - [ ] Tic Tac Toe AI
 
@@ -86,14 +94,49 @@
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
 # Ft_Transcendence
 
+### Table of Content
+
 ## Introduction
+This project is the final projet of the 42 common core. As the subject states, we have the possibility to choose up to 7 major modules to complete it.
+I did this project with [@Lapinew](github.com/Lapinew) and [@gkubina](github.com/gkubina).
+
+TL;DR, This is a web application built using the Django framework. It features a server-side implementation of the classic Pong game, designed with a microservices architecture using docker. The application supports remote players, user management, authentication, and multiple languages and themes. Additionally, it includes advanced features such as AI opponents, live chat, and multiplayer support (4 players in the same game).
 
 ## Description
+**Major Modules**
+Framework: The project is built using the Django framework.
+Server-Side Pong: Replaces the basic Pong game with a server-side implementation and provides an API.
+Microservices Architecture: The backend is designed as microservices to enhance scalability and maintainability.
+Remote Players: Supports gameplay with remote players.
+User Management: Includes standard user management, authentication, and user handling across tournaments.
+Remote Authentication: Implements remote authentication to enhance gameplay and user experience.
+Additional Game: Adds another game with user history and matchmaking features.
+AI Opponent: Introduces an AI opponent for single-player mode.
+Live Chat: Integrates a live chat feature for real-time communication.
+Multiplayer Support: Supports more than two players in the same game.
 
-## Why ?
+**Minor Modules**
+Database: Uses PostgreSQL for the backend database.
+Multiple Language Support: Supports multiple languages to cater to a diverse user base.
+User and Game Stats Dashboards: Provides dashboards for user and game statistics.
+Game Customization Options: Allows users to customize game settings.
+Device Support: Ensures compatibility across all devices.
+
+## The Project
+put screenshot + "tuto"
 
 ## Quick Start
+```
+git clone git@github.com:KoganeShiro/ft_transcendence.git
+cd ft_transcendence
+```
+
+or the link of the github page ??
 
 ## Usage
+If you don't have make or docker and docker composed installed, you should in order to compile and run this project
 
-## Contributing
+If you did, then you can make and follow the instruction !
+```
+make
+```

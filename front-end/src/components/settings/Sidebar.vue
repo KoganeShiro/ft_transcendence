@@ -67,7 +67,6 @@ export default {
 
 <style scoped>
 .sidebar-container {
-  width: 200px;
   height: 550px;
   background-color: #2c2c2c;
   color: #fff;

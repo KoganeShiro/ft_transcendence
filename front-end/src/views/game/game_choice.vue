@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
@@ -31,29 +32,31 @@ import pongImage from "@/assets/pong.png";
 import ticTacToeImage from "@/assets/tic-tac-toe.png";
 
 export default {
+  name: "GameChoice",
   components: {
     HeaderOrganism,
     FooterOrganism,
     GameCard,
   },
-  data() {
-    return {
-      pongImage,
-      ticTacToeImage,
-      cards: [
-        { image: pongImage, name: "Pong" },
-        { image: ticTacToeImage, name: "Tic Tac Toe" },
-      ],
-    };
-  },
   setup() {
     const router = useRouter();
 
+    const cards = ref([
+      { image: pongImage, name: "Pong" },
+      { image: ticTacToeImage, name: "Tic Tac Toe" },
+    ]);
+
     const handleGameChoice = (gameName) => {
-      router.push({ path: "/select-mode", query: { game: gameName } }); // Pass game name
+      if (gameName === "Pong") {
+        console.log("Pong selected");
+        router.push({ path: "/select-mode", query: { game: gameName } });
+      } else if (gameName === "Tic Tac Toe") {
+        console.log("Tic Tac Toe selected");
+        router.push({ path: "/select-tic-mode", query: { game: gameName } });
+      }
     };
 
-    return { handleGameChoice };
+    return { cards, handleGameChoice };
   },
 };
 </script>

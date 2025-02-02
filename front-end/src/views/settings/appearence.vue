@@ -1,8 +1,8 @@
 <template>
-    <div class="appearence-content">
-      <h1>{{ $t("appearance") }}</h1>
-      <ThemeSwitcher @theme-changed="onThemeChanged" />
-    </div>
+  <div class="appearence-content">
+    <h1>{{ $t("appearance") }}</h1>
+    <ThemeSwitcher @theme-changed="onThemeChanged" />
+  </div>
 </template>
 
 <script>
@@ -15,16 +15,14 @@ export default {
   },
   methods: {
     onThemeChanged(themeName) {
-      // Here you can implement the logic to apply the new theme
       console.log("Theme changed to:", themeName);
-      // For example, you could update a CSS variable or call an API to save the preference.
+      // Additional logic can be added here if needed.
     },
   },
 };
 </script>
 
 <style scoped>
-
 .appearence-content {
   margin: 50px auto;
   padding: 20px;

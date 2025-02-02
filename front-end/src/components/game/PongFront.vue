@@ -25,6 +25,13 @@
       <p class="mobile-hide">Move Down: <span>S</span></p>
     </div>
 
+    <div class="player-controls left" v-else-if="mode === 'multiplayer'">
+      <h2 class="mobile-hide">Player 1</h2>
+      <p class="mobile-hide">Move Up: <span>W</span></p>
+      <p class="mobile-hide">Move Down: <span>S</span></p>
+      <!-- MultiPong -->
+    </div>
+
     <div class="tournament" v-else-if="mode === 'tournament'">
       <CreateTournament />
     </div>

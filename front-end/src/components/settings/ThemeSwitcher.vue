@@ -22,6 +22,7 @@ import forest from "@/assets/forest.jpg";
 import volcano from "@/assets/volcano.jpg";
 import sun from "@/assets/sun.jpg";
 import moon from "@/assets/moon.jpg";
+import teapot from "@/assets/teapot.jpg";
 
 export default {
   name: "ThemeSwitcher",
@@ -30,13 +31,13 @@ export default {
   },
   data() {
     return {
-      // Define your available themes
       themes: [
         { name: "Dark", imageUrl: moon },
         { name: "Light", imageUrl: sun },
         { name: "Ocean", imageUrl: ocean },
         { name: "Forest", imageUrl: forest },
-        { name: "Volcano", imageUrl: volcano }
+        { name: "Volcano", imageUrl: volcano },
+        { name: "Teapot", imageUrl: teapot }
       ]
     };
   },

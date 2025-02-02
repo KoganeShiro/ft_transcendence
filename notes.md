@@ -90,9 +90,12 @@ JWT 2FA ??
 
 ◦ Minor module: Game Customization Options.
 
+◦ Major module: Live Chat.
+
 ◦ Major module: Multiplayers (more than 2 in the same game)
 
 ◦ Minor module: Support on all devices.
+
 ◦ Minor module: Add accessibility for Visually Impaired Users.
 
 

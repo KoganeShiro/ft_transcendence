@@ -43,8 +43,9 @@
     "delete-account-msg": "Möchten Sie Ihr Konto wirklich löschen?",
     "game-choice": "Wählen Sie ein Spiel",
     "solo": "Solo",
-    "multi-remote": "Multiplayer (Remote)",
-    "multi-local": "Multiplayer (Lokal)",
+    "multi-remote": "Mehrspieler (Remote)",
+    "multi-local": "Mehrspieler (Lokal)",
+    "more-than-2": "4 Spieler (Remote)",
     "tournament": "Turnier",
     "select-mode": "Wählen Sie den Modus für ",
     "select-back": "Zurück zur Spielauswahl",
@@ -56,6 +57,7 @@
     "waiting-players": "Warten auf den Spieler ",
     "start-tournament": "Turnier starten",
     "join": "Turnier beitreten",
-    "player": "Spieler"
+    "player": "Spieler",
+    "choose-theme": "Wählen Sie ein Thema"
   }
   

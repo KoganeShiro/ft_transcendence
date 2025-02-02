@@ -47,17 +47,14 @@
     cursor: pointer;
     transition: transform 0.2s ease, background 0.3s ease;
   }
-  
   .theme-button:hover {
     transform: scale(1.05);
     background: #444;
   }
-  
   .theme-button.active {
     background: #555;
     border: 2px solid #007bff;
   }
-  
   .theme-image {
     width: 100px;
     height: 100px;
@@ -65,7 +62,6 @@
     object-fit: cover;
     margin-bottom: 10px;
   }
-  
   .theme-name {
     font-size: 1rem;
     color: white;

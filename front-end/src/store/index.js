@@ -15,9 +15,9 @@ export default createStore({
       });
     },
     setTheme(state, theme) {
+      console.log("Setting theme:", theme);
       state.theme = theme;
       localStorage.setItem("theme", theme);
-      // Optionally, update the document's data attribute to allow CSS styling:
       document.body.setAttribute("data-theme", theme);
     }
   },

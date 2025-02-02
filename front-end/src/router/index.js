@@ -23,6 +23,7 @@ import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
 // import Win from '../views/game/win.vue';
 import GameChoice from '../views/game/game_choice.vue';
 import ModeSelection from '../views/game/mode_selection.vue';
+import TicModeSelection from '../views/game/tic_mode_selection.vue';
 import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
 import CreateTournament from '../components/game/CreateTournament.vue';
@@ -134,6 +135,11 @@ const routes = [
     path: "/select-mode",
     name: "modeSelection",
     component: ModeSelection,
+  },
+  {
+    path: "/select-tic-mode",
+    name: "ticModeSelection",
+    component: TicModeSelection,
   },
   {
     path: "/pong/:mode",

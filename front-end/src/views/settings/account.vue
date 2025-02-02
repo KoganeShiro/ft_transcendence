@@ -85,7 +85,6 @@ export default {
           this.user.name = "username42";
           this.user.mail = data.mail;
           this.user.avatar = data.avatar || "/assets/profile.png";
-          // For security reasons, password is left empty.
           this.user.password = "*************";
         })
         .catch(error => {

@@ -55,8 +55,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  color: white;
+  /* background-color: #333; */
+  background-color: var(--header-color);
+  color: var(--text-color);
   padding: 10px 20px;
   height: 50px;
 }
@@ -75,6 +76,8 @@ export default {
   border: none;
   cursor: pointer;
   z-index: 1001;
+  /* make the color darker */
+  filter: brightness(0.8);
 }
 
 .burger-icon,

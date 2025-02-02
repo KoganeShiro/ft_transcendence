@@ -43,8 +43,9 @@
     "delete-account-msg": "Are you sure you want to delete your account?",
     "game-choice": "Choose a game",
     "solo": "Solo",
-    "multi-remote": "Multiplayer (Remote)",
-    "multi-local": "Multiplayer (Local)",
+    "multi-remote": "Versus (Remote)",
+    "multi-local": "Versus (Local)",
+    "more-than-2": "4 players (Remote)",
     "tournament": "Tournament",
     "select-mode": "Select mode for ",
     "select-back": "Back to Game Selection",
@@ -56,6 +57,7 @@
     "waiting-players": "Waiting for the player ",
     "start-tournament": "Start the tournament",
     "join": "Join a tournament",
-    "player": "Player"
+    "player": "Player",
+    "choose-theme": "Choose a theme"
 }
   

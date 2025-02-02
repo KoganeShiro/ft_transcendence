@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from "vue-router";
-import { useI18n } from 'vue-i18n';
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import GameCard from "@/components/game/GameChoice.vue";
@@ -38,8 +38,11 @@ import Solo from "@/assets/solo.png";
 import Remote from "@/assets/remote.png";
 import Local from "@/assets/local.png";
 import Tournament from "@/assets/tournament.svg";
+// import Multiplayer from "@/assets/multiplayer.png";
+import Load from "@/assets/teapot.jpg";
 
 export default {
+  name: "PongModeSelection",
   components: {
     HeaderOrganism,
     FooterOrganism,
@@ -48,24 +51,26 @@ export default {
   setup() {
     const { t } = useI18n();
     const router = useRouter();
-    const route = useRoute();
-    const gameName = route.query.game || "Game";
+
+    // For Pong mode selection, we fix the game name to "Pong"
+    const gameName = "Pong";
 
     const handleModeChoice = (mode) => {
-      if (gameName) {
-        router.push(`/${gameName.toLowerCase()}/${mode}`);
-      }
+      router.push(`/pong/${mode}`);
     };
 
     const goBack = () => {
       router.push("/game-choice");
     };
 
+    // These cards represent the different game modes available for Pong.
     const cards = [
-      { image: Solo, name: t('solo'), mode: "solo" },
-      { image: Remote, name: t('multi-remote'), mode: "remote" },
-      { image: Local, name: t('multi-local'), mode: "local" },
-      { image: Tournament, name: t('tournament'), mode: "tournament" },
+      { image: Solo, name: t("solo"), mode: "solo" },
+      { image: Remote, name: t("multi-remote"), mode: "remote" },
+      { image: Local, name: t("multi-local"), mode: "local" },
+      { image: Tournament, name: t("tournament"), mode: "tournament" },
+      // { image: Multiplayer, name: t("multiplayer"), mode: "multiplayer" },
+      { image: Load, name: t("more-than-2"), mode: "multiplayer" },
     ];
 
     return { gameName, handleModeChoice, goBack, cards };
@@ -99,13 +104,6 @@ export default {
 .game-cards-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.first-row,
-.second-row {
-  display: flex;
   justify-content: center;
   gap: 20px;
 }
