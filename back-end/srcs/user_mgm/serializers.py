@@ -62,19 +62,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password', 'cover_photo')
 
     def create(self, validated_data):
-        default_cover_photo = 'covers/default.jpg'
+  #      default_cover_photo = 'covers/default.jpg'
         user = CustomUser.objects.create(
         username=validated_data['username'],
         email=validated_data['email'],
-        cover_photo=validated_data.get('cover_photo', default_cover_photo),
+        cover_photo=validated_data.get('cover_photo', None),
         )
         user.set_password(validated_data['password'])
+      #  if user.cover_photo:
+      #      user.cover_photo_url = user.cover_photo.url
         user.save()
+        
 
         return user
 
 class ProfileSerializer(serializers.ModelSerializer):    
 
     class Meta:
-        model = CustomUser
+        model = CustomUser        
         fields = '__all__'
