@@ -71,16 +71,26 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import redirect
 from social_django.utils import psa
+import logging
+
+logger = logging.getLogger(__name__)
 
 class OAuth2Login(APIView):
     def get(self, request, *args, **kwargs):
-        return redirect('social:begin', backend='custom')
+        logging.debug('OAuth2Login: Request received')
+        return redirect('social:begin', backend='42')
 
 class OAuth2Complete(APIView):
+
     @psa('social:complete')
     def get(self, request, backend):
+        logging.debug('OAuth2Complete: Request received')
+        print ("OAuth2Complete: Request received")
+        
         user = request.backend.do_auth(request.GET.get('code'))
         if user:
+            logging.debug('OAuth2Complete: Authentication successful')
             return Response({'token': user.auth_token.key}, status=status.HTTP_200_OK)
         else:
+            logging.debug('OAuth2Complete: Authentication failed')
             return Response({'error': 'Authentication failed'}, status=status.HTTP_400_BAD_REQUEST)

@@ -12,9 +12,72 @@ Content-Type: application/json
 
 ###
 
+POST https://localhost:1443/api/games/games/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "player2": 1,
+    "winner": 2,
+    "loser": 2
+}
+
+###
+
+DELETE https://localhost:1443/api/games/games/2/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "loser": 1
+}
+
+###
+
+PATCH https://localhost:1443/api/games/games/4/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "loser": 1
+}
+
+###
+
+GET https://localhost:1443/api/games/games/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "player2": 2,
+    "winner": 1,
+    "loser": 2
+}
+
+###
+
+GET https://localhost:1443/api/games/games/2/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTg4NDMwLCJpYXQiOjE3Mzg1ODgxMzAsImp0aSI6ImJjMThkMzc5MjM2ZjQ5OTliNTRhZDBiOTJkMTJiMTI0IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.bUlsy75uS5vy6Zne1ekaZkTFC-_SpwPGj03FprP2Aj4
+
+{
+    "player1": 1,
+    "player2": 2,
+    "winner": 1,
+    "loser": 2
+}
+
+
+
+###
+
 GET https://localhost:1443/api/profile/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTc4NDQyLCJpYXQiOjE3Mzg1NzgxNDIsImp0aSI6ImZhNWRmMWJlNjEzOTRmZjJhODlkODI2NGNiN2Y3OWU4IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.et7qTdCUD04ASBiU2znYMy1IhbFBMHujahc4rYocSJo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTg4MDk3LCJpYXQiOjE3Mzg1ODc3OTcsImp0aSI6IjdkNWFjYWQzN2QyMTRkNmNhZWE2MmU3Nzc2MmE3MmUxIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.HzqmMN2Pr4AdShRD09pw6aHNgNvvjolaKtG4rvw74xw
 
 ###
 
@@ -23,6 +86,11 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTc4NTQzLCJpYXQiOjE3Mzg1NzgyNDMsImp0aSI6IjcxYTJkNmEzYTA1ZjQ2YzlhMDU5Y2VlMjcwODU5YzgwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9._YFDztjf6H6JIZ6j51BBnJWS0kMSmcTOSzNemJKhPYw
 
 { "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Mjg5ODI0MywiaWF0IjoxNzM4NTc4MjQzLCJqdGkiOiI2ZDIyNDExNDRlNjA0N2E1YWU1MGVlZGUwMGQ5YjMyOSIsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoiYWRhc20xIiwiZW1haWwiOiJhZGFtc0Btc2FpbC5jb20ifQ.TD0jpK2l_934nzDE_g9Y1sjwpo9Vw0wI5Xr8CkfHn_0" }
+
+###
+
+GET https://localhost:1443/media/profile_image/Default_pfp.jpg
+Content-Type: application/json
 
 
 ###
@@ -48,7 +116,7 @@ curl -X POST "https://api.intra.42.fr/oauth/token" \
 -d "client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9" \
 -d "client_secret=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" \
 -d "redirect_uri=https://localhost:1443/api/auth/complete/42/" \
--d "code=833c7c695db021656b88025dd48600c53c033d9694a430638ac21a905346fbb0"
+-d "code=34abdf4a058c8ac9316a5e00fd187d5348e0380672839b82c4060f38725bff14"
 
 ###
 
