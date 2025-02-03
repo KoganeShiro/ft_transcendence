@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, permission_classes  
 from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer
+from django.shortcuts import get_object_or_404
 
 #Login User
 class Login(TokenObtainPairView):
@@ -37,22 +38,88 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-#api/profile  and api/profile/update
+# #api/profile  and api/profile/update
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def getProfile(request):
+#     user = request.user
+#     serializer = ProfileSerializer(user, many=False)
+#     return Response(serializer.data)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getProfile(request):
-    user = request.user
+def getProfile(request, lookup_value=None):
+    """
+    Fetch user profile using either user ID or username.
+    """
+    if lookup_value is None:  # Default to the current user if no lookup is provided
+        user = request.user
+    else:
+        # Check if the lookup_value is an ID (integer) or username (string)
+        if lookup_value.isdigit():
+            user = get_object_or_404(CustomUser, pk=int(lookup_value))  # Lookup by ID
+        else:
+            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+
     serializer = ProfileSerializer(user, many=False)
     return Response(serializer.data)
 
+
+
+
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def updateProfile(request):
+#     user = request.user
+#     serializer = ProfileSerializer(user, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#     return Response(serializer.data)
+
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def updateProfile(request):
-    user = request.user
-    serializer = ProfileSerializer(user, data=request.data, partial=True)
+def updateProfile(request, lookup_value=None):
+    """
+    Update user profile using either user ID or username.
+    """
+    # If no lookup value is provided, default to the current logged-in user
+    if lookup_value is None:
+        user = request.user
+    else:
+        # Check if the lookup_value is an ID (integer) or username (string)
+        if lookup_value.isdigit():
+            user = get_object_or_404(CustomUser, pk=int(lookup_value))  # Lookup by ID
+        else:
+            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+
+    serializer = ProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
     if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+        serializer.save()  # Save the updated profile data
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import CustomUser  # Ensure you're using your custom user model
+from .serializers import UserSerializer  # Your custom serializer for users
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Ensure the user is authenticated to access this data
+def get_all_users(request):
+    """
+    Get all users from the CustomUser model and return their serialized data.
+    """
+    users = CustomUser.objects.all()  # Get all users from CustomUser
+    serializer = UserSerializer(users, many=True)  # Serialize the queryset
+    return Response(serializer.data)  # Return the serialized data as the response
+
+
+
+
+
 
 # social login
 

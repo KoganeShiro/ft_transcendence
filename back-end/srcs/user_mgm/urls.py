@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import OAuth2Login, OAuth2Complete
+from .views import OAuth2Login, OAuth2Complete, get_all_users
 import logging
 # from .views import callback
 
@@ -16,7 +16,11 @@ urlpatterns = [
 
     #Profile
     path('profile/', views.getProfile, name='profile'),
+    path('profile/<str:lookup_value>/', views.getProfile, name='profile'),
     path('profile/update/', views.updateProfile, name='update-profile'),
+    path('profile/update/<str:lookup_value>/', views.updateProfile, name='update-profile'),
+    path('users/', get_all_users, name='get_all_users'),  # Endpoint for all users
+  #  path('users/', views , name='update-profile'),
 
     #Social Auth
     path('auth/', include('social_django.urls', namespace='social')),
