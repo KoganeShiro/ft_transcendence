@@ -46,19 +46,19 @@
 - [x] Make the multi player icon
 - [x] Start Appearence page to be able to change theme (MIDDLE)
 - [x] Add Teapot theme to have power up
+- [x] Add in Avatar component the possibility to modify the image
 
 
-- [ ] Implement power up
-
-- [ ] Add in Avatar component the possibility to modify the image
 
 - [ ] Add the tournament id when creating the tournament
 - [ ] Make the tournament matchmaking page to game better
+- [ ] Chat components
 
 - [ ] How do we add a friend ?
 - [ ] In friend, add a chat component
 - [ ] In friend, add a way to tell if the friend is online
 
+- [ ] Implement power up
 
 - [ ] Tic Tac Toe AI
 

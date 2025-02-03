@@ -53,7 +53,8 @@
 
 <script>
 import axios from "axios";
-import AvatarAtom from "@/components/atoms/Avatar.vue";
+// import AvatarAtom from "@/components/atoms/Avatar.vue";
+import AvatarAtom from "@/components/settings/ModifyAvatar.vue";
 import EditableTextField from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
