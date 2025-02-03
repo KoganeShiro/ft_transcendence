@@ -28,53 +28,74 @@
     </div>
   </template>
   
-  <script>
-  import { useRouter } from "vue-router";
-  import { useI18n } from "vue-i18n";
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  import GameCard from "@/components/game/GameChoice.vue";
-  import Solo from "@/assets/solo.png";
-  import Remote from "@/assets/remote.png";
-  import Local from "@/assets/local.png";
-//   import Multiplayer from "@/assets/multiplayer.png";
-  import Load from "@/assets/teapot.jpg";
   
-  export default {
-    name: "TicModeSelection",
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-      GameCard,
-    },
-    setup() {
-      const { t } = useI18n();
-      const router = useRouter();
-  
-      // For Tic Tac Toe mode selection, we fix the game name.
-      const gameName = "Tic Tac Toe";
-  
-      const handleModeChoice = (mode) => {
-        // Navigate to routes like "/tic-tac-toe/solo", "/tic-tac-toe/remote", etc.
-        router.push(`/tic-tac-toe/${mode}`);
-      };
-  
-      const goBack = () => {
-        router.push("/game-choice");
-      };
-  
-      // Only Solo, Multi-Remote, and Multi-Local are available.
-      const cards = [
-        { image: Solo, name: t("solo"), mode: "solo" },
-        { image: Remote, name: t("multi-remote"), mode: "remote" },
-        { image: Local, name: t("multi-local"), mode: "local" },
-        { image: Load, name: t("more-than-2"), mode: "multiplayer" },
-      ];
-  
-      return { gameName, handleModeChoice, goBack, cards };
-    },
-  };
-  </script>
+<script>
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import HeaderOrganism from "@/components/header/navbar.vue";
+import FooterOrganism from "@/components/footer.vue";
+import GameCard from "@/components/game/GameChoice.vue";
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+// import Multiplayer from "@/assets/custom-icon/multiplayer.png";
+import Load from "@/assets/teapot.jpg";
+
+
+const getThemeImage = (mode, theme) => {
+  try {
+    if (theme === 'teapot') {
+      theme = 'volcano';
+    }
+    return new URL(
+      `../../assets/custom-icon/${mode}-${theme}.png`,
+      import.meta.url
+    ).href;
+  } catch (error) {
+    console.error(`Error loading image for ${mode} in ${theme} theme:`, error);
+    return fallbackImage;
+  }
+};
+
+
+export default {
+  name: "PongModeSelection",
+  components: {
+    HeaderOrganism,
+    FooterOrganism,
+    GameCard,
+  },
+  setup() {
+    const { t } = useI18n();
+    const router = useRouter();
+    const store = useStore();
+    const currentTheme = computed(() => store.state.theme || 'moon');
+
+    const gameName = "Pong";
+
+    const handleModeChoice = (mode) => {
+      router.push(`/tic-tac-toe/${mode}`);
+    };
+
+    const goBack = () => {
+      router.push("/game-choice");
+    };
+
+    const cards = computed(() => [
+      { image: getThemeImage('solo', currentTheme.value), name: t("solo"), mode: "solo" },
+      { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
+      { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
+      // { image: getThemeImage('load', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
+      { image: Load, name: t("more-than-2"), mode: "multiplayer" },
+    ]);
+
+
+
+    return { gameName, handleModeChoice, goBack, cards };
+  },
+};
+</script>
+
   
   <style scoped>
   .h1 {
@@ -110,7 +131,7 @@
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
-    background: #ff5757;
+    background: var(--back);
     color: white;
     border: none;
     cursor: pointer;

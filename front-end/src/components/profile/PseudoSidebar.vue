@@ -76,12 +76,12 @@ export default {
 @media (max-width: 768px) {
   .pseudo-sidebar ul {
     display: flex;
-    flex-direction: row; /* Display items in a row */
-    justify-content: center; /* Center items horizontally */
+    flex-direction: row;
+    justify-content: center;
   }
 
   .pseudo-sidebar li {
-    margin: 0 10px; /* Add horizontal spacing between items */
+    margin: 0 10px;
   }
 }
 </style>

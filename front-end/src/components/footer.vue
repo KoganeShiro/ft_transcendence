@@ -20,7 +20,7 @@ export default {};
   margin-top: 20px;
   background-color: var(--footer-color);;
   padding: 5px 10px;
-  color: white;
+  color: var(--text-color);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -35,6 +35,11 @@ export default {};
 
 .footer-content p {
   margin: 0;
+}
+
+.footer-link {
+  color: var(--link-color);
+  font-weight: bold;
 }
 
 .footer-link:hover {

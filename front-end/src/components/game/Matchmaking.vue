@@ -125,6 +125,7 @@ export default {
 .vs {
   font-weight: bold;
   font-size: 1.2em;
+  color: var(--text-color);
 }
 
 .status {

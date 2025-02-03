@@ -55,7 +55,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background-color: #333; */
   background-color: var(--header-color);
   color: var(--text-color);
   padding: 10px 20px;
@@ -76,15 +75,13 @@ export default {
   border: none;
   cursor: pointer;
   z-index: 1001;
-  /* make the color darker */
-  filter: brightness(0.8);
 }
 
 .burger-icon,
 .cross-icon {
   width: 30px;
   height: 30px;
-  stroke: var(--icon-color, rgb(255, 255, 255));
+  stroke: var(--icon-color);
   stroke-width: 2;
 }
 

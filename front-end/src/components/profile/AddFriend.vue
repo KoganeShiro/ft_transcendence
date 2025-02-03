@@ -63,10 +63,11 @@
     border-radius: 5px;
     border: 1px solid #555;
     margin-right: 10px;
-    background-color: #333;
-    color: white;
+    /* background-color: #333; */
+    background-color: var(--text-box-color);
+    color: var(--text-color);
   }
-  
+
   .add-friend-btn {
     padding: 10px 20px;
     background-color: #4caf50;

@@ -77,7 +77,7 @@
     width: 500px;
     border-radius: 12px;
     background-color: #252525;
-    color: #ffffff;
+    color: var(--text-color);
   }
   
   .register-title {

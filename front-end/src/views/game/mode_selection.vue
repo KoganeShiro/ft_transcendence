@@ -34,12 +34,28 @@ import { useI18n } from "vue-i18n";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import GameCard from "@/components/game/GameChoice.vue";
-import Solo from "@/assets/solo.png";
-import Remote from "@/assets/remote.png";
-import Local from "@/assets/local.png";
-import Tournament from "@/assets/tournament.svg";
-// import Multiplayer from "@/assets/multiplayer.png";
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+// import Multiplayer from "@/assets/custom-icon/multiplayer.png";
 import Load from "@/assets/teapot.jpg";
+
+
+const getThemeImage = (mode, theme) => {
+  try {
+    if (theme === 'teapot') {
+      theme = 'volcano';
+    }
+    return new URL(
+      `../../assets/custom-icon/${mode}-${theme}.png`,
+      import.meta.url
+    ).href;
+  } catch (error) {
+    console.error(`Error loading image for ${mode} in ${theme} theme:`, error);
+    return fallbackImage;
+  }
+};
+
 
 export default {
   name: "PongModeSelection",
@@ -51,8 +67,9 @@ export default {
   setup() {
     const { t } = useI18n();
     const router = useRouter();
+    const store = useStore();
+    const currentTheme = computed(() => store.state.theme || 'moon');
 
-    // For Pong mode selection, we fix the game name to "Pong"
     const gameName = "Pong";
 
     const handleModeChoice = (mode) => {
@@ -63,15 +80,17 @@ export default {
       router.push("/game-choice");
     };
 
-    // These cards represent the different game modes available for Pong.
-    const cards = [
-      { image: Solo, name: t("solo"), mode: "solo" },
-      { image: Remote, name: t("multi-remote"), mode: "remote" },
-      { image: Local, name: t("multi-local"), mode: "local" },
-      { image: Tournament, name: t("tournament"), mode: "tournament" },
-      // { image: Multiplayer, name: t("multiplayer"), mode: "multiplayer" },
+    const cards = computed(() => [
+      { image: getThemeImage('solo', currentTheme.value), name: t("solo"), mode: "solo" },
+      { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
+      { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
+      { image: getThemeImage('tournament', currentTheme.value), name: t("tournament"), mode: "tournament" },
+      // { image: getThemeImage('load', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
       { image: Load, name: t("more-than-2"), mode: "multiplayer" },
-    ];
+    ]);
+
+    console.log(cards);
+
 
     return { gameName, handleModeChoice, goBack, cards };
   },
@@ -112,7 +131,8 @@ export default {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 1rem;
-  background: #ff5757;
+  /* background: #ff5757; */
+  background: var(--back);
   color: white;
   border: none;
   cursor: pointer;
@@ -151,7 +171,7 @@ export default {
 }
 
 .back-button:hover {
-  background: #ff1c1c;
+  background: #db1919d0;
 }
 
 @media (max-width: 600px) {

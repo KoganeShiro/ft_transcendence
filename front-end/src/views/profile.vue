@@ -101,7 +101,7 @@ export default {
 }
 
 .avatar-container {
-  color: white;
+  color: var(--text-color);
   font-size: 1.3rem;
   font-weight: bold;
 }
@@ -125,7 +125,7 @@ export default {
 }
 
 .card {
-  background-color: #64646471;
+  background-color: var(--card-color);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;

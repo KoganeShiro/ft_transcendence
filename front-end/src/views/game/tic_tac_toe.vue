@@ -45,7 +45,7 @@ export default {
 
 <style scoped>
 .tic-tac-toe-page {
-  background-color: #222;
+  background-color: var(--background-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

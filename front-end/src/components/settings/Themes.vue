@@ -39,7 +39,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #333;
+    /* background: #333; */
+    background: var(--text-box-color);
     border: none;
     border-radius: 8px;
     padding: 10px;
@@ -49,11 +50,14 @@
   }
   .theme-button:hover {
     transform: scale(1.05);
-    background: #444;
+    /* background: #444; */
+    background: var(--text-box-color);
   }
   .theme-button.active {
-    background: #555;
+    /* background: #555; */
+    background: var(--sidebar-color);
     border: 2px solid #007bff;
+    transform: scale(1.09);
   }
   .theme-image {
     width: 100px;
@@ -64,7 +68,7 @@
   }
   .theme-name {
     font-size: 1rem;
-    color: white;
+    color: var(--text-color);
     font-weight: bold;
   }
   </style>

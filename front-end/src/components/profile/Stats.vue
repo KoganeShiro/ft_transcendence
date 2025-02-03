@@ -26,7 +26,7 @@ export default {
 <style scoped>
 .stats-container {
   padding: 20px;
-  color: white;
+  color: var(--text-color);
 }
 
 .stats p {

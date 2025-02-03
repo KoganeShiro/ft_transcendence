@@ -64,8 +64,8 @@ export default {
 <style scoped>
 .credit-page {
   text-align: center;
-  color: white;
-  background-color: #222;
+  color: var(--text-color);
+  background-color: var(--background-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -95,7 +95,7 @@ export default {
 }
 
 .github a {
-  color: rgb(255, 255, 255);
+  color: var(--text-color);
   text-decoration: none;
   display: inline-block;
   transition: transform 0.3s ease, color 0.3s ease;
@@ -114,7 +114,7 @@ export default {
 
 .github a:hover {
   transform: translateY(-10px);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-color);
 }
 
 .github a:hover .stars {

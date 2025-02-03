@@ -77,14 +77,15 @@ export default {
   padding: 14px;
   border-radius: 10px;
   font-size: 1rem;
-  color: white;
+  color: var(--text-color);
   transition: all 0.3s ease;
   background-color: transparent;
 }
 
 .lang-btn:hover,
 .lang-btn.selected {
-  background-color: #505050;
+  /* background-color: #505050; */
+  background-color: var(--sidebar-hoover-color);
   transform: scale(1.05);
   font-weight: bold;
 }

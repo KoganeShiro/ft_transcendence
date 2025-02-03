@@ -26,7 +26,7 @@ export default {
 <style scoped>
 .page-container {
   padding: 20px;
-  color: white;
+  color: var(--text-color);
 }
 
 .history-list {
@@ -36,7 +36,8 @@ export default {
 
 .history-list li {
   padding: 10px;
-  background-color: #444;
+  /* background-color: #444; */
+  background-color: var(--text-box-color);
   margin: 10px 0;
   border-radius: 8px;
 }

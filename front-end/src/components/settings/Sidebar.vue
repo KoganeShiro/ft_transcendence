@@ -68,13 +68,14 @@ export default {
 <style scoped>
 .sidebar-container {
   height: 550px;
-  background-color: #2c2c2c;
-  color: #fff;
+  /* background-color: #2c2c2c; */
+  background-color: var(--sidebar-color);
+  color: var(--text-color);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px var(--sidebar-color);
   font-size: 1.5rem;
   position: relative;
 }
@@ -84,7 +85,8 @@ export default {
   margin-top: 100px;
   position: absolute;
   right: -25px;
-  background-color: #333;
+  /* background-color: #333; */
+  background-color: var(--sidebar-color);
   color: white;
   padding: 10px 5px;
   border-radius: 0 5px 5px 0;
@@ -107,7 +109,7 @@ export default {
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 10px;
-  color: #fff;
+  color: var(--text-color);
   text-align: left;
   border-radius: 8px;
   transition: background-color 0.2s ease, transform 0.2s ease;
@@ -115,7 +117,8 @@ export default {
 
 .sidebar-item:hover,
 .sidebar-item.active {
-  background-color: #505050;
+  /* background-color: #505050; */
+  background-color: var(--sidebar-hoover-color);
   transform: scale(1.05);
 }
 

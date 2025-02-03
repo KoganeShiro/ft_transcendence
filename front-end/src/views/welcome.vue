@@ -58,6 +58,7 @@ export default {
   font-size: 300%;
   font-weight: bold;
   margin-bottom: 150px;
+  color: var(--text-color);
 }
 
 .button-group {

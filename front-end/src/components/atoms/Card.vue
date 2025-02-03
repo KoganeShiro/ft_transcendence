@@ -37,7 +37,7 @@
           padding: this.padding,
           borderRadius: this.borderRadius,
           boxShadow: this.shadow,
-          backgroundColor: this.background, //"var(--card-bg)",
+          backgroundColor: "var(--card-color)",
           width: this.width,
         };
       },

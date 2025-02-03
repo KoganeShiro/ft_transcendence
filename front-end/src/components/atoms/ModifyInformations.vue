@@ -85,7 +85,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
-  background: #333;
+  background: var(--overlay-color);
 }
 
 .field-content {
@@ -102,14 +102,14 @@ export default {
 
 .text-value {
   font-style: italic;
-  color: white;
+  color: var(--text-color);
   font-size: 18px;
   padding: 10px;
 }
 
 .edit-btn {
   background: none;
-  color: #3498db;
+  color: var(--link-color);
   border: none;
   cursor: pointer;
   font-style: italic;
@@ -120,7 +120,8 @@ export default {
   width: 100%;
   height: 100%;
   padding: 10px;
-  background: #333;
+  /* background: #333; */
+  background: var(--input-field-color);
   border: none;
   border-radius: 8px;
   color: white;

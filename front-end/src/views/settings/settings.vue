@@ -1,4 +1,5 @@
 <template>
+  <div class="template">
   <div class="settings-page">
     <HeaderOrganism />
 
@@ -14,6 +15,7 @@
 
     <FooterOrganism />
   </div>
+</div>
 </template>
 
 <script>
@@ -57,7 +59,7 @@ export default {
 .settings-page {
   text-align: center;
   color: white;
-  background-color: #222;
+  /* background-color: #222; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;

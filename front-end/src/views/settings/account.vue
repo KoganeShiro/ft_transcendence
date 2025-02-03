@@ -134,10 +134,9 @@ export default {
 .account-card {
   max-width: 500px;
   margin: 40px auto;
-  background: #1f1f1f;
+  background: var(--card-color);
   border-radius: 12px;
   padding: 30px;
-  color: #fff;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -145,8 +144,9 @@ export default {
 .header h1 {
   margin-bottom: 20px;
   font-size: 2rem;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid #44444434;
   padding-bottom: 10px;
+  color: var(--text-color);
 }
 
 .avatar-section {
@@ -168,7 +168,7 @@ export default {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: #ccc;
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
@@ -182,7 +182,7 @@ export default {
 
 .loading {
   text-align: center;
-  color: #fff;
+  color: var(--text-color);
   font-size: 1.5rem;
   margin-top: 100px;
 }

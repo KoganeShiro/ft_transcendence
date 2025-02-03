@@ -128,9 +128,10 @@ export default {
   margin-bottom: 100px;
   padding: 20px;
   max-width: 500px;
-  background: #333;
+  /* background: #333; */
+  background: var(--game-background-color);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-color);
 }
 
 .board {
@@ -148,7 +149,7 @@ export default {
   height: 100px;
   margin: 2px;
   border-radius: 3px;
-  background: #444;
+  background: var(--cell-color);
   border: 2px solid #555;
   display: flex;
   align-items: center;
@@ -158,7 +159,7 @@ export default {
 }
 
 .cell:hover {
-  background: #4b4a4a;
+  background: var(--cell-hover-color);
   transform: scale(1.03);
 }
 

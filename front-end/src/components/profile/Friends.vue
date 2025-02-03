@@ -48,7 +48,7 @@ export default {
 <style scoped>
 .page-container {
   padding: 20px;
-  color: white;
+  color: var(--text-color);
 }
 
 .friends-list ul {
@@ -58,7 +58,8 @@ export default {
 
 .friends-list li {
   padding: 10px;
-  background-color: #444;
+  /* background-color: #444; */
+  background-color: var(--text-box-color);
   margin: 10px 0;
   border-radius: 5px;
   display: flex;

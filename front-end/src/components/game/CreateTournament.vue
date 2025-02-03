@@ -153,6 +153,16 @@ export default {
     padding: 15px;
   }
 
+  .join-button, .create-button {
+    background-color: var(--overlay-color);
+    color: var(--text-color);
+  }
+
+  .join-button:hover, .create-button:hover {
+    background-color: var(--side-btn-color);
+  }
+
+
   .tournament-code {
     margin-top: 30px;
     width: 350px;

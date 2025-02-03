@@ -82,34 +82,33 @@ export default {
 /* Ghost Button */
 .btn-ghost {
   background-color: transparent;
-  color: white;
   width: 150%;
 }
 
 .btn-ghost:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  background-color: var(--sidebar-hoover-color);
 }
 
 /* Menu Button */
 .btn-menu {
-  background-color: #3a3a3a;
-  color: white;
+  background-color: var(--burger-btn-color);
+  color: var(--text-color);
   width: 100%;
 }
 
 .btn-menu:hover {
-  background-color: #252424;
+  background-color: var(--burger-btn-hover-color);
   width: 100%;
 }
 
 .btn-sidebar {
-  background-color: #333;
-  color: white;
+  background-color: var(--pseudo-sidebar-color);
+  color: var(--text-color);
 }
 
 .btn-sidebar:hover {
-  background-color: #425042;
-  color: white;
+  background-color: var(--pseudo-sidebar-hoover-color);
   width: 100%;
   transform: scale(1.05);
 }
@@ -126,7 +125,7 @@ export default {
 
 /* Attention Button */
 .btn-attention {
-  background-color: #bb1111;
+  background-color: var(--attention-btn);
   padding: 10px;
   color: white;
 }
@@ -142,7 +141,8 @@ export default {
 }
 
 .btn-lang:hover {
-  background-color: #7e7e7e81;
+  /* background-color: #7e7e7e81; */
+  background-color: var(--sidebar-hoover-color);
   transform: scale(1.05);
 }
 

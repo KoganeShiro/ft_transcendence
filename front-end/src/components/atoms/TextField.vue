@@ -61,7 +61,7 @@
         return {
           width: this.width,
           padding: this.padding,
-          borderRadius: this.borderRadius, //"var(--border-radius)",
+          borderRadius: this.borderRadius,
           borderWidth: "1px",
           borderStyle: "solid",
         };

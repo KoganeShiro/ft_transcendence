@@ -23,13 +23,27 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from 'vuex';
 import { useRouter } from "vue-router";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 import GameCard from "@/components/game/GameChoice.vue";
-import pongImage from "@/assets/pong.png";
-import ticTacToeImage from "@/assets/tic-tac-toe.png";
+
+const getThemeImage = (game, theme) => {
+  try {
+    if (theme === 'teapot') {
+      theme = 'volcano';
+    }
+    return new URL(
+      `../../assets/${game}-theme/${game}-${theme}.png`,
+      import.meta.url
+    ).href;
+  } catch (error) {
+    console.error("Error loading image:", error);
+    return fallbackImage;
+  }
+};
 
 export default {
   name: "GameChoice",
@@ -40,11 +54,23 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const currentTheme = computed(() => store.state.theme || 'moon');
+    console.log(currentTheme.value);
 
-    const cards = ref([
-      { image: pongImage, name: "Pong" },
-      { image: ticTacToeImage, name: "Tic Tac Toe" },
+    const cards = computed(() => [
+      { 
+        image: getThemeImage('pong', currentTheme.value),
+        name: "Pong"
+      },
+      { 
+        image: getThemeImage('tic-tac-toe', currentTheme.value),
+        name: "Tic Tac Toe"
+      }
     ]);
+
+    console.log(getThemeImage('pong', currentTheme.value));
+    console.log(getThemeImage('tic-tac-toe', currentTheme.value));
 
     const handleGameChoice = (gameName) => {
       if (gameName === "Pong") {

@@ -97,7 +97,7 @@ export default {
 
 <style scoped>
 .pong-container {
-  color: white;
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
