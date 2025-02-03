@@ -46,36 +46,8 @@ SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
 SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
 SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
 SOCIAL_AUTH_42_IGNORE_DEFAULT_SCOPE = True
-SOCIAL_AUTH_42_OAUTH2_WHITELISTED_DOMAINS = ['api.intra.42.fr', 'localhost:1443']
+SOCIAL_AUTH_42_OAUTH2_WHITELISTED_DOMAINS = ['api.intra.42.fr', 'localhost:1443', 'localhost:8000', 'localhost']
                          
-
-#SOCIAL_AUTH_42_KEY = os.environ.get('42KEY')
-#SOCIAL_AUTH_42_SECRET = os.environ.get('42SECRET')
-# SOCIAL_AUTH_TH2_ENDPOINT = os.environ.get('42URL')
-#SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
-#SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
-#SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
-#SOCIAL_AUTH_REDIRECT_IS_HTTPS = True  # Ensure HTTPS redirection
-#SOCIAL_AUTH_42_REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
-#REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
-#REDIRECT_URI = 'http://127.0.0.1:1443/api/auth/complete/42/'
-
-#SOCIAL_AUTH_42_IGNORE_DEFAULT_SCOPE = True
-#SOCIAL_AUTH_42_SCOPE = ['public']
-#SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
-#SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-
-
-#LOGIN_REDIRECT_URL = '/'
-#LOGOUT_REDIRECT_URL = '/'
-
-#import logging
-
-#SOCIAL_AUTH_LOGGER = logging.getLogger('social')
-#SOCIAL_AUTH_LOGGER.setLevel(logging.DEBUG)
-#SOCIAL_AUTH_LOGGER.addHandler(logging.StreamHandler())
-
-#SOCIAL_AUTH_PIPELINE = ('user_mgm.pipeline.check_42_user_data',)
 
 # social login
 AUTHENTICATION_BACKENDS = (
@@ -228,18 +200,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+ #   {
+ #       'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+ #   },
+ #   {
+ #       'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+ #   },
+ #   {
+ #       'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+ #   },
+ #   {
+ #       'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+ #   },
 ]
 
 

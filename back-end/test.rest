@@ -14,17 +14,34 @@ Content-Type: application/json
 
 GET https://localhost:1443/api/profile/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NDk0OTA1LCJpYXQiOjE3Mzg0OTQ2MDUsImp0aSI6ImJjZDU1NzI5MTZiNjRlNTE5ZTI3OGUzMzllNTBhNDEwIiwidXNlcl9pZCI6NSwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.Fkln-NGypOcpgUv6ZSj6pXr00wcKYTUoK2-IW8QnI-Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTc4NDQyLCJpYXQiOjE3Mzg1NzgxNDIsImp0aSI6ImZhNWRmMWJlNjEzOTRmZjJhODlkODI2NGNiN2Y3OWU4IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.et7qTdCUD04ASBiU2znYMy1IhbFBMHujahc4rYocSJo
 
 ###
 
 POST https://localhost:1443/api/logout/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NDk1MjkyLCJpYXQiOjE3Mzg0OTQ5OTIsImp0aSI6ImY1Y2YyMTY0OTI5YjQ5YjNhZTFhM2E2N2NiYTQwMWI4IiwidXNlcl9pZCI6NSwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.ajLTiPysWyzKsq2wNvB9N8aOaK-TFOmcLZtPCKBHwFE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTc4NTQzLCJpYXQiOjE3Mzg1NzgyNDMsImp0aSI6IjcxYTJkNmEzYTA1ZjQ2YzlhMDU5Y2VlMjcwODU5YzgwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9._YFDztjf6H6JIZ6j51BBnJWS0kMSmcTOSzNemJKhPYw
 
-{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MjgxNDk5MiwiaWF0IjoxNzM4NDk0OTkyLCJqdGkiOiI2MTNmMzA1OTc0Zjg0MTU0OTZjNDZlYmMwMTExMjYyNyIsInVzZXJfaWQiOjUsInVzZXJuYW1lIjoiYWRhc20xIiwiZW1haWwiOiJhZGFtc0Btc2FpbC5jb20ifQ.4BWag-hobUpLpGoBRUcTzj91Hdze8oJaF-wv2aDFn-4" }
+{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Mjg5ODI0MywiaWF0IjoxNzM4NTc4MjQzLCJqdGkiOiI2ZDIyNDExNDRlNjA0N2E1YWU1MGVlZGUwMGQ5YjMyOSIsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoiYWRhc20xIiwiZW1haWwiOiJhZGFtc0Btc2FpbC5jb20ifQ.TD0jpK2l_934nzDE_g9Y1sjwpo9Vw0wI5Xr8CkfHn_0" }
+
+
+###
+https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9&redirect_uri=https://localhost:1443/api/auth/complete/42/&response_type=code
+
+###
+
 
 https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9&redirect_uri=https://localhost:1443/api/auth/complete/42/&response_type=code
+
+###
+
+GET https://localhost:1443/api/auth/login/42/
+Content-Type: application/json
+
+
+###
+
+
 
 curl -X POST "https://api.intra.42.fr/oauth/token" \
 -d "grant_type=authorization_code" \
@@ -32,3 +49,8 @@ curl -X POST "https://api.intra.42.fr/oauth/token" \
 -d "client_secret=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" \
 -d "redirect_uri=https://localhost:1443/api/auth/complete/42/" \
 -d "code=833c7c695db021656b88025dd48600c53c033d9694a430638ac21a905346fbb0"
+
+###
+
+GET https://localhost:1443/api/auth/complete/42/?code=eb170dghfffbb676dbecb528bb70ddcd3bea39aa0893cf155f3b125
+
