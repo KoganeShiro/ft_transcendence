@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_mgm.apps.UserMgmConfig',
     'gamestats.apps.GamestatsConfig',
+    'friends.apps.FriendsConfig',
     'django.db.backends.postgresql',    
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
