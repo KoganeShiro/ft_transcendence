@@ -37,10 +37,6 @@ import GameCard from "@/components/game/GameChoice.vue";
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-// import Multiplayer from "@/assets/custom-icon/multiplayer.png";
-import Load from "@/assets/teapot.jpg";
-
-
 const getThemeImage = (mode, theme) => {
   try {
     if (theme === 'teapot') {
@@ -85,8 +81,7 @@ export default {
       { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
       { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
       { image: getThemeImage('tournament', currentTheme.value), name: t("tournament"), mode: "tournament" },
-      // { image: getThemeImage('load', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
-      { image: Load, name: t("more-than-2"), mode: "multiplayer" },
+      { image: getThemeImage('multi', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
     ]);
 
     console.log(cards);

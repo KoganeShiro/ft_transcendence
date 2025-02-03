@@ -43,7 +43,7 @@
 
 - [x] Add in mode choice, 4 players games
 
-- [ ] Make the multi player icon
+- [x] Make the multi player icon
 - [x] Start Appearence page to be able to change theme (MIDDLE)
 - [x] Add Teapot theme to have power up
 

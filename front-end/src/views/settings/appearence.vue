@@ -27,7 +27,7 @@ export default {
   margin: 50px auto;
   padding: 20px;
   max-width: 800px;
-  color: white;
+  color: var(--text-color);
   font-size: 1rem;
   line-height: 1.6;
 }

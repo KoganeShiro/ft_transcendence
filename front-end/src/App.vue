@@ -62,7 +62,7 @@ export default {
 
 #app.forest {
   color: #ffffff;
-  background-color: #086108;
+  background-color: #064706;
 }
 
 #app.volcano {
@@ -157,18 +157,18 @@ export default {
 }
 
 [data-theme="forest"] {
-  --header-color: #009307;
-  --footer-color: #018508;
-  --burger-btn-color: #027912be;
+  --header-color: #003303;
+  --footer-color: #003303;
+  --burger-btn-color: #01580dbe;
   --burger-btn-hover-color: #006e05;
-  --background-color: #086108;
-  --link-color: #1f0e00e1;
+  --background-color: #064706;
+  --link-color: #ff9900e1;
   --card-color: #64646471;
-  --text-box-color: #1a5520c4;
+  --text-box-color: #1f6326c4;
   --pseudo-sidebar-color: #007c25;
   --pseudo-sidebar-hoover-color: #01571b;
-  --sidebar-color: #0a770ae7;
-  --sidebar-hoover-color: rgb(38, 153, 23);
+  --sidebar-color: #0d361be7;
+  --sidebar-hoover-color: rgb(25, 126, 12);
   --side-btn-color: #00932C;
   --text-color: #ffffff;
   --icon-color: #ffffff;
@@ -177,7 +177,7 @@ export default {
   --game-background-color: #117011bb;
   --cell-color: #267226;
   --cell-hover-color: #0a770a;
-  --overlay-color: #0a770ac7;
+  --overlay-color: #123815c4;
 }
 
 [data-theme="volcano"] {
