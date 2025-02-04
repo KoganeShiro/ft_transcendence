@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, permission_classes  
 from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 #Login User
 class Login(TokenObtainPairView):
@@ -17,7 +18,7 @@ class Login(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])
-        user.online = True
+        user.last_seen = timezone.now()
         user.save()
         return response
 
@@ -26,8 +27,7 @@ class Logout(APIView):
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user = request.user
-        user.online = False
+        user = request.user        
         user.save()        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -55,11 +55,7 @@ def getProfile(request, lookup_value=None):
     if lookup_value is None:  # Default to the current user if no lookup is provided
         user = request.user
     else:
-        # Check if the lookup_value is an ID (integer) or username (string)
-        if lookup_value.isdigit():
-            user = get_object_or_404(CustomUser, pk=int(lookup_value))  # Lookup by ID
-        else:
-            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
 
     serializer = ProfileSerializer(user, many=False)
     return Response(serializer.data)
@@ -88,11 +84,7 @@ def updateProfile(request, lookup_value=None):
     if lookup_value is None:
         user = request.user
     else:
-        # Check if the lookup_value is an ID (integer) or username (string)
-        if lookup_value.isdigit():
-            user = get_object_or_404(CustomUser, pk=int(lookup_value))  # Lookup by ID
-        else:
-            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
 
     serializer = ProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
     if serializer.is_valid():
@@ -113,7 +105,7 @@ def get_all_users(request):
     Get all users from the CustomUser model and return their serialized data.
     """
     users = CustomUser.objects.all()  # Get all users from CustomUser
-    serializer = UserSerializer(users, many=True)  # Serialize the queryset
+    serializer = UserSerializer(users, many=True)  # Serialize the queryset    
     return Response(serializer.data)  # Return the serialized data as the response
 
 

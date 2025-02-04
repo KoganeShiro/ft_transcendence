@@ -9,16 +9,16 @@ logger = logging.getLogger(__name__)
 
 urlpatterns = [    
     #Authentication
-    path('token/', views.Login.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', views.Login.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', views.Logout.as_view(), name='auth_logout'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
 
     #Profile
-    path('profile/', views.getProfile, name='profile'),
+    path('profile/', views.getProfile, name='my_profile'),
     path('profile/<str:lookup_value>/', views.getProfile, name='profile'),
     path('profile/update/', views.updateProfile, name='update-profile'),
-    path('profile/update/<str:lookup_value>/', views.updateProfile, name='update-profile'),
+   # path('profile/update/<str:lookup_value>/', views.updateProfile, name='update-profile'),
     path('users/', get_all_users, name='get_all_users'),  # Endpoint for all users
   #  path('users/', views , name='update-profile'),
 

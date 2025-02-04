@@ -13,8 +13,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
-        token['username'] = user.username
-        token['email'] = user.email
+        token['username'] = user.username        
         # ...
 
         return token
@@ -46,8 +45,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
     email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+        required=False,        
     )
     username = serializers.CharField(
         required=True,
@@ -59,21 +57,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'cover_photo')
+        fields = ('username', 'password', 'cover_photo')
 
     def create(self, validated_data):
   #      default_cover_photo = 'covers/default.jpg'
         user = CustomUser.objects.create(
-        username=validated_data['username'],
-        email=validated_data['email'],
-        cover_photo=validated_data.get('cover_photo', None),
+        username=validated_data['username'],        
+        cover_photo=validated_data.get('cover_photo', None),        
         )
         user.set_password(validated_data['password'])
       #  if user.cover_photo:
       #      user.cover_photo_url = user.cover_photo.url
         user.save()
-        
-
         return user
 
 class ProfileSerializer(serializers.ModelSerializer):    
@@ -89,4 +84,4 @@ from .models import CustomUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'cover_photo', 'date_joined']
+        fields = ('username', 'cover_photo', 'last_seen')
