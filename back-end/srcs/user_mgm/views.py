@@ -148,13 +148,14 @@ class OAuth2Login(APIView):
         return redirect('social:begin', backend='42')
 
 class OAuth2Complete(APIView):
-
     @psa('social:complete')
+    #def get(self, request, back42):
+   # def get(self, request):
     def get(self, request, backend):
+    # def get(self, request, *args, **kwargs):       
         logging.debug('OAuth2Complete: Request received')
         print ("OAuth2Complete: Request received")
-        
-        user = request.backend.do_auth(request.GET.get('code'))
+        user = request.backend.do_auth(request.GET.get('code'), backend='42')
         if user:
             logging.debug('OAuth2Complete: Authentication successful')
             return Response({'token': user.auth_token.key}, status=status.HTTP_200_OK)
