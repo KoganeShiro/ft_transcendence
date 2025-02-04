@@ -1,4 +1,6 @@
 import { createStore } from "vuex";
+import invitations from './invitation'
+import game from './game'
 
 export default createStore({
   state: {
@@ -32,5 +34,9 @@ export default createStore({
   getters: {
     selectedLanguage: (state) => state.lang,
     selectedTheme: (state) => state.theme
+  },
+  modules: {
+    invitations,
+    game
   }
 });

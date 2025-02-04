@@ -26,13 +26,13 @@
     "terms-service": "Nutzungsbedingungen",
     "addFriend" : "Freund hinzufügen",
     "add" : "Hinzufügen",
-    "remove": "Entfernen",
+    "block": "Blockieren",
     "stats": "Statistik",
     "friends": "Freunde",
     "history": "Verlauf",
     "settings": "Einstellungen",
-    "win": "Siege",
-    "loss": "Niederlagen",
+    "win": "Herzlichen Glückwunsch, Sie haben gewonnen",
+    "loss": "Viel Glück beim nächsten Mal... Sie haben verloren",
     "account": "Konto",
     "profile": "Profil",
     "appearance": "Ansicht",
@@ -58,6 +58,10 @@
     "start-tournament": "Turnier starten",
     "join": "Turnier beitreten",
     "player": "Spieler",
-    "choose-theme": "Wählen Sie ein Thema"
+    "choose-theme": "Wählen Sie ein Thema",
+    "send": "Senden",
+    "message": "Geben Sie eine Nachricht ein",
+    "loading": "Laden...",
+    "with-friends": "Privat Mehrspieler (Remote)"
   }
   

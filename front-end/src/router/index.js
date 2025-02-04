@@ -16,8 +16,6 @@ import AddFriend from '../components/profile/AddFriend.vue';
 import Account from '../views/settings/account.vue';
 import Appearence from '../views/settings/appearence.vue';
 import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
-// import ThemeSwitcher from '../components/settings/ThemeSwitcher.vue';
-// import Theme from '../components/settings/Theme.vue';
 
 // import Loose from '../views/game/loose.vue';
 // import Win from '../views/game/win.vue';
@@ -29,12 +27,37 @@ import TicTacToe from '../views/game/tic_tac_toe.vue';
 import CreateTournament from '../components/game/CreateTournament.vue';
 import waitingPlayers from '../views/game/waiting_players.vue';
 import Matchmaking from '../views/game/matchmaking.vue';
+import Invitation from '../components/Invitation.vue';
+import WaitingPlayers from '../views/game/waiting_players.vue';
+import WinnerPopup from "@/views/game/winner.vue";
+import LoserPopup from "@/views/game/loser.vue";
+
 
 const routes = [
   {
     path: '/',
     name: 'welcome',
     component: Welcome,
+  },
+  {
+    path: '/invitation',
+    name: 'Invitation',
+    component: Invitation,
+  },
+  {
+    path: '/winner',
+    name: 'WinnerPopup',
+    component: WinnerPopup,
+  },
+  {
+    path: '/loser',
+    name: 'LoserPopup',
+    component: LoserPopup,
+  },
+  {
+    path: '/waiting-players',
+    name: 'WaitingPlayers',
+    component: WaitingPlayers,
   },
   {
     path: '/matchmaking',

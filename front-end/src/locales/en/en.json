@@ -26,13 +26,13 @@
     "terms-service": "Terms of Service",
     "addFriend" : "Add Friend",
     "add" : "Add",
-    "remove": "Remove",
+    "block": "Block",
     "stats": "Stats",
     "friends": "Friends",
     "history": "History",
     "settings": "Settings",
-    "win": "Win(s)",
-    "loss": "Loss(es)",
+    "win": "Congratulation, you win",
+    "loss": "Better luck next time... you lost",
     "account": "Account",
     "profile": "Profile",
     "appearance": "Appearance",
@@ -58,6 +58,10 @@
     "start-tournament": "Start the tournament",
     "join": "Join a tournament",
     "player": "Player",
-    "choose-theme": "Choose a theme"
+    "choose-theme": "Choose a theme",
+    "send": "Send",
+    "message": "Type a message",
+    "loading": "Loading...",
+    "with-friends": "Private versus (Remote)"
 }
   

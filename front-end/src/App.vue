@@ -1,26 +1,50 @@
 <template>
   <div id="app" :class="selectedTheme">
+    <TournamentBanner
+      v-if="shouldShowBanner"
+      :tournamentId="tournamentId"
+      message="Tournament created! Join now:"
+      :duration="10000"
+    />
     <router-view />
+    <InvitationPopup />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import InvitationPopup from "@/components/Invitation.vue";
+import TournamentBanner from "@/components/NotifBanner.vue";
+
 export default {
   name: "App",
+  components: {
+    InvitationPopup,
+    TournamentBanner,
+  },
   computed: {
-    ...mapGetters(["selectedTheme"])
+    ...mapGetters(["selectedTheme"]),
+    tournamentId() {
+      return this.$route.query.tournamentCode || "";
+    },
+    shouldShowBanner() {
+      return !!(
+        this.$route.query.tournamentCode &&
+        this.$route.query.isCreator === "true"
+      );
+    },
   },
   watch: {
     selectedTheme(newTheme) {
       document.body.setAttribute("data-theme", newTheme);
-    }
+    },
   },
   mounted() {
     document.body.setAttribute("data-theme", this.selectedTheme);
-  }
+  },
 };
 </script>
+
 
 <style>
 #app {
@@ -137,10 +161,10 @@ export default {
   --footer-color: #162d44;
   --burger-btn-color: #122335;
   --burger-btn-hover-color: #05192e;
-  --background-color: #1e3a5f;
+  --background-color: #1e3a5fe0;
   --link-color: #53ceffe1;
   --card-color: #64646471;
-  --text-box-color: #162d44;
+  --text-box-color: #19344e;
   --pseudo-sidebar-color: #285a8b;
   --pseudo-sidebar-hoover-color: #2279d1;
   --sidebar-color: #112b44b4;
@@ -154,6 +178,12 @@ export default {
   --cell-color: #162d44;
   --cell-hover-color: #162d44;
   --overlay-color: #162d44;
+
+  --chat-header-bg: #162d44;
+  --chat-messages-bg: #0c203af8;
+  --msg-send: #0c2e5a;
+  --msg-receive: #16555e;
+
 }
 
 [data-theme="forest"] {

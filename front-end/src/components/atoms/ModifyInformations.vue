@@ -4,9 +4,9 @@
     <div class="overlay" v-if="!isEditing">
       <div class="field-content">
         <img v-if="imageUrl" :src="imageUrl" alt="Avatar" class="avatar" />
-        <span class="text-value">{{ modelValue }}</span>
+        <span class="text-value">{{ truncatedValue }}</span>
       </div>
-      <button v-if="modifiable" class="edit-btn" @click="enableEditing">Modify</button>
+      <button v-if="modifiable" class="edit-btn" @click="enableEditing">{{ $t("modify") }}</button>
     </div>
 
     <!-- Editable Input Field (Shown when editing) -->
@@ -18,6 +18,7 @@
       @blur="saveChanges"
       @keyup.enter="saveChanges"
       ref="inputField"
+      maxlength="25"
     />
   </div>
 </template>
@@ -45,6 +46,16 @@ export default {
       isEditing: false,
       editableValue: this.modelValue
     };
+  },
+  computed: {
+    // Truncate the displayed text to a maximum of 25 characters,
+    // appending an ellipsis if necessary.
+    truncatedValue() {
+      if (this.modelValue && this.modelValue.length > 25) {
+        return this.modelValue.substring(0, 25) + '...';
+      }
+      return this.modelValue;
+    }
   },
   methods: {
     enableEditing() {
@@ -116,12 +127,15 @@ export default {
   margin-right: 10px;
 }
 
+.edit-btn:hoover {
+  text-decoration: underline;
+}
+
 .input-field {
   width: 100%;
   height: 100%;
   padding: 10px;
-  /* background: #333; */
-  background: var(--input-field-color);
+  background: var(--text-box-color);
   border: none;
   border-radius: 8px;
   color: white;

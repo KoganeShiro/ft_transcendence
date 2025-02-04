@@ -51,6 +51,7 @@
 
 <script>
 import { ref } from "vue";
+import { useStore } from 'vuex';
 import PongGame from "@/components/game/PongGame.vue";
 import CreateTournament from "@/components/game/CreateTournament.vue";
 import Versus from "@/components/game/Versus.vue";
@@ -82,6 +83,12 @@ export default {
 
     const startGame = () => {
       showVersus.value = false;
+      store.dispatch('game/setInGame', true);
+    };
+
+    const endGame = () => {
+      store.dispatch('game/setInGame', false);
+      // Other game end logic
     };
 
     return {
@@ -89,6 +96,7 @@ export default {
       player1,
       player2,
       startGame,
+      endGame,
     };
   },
 };

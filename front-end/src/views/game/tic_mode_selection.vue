@@ -55,7 +55,7 @@ const getThemeImage = (mode, theme) => {
 
 
 export default {
-  name: "PongModeSelection",
+  name: "TicTacToeModeSelection",
   components: {
     HeaderOrganism,
     FooterOrganism,
@@ -67,7 +67,7 @@ export default {
     const store = useStore();
     const currentTheme = computed(() => store.state.theme || 'moon');
 
-    const gameName = "Pong";
+    const gameName = "Tic Tac Toe";
 
     const handleModeChoice = (mode) => {
       router.push(`/tic-tac-toe/${mode}`);
@@ -82,6 +82,7 @@ export default {
       { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
       { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
       { image: getThemeImage('multi', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
+      { image: getThemeImage('withFriend', currentTheme.value), name: t("with-friend"), mode: "withFriend" },
     ]);
 
 

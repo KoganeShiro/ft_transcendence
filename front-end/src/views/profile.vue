@@ -121,7 +121,8 @@ export default {
 .content {
   flex-grow: 1;
   padding: 20px;
-  overflow-y: auto; 
+  overflow-y: auto;
+  margin-right: 20px;
 }
 
 .card {
@@ -153,7 +154,10 @@ export default {
 
   .content {
     padding: 10px;
-    margin-left: 0;
+    margin-right: 0;
+  }
+  .pseudo-sidebar {
+    margin-right: 15px;
   }
 }
 </style>

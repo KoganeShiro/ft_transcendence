@@ -82,6 +82,7 @@ export default {
       { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
       { image: getThemeImage('tournament', currentTheme.value), name: t("tournament"), mode: "tournament" },
       { image: getThemeImage('multi', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
+      { image: getThemeImage('withFriend', currentTheme.value), name: t("with-friend"), mode: "withFriend" },
     ]);
 
     console.log(cards);

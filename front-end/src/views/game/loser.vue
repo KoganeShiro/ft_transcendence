@@ -1,15 +1,15 @@
 <template>
     <div class="modal-overlay" @click.self="closePopup">
       <div class="modal">
-        <h1>{{ $t("win") }}</h1>
-        <!-- Winner's avatar and name -->
+        <h1>{{ $t("loss") }}</h1>
+        <!-- Loser's avatar and name -->
         <AvatarAtom 
-          :pseudo="winnerName" 
-          :imageUrl="winnerImage" 
+          :pseudo="loserName" 
+          :imageUrl="loserImage" 
           :showPseudo="true" 
           pseudoPosition="bottom" 
         />
-        <router-link class="return-link" to="/">{{ $t("return-home") }}</router-link>
+        <router-link class="return-link" to="/profile">{{ $t("profile") }}</router-link>
       </div>
     </div>
   </template>
@@ -18,19 +18,19 @@
   import AvatarAtom from "@/components/atoms/Avatar.vue";
   
   export default {
-    name: "WinnerPopup",
+    name: "LoserPopup",
     components: {
       AvatarAtom,
     },
     data() {
       return {
-        winnerName: "Username42", // Replace with dynamic data if needed
-        winnerImage: "",        // URL for the winner's image; if empty, AvatarAtom uses its default
+        loserName: "Try Again", // Replace with dynamic data if needed
+        loserImage: "",         // URL for the loser's image; if empty, AvatarAtom uses its default
       };
     },
     methods: {
       closePopup() {
-        // For example, navigate to the home page
+        // Navigate to the home page or close the modal by other means
         this.$router.push("/");
         // Alternatively, emit an event: this.$emit('close');
       },

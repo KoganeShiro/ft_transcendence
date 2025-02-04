@@ -8,11 +8,11 @@
             :label="$t('username')"
             :placeholder="$t('enter-username')"
           />
-          <TextField
+          <!-- <TextField
             id="mail"
             :label="$t('email')"
             :placeholder="$t('enter-email')"
-          />
+          /> -->
           <TextField
             id="password"
             :label="$t('password')"

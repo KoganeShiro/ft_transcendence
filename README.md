@@ -48,19 +48,57 @@
 - [x] Add Teapot theme to have power up
 - [x] Add in Avatar component the possibility to modify the image
 
+- [x] Make sure the lenght of the text boxed doesn't exeed 25 char
+- [x] In friend, add a chat component
+- [x] In friend, add a way to tell if the friend is online
+
+- [x] Pop up to play with another player
+
+- [x] Add the tournament id when creating the tournament
+- [x] Make a component notification of tournament
 
 
-- [ ] Add the tournament id when creating the tournament
+- [ ] Make sure that in tournament the player cannot go elsewhere
+
+- [ ] Expand match info pop up
+
+- [ ] New mode, private match
+- [ ] Add players name on the game match
 - [ ] Make the tournament matchmaking page to game better
-- [ ] Chat components
-
-- [ ] How do we add a friend ?
-- [ ] In friend, add a chat component
-- [ ] In friend, add a way to tell if the friend is online
 
 - [ ] Implement power up
 
 - [ ] Tic Tac Toe AI
+
+
+        # Question about the back logic
+- [ ] Register --> send to the back username, password + avatar (default)
+        --> password no problem without having it hashed in the front
+- [ ] Login --> send to the back username + password
+
+- [ ] Account, possibility to change the username + password
+- [ ] Logout logic ?
+
+- [x] How do we add a friend ?
+        We add a friend by username, if we don't want block
+- [ ] Need friends list + their status (online or offline)
+- [ ] Need the friend icon + chat history
+- [ ] If click on the friend's icon --> json with the var to complete the profile (hide pseudo sidebar)
+
+- [ ] For history .json file with the last x match id
+        need to make another call the know if the user won or loose and against who (* by matches).
+        If we click on it, should expand with more information
+         Another call API (on the match that was clicked)
+
+- [ ] For stats...?
+
+- [ ] Play against AI logic
+- [ ] Play against guest (local) logic
+- [ ] Play against another player logic
+- [ ] Play against a friend (private match) logic
+   - [ ] Invite logic (for private match)
+- [ ] Tournament logic
+- [ ] Play with 4 players logic (should be similar to another player logic)
 
 
         ## When I can communicate with the back

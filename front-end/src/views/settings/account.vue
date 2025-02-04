@@ -18,14 +18,14 @@
           placeholder="Enter your username" 
         />
       </div>
-      <div class="field">
+      <!-- <div class="field">
         <label>{{ $t("email") }}</label>
         <EditableTextField 
           v-model="user.mail" 
           :modifiable="true" 
           placeholder="Enter your email" 
         />
-      </div>
+      </div> -->
       <div class="field">
         <label>{{ $t("password") }}</label>
         <EditableTextField 

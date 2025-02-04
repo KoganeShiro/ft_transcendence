@@ -1,5 +1,6 @@
 <template>
-    <h1> {{ $t("create-join") }} </h1>
+  <div class="page-container">
+    <h1>{{ $t("create-join") }}</h1>
     <div class="container">
       <!-- Create Tournament Card -->
       <Card class="card">
@@ -7,8 +8,6 @@
           <label class="label">{{ $t("number-players") }}</label>
           <PlayerCount v-model="playerCount" />
         </div>
-        <!-- <h2> Tournament id:  </h2> -->
-        <!-- id that the back should send me -->
   
         <ButtonAtom
           class="create-button"
@@ -41,10 +40,10 @@
         </ButtonAtom>
       </Card>
     </div>
-  </template>
+  </div>
+</template>
 
-
-  <script>
+<script>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import Card from "@/components/atoms/Card.vue";
@@ -53,6 +52,7 @@ import PlayerCount from "@/components/game/PlayerCount.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
 export default {
+  name: "CreateTournament",
   components: {
     Card,
     TextField,
@@ -62,14 +62,17 @@ export default {
   setup() {
     const router = useRouter();
     const playerCount = ref(4);
-    const tournamentCode = ref("tournament"); //should be a table of tournament codes given by the back
+    const tournamentCode = ref("");
 
     const createTournament = () => {
+      // Simulate tournament creation by generating a random tournament code.
       const tournamentData = {
         playerCount: playerCount.value,
         isCreator: true,
+        tournamentCode: "T" + Math.floor(Math.random() * 10000),
       };
       console.log("Creating Tournament:", tournamentData);
+      // Navigate to the waiting players page with tournament data in the query.
       router.push({ name: "waitingPlayers", query: tournamentData });
     };
 
@@ -97,9 +100,7 @@ export default {
 </script>
 
   
-  
   <style scoped>
-  /* Center the content */
   .container {
     display: flex;
     flex-direction: column;
