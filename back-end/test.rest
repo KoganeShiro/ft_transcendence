@@ -1,20 +1,42 @@
 POST https://localhost:1443/api/register/
 Content-Type: application/json
 
-{ "username": "adasm1", "password": "Pass1234!", "email": "adams@msail.com" }
+{ "username": "user1", "password": "Pass1234!" }
 
 ###
 
-POST https://localhost:1443/api/token/
+POST https://localhost:1443/api/login/
 Content-Type: application/json
 
-{ "username": "adasm1", "password": "Pass1234!" }
+{ "username": "user1", "password": "Pass1234!" }
 
 ###
 
-POST https://localhost:1443/api/games/games/
+GET https://localhost:1443/api/profile/user1/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NzAxMzA3LCJpYXQiOjE3Mzg2OTQxMDcsImp0aSI6ImEzNTU1MjU4Y2NlMDRiNjRhNTAyYzc5M2M4N2EzZWJlIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJ1c2VyMSJ9.TMGbTW25EHRy6Ob050Uqq66OqIpG9tr2cqwar_rzG5g
+
+{
+    "email": "dfsdf"
+}
+
+
+###
+
+PATCH https://localhost:1443/api/profile_update/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk5OTY0LCJpYXQiOjE3Mzg2OTI3NjQsImp0aSI6IjNmNjEzNzhiNWQ1MzQ0Yjg5ZjVjMjhmNzhmNDE4MWQ4IiwidXNlcl9pZCI6OSwidXNlcm5hbWUiOiJ1c2VyMSJ9.Xt8fX_yRer-zX5LZuq2fLQVw0s6Mp1tyrjmAGzwmMJk
+
+{
+    "email": "dffsdfdf@dsdse.fr"
+}
+
+
+###
+
+GET https://localhost:1443/api/users/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk2ODMzLCJpYXQiOjE3Mzg2ODk2MzMsImp0aSI6IjI0MTBkNDhhZTk4NTQ5NjY5NzM0MDQ0ZWNiY2E4M2UxIiwidXNlcl9pZCI6OCwidXNlcm5hbWUiOiJhZGRzc2RzZHNkc2Rhc20xIn0.XkXc0vKvd6KnXtVQI4A3cl_O5zn7o9kw981WKETiWXI
 
 {
     "player1": 1,

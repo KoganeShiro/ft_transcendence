@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import OAuth2Login, OAuth2Complete, get_all_users
+from .views import OAuth2Login, OAuth2Complete, get_all_users, getProfile, updateProfile
 import logging
 # from .views import callback
 
@@ -15,9 +15,9 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='auth_register'),
 
     #Profile
-    path('profile/', views.getProfile, name='my_profile'),
+    path('profile/', getProfile, name='my_profile'),
     path('profile/<str:lookup_value>/', views.getProfile, name='profile'),
-    path('profile/update/', views.updateProfile, name='update-profile'),
+    path('profile_update/', updateProfile, name='update-profile'),
    # path('profile/update/<str:lookup_value>/', views.updateProfile, name='update-profile'),
     path('users/', get_all_users, name='get_all_users'),  # Endpoint for all users
   #  path('users/', views , name='update-profile'),

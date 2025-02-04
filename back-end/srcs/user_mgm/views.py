@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, permission_classes  
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer
+from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer, ProfileUpdateSerializer
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+
 
 #Login User
 class Login(TokenObtainPairView):
@@ -58,7 +59,15 @@ def getProfile(request, lookup_value=None):
         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
 
     serializer = ProfileSerializer(user, many=False)
-    return Response(serializer.data)
+    isOnline = user.last_seen > timezone.now() - timezone.timedelta(minutes=5)
+    preparedData = {
+        'username': serializer.data['username'],
+        'cover_photo': serializer.data['cover_photo'],
+        'online': isOnline,
+        'last_seen': serializer.data['last_seen'],
+        'is_active': serializer.data['is_active'],
+    }
+    return Response(preparedData)
 
 
 
@@ -72,25 +81,33 @@ def getProfile(request, lookup_value=None):
 #         serializer.save()
 #     return Response(serializer.data)
 
-
-
-@api_view(['PUT'])
+@api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
-def updateProfile(request, lookup_value=None):
-    """
-    Update user profile using either user ID or username.
-    """
-    # If no lookup value is provided, default to the current logged-in user
-    if lookup_value is None:
-        user = request.user
-    else:
-        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
-
-    serializer = ProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
+def updateProfile(request):
+    user = request.user    
+    serializer = ProfileUpdateSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
-        serializer.save()  # Save the updated profile data
+        serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
+
+# @api_view(['PUT', 'PATCH'])
+# @permission_classes([IsAuthenticated])
+# def updateProfile(request, lookup_value=None):
+#     """
+#     Update user profile using either user ID or username.
+#     """
+#     # If no lookup value is provided, default to the current logged-in user
+#     if lookup_value is None:
+#         user = request.user
+#     else:
+#         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+
+#     serializer = ProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
+#     if serializer.is_valid():
+#         serializer.save()  # Save the updated profile data
+#         return Response(serializer.data)
+#     return Response(serializer.errors, status=400)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response

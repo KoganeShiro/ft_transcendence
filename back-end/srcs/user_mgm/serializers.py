@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from .models import CustomUser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils import timezone
 
 
 
@@ -43,10 +44,7 @@ class LogoutSerializer(serializers.Serializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
-    email = serializers.EmailField(
-        required=False,        
-    )
+        write_only=True, required=True, validators=[validate_password])    
     username = serializers.CharField(
         required=True,
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
@@ -75,7 +73,43 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser        
-        fields = '__all__'
+        exclude = ('password',)
+    
+    def update(self, instance, validated_data):
+        """
+        Allow partial updates by checking for each field individually.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Calculate online status based on last_seen
+        current_time = timezone.now()
+        last_seen = instance.last_seen
+        time_difference = current_time - last_seen
+        if time_difference.total_seconds() < 600:
+            instance.online = True
+        else:
+            instance.online = False
+        
+        instance.save()
+        return instance
+
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):    
+
+    class Meta:
+        model = CustomUser        
+        exclude = ('password',)
+    
+    def update(self, instance, validated_data):
+        """
+        Allow partial updates by checking for each field individually.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 from rest_framework import serializers
