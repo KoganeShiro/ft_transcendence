@@ -14,7 +14,7 @@ Content-Type: application/json
 
 GET https://localhost:1443/api/profile/user1/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NzAxMzA3LCJpYXQiOjE3Mzg2OTQxMDcsImp0aSI6ImEzNTU1MjU4Y2NlMDRiNjRhNTAyYzc5M2M4N2EzZWJlIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJ1c2VyMSJ9.TMGbTW25EHRy6Ob050Uqq66OqIpG9tr2cqwar_rzG5g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk5OTY0LCJpYXQiOjE3Mzg2OTI3NjQsImp0aSI6IjNmNjEzNzhiNWQ1MzQ0Yjg5ZjVjMjhmNzhmNDE4MWQ4IiwidXNlcl9pZCI6OSwidXNlcm5hbWUiOiJ1c2VyMSJ9.Xt8fX_yRer-zX5LZuq2fLQVw0s6Mp1tyrjmAGzwmMJk
 
 {
     "email": "dfsdf"
@@ -137,8 +137,8 @@ curl -X POST "https://api.intra.42.fr/oauth/token" \
 -d "grant_type=authorization_code" \
 -d "client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9" \
 -d "client_secret=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" \
--d "redirect_uri=https://localhost:1443/api/auth/complete/42/" \
--d "code=34abdf4a058c8ac9316a5e00fd187d5348e0380672839b82c4060f38725bff14"
+-d "redirect_uri=https://localhost/api/auth/complete/42/" \
+-d "code=bed79fa338136ae8ebade3ff4437cbc72253614394b06c0553ce8f29d6865b9c"
 
 ###
 

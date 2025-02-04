@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import OAuth2Login, OAuth2Complete, get_all_users, getProfile, updateProfile
+from .views import get_all_users, getProfile, updateProfile
 import logging
 # from .views import callback
 
@@ -24,9 +24,9 @@ urlpatterns = [
 
     #Social Auth
     path('auth/', include('social_django.urls', namespace='social')),
-    path('auth/login42/', OAuth2Login.as_view(), name='oauth2_login'),
-    path('auth/complete42/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),
-    #path('auth/complete42/42/', OAuth2Complete.as_view(), name='oauth2_complete'),
+   # path('auth/login42/', OAuth2Login.as_view(), name='oauth2_login'),
+    #path('auth/complete42/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),
+  #  path('auth/complete/42/', OAuth2Complete.as_view(), name='oauth2_complete'),
 
 ]
 

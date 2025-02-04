@@ -1,4 +1,5 @@
 from social_core.backends.oauth import BaseOAuth2
+from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,10 +17,11 @@ class FortyTwoOAuth2(BaseOAuth2):
     DEFAULT_SCOPE = []
     EXTRA_DATA = ["expires_in"]
 
-    def auth_extra_arguments(self):
+    def get_redirect_uri(self, state=None):
         """Ensure redirect_uri is always sent in the OAuth request"""
-        print("auth_extra_arguments")
-        return {'redirect_uri': self.setting('REDIRECT_URI')}
+        print("CALLEDDDDDDDDDDD get_redirect_uri")
+        return settings.REDIRECT_URI
+
     
     def request_access_token(self, *args, **kwargs):
         print("request_access_token")
@@ -27,10 +29,13 @@ class FortyTwoOAuth2(BaseOAuth2):
         logger.debug(f"OAuth Request URL: {self.ACCESS_TOKEN_URL}")
         
         logger.debug(f"OAuth Request Data: {args}, {kwargs}")
-
-        response = super().request_access_token(*args, **kwargs)
-        logger.debug(f"OAuth Response Status: {response.status_code}")
-        logger.debug(f"OAuth Response Content: {response.text}")
+        response = None
+        try:
+            response = super().request_access_token(*args, **kwargs)
+            logger.debug(f"OAuth Response: {response}")
+        except Exception as e:
+            logger.error(f"OAuth Request Error: {e}")
+            raise e
 
         return response
 
@@ -40,17 +45,18 @@ class FortyTwoOAuth2(BaseOAuth2):
  #       return super().request_access_token(*args, **kwargs)
 
     
-  #  def get_user_details(self, response):
-  #      """Extract user details from provider response"""
-  #      return {
-  #          'username': response.get('login'),
-  #          'email': response.get('email'),
-  #          'first_name': response.get('first_name'),
-  #          'last_name': response.get('last_name'),
-  #      }
+    def get_user_details(self, response):
+        print("get_user_details")
+        return {
+            'username': response.get('login'),
+            'email': response.get('email'),
+            
+        }
     
-    def auth_complete(self, *args, **kwargs):
-        self.redirect_uri = self.strategy.build_absolute_uri(self.redirect_uri)
-        return super(FortyTwoOAuth2, self).auth_complete(*args, **kwargs)
+    
+    def user_data(self, access_token, *args, **kwargs):
+         return self.get_json(self.USER_DATA_URL, headers={'Authorization': f'Bearer {access_token}'})
+    
+
     
 
