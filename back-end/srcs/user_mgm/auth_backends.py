@@ -1,9 +1,10 @@
 from social_core.backends.oauth import BaseOAuth2
 from django.conf import settings
 import logging
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
-
 
 class FortyTwoOAuth2(BaseOAuth2):
     """42 OAuth2 authentication backend"""
@@ -18,8 +19,7 @@ class FortyTwoOAuth2(BaseOAuth2):
     EXTRA_DATA = ["expires_in"]
 
     def get_redirect_uri(self, state=None):
-        """Ensure redirect_uri is always sent in the OAuth request"""
-        print("CALLEDDDDDDDDDDD get_redirect_uri")
+        """Ensure redirect_uri is always sent in the OAuth request"""        
         return settings.REDIRECT_URI
 
     
@@ -39,24 +39,14 @@ class FortyTwoOAuth2(BaseOAuth2):
 
         return response
 
- #   def request_access_token(self, *args, **kwargs):
- #       """Ensure access token is requested using POST"""
- #       kwargs['method'] = 'POST'
- #       return super().request_access_token(*args, **kwargs)
-
-    
     def get_user_details(self, response):
         print("get_user_details")
         return {
             'username': response.get('login'),
-            'email': response.get('email'),
-            
+            'email': response.get('email'),            
         }
-    
     
     def user_data(self, access_token, *args, **kwargs):
          return self.get_json(self.USER_DATA_URL, headers={'Authorization': f'Bearer {access_token}'})
-    
-
     
 

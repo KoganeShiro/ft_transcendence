@@ -119,3 +119,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('username', 'cover_photo', 'last_seen')
+
+
+

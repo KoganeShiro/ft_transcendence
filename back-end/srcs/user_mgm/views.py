@@ -18,8 +18,7 @@ class Login(TokenObtainPairView):
     
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        user = CustomUser.objects.get(username=request.data['username'])
-        user.last_seen = timezone.now()
+        user = CustomUser.objects.get(username=request.data['username'])        
         user.save()
         return response
 
@@ -142,14 +141,14 @@ def get_all_users(request):
 #def callback(request):
 #    return redirect(settings.LOGIN_REDIRECT_URL)
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.shortcuts import redirect
-from social_django.utils import psa
-import logging
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
+# from django.shortcuts import redirect
+# from social_django.utils import psa
+# import logging
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 # class OAuth2Login(APIView):
 #     def get(self, request, *args, **kwargs):
