@@ -1,36 +1,97 @@
 <template>
   <div class="stats-container">
     <h1>Stats</h1>
-    <div class="stats">
-      <p><strong>Wins:</strong> {{ stats.wins }}</p>
-      <p><strong>Losses:</strong> {{ stats.losses }}</p>
-      <p><strong>Best Score:</strong> {{ stats.bestScore }}</p>
+    <div v-for="(gameStats, gameType) in stats" :key="gameType">
+      <GameStatsCard :gameType="gameType" :stats="gameStats" />
     </div>
   </div>
 </template>
 
 <script>
+import GameStatsCard from '@/components/profile/StatsCard.vue'
+
 export default {
+  name: "StatsContainer",
+  components: {
+    GameStatsCard
+  },
   data() {
     return {
       stats: {
-        wins: 10,
-        losses: 5,
-        bestScore: 100,
-      },
-    };
-  },
-};
+        "Pong": {
+          currentRank: "Gold",
+          totalMatches: 100,
+          tournamentWins: 5,
+          wins: 60,
+          losses: 40,
+          rankProgression: [1000, 1050, 1100, 1075, 1125, 1150, 1200],
+          pointsWonUnder5Exchanges: 100,
+          pointsWonUnder10Exchanges: 200,
+          pointsWonOver10Exchanges: 300,
+          pointsLostUnder5Exchanges: 80,
+          pointsLostUnder10Exchanges: 150,
+          pointsLostOver10Exchanges: 250
+        },
+        "4 Players Pong": {
+          currentRank: "Silver",
+          totalMatches: 50,
+          tournamentWins: 2,
+          wins: 28,
+          losses: 22,
+          rankProgression: [800, 850, 900, 875, 925, 950, 1000],
+          pointsWonUnder5Exchanges: 50,
+          pointsWonUnder10Exchanges: 100,
+          pointsWonOver10Exchanges: 150,
+          pointsLostUnder5Exchanges: 40,
+          pointsLostUnder10Exchanges: 80,
+          pointsLostOver10Exchanges: 120
+        },
+        "Tic Tac Toe": {
+          currentRank: "Platinum",
+          totalMatches: 200,
+          tournamentWins: 10,
+          wins: 120,
+          losses: 80,
+          rankProgression: [1500, 1550, 1600, 1650, 1700, 1750, 1800],
+          pointsWonUnder5Exchanges: 300,
+          pointsWonUnder10Exchanges: 400,
+          pointsWonOver10Exchanges: 500,
+          pointsLostUnder5Exchanges: 200,
+          pointsLostUnder10Exchanges: 300,
+          pointsLostOver10Exchanges: 400
+        }
+      }
+    }
+  }
+}
 </script>
+
+<!-- <script>
+import GameStatsCard from '@/components/profile/StatsCard.vue'
+
+export default {
+  components: {
+    GameStatsCard
+  },
+  data() {
+    return {
+      stats: {}
+    }
+  },
+  async mounted() {
+    try {
+      const response = await fetch('/api/stats')
+      this.stats = await response.json()
+    } catch (error) {
+      console.error('Error fetching stats:', error)
+    }
+  }
+}
+</script> -->
 
 <style scoped>
 .stats-container {
   padding: 20px;
   color: var(--text-color);
-}
-
-.stats p {
-  font-size: 1.2rem;
-  margin: 10px 0;
 }
 </style>

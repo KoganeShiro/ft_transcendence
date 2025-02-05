@@ -36,6 +36,13 @@
       <CreateTournament />
     </div>
 
+    <!-- 
+    v-else-if="mode" === "withFriend"
+    get the code to access the game (pop up)
+      can close the pop up
+    versus page (searching for an opponent [friend])
+     -->
+
     <div v-if="mode !== 'tournament'" class="game-container">
       <Versus
         v-if="showVersus"
@@ -51,7 +58,6 @@
 
 <script>
 import { ref } from "vue";
-import { useStore } from 'vuex';
 import PongGame from "@/components/game/PongGame.vue";
 import CreateTournament from "@/components/game/CreateTournament.vue";
 import Versus from "@/components/game/Versus.vue";

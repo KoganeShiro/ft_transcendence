@@ -7,6 +7,19 @@
       <h1>Tic Tac Toe - {{ mode }} mode</h1>
     </div>
 
+    <!-- Front for random and friend versus (remote)
+            ===+> have the versus component sending
+                    information to the backend (who is the opponent)
+         Front for solo
+            ===+> have the versus component (gameplay on the front)
+         Front for local versus
+            ===+> have the versus component sending
+                    information to the backend (guest and host match)
+          Front for 4 player mode
+            ===+> have (a new ?) versus component sending
+                    information to the backend
+     -->
+
     <!-- Game content -->
     <div class="tic-tac-toe-content">
       <TicTacToeGame :mode="mode" :useImages="false" />

@@ -4,6 +4,24 @@
     <div :class="['mobile-hide', { 'hide-heading': mode === 'tournament' }]">
       <h1>Pong - {{ mode }} mode</h1>
     </div>
+
+    <!--
+          Make a component for each mode
+          Front for solo, random and friend versus (remote)
+            ===+> have the versus component sending
+                    information to the backend (who is the opponent)
+         Front for local versus
+            ===+> have the versus component sending
+                    information to the backend (guest and host match)
+         Front for tournament
+            ===+> Call create tournament component, create/join logic
+                    have the versus component sending
+                    information to the backend (guest and host match) 
+         Front for 4 player mode
+            ===+> have (a new ?) versus component sending
+                    information to the backend
+    -->
+
     <PongFront :mode="mode" />
   </div>
   <FooterOrganism />
@@ -12,7 +30,7 @@
 <script>
 import { useRoute } from "vue-router";
 import { ref, computed } from "vue";
-import PongFront from "@/components/game/PongFront.vue";
+import PongFront from "@/components/game/pongFront/PongFront.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
 

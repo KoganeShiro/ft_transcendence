@@ -40,6 +40,7 @@
   import FooterOrganism from "@/components/footer.vue";
   import MatchmakingComponent from "@/components/game/Matchmaking.vue";
   import PongGame from "@/components/game/PongGame.vue";
+  import { useStore } from 'vuex';
   
   export default {
     components: {
@@ -47,6 +48,9 @@
       FooterOrganism,
       MatchmakingComponent,
       PongGame,
+    },
+    setup() {
+      const store = useStore();
     },
     data() {
       return {

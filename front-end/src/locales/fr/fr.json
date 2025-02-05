@@ -43,7 +43,7 @@
     "delete-account-msg": "Êtes-vous sûr de vouloir supprimer votre compte?",
     "game-choice": "Choisissez un jeu",
     "solo": "Solo",
-    "multi-remote": "Versus (à Distance)",
+    "multi-remote": "Versus aléatoire (à Distance)",
     "multi-local": "Versus (Local)",
     "more-than-2": "4 joueurs (à Distance)",
     "tournament": "Tournoi",
@@ -62,6 +62,6 @@
     "send": "Envoyer",
     "message": "Tapez un message",
     "loading": "Chargement...",
-    "with-friend": "Versus privé (à Distance)"
+    "with-friend": "Versus amis (à Distance)"
   }
   

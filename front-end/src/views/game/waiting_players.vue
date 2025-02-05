@@ -17,15 +17,21 @@
             :disabled="!isCreator"
           />
         </div>
-        <ButtonAtom
-          v-if="isCreator"
-          class="start-button"
-          variant="42"
-          fontSize="18px"
-          @click="startTournament"
-        >
-          {{ $t("start-tournament") }}
-        </ButtonAtom>
+        <!-- Only show the start controls if the user is the creator -->
+        <div v-if="isCreator">
+          <ButtonAtom
+            class="start-button"
+            variant="42"
+            fontSize="18px"
+            @click="startTournament"
+            :disabled="tournamentStarted"
+          >
+            {{ $t("start-tournament") }}
+          </ButtonAtom>
+          <div v-if="startCountdown > 0 && !tournamentStarted">
+            <p>Starting tournament in {{ startCountdown }} seconds...</p>
+          </div>
+        </div>
       </Card>
     </div>
     <FooterOrganism />
@@ -54,6 +60,8 @@ export default {
       playerNames: [],
       isCreator: false,
       tournamentId: "", // to store the tournament code from the route query
+      startCountdown: 10, // countdown (in seconds) before automatic start
+      tournamentStarted: false,
     };
   },
   setup() {
@@ -65,17 +73,39 @@ export default {
     this.isCreator = this.route.query.isCreator === "true";
     const count = Number(this.route.query.playerCount) || 4;
     this.playerNames = Array(count).fill("");
-    // Get the tournament code from the route query, or set as "N/A" if not available
+    // Get the tournament code from the route query, or default to "N/A"
     this.tournamentId = this.route.query.tournamentCode || "N/A";
   },
+  mounted() {
+    if (this.isCreator) {
+      this.startTimer();
+    }
+  },
   methods: {
+    startTimer() {
+      const timer = setInterval(() => {
+        if (this.startCountdown > 0) {
+          this.startCountdown--;
+        } else {
+          clearInterval(timer);
+          if (!this.tournamentStarted) {
+            this.startTournament();
+          }
+        }
+      }, 1000);
+    },
     startTournament() {
+      this.tournamentStarted = true;
+      // Navigate to the matchmaking/game page.
       this.router.push("/matchmaking");
     },
   },
+  // Prevent navigation away from the waiting page
+  beforeRouteLeave(to, from, next) {
+    next(false);
+  },
 };
 </script>
-
 
 <style scoped>
 .container {

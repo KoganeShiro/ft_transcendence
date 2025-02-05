@@ -43,7 +43,7 @@
     "delete-account-msg": "Möchten Sie Ihr Konto wirklich löschen?",
     "game-choice": "Wählen Sie ein Spiel",
     "solo": "Solo",
-    "multi-remote": "Mehrspieler (Remote)",
+    "multi-remote": "Wahlfreier mehrspieler (Remote)",
     "multi-local": "Mehrspieler (Lokal)",
     "more-than-2": "4 Spieler (Remote)",
     "tournament": "Turnier",
@@ -62,6 +62,6 @@
     "send": "Senden",
     "message": "Geben Sie eine Nachricht ein",
     "loading": "Laden...",
-    "with-friends": "Privat Mehrspieler (Remote)"
+    "with-friends": "Mehrspieler mit Freund (Remote)"
   }
   

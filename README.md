@@ -57,18 +57,21 @@
 - [x] Add the tournament id when creating the tournament
 - [x] Make a component notification of tournament
 
+- [x] Expand match info pop up
 
-- [ ] Make sure that in tournament the player cannot go elsewhere
 
-- [ ] Expand match info pop up
+
+- [-] Make sure that in tournament the player cannot go elsewhere
 
 - [ ] New mode, private match
 - [ ] Add players name on the game match
 - [ ] Make the tournament matchmaking page to game better
 
+- [ ] Make the pong game responsive ==> may start searching for how to make the AI
+
 - [ ] Implement power up
 
-- [ ] Tic Tac Toe AI
+- [ ] Make the Tic Tac Toe AI
 
 
         # Question about the back logic
@@ -90,12 +93,27 @@
         If we click on it, should expand with more information
          Another call API (on the match that was clicked)
 
-- [ ] For stats...?
+- [ ] For stats in .json file (one call)
+        - Rank actuel (pong, multi et ttc)
 
-- [ ] Play against AI logic
+        - int tab (progression --> in rank) ---> make a graph (nb de match abscisse et nb of point ordonner) => Line Graphs
+
+        - nb game win, nb game lost => Doughnut Charts
+        - nb total de match
+
+        - nb win tournament
+
+        - nb de point gagne inferieur a 5 echange
+        - nb de point gagne inferieur a 10 echange
+        - nb de point gagne inferieur a +10 echange
+                same for lose point
+                        ==> one Bar Charts
+
+
+- [ ] Play against AI logic (same as remote (private))
+- [ ] Play against another player logic --> 
+- [ ] Play against a friend (private match) logic -- >
 - [ ] Play against guest (local) logic
-- [ ] Play against another player logic
-- [ ] Play against a friend (private match) logic
    - [ ] Invite logic (for private match)
 - [ ] Tournament logic
 - [ ] Play with 4 players logic (should be similar to another player logic)
@@ -130,6 +148,7 @@
 - [ ] More than 2 players game page (x2)
 
 
+[](https://www.w3schools.com/js/js_graphics_chartjs.asp)
 
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
 # Ft_Transcendence

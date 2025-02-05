@@ -130,6 +130,11 @@ export default {
   --cell-color: #bdb7b7;
   --cell-hover-color: #4b4a4a;
   --overlay-color: #acacacb4;
+
+  --chat-header-bg: #778592;
+  --chat-messages-bg: #e4e4ddf8;
+  --msg-send: #bac7d8;
+  --msg-receive: #9bdee9;
 }
 
 [data-theme="dark"] {
@@ -154,6 +159,11 @@ export default {
   --cell-color: #444;
   --cell-hover-color: #4b4a4a;
   --overlay-color: #202020b4;
+
+  --chat-header-bg: #202020;
+  --chat-messages-bg: #3b3b3b71;
+  --msg-send: #08203f;
+  --msg-receive: #134b53;
 }
 
 [data-theme="ocean"] {
@@ -208,6 +218,11 @@ export default {
   --cell-color: #267226;
   --cell-hover-color: #0a770a;
   --overlay-color: #123815c4;
+
+  --chat-header-bg: #1e491b;
+  --chat-messages-bg: #3b3b3b71;
+  --msg-send: #0b632d;
+  --msg-receive: #58b44c;
 }
 
 [data-theme="volcano"] {
@@ -232,6 +247,11 @@ export default {
   --cell-color: #420101ea;
   --cell-hover-color: #7c2020;
   --overlay-color: #5e1a1a;
+
+  --chat-header-bg: #491b1b;
+  --chat-messages-bg: #4d363671;
+  --msg-send: #630b0b;
+  --msg-receive: #b44c4c;
 }
 
 [data-theme="teapot"] {
@@ -256,6 +276,11 @@ export default {
   --cell-color: #014042ea;
   --cell-hover-color: #012a42ea;
   --overlay-color: #2c0347;
+
+  --chat-header-bg: #2d1b49;
+  --chat-messages-bg: #362b3a71;
+  --msg-send: #1b0b63;
+  --msg-receive: #ab4cb4;
 }
 
 body, html {
