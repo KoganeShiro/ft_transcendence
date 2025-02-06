@@ -13,7 +13,7 @@ from django.utils import timezone
 
 
 #Login User
-class Login(TokenObtainPairView):
+class Login(TokenObtainPairView):    
     serializer_class = MyTokenObtainPairSerializer
     
     def post(self, request, *args, **kwargs):
@@ -132,6 +132,7 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 def social_auth_complete(request):
+    
     """
     Retrieve the JWT tokens stored in the pipeline and return as JSON.
     """

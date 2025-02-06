@@ -1,41 +1,43 @@
 <template>
-    <div class="logout-container">
-      <Card class="logout-card">
-        <h3 class="logout-title">Oh no 🥺</h3>
-        <h3 class="logout-title">
-          {{ $t("logout-msg") }}
-        </h3>
-        <Button variant="attention" class="logout-button" @click="onlogout" >{{ $t("logout-confirm") }}</Button>
-        <Button variant="42" class="logout-button" @click="ongoback">{{ $t("logout-cancel") }}</Button>
-      </Card>
-    </div>
-  </template>
-  
-  <script>
-  import Card from "@/components/atoms/Card.vue";
-  import TextField from "@/components/atoms/TextField.vue";
-  import Button from "@/components/atoms/Button.vue";
-  import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
-  import InputGroup from "@/components/atoms/TextFieldGroup.vue";
-  
-  export default {
-    components: {
-      Card,
-      TextField,
-      Button,
-      InputGroup,
-      ButtonGroup,
+  <div class="logout-container">
+    <Card class="logout-card">
+      <h3 class="logout-title">Oh no 🥺</h3>
+      <h3 class="logout-title">
+        {{ $t("logout-msg") }}
+      </h3>
+      <Button variant="attention" class="logout-button" @click="onlogout">{{ $t("logout-confirm") }}</Button>
+      <Button variant="42" class="logout-button" @click="ongoback">{{ $t("logout-cancel") }}</Button>
+    </Card>
+  </div>
+</template>
+
+<script>
+import Card from "@/components/atoms/Card.vue";
+import Button from "@/components/atoms/Button.vue";
+import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
+import InputGroup from "@/components/atoms/TextFieldGroup.vue";
+
+export default {
+  components: {
+    Card,
+    Button,
+    InputGroup,
+    ButtonGroup,
+  },
+  methods: {
+    onlogout() {
+      // Remove the cookies by setting them with an expired date
+      document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      this.$router.push("/");
     },
-    methods: {
-      onlogout() {
-        this.$router.push("/");
-      },
-      ongoback() {
-        this.$router.push("/profile");
-      },
+    ongoback() {
+      this.$router.push("/profile");
     },
-  };
-  </script>
+  },
+};
+</script>
+
   
   <style scoped>
   .logout-container {

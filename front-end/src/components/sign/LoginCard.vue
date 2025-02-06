@@ -5,22 +5,20 @@
       <InputGroup class="input-group">
         <TextField
           id="username"
+          v-model="username"
           :label="$t('username')"
           :placeholder="$t('enter-username')"
         />
         <TextField
           id="password"
+          v-model="password"
+          type="password"
           :label="$t('password')"
           :placeholder="$t('enter-password')"
         />
       </InputGroup>
-      <!--
-      If login success, token in cookie (auth et refresh)
-        when auth token expired, should send refresh token to get a new auth token
-      if error, show error
-      -->
       <ButtonGroup class="button-group">
-        <Button variant="primary" class="login-button" @click="onLogin" >{{ $t("login") }}</Button>
+        <Button variant="primary" class="login-button" @click="onLogin">{{ $t("login") }}</Button>
         <Button variant="42" class="login-button" @click="onLogin">{{ $t("login-42") }}</Button>
       </ButtonGroup>
     </Card>
@@ -28,6 +26,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Card from "@/components/atoms/Card.vue";
 import TextField from "@/components/atoms/TextField.vue";
 import Button from "@/components/atoms/Button.vue";
@@ -42,10 +41,40 @@ export default {
     InputGroup,
     ButtonGroup,
   },
+  data() {
+    return {
+      username: "",
+      password: "",
+      loading: false,
+    };
+  },
   methods: {
-    onLogin() {
-      // check if the username/mail and password is ok
-      this.$router.push("/profile");
+    async onLogin() {
+      if (this.loading) return;
+      this.loading = true;
+
+      const payload = {
+        username: this.username,
+        password: this.password,
+      };
+
+      try {
+        const response = await axios.post('/api/login/', payload, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("Login successful:", response.data);
+        // Handle token storage and redirection
+        document.cookie = `auth=${response.data.authToken}; path=/`;
+        document.cookie = `refresh=${response.data.refreshToken}; path=/`;
+        this.$router.push("/profile");
+      } catch (error) {
+        console.error("Login failed:", error);
+        alert("Login failed. Please try again.");
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };

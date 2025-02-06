@@ -68,42 +68,51 @@ export default {
       username: "",
       password: "",
       confirmPassword: "",
+      loading: false, // Add loading flag
     };
   },
   methods: {
+    formValid() {
+      // All fields must be non-empty.
+      console.log(this.username.trim() !== "" &&
+        this.password.trim() !== "" &&
+        this.confirmPassword.trim() !== "");
+      return (
+        this.username.trim() !== "" &&
+        this.password.trim() !== "" &&
+        this.confirmPassword.trim() !== ""
+      );
+    },
     async onRegister() {
-      if (this.username.trim() === "" || this.password.trim() === "" || this.confirmPassword.trim() === "") {
+      if (this.loading) return;
+      this.loading = true;
+
+      if (!this.formValid()) {
         alert("Please fill in all fields!");
+        this.loading = false;
         return;
       }
       if (this.password !== this.confirmPassword) {
         alert("Passwords do not match!");
+        this.loading = false;
         return;
       }
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      console.log("Password:", this.password);
-      console.log("Lowercase:", /[a-z]/.test(this.password));
-      console.log("Uppercase:", /[A-Z]/.test(this.password));
-      console.log("Digit:", /\d/.test(this.password));
-      console.log("Special character:", /[@$!%*?&]/.test(this.password));
-      console.log("Length >= 8:", this.password.length >= 8);
-      console.log("Regex test:", regex.test(this.password));
-
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&=.<>;:|\-/+()#])[A-Za-z\d@$!%*?&=.<>;:|\-/+()#]{8,}$/;
       if (!regex.test(this.password)) {
         alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        this.loading = false;
         return;
       }
 
       // Build payload for POST request
       const payload = {
-        "username": this.username,
-        "password": this.password,
-        // "cover_photo": defaultProfile,
+        username: this.username,
+        password: this.password,
+        // cover_photo: defaultProfile,
       };
-      console.log("Payload:", payload);
 
       try {
-        const response = await axios.post('https://localhost:1443/api/register/', payload, {
+        const response = await axios.post('/api/register/', payload, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -113,6 +122,8 @@ export default {
       } catch (error) {
         console.error("Registration failed:", error);
         alert("Registration failed. Please try again.");
+      } finally {
+        this.loading = false;
       }
     },
     on42register() {
@@ -150,12 +161,6 @@ export default {
   font-size: 20px;
   padding: 15px 0;
   border-radius: 8px;
-}
-
-/* You might want to style the disabled state differently */
-.register-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .input-group {
