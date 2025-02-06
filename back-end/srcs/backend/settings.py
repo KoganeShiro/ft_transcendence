@@ -66,11 +66,19 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ), 
-    # 'DEFAULT_RENDERER_CLASSES': (
-    #     'rest_framework.renderers.JSONRenderer',
-    # ),    
+     'DEFAULT_RENDERER_CLASSES': (
+         'rest_framework.renderers.JSONRenderer',
+     ),    
 }
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"  # Optional: Store sessions in cache instead of DB
+#SESSION_COOKIE_AGE = 0  # Make session cookies expire immediately
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Auto-delete session on browser close
 
+
+SOCIAL_AUTH_STATE_SESSION = False  # Prevent PSA from storing state in session
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = []  # Ensure no fields are stored in session
+SOCIAL_AUTH_PIPELINE_CACHE_KEY = "psa_pipeline_cache_{uid}"  # Store pipeline in cache
+SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"  # Default DB storage, but can be overridden
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -154,6 +162,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),    
     'https://localhost',
 ]
+
+
 
 
 MIDDLEWARE = [

@@ -49,4 +49,6 @@ class FortyTwoOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
          return self.get_json(self.USER_DATA_URL, headers={'Authorization': f'Bearer {access_token}'})
     
+    
+    
 
