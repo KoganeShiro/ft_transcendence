@@ -9,7 +9,12 @@ frontend/node_modules/
 */obj
 frontend/node_modules/*
 frontend/node_modules/.*
+
+# Ignore compiled files
 back-end/bin/*
 back-end/include/*
 back-end/lib/*
 back-end/lib64/*
+*.pyc
+
+
