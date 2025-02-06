@@ -1,7 +1,7 @@
 POST https://localhost:1443/api/register/
 Content-Type: application/json
 
-{ "username": "user1", "password": "Pass1234!" }
+{ "username": "user2", "password": "Pass1234!" }
 
 ###
 

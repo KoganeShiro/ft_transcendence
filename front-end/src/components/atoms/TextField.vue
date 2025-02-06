@@ -6,7 +6,8 @@
       :placeholder="placeholder"
       :class="inputClass"
       :style="inputStyle"
-      @input="$emit('input', $event.target.value)"
+      :value="modelValue" 
+      @input="$emit('update:modelValue', $event.target.value)"
       maxlength="25"
     />
   </div>
@@ -15,9 +16,13 @@
 <script>
 export default {
   props: {
+    modelValue: {  // renamed from "value" to "modelValue"
+      type: String,
+      default: ""
+    },
     id: {
       type: String,
-      default: "",
+      default: ""
     },
     type: {
       type: String,
@@ -71,6 +76,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 .input-wrapper {
