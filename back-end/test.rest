@@ -1,0 +1,155 @@
+POST https://localhost:1443/api/register/
+Content-Type: application/json
+
+{ "username": "user1", "password": "Pass1234!" }
+
+###
+
+POST https://localhost:1443/api/login/
+Content-Type: application/json
+
+{ "username": "user1", "password": "Pass1234!" }
+
+###
+
+POST https://localhost:1443/api/logout/
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MzE1MjEwNCwiaWF0IjoxNzM4ODMyMTA0LCJqdGkiOiI0MDRhYTQ4NGEyMDM0MjE5YTBjZDQzMTM3MGQ3MmUwZCIsInVzZXJfaWQiOjJ9.GL6DgatMbWhUz12Uf7_3DoNquiRuRJZxRFAIqsELbSU"
+}
+
+###
+
+GET https://localhost:1443/api/profile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4ODM1MTI2LCJpYXQiOjE3Mzg4Mjc1MzQsImp0aSI6ImI3YTc4YTIzMmVmMDRkNzM4NmE4YzExYmQ2MDY5NmI2IiwidXNlcl9pZCI6Mn0.DCqy0REgIDFwixzxxPwGdqPmEGNMcFy8VqsNViuOTOw
+
+{
+    "email": "dfsdf"
+}
+
+
+###
+
+PATCH https://localhost:1443/api/profile_update/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk5OTY0LCJpYXQiOjE3Mzg2OTI3NjQsImp0aSI6IjNmNjEzNzhiNWQ1MzQ0Yjg5ZjVjMjhmNzhmNDE4MWQ4IiwidXNlcl9pZCI6OSwidXNlcm5hbWUiOiJ1c2VyMSJ9.Xt8fX_yRer-zX5LZuq2fLQVw0s6Mp1tyrjmAGzwmMJk
+
+{
+    "email": "dffsdfdf@dsdse.fr"
+}
+
+
+###
+
+GET https://localhost:1443/api/users/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk2ODMzLCJpYXQiOjE3Mzg2ODk2MzMsImp0aSI6IjI0MTBkNDhhZTk4NTQ5NjY5NzM0MDQ0ZWNiY2E4M2UxIiwidXNlcl9pZCI6OCwidXNlcm5hbWUiOiJhZGRzc2RzZHNkc2Rhc20xIn0.XkXc0vKvd6KnXtVQI4A3cl_O5zn7o9kw981WKETiWXI
+
+{
+    "player1": 1,
+    "player2": 1,
+    "winner": 2,
+    "loser": 2
+}
+
+###
+
+DELETE https://localhost:1443/api/games/games/2/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "loser": 1
+}
+
+###
+
+PATCH https://localhost:1443/api/games/games/4/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "loser": 1
+}
+
+###
+
+GET https://localhost:1443/api/games/games/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTk2MDQ2LCJpYXQiOjE3Mzg1ODg4NDYsImp0aSI6ImM4NTgzMTIyMDg4NzRmOTNiZmQ2YWQ5YjY2ODI3MjMwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.JEBZojrAo0Vl-BYut-S-s9o6TBiSnTGbHKAtIB8fRVw
+
+{
+    "player1": 1,
+    "player2": 2,
+    "winner": 1,
+    "loser": 2
+}
+
+###
+
+GET https://localhost:1443/api/games/games/2/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTg4NDMwLCJpYXQiOjE3Mzg1ODgxMzAsImp0aSI6ImJjMThkMzc5MjM2ZjQ5OTliNTRhZDBiOTJkMTJiMTI0IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.bUlsy75uS5vy6Zne1ekaZkTFC-_SpwPGj03FprP2Aj4
+
+{
+    "player1": 1,
+    "player2": 2,
+    "winner": 1,
+    "loser": 2
+}
+
+
+
+###
+
+GET https://localhost:1443/api/users/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NjAwMTMxLCJpYXQiOjE3Mzg1OTI5MzEsImp0aSI6IjFiZmJjZDk5OGI0NDRhZTFiYzUyMGQ1YjQzMWM2OTU1IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9.TcruRJWQUreDLBf0DBuRVd1sTi4Vf0x_DR-0sRaAClc
+
+###
+
+POST https://localhost:1443/api/logout/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NTc4NTQzLCJpYXQiOjE3Mzg1NzgyNDMsImp0aSI6IjcxYTJkNmEzYTA1ZjQ2YzlhMDU5Y2VlMjcwODU5YzgwIiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJhZGFzbTEiLCJlbWFpbCI6ImFkYW1zQG1zYWlsLmNvbSJ9._YFDztjf6H6JIZ6j51BBnJWS0kMSmcTOSzNemJKhPYw
+
+{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Mjg5ODI0MywiaWF0IjoxNzM4NTc4MjQzLCJqdGkiOiI2ZDIyNDExNDRlNjA0N2E1YWU1MGVlZGUwMGQ5YjMyOSIsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoiYWRhc20xIiwiZW1haWwiOiJhZGFtc0Btc2FpbC5jb20ifQ.TD0jpK2l_934nzDE_g9Y1sjwpo9Vw0wI5Xr8CkfHn_0" }
+
+###
+
+GET https://localhost:1443/media/profile_image/Default_pfp.jpg
+Content-Type: application/json
+
+
+###
+https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9&redirect_uri=https://localhost:1443/api/auth/complete/42/&response_type=code
+
+###
+
+
+https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9&redirect_uri=https://localhost:1443/api/auth/complete/42/&response_type=code
+
+###
+
+GET https://localhost:1443/api/auth/login/42/
+Content-Type: application/json
+
+
+###
+
+
+
+curl -X POST "https://api.intra.42.fr/oauth/token" \
+-d "grant_type=authorization_code" \
+-d "client_id=u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9" \
+-d "client_secret=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" \
+-d "redirect_uri=https://localhost/api/auth/complete/42/" \
+-d "code=bed79fa338136ae8ebade3ff4437cbc72253614394b06c0553ce8f29d6865b9c"
+
+###
+
+GET https://localhost:1443/api/auth/complete/42/?code=eb170dghfffbb676dbecb528bb70ddcd3bea39aa0893cf155f3b125
+

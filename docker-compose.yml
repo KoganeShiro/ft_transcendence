@@ -1,0 +1,94 @@
+# Use postgres/example user/password credentials
+services:
+  nginx:
+    build:      
+      dockerfile: webserver/Dockerfile
+    container_name: nginx
+    env_file:
+      - .env
+    ports:      
+      - "1443:443"
+    depends_on:
+      - back-end
+    volumes:
+      - webserver_data:/usr/share/nginx/html    
+    restart: always
+    networks:
+      - pong
+    
+  
+  back-end:
+    build:      
+      dockerfile: back-end/Dockerfile
+    container_name: back-end
+    expose:      
+      - "8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./back-end/srcs:/usr/src/app  
+    restart: always
+    networks:
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/admin/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    expose:
+      - "5432"
+    env_file:
+      - .env
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+
+networks:
+  pong:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  webserver_data:
+#  back-end_data:
+#    driver: local # specify the driver for the volume 
+#    driver_opts:
+#      type: 'none'
+#      o: 'bind'
+#      device: 'back-end/src'  # Ou stocker le dossier sur votre ordinateur en local
+
+#volumes:
+#  database:
+#    driver: local
+#    driver_opts:
+#      type: 'none' 
+#      o: 'bind'
+#      device: '/home/${LOGIN}/data/postgres' 
+
+#     user_service:
+#        driver: local # specify the driver for the volume 
+#        driver_opts:
+#          type: 'none'
+#          o: 'bind'
+#          device: '.'  # Ou stocker le dossier sur votre ordinateur en local

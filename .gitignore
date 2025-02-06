@@ -5,4 +5,11 @@ frontend/node_modules/
 # Ignore other files and directories
 *.out
 *.vscode
+*/*.out
 */obj
+frontend/node_modules/*
+frontend/node_modules/.*
+back-end/bin/*
+back-end/include/*
+back-end/lib/*
+back-end/lib64/*
