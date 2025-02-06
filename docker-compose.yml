@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     ports:      
-      - "1443:443"
+      - "${PORT}:443"
     depends_on:
       - back-end
     volumes:

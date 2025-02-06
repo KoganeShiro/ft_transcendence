@@ -26,7 +26,7 @@
         </InputGroup>
         <!-- 
         
-        POST https://localhost:1443/api/register/
+        POST /api/register/
         Content-Type: application/json
 
         { "username": "user1", "password": "Pass1234!", "cover_photo": }
