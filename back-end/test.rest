@@ -12,22 +12,26 @@ Content-Type: application/json
 
 ###
 
+POST https://localhost:1443/api/login/refresh/
+Content-Type: application/json
+
+{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MzE2MTk1MywiaWF0IjoxNzM4ODQxOTUzLCJqdGkiOiI0OTgyOTI5ODMxMjM0MTY1YjU3YWY3YzNhYWY2NGUwNSIsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoidXNlcjEifQ.n13RotunMtpYBuvpDcHumoEHcffmGUh9t_9Whku-9vg" }
+
+###
+
 POST https://localhost:1443/api/logout/
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MzE1MjEwNCwiaWF0IjoxNzM4ODMyMTA0LCJqdGkiOiI0MDRhYTQ4NGEyMDM0MjE5YTBjZDQzMTM3MGQ3MmUwZCIsInVzZXJfaWQiOjJ9.GL6DgatMbWhUz12Uf7_3DoNquiRuRJZxRFAIqsELbSU"
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MzE2MTc0NCwiaWF0IjoxNzM4ODQxNzQ0LCJqdGkiOiI5MzVhMWM0YmNmNzE0YTZhYTBjMWI4NzYxNWFkZGIzOSIsInVzZXJfaWQiOjIsInVzZXJuYW1lIjoidXNlcjEifQ.ar1Mt7i7LWaLpz5DAI4qA15vP-bdmx-38ZBSlINly7M"
 }
 
 ###
 
-GET https://localhost:1443/api/profile/
+GET https://localhost:1443/api/profile/gkubina/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4ODM1MTI2LCJpYXQiOjE3Mzg4Mjc1MzQsImp0aSI6ImI3YTc4YTIzMmVmMDRkNzM4NmE4YzExYmQ2MDY5NmI2IiwidXNlcl9pZCI6Mn0.DCqy0REgIDFwixzxxPwGdqPmEGNMcFy8VqsNViuOTOw
+Authorization: Bearer eyJhbGcOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4ODQ4Njc3LCJpYXQiOjE3Mzg4NDE0NzcsImp0aSI6IjU2MGM3NDFiNGQ3YTQzZjY5ZmI3NmY4Nzc0ZmEzNDQ5IiwidXNlcl9pZCI6MiwidXNlcm5hbWUiOiJ1c2VyMSJ9.shGeC-oBJjKM6nUVE9u2XJ1GL7u2O4QqJd-v6oiEndg
 
-{
-    "email": "dfsdf"
-}
 
 
 ###

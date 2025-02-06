@@ -6,6 +6,7 @@ COPY front-end/package.json front-end/package-lock.json ./
 RUN npm install
 
 COPY ./front-end .
+
 RUN npm run build
 
 FROM nginx:latest
