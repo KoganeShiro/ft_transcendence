@@ -24,6 +24,15 @@
             :placeholder="$t('confirmPassword')"
           />
         </InputGroup>
+        <!-- 
+        
+        POST https://localhost:1443/api/register/
+        Content-Type: application/json
+
+        { "username": "user1", "password": "Pass1234!", "cover_photo": }
+        
+        /backend/test.rest
+         -->
         <ButtonGroup class="button-group">
           <!-- Send a POST Request with the informations in json format
                 Send back error or not -->
