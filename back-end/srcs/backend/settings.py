@@ -22,7 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f+&g!!lmxdld%5v!2&#q5oowy)p64m0pdys47ju9*g40r(z&kq'
+#SECRET_KEY = 'django-insecure-f+&g!!lmxdld%5v!2&#q5oowy)p64m0pdys47ju9*g40r(z&kq'
+SECRET_KEY = os.environ.get('HASHER_CODE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,20 +39,19 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
-# REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
 REDIRECT_URI = 'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT') + '/api/auth/complete/42/'
 
 SOCIAL_AUTH_42_LOGIN_REDIRECT_URL = '/api/auth/get_token/'
-SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'                      
-SOCIAL_AUTH_42_SECRET = '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'
+# SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'                      
+SOCIAL_AUTH_42_KEY = os.environ.get('AUTH_CLIENT_ID')                     
+# SOCIAL_AUTH_42_SECRET = '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'
+SOCIAL_AUTH_42_SECRET = os.environ.get('AUTH_SECRET')
 SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
 SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
 SOCIAL_AUTH_42_USER_DATA_URL = 'https://api.intra.42.fr/v2/me'
-# SOCIAL_AUTH_42_REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
 SOCIAL_AUTH_42_REDIRECT_URI = 'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT') + '/api/auth/complete/42/'
 SOCIAL_AUTH_42_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_USER_MODEL = 'user_mgm.CustomUser'
-#SOCIAL_AUTH_42_OAUTH2_WHITELISTED_DOMAINS = ['api.intra.42.fr', 'localhost:1443', 'localhost:8000', 'localhost']
 SOCIAL_AUTH_42_SCOPE = ['public']
 SOCIAL_AUTH_42_EXTRA_DATA = ['id', 'login', 'email', 'image']
 
@@ -151,8 +151,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000',
     'https://localhost:8000',
-    'https://localhost:443',
-    'https://localhost:1443',
+    'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),    
     'https://localhost',
 ]
 

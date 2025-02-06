@@ -1,4 +1,4 @@
-FROM node:latest AS builder
+FROM node:22.13.1 AS builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY ./front-end .
 
 RUN npm run build
 
-FROM nginx:latest
+FROM nginx:1.27.4
 
 RUN apt-get update && \  
     apt-get install -y openssl   
@@ -18,6 +18,8 @@ COPY webserver/create_ssl_and_start_nginx.sh /docker-entrypoint.d/01-create_ssl_
 RUN chmod +x /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
 
 COPY webserver/nginx.conf /etc/nginx/nginx.conf
+
+RUN sed -i 's/HOSTNAME/$HOSTNAME/g' /etc/nginx/nginx.conf
 
 # COPY webserver/certs/ /etc/nginx/certs/ 
 #move the certs copy to run part with script
