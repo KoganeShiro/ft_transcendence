@@ -41,6 +41,33 @@ services:
       start_period: 30s
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
+  front-end:
+    build:      
+      dockerfile: front-end/Dockerfile
+    container_name: front-end
+    expose:      
+      - "5173"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./front-end:/app  
+    restart: always
+    networks:
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    # command: ["npm", "start", "--", "--port", "5173"]
+
+
+
+
 
   postgres:
     image: postgres:latest

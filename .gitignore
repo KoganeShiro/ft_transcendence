@@ -9,6 +9,7 @@ frontend/node_modules/
 */obj
 frontend/node_modules/*
 frontend/node_modules/.*
+frontend/package-lock.json
 
 # Ignore compiled files
 back-end/bin/*
