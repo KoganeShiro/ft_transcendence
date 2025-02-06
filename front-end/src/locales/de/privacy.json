@@ -1,0 +1,152 @@
+{
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "lastUpdated": "2025-01-25 17:25:54",
+      "sections": [
+        {
+          "title": "ZUSAMMENFASSUNG DER WICHTIGSTEN PUNKTE",
+          "content": [
+            "Diese Zusammenfassung enthält die wichtigsten Punkte unserer Datenschutzerklärung. Weitere Details zu diesen Themen finden Sie in den entsprechenden Abschnitten mithilfe des nachfolgenden Inhaltsverzeichnisses.",
+            "Welche personenbezogenen Daten verarbeiten wir? Wenn Sie unsere Dienste besuchen, nutzen oder darin navigieren, können wir personenbezogene Daten verarbeiten, je nachdem, wie Sie mit uns und den Diensten interagieren, welche Entscheidungen Sie treffen und welche Produkte und Funktionen Sie nutzen.",
+            "Verarbeiten wir sensible personenbezogene Daten? Einige Informationen können in bestimmten Rechtsordnungen als 'besonders' oder 'sensibel' eingestuft werden, beispielsweise Ihre ethnische Herkunft, sexuelle Orientierung und religiösen Überzeugungen. Wir verarbeiten keine sensiblen personenbezogenen Daten.",
+            "Erheben wir Informationen von Dritten? Wir können Informationen von Dritten erheben, wie zum Beispiel von 42 über deren API, um Ihnen ein besseres Nutzungserlebnis zu bieten.",
+            "Wie verarbeiten wir Ihre Informationen? Wir verarbeiten Ihre Informationen, um unsere Dienste bereitzustellen, zu verbessern und zu verwalten, mit Ihnen zu kommunizieren, für Sicherheit und Betrugsprävention zu sorgen und gesetzliche Vorschriften einzuhalten. Wir verarbeiten Ihre Informationen nur, wenn wir dafür einen rechtmäßigen Grund haben.",
+            "In welchen Situationen und mit welchen Parteien teilen wir personenbezogene Daten? Wir können Informationen in bestimmten Situationen und mit bestimmten Dritten teilen.",
+            "Was sind Ihre Rechte? Je nach Ihrem geografischen Standort können Ihnen nach geltendem Datenschutzrecht bestimmte Rechte in Bezug auf Ihre personenbezogenen Daten zustehen.",
+            "Wie können Sie Ihre Rechte ausüben? Der einfachste Weg, Ihre Rechte auszuüben, ist die Einreichung eines Antrags auf Auskunft oder die Kontaktaufnahme mit uns. Wir werden jeden Antrag gemäß den geltenden Datenschutzgesetzen prüfen und bearbeiten.",
+            "Möchten Sie mehr darüber erfahren, was wir mit den von uns erhobenen Informationen machen? Lesen Sie die vollständige Datenschutzerklärung."
+          ]
+        },
+        {
+          "title": "INHALTSVERZEICHNIS",
+          "content": [
+            "1. WELCHE INFORMATIONEN ERHEBEN WIR?",
+            "2. WIE VERARBEITEN WIR IHRE INFORMATIONEN?",
+            "3. WANN UND MIT WEM TEILEN WIR IHRE PERSONENBEZOGENEN DATEN?",
+            "4. VERWENDEN WIR COOKIES UND ANDERE TRACKING-TECHNOLOGIEN?",
+            "5. WIE GEHEN WIR MIT IHREN SOCIAL-MEDIA-ANMELDUNGEN UM?",
+            "6. WERDEN IHRE INFORMATIONEN INTERNATIONAL ÜBERTRAGEN?",
+            "7. WIE LANGE BEWAHREN WIR IHRE INFORMATIONEN AUF?",
+            "8. ERHEBEN WIR INFORMATIONEN VON MINDERJÄHRIGEN?",
+            "9. WELCHE DATENSCHUTZRECHTE HABEN SIE?",
+            "10. STEUERUNGSMÖGLICHKEITEN FÜR DO-NOT-TRACK-FUNKTIONEN",
+            "11. NEHMEN WIR AKTUALISIERUNGEN DIESER ERKLÄRUNG VOR?",
+            "12. WIE KÖNNEN SIE UNS BEZÜGLICH DIESER ERKLÄRUNG KONTAKTIEREN?",
+            "13. WIE KÖNNEN SIE DIE VON UNS ERHOBENEN DATEN EINSEHEN, AKTUALISIEREN ODER LÖSCHEN?"
+          ]
+        },
+        {
+            "title": "EINFÜHRUNG",
+            "content": [
+                "Diese Datenschutzerklärung ('wir', 'uns' oder 'unser') beschreibt, wie und warum wir Ihre personenbezogenen Daten möglicherweise erfassen, speichern, nutzen und/oder teilen ('verarbeiten'), wenn Sie unsere Dienste ('Dienste') nutzen.",
+                "Fragen oder Bedenken? Das Lesen dieser Datenschutzerklärung wird Ihnen helfen, Ihre Datenschutzrechte und -optionen zu verstehen. Wir sind für die Entscheidungen über die Verarbeitung Ihrer personenbezogenen Daten verantwortlich. Wenn Sie mit unseren Richtlinien und Praktiken nicht einverstanden sind, nutzen Sie bitte unsere Dienste nicht."
+        ]
+        },
+        {
+            "title": "1. WELCHE INFORMATIONEN ERHEBEN WIR?",
+            "content": [
+                "Personenbezogene Daten, die Sie uns mitteilen",
+                "Kurz gesagt: Wir erheben personenbezogene Daten, die Sie uns zur Verfügung stellen.",
+                "Wir erheben personenbezogene Daten, die Sie uns freiwillig zur Verfügung stellen, wenn Sie sich für die Dienste registrieren, Interesse an Informationen über uns oder unsere Produkte und Dienste bekunden, wenn Sie an Aktivitäten auf den Diensten teilnehmen oder wenn Sie uns anderweitig kontaktieren.",
+                "Sensible Daten: Wir verarbeiten keine sensiblen Daten.",
+                "Alle personenbezogenen Daten, die Sie uns zur Verfügung stellen, müssen wahr, vollständig und genau sein, und Sie müssen uns über alle Änderungen dieser personenbezogenen Daten informieren.",
+                "-",
+                "Automatisch erhobene Informationen",
+                "Kurz gesagt: Einige Informationen – wie Ihre Internet-Protokoll (IP)-Adresse und/oder Browser- und Geräteeigenschaften – werden automatisch erfasst, wenn Sie unsere Dienste besuchen.",
+                "Wir erheben automatisch bestimmte Informationen, wenn Sie unsere Dienste besuchen, nutzen oder darin navigieren. Diese Informationen geben keine Auskunft über Ihre spezifische Identität (wie Name oder Kontaktdaten), können aber Geräte- und Nutzungsinformationen enthalten, wie Ihre IP-Adresse, Browser- und Geräteeigenschaften, Betriebssystem, Spracheinstellungen, verweisende URLs, Gerätename, Land, Standort, Informationen darüber, wie und wann Sie unsere Dienste nutzen, sowie andere technische Informationen. Diese Informationen werden hauptsächlich benötigt, um die Sicherheit und den Betrieb unserer Dienste zu gewährleisten sowie für unsere internen Analyse- und Berichtszwecke.",
+                "Wie viele Unternehmen erheben wir auch Informationen über Cookies und ähnliche Technologien."
+        ]
+        },
+        {
+            "title": "2. WIE VERARBEITEN WIR IHRE INFORMATIONEN?",
+            "content": [
+                "Kurz gesagt: Wir verarbeiten Ihre Informationen, um unsere Dienste bereitzustellen, zu verbessern und zu verwalten, mit Ihnen zu kommunizieren, für Sicherheit und Betrugsprävention zu sorgen und gesetzliche Vorschriften einzuhalten. Wir können Ihre Informationen auch für andere Zwecke mit Ihrer Einwilligung verarbeiten.",
+                "Wir verarbeiten Ihre personenbezogenen Daten aus verschiedenen Gründen, je nachdem, wie Sie mit unseren Diensten interagieren"
+        ]
+        },
+        {
+            "title": "3. WANN UND MIT WEM TEILEN WIR IHRE PERSONENBEZOGENEN DATEN?",
+            "content": [
+                "Kurz gesagt: Wir können Informationen in bestimmten, in diesem Abschnitt beschriebenen Situationen und/oder mit den folgenden Dritten teilen.",
+                "Wir müssen Ihre personenbezogenen Daten möglicherweise in den folgenden Situationen teilen:",
+                "• Verbundene Unternehmen. Wir können Ihre Informationen mit unseren verbundenen Unternehmen teilen, wobei wir von diesen verlangen, dass sie diese Datenschutzerklärung einhalten. Zu den verbundenen Unternehmen gehören unsere Muttergesellschaft und alle Tochtergesellschaften, Joint-Venture-Partner oder andere Unternehmen, die wir kontrollieren oder die unter gemeinsamer Kontrolle mit uns stehen."
+        ]
+        },
+        {
+            "title": "4. VERWENDEN WIR COOKIES UND ANDERE TRACKING-TECHNOLOGIEN?",
+            "content": [
+                "Kurz gesagt: Wir können Cookies und andere Tracking-Technologien verwenden, um Ihre Informationen zu erheben und zu speichern.",
+                "Wir können Cookies und ähnliche Tracking-Technologien (wie Web-Beacons und Pixels) verwenden, um Informationen zu sammeln, wenn Sie mit unseren Diensten interagieren. Einige Online-Tracking-Technologien helfen uns dabei, die Sicherheit unserer Dienste aufrechtzuerhalten, Abstürze zu verhindern, Fehler zu beheben, Ihre Präferenzen zu speichern und grundlegende Website-Funktionen zu unterstützen."
+        ]
+        },
+        {
+            "title": "5. WIE GEHEN WIR MIT IHREN SOCIAL-MEDIA-ANMELDUNGEN UM?",
+            "content": [
+                "Kurz gesagt: Wenn Sie sich dafür entscheiden, sich über die 42-API bei unseren Diensten zu registrieren oder anzumelden, haben wir möglicherweise Zugriff auf bestimmte Informationen über Sie.",
+                "Unsere Dienste bieten Ihnen die Möglichkeit, sich über die 42-API mit Ihren Kontodaten zu registrieren und anzumelden. Wenn Sie sich dafür entscheiden, erhalten wir bestimmte Profilinformationen über Sie von der 42-API. Zu den Profilinformationen, die wir erhalten, gehören in der Regel Ihr Name, Ihre E-Mail-Adresse und Ihr Profilbild sowie andere Informationen, die Sie öffentlich zugänglich machen",
+                "Wir werden die erhaltenen Informationen nur für die in dieser Datenschutzerklärung beschriebenen Zwecke oder die Ihnen anderweitig auf den relevanten Diensten klar mitgeteilten Zwecke verwenden. Bitte beachten Sie, dass wir keine Kontrolle über und keine Verantwortung für andere Verwendungen Ihrer personenbezogenen Daten durch 42 haben. Wir empfehlen Ihnen, deren Datenschutzerklärung zu lesen, um zu verstehen, wie sie Ihre personenbezogenen Daten erheben, verwenden und teilen, und wie Sie Ihre Datenschutzeinstellungen auf deren Websites und Apps festlegen können."
+        ]
+        },
+            {
+            "title": "6. WERDEN IHRE INFORMATIONEN INTERNATIONAL ÜBERTRAGEN?",
+            "content": [
+                "Kurz gesagt: Wir übertragen Ihre Informationen nicht international.",
+                "Unsere Server befinden sich in Frankreich. Wenn Sie von außerhalb auf unsere Dienste zugreifen, beachten Sie bitte, dass Ihre Informationen von uns in unseren Einrichtungen und in den Einrichtungen der Dritten, mit denen wir Ihre personenbezogenen Daten möglicherweise teilen (siehe 'WANN UND MIT WEM TEILEN WIR IHRE PERSONENBEZOGENEN DATEN?' oben), in Frankreich und anderen Ländern übertragen, gespeichert und verarbeitet werden können.",
+                "Wenn Sie im Europäischen Wirtschaftsraum (EWR), im Vereinigten Königreich (UK) oder in der Schweiz ansässig sind, verfügen diese Länder möglicherweise nicht über Datenschutzgesetze oder ähnliche Gesetze, die so umfassend sind wie die in Ihrem Land. Wir werden jedoch alle erforderlichen Maßnahmen ergreifen, um Ihre personenbezogenen Daten gemäß dieser Datenschutzerklärung und geltendem Recht zu schützen."
+        ]
+        },
+        {
+            "title": "7. WIE LANGE BEWAHREN WIR IHRE INFORMATIONEN AUF?",
+            "content": [
+                "Kurz gesagt: Wir bewahren Ihre Informationen so lange auf, wie es zur Erfüllung der in dieser Datenschutzerklärung dargelegten Zwecke erforderlich ist, sofern gesetzlich nichts anderes vorgeschrieben ist.",
+                "Wir bewahren Ihre personenbezogenen Daten nur so lange auf, wie es für die in dieser Datenschutzerklärung dargelegten Zwecke erforderlich ist, es sei denn, eine längere Aufbewahrungsfrist ist gesetzlich vorgeschrieben oder zulässig (wie steuerliche, buchhalterische oder andere gesetzliche Anforderungen).",
+                "Wenn wir keine laufende berechtigte geschäftliche Notwendigkeit zur Verarbeitung Ihrer personenbezogenen Daten mehr haben, werden wir diese entweder löschen oder anonymisieren, oder, falls dies nicht möglich ist (zum Beispiel, weil Ihre personenbezogenen Daten in Backup-Archiven gespeichert wurden), werden wir Ihre personenbezogenen Daten sicher aufbewahren und von jeder weiteren Verarbeitung isolieren, bis eine Löschung möglich ist."
+        ]
+        },
+        {
+            "title": "8. ERHEBEN WIR INFORMATIONEN VON MINDERJÄHRIGEN?",
+            "content": [
+                "Kurz gesagt: Wir erheben wissentlich keine Daten von Kindern unter 18 Jahren und richten kein Marketing an sie.",
+                "Wir erheben wissentlich keine Daten von Kindern unter 18 Jahren, fordern diese nicht an und richten kein Marketing an sie, noch verkaufen wir wissentlich deren personenbezogene Daten. Durch die Nutzung der Dienste versichern Sie, dass Sie mindestens 18 Jahre alt sind oder dass Sie der Elternteil oder Vormund eines solchen Minderjährigen sind und der Nutzung der Dienste durch diesen Minderjährigen zustimmen. Wenn wir erfahren, dass personenbezogene Daten von Nutzern unter 18 Jahren erhoben wurden, werden wir das Konto deaktivieren und angemessene Maßnahmen ergreifen, um diese Daten umgehend aus unseren Aufzeichnungen zu löschen. Wenn Sie Kenntnis von Daten erhalten, die wir möglicherweise von Kindern unter 18 Jahren erhoben haben, kontaktieren Sie uns bitte unter"
+        ]
+        },
+        {
+            "title": "9. WELCHE DATENSCHUTZRECHTE HABEN SIE?",
+            "content": [
+              "Kurz gesagt: Je nach Ihrem Land, Ihrer Provinz oder Ihrem Bundesstaat können Sie Ihr Konto jederzeit überprüfen, ändern oder kündigen.",
+              "Widerruf Ihrer Einwilligung: Wenn wir uns bei der Verarbeitung Ihrer personenbezogenen Daten auf Ihre Einwilligung stützen, die je nach geltendem Recht ausdrücklich und/oder stillschweigend sein kann, haben Sie das Recht, Ihre Einwilligung jederzeit zu widerrufen. Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie uns über die im Abschnitt 'WIE KÖNNEN SIE UNS BEZÜGLICH DIESER ERKLÄRUNG KONTAKTIEREN?' angegebenen Kontaktdaten kontaktieren.",
+              "Bitte beachten Sie, dass dies die Rechtmäßigkeit der Verarbeitung vor ihrem Widerruf nicht berührt und, soweit das geltende Recht dies zulässt, die Verarbeitung Ihrer personenbezogenen Daten, die auf anderen rechtmäßigen Verarbeitungsgründen als der Einwilligung beruht, nicht beeinträchtigt.",
+              "-",
+              "Kontoinformationen",
+              "Wenn Sie zu irgendeinem Zeitpunkt die Informationen in Ihrem Konto überprüfen oder ändern oder Ihr Konto kündigen möchten, können Sie:",
+              "Auf Ihren Antrag zur Kontoauflösung hin werden wir Ihr Konto und Ihre Informationen aus unseren aktiven Datenbanken deaktivieren oder löschen oder anonymisieren. Wir können jedoch bestimmte Informationen in unseren Dateien aufbewahren, um Betrug zu verhindern, bei der Lösung von Problemen zu helfen, bei Untersuchungen zu unterstützen, unsere rechtlichen Bedingungen durchzusetzen und/oder geltende gesetzliche Anforderungen zu erfüllen."
+            ]
+        },
+        {
+            "title": "10. STEUERUNGSMÖGLICHKEITEN FÜR DO-NOT-TRACK-FUNKTIONEN",
+            "content": [
+              "Die meisten Webbrowser und einige mobile Betriebssysteme und mobile Anwendungen enthalten eine Do-Not-Track-Funktion ('DNT') oder -Einstellung, die Sie aktivieren können, um Ihre Datenschutzpräferenz zu signalisieren, dass Ihre Online-Browsing-Aktivitäten nicht überwacht und erfasst werden sollen. Zum jetzigen Zeitpunkt wurde kein einheitlicher Technologiestandard für die Erkennung und Implementierung von DNT-Signalen festgelegt. Daher reagieren wir derzeit nicht auf DNT-Browser-Signale oder andere Mechanismen, die automatisch Ihre Entscheidung kommunizieren, nicht online verfolgt zu werden. Wenn in Zukunft ein Standard für Online-Tracking verabschiedet wird, dem wir folgen müssen, werden wir Sie über diese Praxis in einer überarbeiteten Version dieser Datenschutzerklärung informieren."
+            ]
+        },
+        {
+            "title": "11. NEHMEN WIR AKTUALISIERUNGEN DIESER ERKLÄRUNG VOR?",
+            "content": [
+              "Kurz gesagt: Ja, wir werden diese Erklärung bei Bedarf aktualisieren, um den einschlägigen Gesetzen zu entsprechen.",
+              "Wir können diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Die aktualisierte Version wird durch ein aktualisiertes 'Überarbeitet'-Datum oben in dieser Datenschutzerklärung gekennzeichnet. Wenn wir wesentliche Änderungen an dieser Datenschutzerklärung vornehmen, können wir Sie entweder durch deutlich sichtbare Veröffentlichung einer Mitteilung über solche Änderungen oder durch direkte Zusendung einer Benachrichtigung informieren. Wir empfehlen Ihnen, diese Datenschutzerklärung regelmäßig zu überprüfen, um darüber informiert zu sein, wie wir Ihre Informationen schützen."
+            ]
+        },
+        {
+            "title": "12. WIE KÖNNEN SIE UNS BEZÜGLICH DIESER ERKLÄRUNG KONTAKTIEREN?",
+            "content": [
+              "Wenn Sie Fragen oder Anmerkungen zu dieser Erklärung haben, können Sie uns per Post kontaktieren unter:"
+            ]
+        },
+        {
+            "title": "13. WIE KÖNNEN SIE DIE VON UNS ERHOBENEN DATEN EINSEHEN, AKTUALISIEREN ODER LÖSCHEN?",
+            "content": [
+              "Je nach den geltenden Gesetzen Ihres Landes haben Sie möglicherweise das Recht, Zugang zu den personenbezogenen Daten zu verlangen, die wir von Ihnen erheben, Details darüber zu erhalten, wie wir sie verarbeitet haben, Ungenauigkeiten zu korrigieren oder Ihre personenbezogenen Daten zu löschen. Sie haben möglicherweise auch das Recht, Ihre Einwilligung zur Verarbeitung Ihrer personenbezogenen Daten zu widerrufen. Diese Rechte können in bestimmten Fällen durch geltendes Recht eingeschränkt sein. Um die Einsicht, Aktualisierung oder Löschung Ihrer personenbezogenen Daten zu beantragen, füllen Sie bitte einen Antrag auf Auskunft über personenbezogene Daten aus und senden Sie diesen an transcendental-teapot@mail.com."
+            ]
+        }
+      ]
+    }
+  }

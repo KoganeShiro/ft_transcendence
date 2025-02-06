@@ -1,10 +1,10 @@
 <template>
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2025 &lt;team name&gt;</p>
+      <p>&copy; 2025 Transcendental Teapot</p>
       <p>
         <router-link to="/privacy" class="footer-link">
-          Legal Notices – Privacy Policy
+          {{ $t("privacy-policy") }}
         </router-link>
       </p>
     </div>
@@ -17,9 +17,10 @@ export default {};
 
 <style scoped>
 .footer {
-  background-color: #333;
+  margin-top: 20px;
+  background-color: var(--footer-color);;
   padding: 5px 10px;
-  color: white;
+  color: var(--text-color);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -37,8 +38,8 @@ export default {};
 }
 
 .footer-link {
-  color: #00aaff;
-  text-decoration: none;
+  color: var(--link-color);
+  font-weight: bold;
 }
 
 .footer-link:hover {

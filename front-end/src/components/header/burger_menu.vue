@@ -1,11 +1,21 @@
 <template>
     <div :class="['burger-menu', { active: isActive }]">
-      <ButtonGroupMolecule>
-        <ButtonAtom variant="menu">Play</ButtonAtom>
-        <ButtonAtom variant="menu">Profile</ButtonAtom>
-        <ButtonAtom variant="menu">Settings</ButtonAtom>
-        <ButtonAtom variant="menu">Log out</ButtonAtom>
-        <ButtonAtom variant="menu">Credits</ButtonAtom>
+      <ButtonGroupMolecule class="menu-btn-group">
+        <router-link to="/game-choice" class="button-link">
+          <ButtonAtom variant="menu">{{ $t("play") }}</ButtonAtom>
+        </router-link>
+        <router-link to="/profile" class="button-link">
+          <ButtonAtom variant="menu">{{ $t("profile") }}</ButtonAtom>
+        </router-link>
+        <router-link to="/settings" class="button-link">
+          <ButtonAtom variant="menu">{{ $t("settings") }}</ButtonAtom>
+        </router-link>
+        <router-link to="/logout" class="button-link">
+          <ButtonAtom variant="menu">{{ $t("logout") }}</ButtonAtom>
+        </router-link>
+        <router-link to="/credits" class="button-link">
+          <ButtonAtom variant="menu">{{ $t("credits") }}</ButtonAtom>
+        </router-link>
     </ButtonGroupMolecule>
 
     </div>
@@ -40,25 +50,27 @@ import TextAtom from "@/components/atoms/Text.vue";
     bottom: 0;
     width: 270px;
     height: 300px;
-    padding: 20px;
-    background-color: #333;
-    color: #ffffff;
+    background-color: var(--header-color);
+    color: var(--text-color);
     overflow-y: auto;
     transition: transform 0.3s ease-in-out;
     transform: translateX(100%);
     border-radius: 10px;
+    z-index: 1000;
   }
   
   .burger-menu.active {
     transform: translateX(0);
   }
-  .button-group > * {
+  .menu-btn-group :deep(*) {
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    padding: 15px 50px;
+    padding: 15px 0px;
   }
-  .button-group > *:hover {
-    transform: scale(1.05);
+
+  .button-link {
+    display: contents;
   }
+
   </style>

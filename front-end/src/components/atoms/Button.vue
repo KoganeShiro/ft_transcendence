@@ -1,5 +1,9 @@
 <template>
-  <button :class="buttonClass" :style="buttonStyle" @click="onClick">
+  <button
+    :class="['btn', buttonClass]"
+    :style="buttonStyle"
+    @click="onClick"
+  >
     <slot />
   </button>
 </template>
@@ -9,15 +13,19 @@ export default {
   props: {
     variant: {
       type: String,
-      default: "primary",
+      default: "primary", // Default button style
     },
     width: {
       type: String,
-      default: null,
+      default: null, // Optional custom width
     },
     fontSize: {
       type: String,
-      default: null,
+      default: null, // Optional custom font size
+    },
+    borderRadius: {
+      type: String,
+      default: "7px", // Default border radius
     },
   },
   computed: {
@@ -25,13 +33,12 @@ export default {
       return `btn-${this.variant}`;
     },
     buttonStyle() {
-      const style = {};
-      if (this.width && this.variant !== 'menu') {
-        style.width = this.width;
-      }
-      if (this.fontSize) {
-        style.fontSize = this.fontSize;
-      }
+      const style = {
+        padding: this.padding,
+        borderRadius: this.borderRadius,
+        width: this.width || "auto",
+        fontSize: this.fontSize || "inherit",
+      };
       return style;
     },
   },
@@ -44,56 +51,105 @@ export default {
 </script>
 
 <style scoped>
-.btn-primary, .btn-secondary, .btn-ghost, .btn-menu {
-  transition: all 0.3s ease;
+/* Base Button Styles */
+.btn {
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn-primary:hover, .btn-secondary:hover, .btn-ghost:hover {
-  opacity: 0.8;
-}
-
-.btn-menu:hover {
-  background-color: #252424;
-}
-
-.btn-primary, .btn-secondary, .btn-ghost {
-  width: auto;
-}
-
+/* Primary Button */
 .btn-primary {
   background-color: #007bff;
   color: white;
-  border: none;
-  padding: auto;
-  border-radius: 25px;
-  cursor: pointer;
 }
 
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Secondary Button */
 .btn-secondary {
   background-color: #6f42c1;
   color: white;
-  border: none;
-  padding: auto;
-  border-radius: 25px;
-  cursor: pointer;
 }
 
+.btn-secondary:hover {
+  background-color: #543294;
+}
+
+/* Ghost Button */
 .btn-ghost {
   background-color: transparent;
-  color: white;
-  border: none;
-  padding: auto;
-  border-radius: 10px;
-  cursor: pointer;
+  width: 150%;
 }
 
+.btn-ghost:hover {
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  background-color: var(--sidebar-hoover-color);
+}
+
+/* Menu Button */
 .btn-menu {
-  background-color: #3a3a3a;
-  color: white;
-  border: none;
+  background-color: var(--burger-btn-color);
+  color: var(--text-color);
   width: 100%;
-  padding: auto;
-  border-radius: 7px;
-  cursor: pointer;
+}
+
+.btn-menu:hover {
+  background-color: var(--burger-btn-hover-color);
+  width: 100%;
+}
+
+.btn-sidebar {
+  background-color: var(--pseudo-sidebar-color);
+  color: var(--text-color);
+}
+
+.btn-sidebar:hover {
+  background-color: var(--pseudo-sidebar-hoover-color);
+  width: 100%;
+  transform: scale(1.05);
+}
+
+/* 42 Theme Button */
+.btn-42 {
+  background-color: #131313;
+  color: white;
+}
+
+.btn-42:hover {
+  background-color: #000000;
+}
+
+/* Attention Button */
+.btn-attention {
+  background-color: var(--attention-btn);
+  padding: 10px;
+  color: white;
+}
+
+.btn-attention:hover {
+  background-color: #313030c4;
+}
+
+.btn-lang {
+  background-color: transparent;
+  color: white;
+  width: 520px;
+}
+
+.btn-lang:hover {
+  /* background-color: #7e7e7e81; */
+  background-color: var(--sidebar-hoover-color);
+  transform: scale(1.05);
+}
+
+/* Disabled State */
+.btn:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
 }
 </style>

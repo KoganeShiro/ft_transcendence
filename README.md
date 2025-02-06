@@ -1,416 +1,202 @@
-# ft_transcendence
+## MY TODO
+
+- [x] Design for mobile
+- [x] card component
+- [x] Text input field component
+- [x] Login page (IMPORTANT)
+- [x] Register page (IMPORTANT)
+- [x] Logout page (MIDDLE)
+
+- [x] Finish the .json terms and service file EN
+- [x] Finish the .json private policy EN
+- [x] Finish the .json terms and service file FR
+- [x] Finish the .json private policy FR (need to review)
+- [x] Finish the .json terms and service file DE
+- [x] Finish the .json private policy DE (need to review)
+
+
+- [x] Profile page (MIDDLE)
+- [x] (got the structure of it, stats component + history + friends)
+
+- [x] Start Language page to be able to change language (MIDDLE)
+- [x] Settings sidebar component (MIDDLE)
+
+- [x] Credits page
+
+
+- [x] Game choice page (MIDDLE)
+- [x] Game mode page (MIDDLE)
+- [x] Pong page (IMPORTANT)
+
+- [x] Searching opponent page
+
+- [x] Create tournament or Join tournament
+- [x] Waiting for players
+- [x] Matchmaking page (IMPORTANT)
+
+- [x] Already fill text field component where i can modify it
+- [x] Account page (IMPORTANT)
+- [x] Make the sidebar of the Parameter mobile friendly
+
+- [x] Tic Tac Toe page (IMPORTANT)
+- [x] Tic Tac Toe game page (IMPORTANT)
+
+- [x] Add in mode choice, 4 players games
+
+- [x] Make the multi player icon
+- [x] Start Appearence page to be able to change theme (MIDDLE)
+- [x] Add Teapot theme to have power up
+- [x] Add in Avatar component the possibility to modify the image
+
+- [x] Make sure the lenght of the text boxed doesn't exeed 25 char
+- [x] In friend, add a chat component
+- [x] In friend, add a way to tell if the friend is online
+
+- [x] Pop up to play with another player
+
+- [x] Add the tournament id when creating the tournament
+- [x] Make a component notification of tournament
+
+- [x] Expand match info pop up
+
+
+
+- [-] Make sure that in tournament the player cannot go elsewhere
+
+- [ ] New mode, private match
+- [ ] Add players name on the game match
+- [ ] Make the tournament matchmaking page to game better
+
+- [ ] Make the pong game responsive ==> may start searching for how to make the AI
+
+- [ ] Implement power up
+
+- [ ] Make the Tic Tac Toe AI
+
+
+        # Question about the back logic
+- [ ] Register --> send to the back username, password + avatar (default)
+        --> password no problem without having it hashed in the front
+- [ ] Login --> send to the back username + password
+
+- [ ] Account, possibility to change the username + password
+- [ ] Logout logic ?
+
+- [x] How do we add a friend ?
+        We add a friend by username, if we don't want block
+- [ ] Need friends list + their status (online or offline)
+- [ ] Need the friend icon + chat history
+- [ ] If click on the friend's icon --> json with the var to complete the profile (hide pseudo sidebar)
+
+- [ ] For history .json file with the last x match id
+        need to make another call the know if the user won or loose and against who (* by matches).
+        If we click on it, should expand with more information
+         Another call API (on the match that was clicked)
+
+- [ ] For stats in .json file (one call)
+        - Rank actuel (pong, multi et ttc)
+
+        - int tab (progression --> in rank) ---> make a graph (nb de match abscisse et nb of point ordonner) => Line Graphs
+
+        - nb game win, nb game lost => Doughnut Charts
+        - nb total de match
+
+        - nb win tournament
+
+        - nb de point gagne inferieur a 5 echange
+        - nb de point gagne inferieur a 10 echange
+        - nb de point gagne inferieur a +10 echange
+                same for lose point
+                        ==> one Bar Charts
+
+
+- [ ] Play against AI logic (same as remote (private))
+- [ ] Play against another player logic --> 
+- [ ] Play against a friend (private match) logic -- >
+- [ ] Play against guest (local) logic
+   - [ ] Invite logic (for private match)
+- [ ] Tournament logic
+- [ ] Play with 4 players logic (should be similar to another player logic)
+
+
+        ## When I can communicate with the back
+- [ ] Make each part into container
+
+- [ ] Call the back for the game
+- [ ] Matchmaking logic
+- [ ] Tournament logic
+- [ ] Games logic with following pages...
+
+- [ ] Can register
+- [ ] Can login
+- [ ] Can logout
+
+- [ ] Call the back for stats
+- [ ] Call the back for history (ten last battles)
+- [ ] Call the back for friends list (max of 10)
+- [ ] Add a component for the chat ?
+
+- [ ] Call the back for account --> PATCH request to modify informations + avatar
+        - [ ] Can modify avatar
+        - [ ] Can modify username
+        - [ ] Can modify password
+        - [ ] Can modify email
+
+- [ ] Pong AI
+
+
+- [ ] More than 2 players game page (x2)
+
+
+[](https://www.w3schools.com/js/js_graphics_chartjs.asp)
+
+(Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
+# Ft_Transcendence
 
 ### Table of Content
-- [Mandatory Rules](#mandatory)
-- [Modules](#modules)
-    - [Notes](#notes)
-	- [Roadmap](#roadmap)
-- [Launch](#launch)
+
+## Introduction
+This project is the final projet of the 42 common core. As the subject states, we have the possibility to choose up to 7 major modules to complete it.
+I did this project with [@Lapinew](https://github.com/Lapinew) and [@gkubina](https://github.com/gkubina).
+
+TL;DR, This is a web application built using the Django framework. It features a server-side implementation of the classic Pong game, designed with a microservices architecture using docker. The application supports remote players, user management, authentication, and multiple languages and themes. Additionally, it includes advanced features such as AI opponents, live chat, and multiplayer support (4 players in the same game).
+
+## Description
+**Major Modules**
+- Framework: The project is built using the Django framework.
+- Server-Side Pong: Replaces the basic Pong game with a server-side implementation and provides an API.
+- Microservices Architecture: The backend is designed as microservices to enhance scalability and maintainability.
+- Remote Players: Supports gameplay with remote players.
+- User Management: Includes standard user management, authentication, and user handling across tournaments.
+- Remote Authentication: Implements remote authentication to enhance gameplay and user experience.
+- Additional Game: Adds another game with user history and matchmaking features.
+- AI Opponent: Introduces an AI opponent for single-player mode.
+- Live Chat: Integrates a live chat feature for real-time communication.
+- Multiplayer Support: Supports more than two players in the same game.
+
+**Minor Modules**
+- Database: Uses PostgreSQL for the backend database.
+- Multiple Language Support: Supports multiple languages to cater to a diverse user base.
+- User and Game Stats Dashboards: Provides dashboards for user and game statistics.
+- Game Customization Options: Allows users to customize game settings.
+- Device Support: Ensures compatibility across all devices.
 
 
-[trello](https://trello.com/b/r4gjArPg/fttranscendence)
+## The Project
+put screenshot + "tuto"
 
-[figma](https://www.figma.com/design/StkSWr1YVLh2fYExErcrea/Transcendance?node-id=0-1&t=TEepryumGqKd7wGn-1)
-
-Framework back module:
-    Django ?
-
-Database module:
-    PostgreSQL/MariaDB
-
-Framework front:
-    Vuejs ?
-
-
-
-### Mandatory 
-
-The user should be able to use the Back and Forward buttons of the browser
-
-Your website must be compatible with the latest stable up-to-date version of
-Google Chrome 
-
-The user should encounter no unhandled errors and no warnings when browsing the
-website.
-
-Everything must be launched with a single command line to run an autonomous
-container provided by Docker . Example : docker-compose up --build
-    You can’t use so called “bind-mount volumes” between the host and the container if non-root UIDs are used in the container
-
-
-Mult local player:
-    Ask the account owner (if not guest mode) to write the username of the second player
-
-Mult remote player (will be like solo):
-    Wait page to find another player (or the AI)
-
-A player must be able to play against another player, but it should also be possible to propose a tournament. This tournament will consist of multiple players who can take turns playing against each other. You have flexibility in how you implement the tournament, but it must clearly display who is playing against whom and the order of the players
-
-A registration system is required: at the start of a tournament, each player must input their alias name. The aliases will be reset when a new tournament begins. However, this requirement can be modified using the Standard User Management module.
-
-There must be a matchmaking system: the tournament system organize the matchmaking of the participants, and announce the next fight
-
-During the evaluation, the team will justify any usage of library or tool that is not explicitly approved by the subject
-
-
-• Any password stored in your database, if applicable, must be hashed.
-• Your website must be protected against SQL injections/XSS.
-• If you have a backend or any other features, it is mandatory to enable an HTTPS connection for all aspects (Utilize wss instead of ws...).
-• You must implement some form of validation for forms and any user input, either within the base page if no backend is used or on the server side if a backend is employed.
-• Regardless of whether you choose to implement the JWT Security module with 2FA, it’s crucial to prioritize the security of your website. For instance, if you opt to create an API, ensure your routes are protected. Remember, even if you decide not to use JWT tokens, securing the site remains essential.
-
-For obvious security reasons, any credentials, API keys, env variables etc... must be saved locally in a .env file and ignored by git. Publicly stored credentials will lead you directly to a failure of the project.
-
-
-### Modules
-~~◦ Minor module: Use a front-end [Bootstrap toolkit](https://getbootstrap.com/) (with only vanilla js ?)~~
-
-◦ Major module: Use a Framework for the (Django)
-
-◦ Minor module: Use a database for the backend. ([ProgreSQL](https://www.postgresql.org/))
-
-◦ Major module: Replacing Basic Pong with Server-Side Pong and Implementing an API.
-
-◦ Major module: Designing the Backend as Microservices.
-
-◦ Major module: Remote players
-
-◦ Major module: Standard user management, authentication, users across tournaments.
-
-◦ Major module: Implementing a remote authentication. Gameplay and user experience
-
-
-
-◦ Major module: Add Another Game with User History and Matchmaking.
-◦ Major module: Introduce an AI Opponent.
-◦ Minor module: Multiple language supports.
-◦ Minor module: User and Game Stats Dashboards
-
-◦ Minor module: Game Customization Options.
-
-◦ Major module: Multiplayers (more than 2 in the same game)
-
-◦ Minor module: Support on all devices.
-◦ Minor module: Add accessibility for Visually Impaired Users.
-
-
-## Notes
-Atoms: Smallest components (e.g., buttons, text).
-Molecules: Groups of atoms working together (e.g., a button group).
-Organisms: Larger sections composed of molecules (e.g., header with navigation).
-Templates: Page structure.
-Pages: Complete views.
-
-Frontend: Vue.js
-    Purpose: Provides an interactive user interface for the game (Pong and Tic Tac Toe), authentication, user profile, settings, and other features.
-    Components:
-        Game Interface: Visual representation of the games (Pong, Tic Tac Toe).
-        User Management: Login, signup, and profile management pages.
-        Multiplayer Features: Real-time matchmaking and game customization.
-        Stats and Dashboards: Displays user statistics and match history.
-        Settings & Accessibility: Language support, customization options, and accessibility settings.
-    Libraries/Tools:
-        Vue Router for navigation.
-        Vuex/Pinia for state management (e.g., user session, settings).
-        Axios for API communication.
-
-Backend: Django
-    Purpose: Manages server-side logic, user authentication, game mechanics, and API endpoints.
-    Modules:
-        Authentication & User Management:
-            Standard login/logout functionality.
-            Remote authentication via OAuth or JWT.
-            User profiles (with stats, match history, settings).
-        Game Logic:
-            Server-side mechanics for Pong and Tic Tac Toe.
-            AI opponent logic for single-player mode.
-            Multiplayer matchmaking (real-time game sessions).
-        API:
-            REST API (via Django REST Framework) for communication with the frontend.
-            Endpoints for:
-                Game state management (e.g., moves, scores).
-                User actions (e.g., login, sign-up).
-                Tournament and leaderboard data.
-        Microservices Design:
-            Modularized services:
-                UserService for authentication and profiles.
-                GameService for game logic and matchmaking.
-                StatService for tracking user and game stats.
-        Language & Accessibility Support:
-            Integrated with Django translation tools for multiple languages.
-            Accessibility features (e.g., screen reader compatibility).
-
-Database: PostgreSQL
-    Purpose: Stores user data, game states, statistics, and other persistent information.
-    Schema Design:
-        User Table:
-            User credentials (hashed passwords, email).
-            Profile settings (preferred language, avatar, etc.).
-        Game History Table:
-            Match ID, player IDs, winner/loser, score.
-            Timestamp of matches.
-        Game State Table:
-            Current game state for active sessions.
-            Used for resuming interrupted games.
-        Statistics Table:
-            User stats (wins, losses, ranking points).
-            Global leaderboard data.
-        Multiplayer Sessions Table:
-            Stores active multiplayer game session details.
-
-Communication Layer:
-    API: REST API with Django REST Framework.
-    WebSockets:
-        Real-time communication for multiplayer games.
-        Server-side implementation in Django Channels.
-
-Additional Features:
-    Matchmaking System:
-        Real-time player pairing using a queue-based algorithm.
-        Filters for skill level and preferences.
-    Multiplayer Support:
-        Ability to host games with more than two players.
-    Device Support:
-        Fully responsive design in the frontend.
-        Support for various input methods (mouse, keyboard, touchscreen).
-    Game Customization:
-        Options like difficulty levels, themes, and gameplay speed.
-    Accessibility:
-        ARIA-compliant UI for visually impaired users.
-
-Deployment & Hosting:
-    Backend:
-        Host Django on a platform like Heroku, AWS, or Google Cloud.
-    Frontend:
-        Deploy Vue.js on platforms like Netlify or Vercel.
-    Database:
-        Use managed PostgreSQL services (e.g., AWS RDS, Heroku Postgres).
-
-
-## Directory listing
-
+## Quick Start
 ```
-/project_root
-├── /backend                # Django backend
-│   ├── /users              # User authentication microservice
-│   ├── /games              # Game logic (Pong, Tic Tac Toe, etc.)
-│   ├── /stats              # Stats and history microservice
-│   ├── Dockerfile          # Docker setup for backend
-│   ├── requirements.txt    # Python dependencies
-│   └── manage.py           # Django management
-│
-├── /frontend               # Vue.js frontend
-│   ├── /src
-│   │   ├── /components     # Vue components (Pong UI, stats, etc.)
-│   │   ├── /views          # Pages (Home, Login, Game)
-│   │   ├── App.vue         # Main Vue app
-│   │   └── main.js         # Vue entry point
-│   ├── package.json        # Frontend dependencies
-│   └── Dockerfile          # Docker setup for frontend
-│
-├── /database               # PostgreSQL setup
-│   ├── init.sql            # Initial database schema
-│   ├── migrations          # Django migrations
-│   └── Dockerfile          # Docker setup for database
-│
-├── /ai                     # AI logic
-│   ├── /pong_ai            # AI scripts for Pong
-│   ├── /tic_tac_toe_ai     # AI scripts for Tic Tac Toe
-│   └── requirements.txt    # Python dependencies for AI
-│
-├── docker-compose.yml      # Docker Compose for full stack
-└── README.md               # Documentation
+git clone git@github.com:KoganeShiro/ft_transcendence.git
+cd ft_transcendence
 ```
 
-## Roadmap
-Week 1: Project Setup and Basics
+or the link of the github page ??
 
-    Georg:
-        Set up Docker environment for local development and deployment.
-        Create the Django project structure with microservices (e.g., user management, game logic).
-        Implement user authentication (sign-up, login, remote authentication).
+## Usage
+If you don't have make or docker and docker composed installed, you should in order to compile and run this project
 
-    Damien:
-        Design the PostgreSQL database schema:
-            Users, game history, matches, stats, etc.
-        Set up database migrations in Django.
-        Create APIs for basic game data retrieval and updates (e.g., user profiles).
-
-    Celine:
-        Set up the Vue.js project and basic UI components (e.g., login, dashboard).
-        Integrate authentication flows with the backend (sign-up, login, logout).
-        Design a basic frontend layout for Pong.
-
-Week 2: Core Game Implementation
-
-    Georg:
-        Implement backend game history storage:
-            Track wins, losses, and stats.
-        Set up API endpoints for starting/joining matches.
-        Develop the matchmaking system API (for 2 players initially).
-
-    Damien:
-        Implement the server-side logic for Pong, handling:
-            Game state (real-time ball/paddle updates).
-            Remote players (via WebSockets).
-
-    Celine:
-        Build the Pong UI with Vue.js:
-            Paddle and ball movement.
-            Integrate real-time data via WebSocket (basic 2-player mode).
-        Build the Tic Tac Toe with Vue.js:
-            Integrate real-time data via WebSocket (basic 2-player mode).
-
-Week 3: Advanced Features
-
-    Georg:
-        Implement game customization options (e.g., paddle size, ball speed).
-        Finalize microservices (deploy each separately in Docker containers).
-
-    Damien:
-        Implement the AI opponent for Pong:
-            Simple algorithm (predictive ball movement).
-        Enable storing match history with AI or human players.
-
-    Celine:
-        Add UI for matchmaking (join/create game).
-        Build a user dashboard:
-            Game stats, match history, and user profile.
-
-Week 4: Final Features and Deployment
-
-    Georg:
-        (**Add support for multiplayer (3-4 players):
-            Update backend game state logic for more paddles and interactions.
-            Modify WebSocket broadcasts for additional players.**)
-
-    Damien:
-        Add support for a second game (Tic Tac Toe or similar):
-            Backend logic, APIs, and history storage.
-        Refine database queries and optimize performance.
-
-    Celine:
-        Finalize UI for the second game.
-        Add support for multiple languages.
-        AI Tic Tac Toe
-        //Test and ensure responsive design for all devices.
-
-
-
-## Questions
-    Comment se fait l'interaction entre le front et le back
-        Quelle format de message ?
-        Lorsque le back donne des info pour afficher dynamiquement sur le front
-        Lorsque le front envoit des choses qui doivent etre stocke sur la databese dans le back
-
-
-### Github
-https://github.com/C-est-quand-la-prochaine-reu-han
-https://github.com/LaTeam-Trancendence/transcendence
-
-
+If you did, then you can make and follow the instruction !
 ```
-/project_root
-├── docker-compose.yml      # Orchestrates the backend, frontend, database, and AI services
-├── README.md               # Documentation for the project setup and usage
+make
 ```
-```
-/backend
-├── Dockerfile               # Docker image definition for the backend
-├── requirements.txt         # Python dependencies for Django (Django, DRF, etc.)
-├── manage.py                # Django management script
-├── /users                   # User authentication and management microservice
-│   ├── __init__.py          # Python package initialization
-│   ├── admin.py             # Django admin configuration for user models
-│   ├── apps.py              # App configuration for the 'users' app
-│   ├── models.py            # Defines the User model
-│   ├── serializers.py       # Serializes user data (e.g., login, registration responses)
-│   ├── views.py             # Handles login, registration, and user API endpoints
-│   ├── urls.py              # Routes user-related endpoints (e.g., /api/users)
-│   ├── tests.py             # Unit tests for user authentication
-│   └── migrations           # Auto-generated database schema migrations for users
-│       └── <auto_generated_migration_files>.py
-├── /games                   # Game logic microservice (Pong and Tic Tac Toe)
-│   ├── __init__.py          # Python package initialization
-│   ├── admin.py             # Django admin configuration for game models
-│   ├── apps.py              # App configuration for the 'games' app
-│   ├── models.py            # Models for games (e.g., Game, Match)
-│   ├── serializers.py       # Serializes game data for the frontend
-│   ├── views.py             # API views for game logic (e.g., start/join a game)
-│   ├── urls.py              # Routes game-related endpoints (e.g., /api/games)
-│   ├── tests.py             # Unit tests for game logic and API endpoints
-│   ├── websockets.py        # Real-time game updates using Django Channels
-│   └── migrations           # Auto-generated database schema migrations for games
-│       └── <auto_generated_migration_files>.py
-├── /stats                   # Stats and history microservice
-│   ├── __init__.py          # Python package initialization
-│   ├── admin.py             # Django admin configuration for stats models
-│   ├── apps.py              # App configuration for the 'stats' app
-│   ├── models.py            # Models for stats (e.g., MatchHistory, Leaderboard)
-│   ├── serializers.py       # Serializes stats data for frontend dashboards
-│   ├── views.py             # API views for fetching stats and match history
-│   ├── urls.py              # Routes stats-related endpoints (e.g., /api/stats)
-│   ├── tests.py             # Unit tests for stats endpoints
-│   └── migrations           # Auto-generated database schema migrations for stats
-│       └── <auto_generated_migration_files>.py
-```
-
-```
-/frontend
-├── Dockerfile               # Docker image definition for the frontend
-├── package.json             # Node.js dependencies for Vue.js
-├── /src                     # Source code for Vue.js app
-│   ├── App.vue              # Main Vue app layout and structure
-│   ├── main.js              # Vue entry point, initializes app and routing
-│   ├── /assets              # Static assets (images, fonts, etc.)
-│   │   └── logo.png         # Example static asset
-│   ├── /components          # Reusable Vue components
-│   │   ├── PongGame.vue     # Vue component for Pong game UI
-│   │   ├── UserStats.vue    # Vue component for displaying user stats
-│   │   ├── Matchmaking.vue  # Vue component for matchmaking
-│   │   └── Header.vue       # Navbar/header component
-│   ├── /views               # Top-level pages
-│   │   ├── Home.vue         # Home page with game options and stats
-│   │   ├── Login.vue        # Login and registration page
-│   │   └── Game.vue         # Game interface for Pong/Tic Tac Toe
-│   ├── /store               # Vuex store for state management
-│   │   └── index.js         # Vuex store configuration (e.g., user, game states)
-│   └── /router              # Vue Router for navigation
-│       └── index.js         # Routing configuration for frontend views
-```
-
-```
-/database
-├── Dockerfile               # Docker image definition for PostgreSQL
-├── init.sql                 # Initial SQL script for setting up the database schema
-├── /migrations              # Auto-generated database schema migrations
-│   └── <auto_generated_migration_files>.py
-```
-
-```
-/ai
-├── Dockerfile               # Docker image definition for AI microservice
-├── requirements.txt         # Python dependencies for AI (e.g., numpy)
-├── /pong_ai                 # AI logic for Pong
-│   ├── ai_logic.py          # Core logic for Pong AI (e.g., ball prediction)
-│   ├── tests.py             # Unit tests for Pong AI logic
-│   └── __init__.py          # Python package initialization
-├── /tic_tac_toe_ai          # AI logic for Tic Tac Toe
-│   ├── ai_logic.py          # Minimax algorithm or other logic for Tic Tac Toe AI
-│   ├── tests.py             # Unit tests for Tic Tac Toe AI
-│   └── __init__.py          # Python package initialization
-```
-
-
-## Launch
-
-clone the repo
-
-cd in the repo, cd front-end
-
-```
-npm install
-npm run dev
-```
-
-You may have to install nodejs
