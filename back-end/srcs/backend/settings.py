@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-f+&g!!lmxdld%5v!2&#q5oowy)p64m0pdys47ju9*g40r(z&kq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'user_mgm.CustomUser'
 
@@ -64,13 +64,11 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication', # added for normal login
-      #  'rest_framework.authentication.BasicAuthentication',
-      #  'rest_framework.authentication.TokenAuthentication',
-       # 'rest_framework.authentication.SessionAuthentication', # added for social login, check how to differentiate between social and normal login
-## social login
-#        'rest_framework.authentication.SessionAuthentication',
-    )
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ), 
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),    
 }
 
 
@@ -81,7 +79,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.user.create_user',
-    #'user_mgm.social_pipeline.save_avatar',
+    'user_mgm.social_pipeline.save_avatar',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',

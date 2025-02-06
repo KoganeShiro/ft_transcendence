@@ -12,9 +12,18 @@ Content-Type: application/json
 
 ###
 
-GET https://localhost:1443/api/profile/user1/
+POST https://localhost:1443/api/logout/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4Njk5OTY0LCJpYXQiOjE3Mzg2OTI3NjQsImp0aSI6IjNmNjEzNzhiNWQ1MzQ0Yjg5ZjVjMjhmNzhmNDE4MWQ4IiwidXNlcl9pZCI6OSwidXNlcm5hbWUiOiJ1c2VyMSJ9.Xt8fX_yRer-zX5LZuq2fLQVw0s6Mp1tyrjmAGzwmMJk
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MzE1MjEwNCwiaWF0IjoxNzM4ODMyMTA0LCJqdGkiOiI0MDRhYTQ4NGEyMDM0MjE5YTBjZDQzMTM3MGQ3MmUwZCIsInVzZXJfaWQiOjJ9.GL6DgatMbWhUz12Uf7_3DoNquiRuRJZxRFAIqsELbSU"
+}
+
+###
+
+GET https://localhost:1443/api/profile/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4ODM1MTI2LCJpYXQiOjE3Mzg4Mjc1MzQsImp0aSI6ImI3YTc4YTIzMmVmMDRkNzM4NmE4YzExYmQ2MDY5NmI2IiwidXNlcl9pZCI6Mn0.DCqy0REgIDFwixzxxPwGdqPmEGNMcFy8VqsNViuOTOw
 
 {
     "email": "dfsdf"
