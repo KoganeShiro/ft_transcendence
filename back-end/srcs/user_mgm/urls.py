@@ -24,6 +24,7 @@ urlpatterns = [
 
     #Social Auth
   #  path('auth/complete/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),
+    path('auth/get_token/', views.social_auth_complete, name='social_auth_complete'),
     path('auth/', include('social_django.urls', namespace='social')),
    # path('auth/login42/', OAuth2Login.as_view(), name='oauth2_login'),
     #path('auth/complete/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),

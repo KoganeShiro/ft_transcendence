@@ -41,7 +41,7 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 # REDIRECT_URI = 'https://localhost:1443/api/auth/complete/42/'
 REDIRECT_URI = 'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT') + '/api/auth/complete/42/'
 
-
+SOCIAL_AUTH_42_LOGIN_REDIRECT_URL = '/api/auth/get_token/'
 SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'                      
 SOCIAL_AUTH_42_SECRET = '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'
 SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
@@ -67,11 +67,29 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication', # added for normal login
       #  'rest_framework.authentication.BasicAuthentication',
       #  'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication', # added for social login, check how to differentiate between social and normal login
+       # 'rest_framework.authentication.SessionAuthentication', # added for social login, check how to differentiate between social and normal login
 ## social login
 #        'rest_framework.authentication.SessionAuthentication',
     )
 }
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    #'user_mgm.social_pipeline.save_avatar',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'user_mgm.social_pipeline.generate_jwt_token',
+
+   # 'user_mgm.social_pipeline.generate_jwt_token', 
+)
+
 
 
 

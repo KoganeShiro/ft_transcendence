@@ -27,8 +27,8 @@ class Logout(APIView):
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user = request.user        
-        user.save()        
+     #   user = request.user        
+     #   user.save()        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -125,7 +125,22 @@ def get_all_users(request):
     return Response(serializer.data)  # Return the serialized data as the response
 
 
+from django.shortcuts import redirect
+from django.contrib.auth import login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
+@api_view(['GET'])
+def social_auth_complete(request):
+    """
+    Retrieve the JWT tokens stored in the pipeline and return as JSON.
+    """
+    jwt_tokens = request.session.get('jwt_tokens')
+
+    if jwt_tokens:
+        return Response(jwt_tokens)
+    
+    return Response({'error': 'Authentication failed'}, status=400)
 
 
 
