@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer, ProfileUpdateSerializer
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.contrib.auth import logout
 
 
 #Login User
@@ -20,6 +21,8 @@ class Login(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])        
         user.save()
+        logout(request)  # This removes the session ID cookie
+        response.delete_cookie('sessionid') # This deletes the session ID cookie        
         return response
 
 class Logout(APIView):
@@ -129,6 +132,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth import logout
+
 
 @api_view(['GET'])
 def social_auth_complete(request):
@@ -139,9 +144,16 @@ def social_auth_complete(request):
     jwt_tokens = request.session.get('jwt_tokens')
 
     if jwt_tokens:
-        return Response(jwt_tokens)
+        logout(request)  # This removes the session ID cookie
+        response = Response(jwt_tokens)
+        response.delete_cookie('sessionid') # This deletes the session ID cookie        
+        return response
     
     return Response({'error': 'Authentication failed'}, status=400)
 
+@api_view(['GET'])
+def social_auth_login(request):
+    logout(request)  # This removes the session ID cookie
+    return redirect('social:begin', '42')
 
 

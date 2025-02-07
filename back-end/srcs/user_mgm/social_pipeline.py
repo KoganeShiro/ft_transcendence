@@ -8,6 +8,7 @@ def generate_jwt_token(backend, user, response, request, *args, **kwargs):
     """
     Store JWT token in kwargs so it can be accessed later.
     """
+
     refresh = RefreshToken.for_user(user)
     
     tokens = {
@@ -58,28 +59,10 @@ def save_avatar(backend, user, response, *args, **kwargs):
 
 
 
-# import requests
-# from django.core.files.base import ContentFile
+# def clear_session_before_redirect(strategy, backend, request=None, *args, **kwargs):
+#     """Clears the session before redirecting to the OAuth provider."""
+#     print('clear_session_before_redirect')
+#     if request and request.session.session_key:
+#         request.session.flush()
 
-# def save_avatar(backend, user, response, *args, **kwargs):
-#     """
-#     Downloads and saves the user's avatar from the social provider.
-#     """
-    
 
-#     avatar_url = 
-
-    
-#     if avatar_url:
-#         try:
-#             avatar_response = requests.get(avatar_url)
-#             avatar_response.raise_for_status()
-#             print(avatar_response.content)
-#             user.cover_photo.save(
-#                 f"{user.username}_avatar.jpg",
-#                 ContentFile(avatar_response.content),
-#                 save=True
-#             )
-#         except requests.RequestException:
-#             user.cover_photo = None           
-#             pass

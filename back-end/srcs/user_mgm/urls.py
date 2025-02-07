@@ -22,14 +22,10 @@ urlpatterns = [
     path('users/', get_all_users, name='get_all_users'),  # Endpoint for all users
   #  path('users/', views , name='update-profile'),
 
-    #Social Auth
-  #  path('auth/complete/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),
+    #Social Auth  
     path('auth/get_token/', views.social_auth_complete, name='social_auth_complete'),
+    path('auth/login42/', views.social_auth_login, name='social_auth_login'),
     path('auth/', include('social_django.urls', namespace='social')),
-   # path('auth/login42/', OAuth2Login.as_view(), name='oauth2_login'),
-    #path('auth/complete/<str:backend>/', OAuth2Complete.as_view(), name='oauth2_complete'),
-  #  path('auth/complete/42/', OAuth2Complete.as_view(), name='oauth2_complete'),
-
 ]
 
 logger.debug('URL patterns defined')
