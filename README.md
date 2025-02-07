@@ -59,8 +59,6 @@
 
 - [x] Expand match info pop up
 
-
-
 - [-] Make sure that in tournament the player cannot go elsewhere
 
 - [ ] New mode, private match
@@ -75,9 +73,9 @@
 
 
         # Question about the back logic
-- [ ] Register --> send to the back username, password + avatar (default)
+- [x] Register --> send to the back username, password + avatar (default)
         --> password no problem without having it hashed in the front
-- [ ] Login --> send to the back username + password
+- [x] Login --> send to the back username + password
 
 - [ ] Account, possibility to change the username + password
 - [ ] Logout logic ?
@@ -125,11 +123,11 @@
 - [ ] Call the back for the game
 - [ ] Matchmaking logic
 - [ ] Tournament logic
-- [ ] Games logic with following pages...
+- [x] Games logic with following pages...
 
-- [ ] Can register
-- [ ] Can login
-- [ ] Can logout
+- [x] Can register
+- [x] Can login
+- [-] Can logout
 
 - [ ] Call the back for stats
 - [ ] Call the back for history (ten last battles)
@@ -151,6 +149,7 @@
 [](https://www.w3schools.com/js/js_graphics_chartjs.asp)
 
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
+
 # Ft_Transcendence
 
 ### Table of Content
@@ -198,5 +197,6 @@ If you don't have make or docker and docker composed installed, you should in or
 
 If you did, then you can make and follow the instruction !
 ```
-make
+make build
+make up
 ```

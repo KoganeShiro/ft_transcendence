@@ -1,6 +1,6 @@
 <template>
   <div id="pongField">
-    <canvas ref="pongCanvas" class="canvas" width="600" height="400"></canvas>
+    <canvas ref="pongCanvas" class="canvas" width="900" height="500"></canvas>
   </div>
 </template>
 
@@ -33,6 +33,7 @@ export default {
   mounted() {
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
+    //add event listener for touch (mobile)
     this.startGameLoop();
   },
   methods: {
@@ -135,11 +136,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-
 }
  .canvas {
-  border: 2px solid red;
+  border: 2px solid var(--background-color);
+  border-radius: 8px;
   background-color: black;
 }
 
