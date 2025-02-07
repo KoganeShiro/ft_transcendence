@@ -61,8 +61,10 @@
 
 - [-] Make sure that in tournament the player cannot go elsewhere
 
-- [ ] New mode, private match
-- [ ] Add players name on the game match
+- [x] New mode, private match
+
+- [ ] Add the private match component on tic tac toes
+- [ ] Add players name on the game match ?
 - [ ] Make the tournament matchmaking page to game better
 
 - [ ] Make the pong game responsive ==> may start searching for how to make the AI

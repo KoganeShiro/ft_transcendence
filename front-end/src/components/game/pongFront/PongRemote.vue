@@ -1,22 +1,18 @@
 <template>
 	<div class="pong-page">
-	  <div class="content">
-      <Versus v-if="showVersus" @time-up="handleTimeUp" />
-
-      <div v-else class="content">
+	  <Versus v-if="showVersus" @time-up="handleTimeUp" />
+	  
+	  <div v-else class="content">
+		<div class="player-controls">
 		  <h2 class="mobile-hide">Commands</h2>
 		  <p class="mobile-hide">Move Up: <span class="span">W</span></p>
 		  <p class="mobile-hide">Move Down: <span class="span">S</span></p>
 		</div>
 		<div class="game-container">
-		  <!-- This component handles the solo game logic -->
-		  <!-- <PongRemote /> -->
-			<div class="game-container">
-				<PongGame />
-			</div>
+		  <PongGame />
 		</div>
 	  </div>
-</div>
+	</div>
   </template>
   
   <script>
@@ -24,7 +20,7 @@
   import Versus from "@/components/game/Versus.vue";
   
   export default {
-	name: 'SoloFront',
+	name: 'RemoteFront',
 	components: {
 	  Versus,
 	  PongGame,
@@ -36,7 +32,6 @@
 	},
 	methods: {
 	  handleTimeUp() {
-		// Hide the Versus overlay when the time is up
 		this.showVersus = false;
 	  },
 	},
@@ -46,51 +41,38 @@
   <style scoped>
   .pong-page {
 	color: #fff;
+	position: relative;
   }
-  
-  .span {
-	font-weight: bold;
-  }
-
-  .player-controls {
-	/* border: 2px solid #444; */
-	border-radius: 8px;
-	padding: 10px;
-	background-color: #11101088;
-	width: 30%;
-	margin-left: 20%;
-  }
-  
   .content {
 	padding: 20px;
 	text-align: center;
   }
-  
-  .game-container {
+  .player-controls {
+	margin: 20px auto;
+	width: 30%;
+	background-color: rgba(17, 16, 16, 0.53);
 	border-radius: 8px;
 	padding: 10px;
   }
-
+  .game-container {
+	margin-top: 20px;
+	border-radius: 8px;
+	padding: 10px;
+  }
   @media screen and (max-width: 810px) {
-  .mobile-hide {
-	display: none;
-  }
-
-  .player-controls {
-	padding: 5px;
-	background: none;
-	border: none;
-  }
-
+	.mobile-hide {
+	  display: none;
+	}
+	.player-controls {
+	  width: 100%;
+	  padding: 5px;
+	  background: none;
+	  border: none;
+	}
 	.game-container {
 	  padding: 5px;
 	  border: none;
 	}
-}
-
-@media screen and (max-width: 410px) {
-	.game-container {
-		border: none;
-	}
-}
+  }
   </style>
+  

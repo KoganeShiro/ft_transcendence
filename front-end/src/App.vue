@@ -142,7 +142,7 @@ export default {
   --footer-color: #302d2d;
   --burger-btn-color: #313131ec;
   --burger-btn-hover-color: #252424;
-  --background-color: #333333;
+  --background-color: #222;
   --link-color: #3498db;
   --card-color: #3b3b3b71;
   --text-box-color: #333;
@@ -155,7 +155,7 @@ export default {
   --icon-color: #ffffff;
   --attention-btn: #bb1111;
   --back: #630606;
-  --game-background-color: #222;
+  --game-background-color: #1d1b1b;
   --cell-color: #444;
   --cell-hover-color: #4b4a4a;
   --overlay-color: #202020b4;

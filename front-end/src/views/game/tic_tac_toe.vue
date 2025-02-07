@@ -22,7 +22,8 @@
 
     <!-- Game content -->
     <div class="tic-tac-toe-content">
-      <TicTacToeGame :mode="mode" :useImages="false" />
+      <!-- front -->
+      <TicTacToeGame />
     </div>
 
     <FooterOrganism />
@@ -34,7 +35,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
-import TicTacToeGame from "@/components/game/TicTacToeGame.vue";
+import TicTacToeGame from "@/components/game/TicTacToeFront.vue";
 
 export default {
   name: "TicTacToe",

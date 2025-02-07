@@ -29,6 +29,7 @@ export default {
       // Remove the cookies by setting them with an expired date
       document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      //or call POST https://localhost:1443/api/logout/s
       this.$router.push("/");
     },
     ongoback() {
