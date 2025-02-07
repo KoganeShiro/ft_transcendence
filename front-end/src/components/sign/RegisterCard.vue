@@ -97,7 +97,7 @@ export default {
         this.loading = false;
         return;
       }
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&=.<>;:|\-/+()#])[A-Za-z\d@$!%*?&=.<>;:|\-/+()#]{8,}$/;
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\- /+()#])[A-Za-z\d@$!%*;?&=.<>:|\-/+()#]{8,}$/;
       if (!regex.test(this.password)) {
         alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
         this.loading = false;
@@ -121,6 +121,7 @@ export default {
         this.$router.push("/login");
       } catch (error) {
         console.error("Registration failed:", error);
+        //make a better error message if the user already exist
         alert("Registration failed. Please try again.");
       } finally {
         this.loading = false;
