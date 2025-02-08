@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import get_all_users, getProfile, updateProfile
+from .views import get_all_users, getProfile, updateProfile, refresh_tokens
 import logging
 # from .views import callback
 
@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 urlpatterns = [    
     #Authentication
     path('login/', views.Login.as_view(), name='token_obtain_pair'),
-    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/refresh/', refresh_tokens, name='token_refresh'),
+    #path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', views.Logout.as_view(), name='auth_logout'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
 

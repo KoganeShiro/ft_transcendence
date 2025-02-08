@@ -65,7 +65,17 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'user_mgm.permissions.CookieJWTAuthentication',
     ), 
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+
+
+
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
   #   'DEFAULT_RENDERER_CLASSES': (
   #       'rest_framework.renderers.JSONRenderer',
   #   ),    
