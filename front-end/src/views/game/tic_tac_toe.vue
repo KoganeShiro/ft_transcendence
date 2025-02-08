@@ -4,7 +4,7 @@
 
     <!-- Heading showing which mode is active -->
     <div class="heading">
-      <h1>Tic Tac Toe - {{ mode }} mode</h1>
+      <!-- <h1>Tic Tac Toe - {{ mode }} mode</h1> -->
     </div>
 
     <!-- Front for random and friend versus (remote)
@@ -22,7 +22,8 @@
 
     <!-- Game content -->
     <div class="tic-tac-toe-content">
-      <TicTacToeGame :mode="mode" :useImages="false" />
+      <!-- front, get to mode in it -->
+      <TicTacToeGame />
     </div>
 
     <FooterOrganism />
@@ -34,7 +35,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
-import TicTacToeGame from "@/components/game/TicTacToeGame.vue";
+import TicTacToeGame from "@/components/game/TicTacToeFront.vue";
 
 export default {
   name: "TicTacToe",
@@ -55,6 +56,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .tic-tac-toe-page {

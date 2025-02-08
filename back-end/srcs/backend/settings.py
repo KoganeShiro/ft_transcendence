@@ -136,6 +136,11 @@ INSTALLED_APPS = [
 
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
+]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
@@ -191,6 +196,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'user_mgm.update_last_seen.UpdateLastSeenMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 CORS_ALLOWED_ORIGINS = [

@@ -1,14 +1,15 @@
 <template>
-    <div class="versus-container" v-if="show.value">
+  <!-- Use a transition wrapper for a smooth fade-out -->
+  <transition name="fade" @after-leave="emitTimeUp">
+    <div class="versus-container" v-if="show">
       <div class="versus-background">
         <div class="text">
-          <h1>{{ opponentStatus.value }}</h1>
+          <h1>{{ opponentStatus }}</h1>
         </div>
         <div class="versus-content">
           <!-- Player 1 Avatar -->
           <div class="player">
             <AvatarAtom
-              :imageUrl="player1.imageUrl"
               :pseudo="player1.pseudo"
               :showPseudo="true"
               pseudoPosition="bottom"
@@ -34,177 +35,179 @@
         </div>
       </div>
     </div>
-  </template>
+  </transition>
+</template>
 
-  
-  <script>
-  import { reactive, watch, onMounted } from 'vue';
-  import AvatarAtom from '@/components/atoms/Avatar.vue';
-  import defaultAvatar from '@/assets/searching.webp';
-  import anotherAvatar from '@/assets/profile2.png';
-  
-  export default {
-    components: {
-      AvatarAtom,
+<script>
+import { ref, watch, onMounted } from 'vue';
+import AvatarAtom from '@/components/atoms/Avatar.vue';
+import defaultAvatar from '@/assets/searching.webp';
+import anotherAvatar from '@/assets/profile2.png';
+
+export default {
+  name: 'Versus',
+  components: {
+    AvatarAtom,
+  },
+  props: {
+    player1: {
+      type: Object,
+      default: () => ({
+        imageUrl: 'https://via.placeholder.com/100',
+        pseudo: 'Player 1',
+        link: '#'
+      })
     },
-    props: {
-      player1: {
-        type: Object,
-        required: true,
-      },
-      duration: {
-        type: Number,
-        default: 30,
-      },
+    // Duration in seconds before fading out after an opponent is found
+    duration: {
+      type: Number,
+      default: 3,
     },
-    setup(props, { emit }) {
-      const player2 = reactive({
-        imageUrl: defaultAvatar,
-        pseudo: 'Waiting for an opponent...',
-        link: '',
-      });
-  
-      const show = reactive({ value: true });
-      const opponentStatus = reactive({ value: 'Waiting for an opponent...' });
-  
-      onMounted(() => {
-        setTimeout(() => {
-          player2.imageUrl = anotherAvatar;
-          player2.pseudo = 'OpponentName';
-          player2.link = 'https://opponent-profile.com';
-        }, 2000);
-      });
-  
-      watch(player2, (newVal) => {
-        if (newVal.pseudo !== 'Waiting for an opponent...') {
+  },
+  setup(props, { emit }) {
+    // Control the overlay visibility
+    const show = ref(true);
+    
+    // Reactive status message
+    const opponentStatus = ref('Waiting for an opponent...');
+    
+    // Create a reactive object for player2 with default values.
+    const player2 = ref({
+      imageUrl: defaultAvatar,
+      pseudo: 'Waiting for an opponent...',
+      link: '',
+    });
+    
+    onMounted(() => {
+      // Simulate finding an opponent after 2 seconds.
+      setTimeout(() => {
+        player2.value.imageUrl = anotherAvatar;
+        player2.value.pseudo = 'OpponentName';
+        player2.value.link = 'https://opponent-profile.com';
+      }, 3000);
+    });
+    
+    // Watch for changes in player2 pseudo.
+    watch(
+      () => player2.value.pseudo,
+      (newVal) => {
+        if (newVal !== 'Waiting for an opponent...') {
           opponentStatus.value = 'Opponent found!';
+          // Wait for props.duration seconds before starting the fade-out transition.
           setTimeout(() => {
-            show.value = false;
-            emit('time-up');
-          }, props.duration);
+            show.value = false; // This will trigger the fade transition.
+          }, props.duration * 1000);
         }
-      });
-  
-      return {
-        player2,
-        show,
-        opponentStatus,
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.8);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-30px);
-    }
-    60% {
-      transform: translateY(-15px);
-    }
-  }
-  
-  @keyframes slideIn {
-    0% {
-      opacity: 0;
-      transform: translateX(-100%);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  @keyframes slideInReverse {
-    0% {
-      opacity: 0;
-      transform: translateX(100%);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  .versus-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999;
-    color: var(--text-color);
-  }
-  
-  .versus-background {
-    background-color: var(--text-box-color);
-    padding: 100px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .text {
-    text-align: center;
-    width: 100%;
-    animation: fadeIn 1s ease-in-out;
-  }
-  
+      }
+    );
+    
+    // When the fade transition is complete, emit an event so the parent can hide the overlay.
+    const emitTimeUp = () => {
+      emit('time-up');
+    };
+
+    return {
+      show,
+      opponentStatus,
+      player2,
+      emitTimeUp,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.versus-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: var(--text-color);
+}
+
+.versus-background {
+  background-color: var(--text-box-color, rgba(0,0,0,0.8));
+  padding: 100px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  text-align: center;
+  width: 100%;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.versus-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.versus-text h1 {
+  font-size: 3rem;
+  animation: bounce 2s infinite;
+}
+
+.animate-avatar {
+  animation: fadeIn 1s ease-in-out, slideIn 1s ease-in-out;
+}
+
+.animate-avatar:nth-child(1) {
+  animation: fadeIn 1s ease-in-out, slideInReverse 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-30px); }
+  60% { transform: translateY(-15px); }
+}
+
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateX(-100%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInReverse {
+  0% { opacity: 0; transform: translateX(100%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
   .versus-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-  }
-  
-  .player {
-    display: flex;
     flex-direction: column;
-    align-items: center;
   }
-  
   .versus-text h1 {
-    font-size: 3rem;
-    animation: bounce 2s infinite;
+    font-size: 2rem;
   }
-  
-  .animate-avatar {
-    animation: fadeIn 1s ease-in-out, slideIn 1s ease-in-out;
-  }
-  
-  .animate-avatar:nth-child(1) {
-    animation: fadeIn 1s ease-in-out, slideInReverse 1s ease-in-out;
-  }
-  
-  @media (max-width: 768px) {
-    .versus-content {
-      flex-direction: column;
-    }
-    .versus-text h1 {
-      font-size: 2rem;
-    }
-  }
-  </style>
+}
+</style>

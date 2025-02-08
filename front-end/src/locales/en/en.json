@@ -62,6 +62,16 @@
     "send": "Send",
     "message": "Type a message",
     "loading": "Loading...",
-    "with-friends": "Versus friend (Remote)"
+    "with-friends": "Versus friend (Remote)",
+    "iAgreeTo": "I agree to",
+    "game-withfriend": "Game with Friend",
+    "join-create-match": "Enter a code to join a Game or click create to start a new Game.",
+    "match-id": "Your Game Code: ",
+    "copy": "Copy",
+    "create-game": "Create Game",
+    "join-game": "Join Game",
+    "commands": "Commands",
+    "move-up": "Move Up: ",
+    "move-down": "Move Down: "
 }
   

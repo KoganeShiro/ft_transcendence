@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Card from "@/components/atoms/Card.vue";
 import Button from "@/components/atoms/Button.vue";
 import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
@@ -25,11 +26,33 @@ export default {
     ButtonGroup,
   },
   methods: {
-    onlogout() {
-      // Remove the cookies by setting them with an expired date
-      document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      this.$router.push("/");
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    },
+    async onlogout() {
+      try {
+        const refreshToken = this.getCookie('refresh');
+        if (!refreshToken) {
+          throw new Error('Refresh token not found');
+        }
+
+        // Call the API to remove the refresh cookie
+        await axios.post('/api/logout/', { refresh: refreshToken }, {
+          withCredentials: true,
+        });
+
+        // Clear the cookies
+        document.cookie = 'access=; Max-Age=0; path=/';
+        document.cookie = 'refresh=; Max-Age=0; path=/';
+
+        // Redirect to the home page after successful logout
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error during logout:", error);
+        alert("Logout failed. Please try again.");
+      }
     },
     ongoback() {
       this.$router.push("/profile");
@@ -37,7 +60,6 @@ export default {
   },
 };
 </script>
-
   
   <style scoped>
   .logout-container {

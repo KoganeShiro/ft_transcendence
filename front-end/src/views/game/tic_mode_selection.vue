@@ -81,7 +81,7 @@ export default {
       { image: getThemeImage('solo', currentTheme.value), name: t("solo"), mode: "solo" },
       { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
       { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
-      { image: getThemeImage('withFriend', currentTheme.value), name: t("with-friend"), mode: "withFriend" },
+      { image: getThemeImage('withFriend', currentTheme.value), name: t("with-friends"), mode: "withFriend" },
     ]);
 
 

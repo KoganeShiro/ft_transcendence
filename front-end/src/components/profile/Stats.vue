@@ -93,5 +93,6 @@ export default {
 .stats-container {
   padding: 20px;
   color: var(--text-color);
+  margin-bottom: 50px;
 }
 </style>

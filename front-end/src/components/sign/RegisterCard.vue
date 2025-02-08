@@ -3,6 +3,7 @@
     <Card class="register-card">
       <h3 class="register-title">{{ $t("welcome") }}</h3>
       <InputGroup class="input-group">
+        <!-- Bind the input fields with v-model -->
         <TextField
           id="username"
           v-model="username"
@@ -25,11 +26,32 @@
         />
       </InputGroup>
       
+      <!-- Terms and Services Checkbox -->
+      <div class="terms-container">
+        <input type="checkbox" id="terms" v-model="acceptedTerms" />
+        <label for="terms">
+          {{ $t("iAgreeTo") }}
+          <router-link to="/terms" class="terms-link">
+            {{ $t("terms-service") }}
+          </router-link>
+        </label>
+      </div>
+      
+      <!--
+      Expected POST request:
+      POST https://localhost:1443/api/register/
+      Content-Type: application/json
+
+      { "username": "user1", "password": "Pass1234!", "cover_photo": null }
+      -->
+      
       <ButtonGroup class="button-group">
+        <!-- Registration button: disabled until the form is valid -->
         <Button
           variant="primary"
           class="register-button"
           @click="onRegister"
+          :disabled="!formValid()"
         >
           {{ $t("register") }}
         </Button>
@@ -37,6 +59,7 @@
           variant="42"
           class="register-button"
           @click="on42register"
+          :disabled="!acceptedTerms"
         >
           {{ $t("register-42") }}
         </Button>
@@ -68,27 +91,30 @@ export default {
       username: "",
       password: "",
       confirmPassword: "",
-      loading: false, // Add loading flag
+      acceptedTerms: false, // Checkbox value
+      loading: false,
     };
   },
   methods: {
     formValid() {
-      // All fields must be non-empty.
-      console.log(this.username.trim() !== "" &&
-        this.password.trim() !== "" &&
-        this.confirmPassword.trim() !== "");
-      return (
+      // All fields must be non-empty and the terms must be accepted.
+      const valid =
         this.username.trim() !== "" &&
         this.password.trim() !== "" &&
-        this.confirmPassword.trim() !== ""
-      );
+        this.confirmPassword.trim() !== "" &&
+        this.acceptedTerms;
+      return valid;
+    },
+    goodPassword(password) {
+      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
+      return regex.test(password);
     },
     async onRegister() {
       if (this.loading) return;
       this.loading = true;
 
       if (!this.formValid()) {
-        alert("Please fill in all fields!");
+        alert("Please fill in all fields and accept the Terms and Services!");
         this.loading = false;
         return;
       }
@@ -97,9 +123,10 @@ export default {
         this.loading = false;
         return;
       }
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&=.<>;:|\-/+()#])[A-Za-z\d@$!%*?&=.<>;:|\-/+()#]{8,}$/;
-      if (!regex.test(this.password)) {
-        alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+      if (!this.goodPassword(this.password)) {
+        alert(
+          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+        );
         this.loading = false;
         return;
       }
@@ -126,13 +153,34 @@ export default {
         this.loading = false;
       }
     },
-    on42register() {
-      this.$router.push("/profile");
+    async on42register() {
+      if (this.loading) return;
+      this.loading = true;
+
+      try {
+        const response = await axios.get('/api/auth/login/42/', {
+          headers: {
+            'Access-Control-Allow-Origin': 'https://localhost:1443'
+          }
+        });
+
+        if (response.status === 302) {
+          // Redirect to the OAuth2 provider
+          window.location.href = response.headers.location;
+        } else {
+          console.error("Unexpected response:", response);
+          alert("Registration failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Registration failed:", error);
+        alert("Registration failed. Please try again.");
+      } finally {
+        this.loading = false;
+      }
     }
   },
 };
 </script>
-
 
 <style scoped>
 .register-container {
@@ -146,6 +194,7 @@ export default {
   border-radius: 12px;
   background-color: #252525;
   color: var(--text-color);
+  padding: 20px;
 }
 
 .register-title {
@@ -153,6 +202,35 @@ export default {
   font-size: 28px;
   font-weight: bold;
   line-height: 1;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  width: 95%;
+  margin-bottom: 10%;
+}
+
+/* Terms container styling */
+.terms-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.terms-container input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.terms-link {
+  color: var(--primary-color, #36A2EB);
+  text-decoration: underline;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
 }
 
 .register-button {
@@ -163,14 +241,10 @@ export default {
   border-radius: 8px;
 }
 
-.input-group {
-  width: 95%;
-  margin-bottom: 10%;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
+/* Style disabled state */
+.register-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 700px) {

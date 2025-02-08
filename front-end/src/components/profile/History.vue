@@ -259,6 +259,7 @@ export default {
 .page-container {
   padding: 20px;
   color: var(--text-color);
+  margin-bottom: 50px;
 }
 
 .game-section {

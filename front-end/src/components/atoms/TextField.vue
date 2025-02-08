@@ -105,20 +105,21 @@ export default {
 .input-wrapper {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  line-height: 2;
 }
 
 .input-label {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
   text-align: left;
   margin-left: 15px;
+  margin-bottom: 8px;
 }
 
 .input-container {
   position: relative;
   width: 100%;
+  margin-bottom: 18px;
 }
 
 .input-field {
@@ -146,4 +147,12 @@ export default {
   font-size: 1.4em;
   user-select: none;
 }
+
+@media (max-width: 700px) {
+  .input-field {
+    margin-right: 15px;
+    margin-left: -5px;
+  }
+}
+
 </style>

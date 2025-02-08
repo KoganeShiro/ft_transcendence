@@ -30,6 +30,7 @@ build:
 .PHONY: up
 up: 
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
+	@echo "https://localhost:1443"
 
 # Stop and remove services
 .PHONY: down

@@ -62,6 +62,16 @@
     "send": "Envoyer",
     "message": "Tapez un message",
     "loading": "Chargement...",
-    "with-friend": "Versus amis (à Distance)"
+    "with-friend": "Versus amis (à Distance)",
+    "iAgreeTo": "J'accepte les",
+    "game-withfriend": "Match avec un ami",
+    "join-create-match": "Rejoindre ou créer un match",
+    "match-id": "Entrez l'identifiant du match",
+    "copy": "Copier",
+    "create-game": "Créer un match",
+    "join-game": "Rejoindre un match",
+    "commands": "Commandes",
+    "move-up": "Bouger vers le haut: ",
+    "move-down": "Bouger vers le bas: "
   }
   
