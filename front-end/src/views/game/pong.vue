@@ -127,7 +127,6 @@ export default {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
-  background-color: #1e1e1e;
 }
 
 /* Example mobile hide class */

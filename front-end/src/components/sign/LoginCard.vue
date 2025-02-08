@@ -19,7 +19,7 @@
       </InputGroup>
       <ButtonGroup class="button-group">
         <Button variant="primary" class="login-button" @click="onLogin">{{ $t("login") }}</Button>
-        <Button variant="42" class="login-button" @click="onLogin">{{ $t("login-42") }}</Button>
+        <Button variant="42" class="login-button" @click="on42Login">{{ $t("login-42") }}</Button>
       </ButtonGroup>
     </Card>
   </div>
@@ -66,12 +66,30 @@ export default {
         });
         console.log("Login successful:", response.data);
         // Handle token storage and redirection
-        document.cookie = `auth=${response.data.authToken}; path=/`;
-        document.cookie = `refresh=${response.data.refreshToken}; path=/`;
+        document.cookie = `access=${response.data.access}; path=/`;
+        document.cookie = `refresh=${response.data.refresh}; path=/`;
         this.$router.push("/profile");
       } catch (error) {
         console.error("Login failed:", error);
         alert("Login failed. Please try again.");
+      } finally {
+        this.loading = false;
+      }
+    },
+    async on42Login() {
+      if (this.loading) return;
+      this.loading = true;
+
+      try {
+        const response = await axios.get('/api/auth/login/42/');
+        console.log("42 Login successful:", response.data);
+        // Handle token storage and redirection
+        document.cookie = `access=${response.data.access}; path=/`;
+        document.cookie = `refresh=${response.data.refresh}; path=/`;
+        this.$router.push("/profile");
+      } catch (error) {
+        console.error("42 Login failed:", error);
+        alert("42 Login failed. Please try again.");
       } finally {
         this.loading = false;
       }

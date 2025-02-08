@@ -1,14 +1,14 @@
 <template>
   <div class="modal-overlay">
     <Card class="modal-card">
-      <h2 class="modal-title">Game-with-Friend</h2>
+      <h2 class="modal-title">{{ $t('game-withfriend') }}</h2>
       <p class="modal-text">
-        Enter-a-code to join a match or click create to start a-new-match.
+        {{ $t('join-create-match') }}
       </p>
       
       <!-- Display generated code after creation -->
       <div v-if="generatedCode" class="created-match-code">
-        <p>Your match code:</p>
+        <p>{{ $t('match-id') }}</p>
         <div class="code-display">
           <input 
             :value="generatedCode" 
@@ -16,11 +16,11 @@
             readonly
             class="generated-code-input"
           />
-          <button @click="copyCode" class="copy-btn">Copy</button>
+          <button class="copy-btn" :class="{ copied: isCopied }" @click="copyToClipboard">{{ $t('copy') }}</button>
         </div>
       </div>
 
-      <Button class="btn" variant="secondary" @click="createMatch">Create Match</Button>
+      <Button class="btn" variant="secondary" @click="createMatch">{{ $t('create-game') }}</Button>
       
       <div class="form-group">
         <input 
@@ -31,10 +31,11 @@
         />
       </div>
       
-      <Button class="btn" variant="primary" @click="joinMatch">Join Match</Button>
+      <Button class="btn" variant="primary" @click="joinMatch">{{ $t('join-game') }}</Button>
     </Card>
   </div>
 </template>
+
 
 <script>
 import Card from "@/components/atoms/Card.vue";
@@ -49,7 +50,8 @@ export default {
   data() {
     return {
       matchCode: "",
-      generatedCode: "code-abcd-12345"
+      generatedCode: "code-abcd-12345",
+      isCopied: false, // Add this property to manage the copied state
     };
   },
   methods: {
@@ -70,6 +72,7 @@ export default {
           action: "create", 
           code: this.generatedCode 
         });
+        //should go back to PongWithFriend.vue
 
       } catch (error) {
         console.error("Error creating match:", error);
@@ -87,10 +90,18 @@ export default {
         code: this.matchCode 
       });
     },
-    copyCode() {
-      navigator.clipboard.writeText(this.generatedCode)
-        .then(() => alert("Code copied to clipboard!"))
-        .catch(err => console.error("Failed to copy code:", err));
+    copyToClipboard() {
+      const el = document.createElement('textarea');
+      el.value = this.generatedCode;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      this.isCopied = true;
+      setTimeout(() => {
+        this.isCopied = false;
+      }, 1000);
     }
   }
 };
@@ -183,10 +194,23 @@ cursor: pointer;
 background-color: #45a049;
 }
 
+
+.copy-btn.copied {
+  animation: copied-animation 0.5s ease-in-out;
+}
+
+@keyframes copied-animation {
+  0% { background-color: #4CAF50;}
+  50% { background-color: #45a049; scale: 0.95;}
+  100% { background-color: #4CAF50; }
+}
+
 @media (max-width: 768px) {
-.modal-card {
-  height: 55%;
+  .modal-card {
+    height: 65%;
+    width: 78%;
+  }
 }
-}
+
 
 </style>

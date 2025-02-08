@@ -1,3 +1,23 @@
+Login Workflow:
+/api/login
+Send username + password.
+if ok: store acces token + refreshtoken in local storage
+if not ok: stay logged outLogin workflow 42:
+open link: /api/auth/login42/
+if ok: store acces token + refreshtoken in local storage
+if not ok: stay logged outlogout workflow:
+/api/logout/
+send refresh token.
+if ok: delete access and refresh token and log out.refresh access token:
+send refresh token in body
+if ok: delete old access and refresh token in local storage and replace them by new ones
+if not ok: delete old acces and refresh token and logoutother requests:
+send access token in header (bearer ...)
+if ok: receive information.
+if not ok: call "refresh access token" and try again with new access token
+if still not ok: logout
+
+
 POST https://localhost:1443/api/register/
 Content-Type: application/json
 

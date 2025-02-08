@@ -101,9 +101,9 @@ export default {
     },
   },
   // Prevent navigation away from the waiting page
-  beforeRouteLeave(to, from, next) {
-    next(false);
-  },
+  // beforeRouteLeave(to, from, next) {
+  //   next(false);
+  // },
 };
 </script>
 

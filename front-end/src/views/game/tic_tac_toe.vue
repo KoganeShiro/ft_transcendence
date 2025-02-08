@@ -4,7 +4,7 @@
 
     <!-- Heading showing which mode is active -->
     <div class="heading">
-      <h1>Tic Tac Toe - {{ mode }} mode</h1>
+      <!-- <h1>Tic Tac Toe - {{ mode }} mode</h1> -->
     </div>
 
     <!-- Front for random and friend versus (remote)
@@ -22,7 +22,7 @@
 
     <!-- Game content -->
     <div class="tic-tac-toe-content">
-      <!-- front -->
+      <!-- front, get to mode in it -->
       <TicTacToeGame />
     </div>
 
@@ -56,6 +56,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .tic-tac-toe-page {

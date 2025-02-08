@@ -62,6 +62,16 @@
     "send": "Senden",
     "message": "Geben Sie eine Nachricht ein",
     "loading": "Laden...",
-    "with-friends": "Mehrspieler mit Freund (Remote)"
+    "with-friends": "Mehrspieler mit Freund (Remote)",
+    "iAgreeTo": "Ich stimme den",
+    "game-withfriend": "Spiel mit Freund",
+    "join-create-match": "Beitreten oder Erstellen eines Spiels",
+    "match-id": "Geben Sie die Spiel-ID ein",
+    "copy": "Kopieren",
+    "create-game": "Spiel erstellen",
+    "join-game": "Spiel beitreten",
+    "commands": "Befehle",
+    "move-up": "Nach oben bewegen: ",
+    "move-down": "Nach unten bewegen: "
   }
   

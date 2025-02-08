@@ -3,7 +3,6 @@
 <template>
   <div class="template">
     <HeaderOrganism />
-
     <div class="profile-page">
       <!-- Left section: Avatar + Sidebar -->
       <div class="left-section">

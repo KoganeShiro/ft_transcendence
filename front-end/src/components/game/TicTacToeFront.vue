@@ -1,66 +1,71 @@
 <template>
-    <div class="pong-page">
-      <Versus v-if="showVersus" @time-up="handleTimeUp" />
-      
-      <div v-else class="content">
-        <div class="game-container">
-          <TicTacToeGame :mode="mode" :useImages="false" />
-        </div>
+  <div class="pong-page">
+    <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" />
+    <Versus v-else-if="showVersus" @time-up="handleTimeUp" />
+    
+    <div v-else class="content">
+      <div class="game-container">
+        <TicTacToeGame :mode="mode" :useImages="false" />
       </div>
     </div>
-  </template>
-  
-  <script>
+  </div>
+</template>
+
+<script>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import TicTacToeGame from "@/components/game/TicTacToeGame.vue";
 import Versus from "@/components/game/Versus.vue";
-  
-  export default {
-    name: 'LocalFront',
-    components: {
-      Versus,
-      TicTacToeGame,
+import MatchPopup from "@/components/game/pongFront/PrivateMatch.vue";
+
+export default {
+  name: 'LocalFront',
+  components: {
+    Versus,
+    TicTacToeGame,
+    MatchPopup,
+  },
+  setup() {
+    const route = useRoute();
+    const mode = computed(() => route.params.mode);
+
+    return { mode };
+  },
+  data() {
+    return {
+      showPopup: this.mode === 'withFriend',
+      showVersus: this.mode !== 'withFriend',
+      matchAction: '',
+      matchCode: '',
+    };
+  },
+  methods: {
+    handleMatchSelection({ action, code }) {
+      // Hide the popup and proceed with the selected action.
+      this.showPopup = false;
+      this.matchAction = action;
+      this.matchCode = code;
+      
+      // For example, if the user chose "create", we might show the versus overlay first.
+      if (action === "create") {
+        this.showVersus = true;
+      } else if (action === "join") {
+        // Handle join logic here; you might also show Versus before the game.
+        this.showVersus = true;
+      }
     },
-    data() {
-      return {
-        showVersus: true,
-      };
+    handleTimeUp() {
+      // Hide the Versus overlay when the time is up
+      this.showVersus = false;
     },
-    methods: {
-      handleTimeUp() {
-        // Hide the Versus overlay when the time is up
-        this.showVersus = false;
-      },
-    },
-  };
-  </script>
+  },
+};
+</script>
+
   
   <style scoped>
   .pong-page {
     color: #fff;
-  }
-  
-  .span {
-    font-weight: bold;
-  }
-  
-  .player-controls {
-    display: flex;
-  }
-  
-  .left-cmd {
-    border-radius: 8px;
-    padding: 10px;
-    background-color: #11101088;
-    width: 30%;
-    margin-left: 7%;
-  }
-  
-  .right-cmd {
-    border-radius: 8px;
-    padding: 10px;
-    background-color: #11101088;
-    width: 30%;
-    margin-left: 25%;
   }
   
   .content {
@@ -71,27 +76,12 @@ import Versus from "@/components/game/Versus.vue";
   .game-container {
     border-radius: 8px;
     padding: 10px;
+    background-color: none;
   }
   
   @media screen and (max-width: 810px) {
     .mobile-hide {
       display: none;
-    }
-  
-    .left-cmd {
-      padding: 0;
-      background-color: transparent;
-    }
-  
-    .right-cmd {
-      padding: 0;
-      background-color: transparent;
-    }
-  
-    .player-controls {
-      padding: 5px;
-      background: none;
-      border: none;
     }
   
     .game-container {

@@ -6,9 +6,9 @@
       <Versus v-if="showVersus" @time-up="handleVersusTimeUp" />
       <div v-else>
         <div class="player-controls">
-          <h2 class="mobile-hide">Commands</h2>
-          <p class="mobile-hide">Move Up: <span class="span">W</span></p>
-          <p class="mobile-hide">Move Down: <span class="span">S</span></p>
+          <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
+          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
         </div>
         <div class="game-container">
           <PongGame />

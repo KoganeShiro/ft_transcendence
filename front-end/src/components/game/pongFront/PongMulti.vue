@@ -4,8 +4,9 @@
 		<!-- <Versus /> -->
 		<div class="player-controls">
 		  <h2 class="mobile-hide">Commands</h2>
-		  <p class="mobile-hide">Move Up: <span class="span">W</span></p>
-		  <p class="mobile-hide">Move Down: <span class="span">S</span></p>
+		  <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
+          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
 		</div>
 		<div class="game-container">
 		  <!-- This component handles the solo game logic -->
@@ -64,6 +65,7 @@
   .game-container {
 	border-radius: 8px;
 	padding: 10px;
+	background-color: none;
   }
 
   @media screen and (max-width: 810px) {

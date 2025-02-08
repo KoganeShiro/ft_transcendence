@@ -63,37 +63,63 @@
 
 - [x] New mode, private match
 
-- [ ] Add the private match component on tic tac toes
-- [ ] Add players name on the game match ?
-- [ ] Make the tournament matchmaking page to game better
+- [x] Add the private match component on tic tac toe
+
+- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
+- [ ] !!! Make the tournament matchmaking page to game better !!!
 
 - [ ] Make the pong game responsive ==> may start searching for how to make the AI
 
-- [ ] Implement power up
-
 - [ ] Make the Tic Tac Toe AI
 
+- [ ] Play against AI logic (same as remote (private))
+- [ ] Play against another player logic --> 
+- [ ] Play against a friend (private match) logic -- >
+- [ ] Play against guest (local) logic
+   - [x] Invite logic (for private match)
+- [ ] Tournament logic
+- [ ] Play with 4 players logic (should be similar to another player logic)
 
-        # Question about the back logic
+- [ ] Call the back for the game
+- [ ] Matchmaking logic
+- [ ] Tournament logic
+- [x] Games logic with following pages...
+
+- [x] Can register
+- [x] Can login
+- [-] Can logout
+
+- [ ] Call the back for stats
+- [ ] Call the back for history (5 last battles for each "games")
+- [ ] Call the back for friends list (max of 10)
+- [x] Add a component for the chat
+
+- [ ] Call the back for account --> PATCH request to modify informations + avatar
+        - [ ] Can modify avatar
+        - [ ] Can modify username
+        - [ ] Can modify password
+        
+
+- [ ] Make each part into container
+
 - [x] Register --> send to the back username, password + avatar (default)
         --> password no problem without having it hashed in the front
 - [x] Login --> send to the back username + password
 
 - [ ] Account, possibility to change the username + password
-- [ ] Logout logic ?
 
 - [x] How do we add a friend ?
         We add a friend by username, if we don't want block
-- [ ] Need friends list + their status (online or offline)
-- [ ] Need the friend icon + chat history
-- [ ] If click on the friend's icon --> json with the var to complete the profile (hide pseudo sidebar)
+- [x] Need friends list + their status (online or offline)
+- [x] Need the friend icon + chat history
+- [x] If click on the friend's icon --> json with the var to complete the profile (hide pseudo sidebar)
 
-- [ ] For history .json file with the last x match id
+- [x] For history .json file with the last x match id
         need to make another call the know if the user won or loose and against who (* by matches).
         If we click on it, should expand with more information
          Another call API (on the match that was clicked)
 
-- [ ] For stats in .json file (one call)
+- [x] For stats in .json file (one call)
         - Rank actuel (pong, multi et ttc)
 
         - int tab (progression --> in rank) ---> make a graph (nb de match abscisse et nb of point ordonner) => Line Graphs
@@ -109,41 +135,9 @@
                 same for lose point
                         ==> one Bar Charts
 
-
-- [ ] Play against AI logic (same as remote (private))
-- [ ] Play against another player logic --> 
-- [ ] Play against a friend (private match) logic -- >
-- [ ] Play against guest (local) logic
-   - [ ] Invite logic (for private match)
-- [ ] Tournament logic
-- [ ] Play with 4 players logic (should be similar to another player logic)
-
-
-        ## When I can communicate with the back
-- [ ] Make each part into container
-
-- [ ] Call the back for the game
-- [ ] Matchmaking logic
-- [ ] Tournament logic
-- [x] Games logic with following pages...
-
-- [x] Can register
-- [x] Can login
-- [-] Can logout
-
-- [ ] Call the back for stats
-- [ ] Call the back for history (ten last battles)
-- [ ] Call the back for friends list (max of 10)
-- [ ] Add a component for the chat ?
-
-- [ ] Call the back for account --> PATCH request to modify informations + avatar
-        - [ ] Can modify avatar
-        - [ ] Can modify username
-        - [ ] Can modify password
-        - [ ] Can modify email
-
 - [ ] Pong AI
 
+- [ ] Implement power up
 
 - [ ] More than 2 players game page (x2)
 

@@ -116,10 +116,16 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
  # added for social login
     'social_django', 
+    'corsheaders',
    # 'dj_rest_auth',
 
     #'user_mgm',
 
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
 ]
 
 SIMPLE_JWT = {
@@ -176,6 +182,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'user_mgm.update_last_seen.UpdateLastSeenMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
