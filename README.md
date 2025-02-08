@@ -64,11 +64,14 @@
 - [x] New mode, private match
 
 - [x] Add the private match component on tic tac toe
+- [x] !!! Make the tournament matchmaking page to game better !!!
+
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
-- [ ] !!! Make the tournament matchmaking page to game better !!!
 
 - [ ] Make the pong game responsive ==> may start searching for how to make the AI
+
+- [ ] If user is connected with 42, cannot modify their account information
 
 - [ ] Make the Tic Tac Toe AI
 
@@ -87,7 +90,8 @@
 
 - [x] Can register
 - [x] Can login
-- [-] Can logout
+- [x] Can logout
+- [x] Can connect using 42
 
 - [ ] Call the back for stats
 - [ ] Call the back for history (5 last battles for each "games")

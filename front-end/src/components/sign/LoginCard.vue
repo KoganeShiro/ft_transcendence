@@ -66,8 +66,8 @@ export default {
         });
         console.log("Login successful:", response.data);
         // Handle token storage and redirection
-        document.cookie = `access=${response.data.access}; path=/`;
-        document.cookie = `refresh=${response.data.refresh}; path=/`;
+        // document.cookie = `access=${response.data.access}; path=/`;
+        // document.cookie = `refresh=${response.data.refresh}; path=/`;
         this.$router.push("/profile");
       } catch (error) {
         console.error("Login failed:", error);
@@ -81,11 +81,14 @@ export default {
       this.loading = true;
 
       try {
-        const response = await axios.get('/api/auth/login/42/');
-        console.log("42 Login successful:", response.data);
+        // const response = await axios.get('/api/auth/login42/');
+        // console.log("42 Login successful:", response.data);
+
+        window.location.href = "/api/auth/login42/";
+
         // Handle token storage and redirection
-        document.cookie = `access=${response.data.access}; path=/`;
-        document.cookie = `refresh=${response.data.refresh}; path=/`;
+        // document.cookie = `access=${response.data.access}; path=/`;
+        // document.cookie = `refresh=${response.data.refresh}; path=/`;
         this.$router.push("/profile");
       } catch (error) {
         console.error("42 Login failed:", error);

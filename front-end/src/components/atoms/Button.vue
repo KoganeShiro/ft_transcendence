@@ -131,7 +131,7 @@ export default {
 }
 
 .btn-attention:hover {
-  background-color: #313030c4;
+  background-color: var(--back);
 }
 
 .btn-lang {

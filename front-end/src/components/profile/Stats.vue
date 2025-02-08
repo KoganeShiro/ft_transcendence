@@ -19,7 +19,7 @@ export default {
     return {
       stats: {
         "Pong": {
-          currentRank: "Gold",
+          currentRank: 1,
           totalMatches: 100,
           tournamentWins: 5,
           wins: 60,
@@ -33,9 +33,8 @@ export default {
           pointsLostOver10Exchanges: 250
         },
         "4 Players Pong": {
-          currentRank: "Silver",
+          currentRank: 1,
           totalMatches: 50,
-          tournamentWins: 2,
           wins: 28,
           losses: 22,
           rankProgression: [800, 850, 900, 875, 925, 950, 1000],
@@ -47,18 +46,11 @@ export default {
           pointsLostOver10Exchanges: 120
         },
         "Tic Tac Toe": {
-          currentRank: "Platinum",
+          currentRank: 1,
           totalMatches: 200,
-          tournamentWins: 10,
           wins: 120,
           losses: 80,
           rankProgression: [1500, 1550, 1600, 1650, 1700, 1750, 1800],
-          pointsWonUnder5Exchanges: 300,
-          pointsWonUnder10Exchanges: 400,
-          pointsWonOver10Exchanges: 500,
-          pointsLostUnder5Exchanges: 200,
-          pointsLostUnder10Exchanges: 300,
-          pointsLostOver10Exchanges: 400
         }
       }
     }

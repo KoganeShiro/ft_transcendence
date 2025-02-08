@@ -15,23 +15,17 @@
         <EditableTextField 
           v-model="user.name" 
           :modifiable="true" 
-          placeholder="Enter your username" 
+          placeholder="Enter your-new-username"
+          @save="saveProfile"
         />
       </div>
-      <!-- <div class="field">
-        <label>{{ $t("email") }}</label>
-        <EditableTextField 
-          v-model="user.mail" 
-          :modifiable="true" 
-          placeholder="Enter your email" 
-        />
-      </div> -->
       <div class="field">
         <label>{{ $t("password") }}</label>
         <EditableTextField 
           v-model="user.password" 
           :modifiable="true" 
-          placeholder="Enter new password" 
+          placeholder="Enter your-new-password" 
+          @save="saveProfile"
         />
       </div>
     </div>
@@ -51,9 +45,9 @@
   </div>
 </template>
 
+
 <script>
 import axios from "axios";
-// import AvatarAtom from "@/components/atoms/Avatar.vue";
 import AvatarAtom from "@/components/settings/ModifyAvatar.vue";
 import EditableTextField from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
@@ -69,7 +63,6 @@ export default {
     return {
       user: {
         name: "",
-        mail: "",
         password: "",
         avatar: "",
       },
@@ -79,44 +72,51 @@ export default {
   methods: {
     initAccount() {
       this.loading = true;
-      axios.get("/api/account")
+      axios.get("/api/profile")
         .then(response => {
           const data = response.data;
-          // this.user.name = data.name;
-          this.user.name = "username42";
-          this.user.mail = data.mail;
-          this.user.avatar = data.avatar || "/assets/profile.png";
+          this.user.name = data.username;
+          this.user.cover_photo = data.cover_photo;
           this.user.password = "*************";
+          this.is42 = data.is42;
         })
         .catch(error => {
           console.error("Error fetching account data:", error);
-          // Optionally, handle errors here (e.g., show an error message)
         })
         .finally(() => {
           this.loading = false;
         });
     },
     saveProfile() {
-      axios.patch("/api/account", {
-        name: this.user.name,
-        mail: this.user.mail,
-        password: this.user.password,
-      })
-      .then(response => {
-        alert(this.$t("profile_saved_successfully"));
-        // Optionally update local state based on response.
-      })
-      .catch(error => {
-        console.error("Error saving profile:", error);
-        alert(this.$t("error_saving_profile"));
-      });
+      if (this.is42) {
+        alert(this.$t("42_account_cannot_be_modified"));
+        return;
+      }
+      const payload = { username: this.user.name };
+      
+      if (this.user.password !== "*************") {
+        payload.password = this.user.password;
+      }
+      
+      if (this.user.cover_photo) {
+        payload.cover_photo = this.user.cover_photo;
+      }
+      
+      axios.patch("/api/profile_update", payload)
+        .then(response => {
+          console.log("Profile saved successfully:", response.data);
+        })
+        .catch(error => {
+          console.error("Error saving profile:", error);
+          alert(this.$t("error_saving_profile"));
+        });
     },
+
     removeAccount() {
       if (confirm(this.$t("delete-account-msg"))) {
         axios.delete("/api/account")
           .then(response => {
             alert(this.$t("account_deleted_successfully"));
-            // Optionally, redirect the user or update the UI accordingly.
           })
           .catch(error => {
             console.error("Error deleting account:", error);
@@ -130,6 +130,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .account-card {

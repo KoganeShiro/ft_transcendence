@@ -1,5 +1,3 @@
-<!-- Auth token Bearer, so we know which user -->
-<!-- Pseudo sidebar, with all the information on the page -->
 <template>
   <div class="template">
     <HeaderOrganism />
@@ -8,7 +6,7 @@
       <div class="left-section">
         <!-- Avatar + Username -->
         <div class="avatar-container">
-          <AvatarComponent />
+          <AvatarComponent :pseudo="username" :imageUrl="cover_photo" />
         </div>
 
         <!-- Pseudo Sidebar -->
@@ -22,6 +20,7 @@
       <!-- Right section: Scrollable content -->
       <div class="content">
         <div v-if="activeTab === 'stats'" class="card">
+          <!-- ProfileStats :json="jsonFile" -->
           <ProfileStats />
         </div>
         <div v-if="activeTab === 'history'" class="card">
@@ -38,6 +37,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import PseudoSidebar from "@/components/profile/PseudoSidebar.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
@@ -64,15 +64,33 @@ export default {
         { key: "friends", label: this.$t('friends'), route: "#friends" },
       ],
       activeTab: "stats", // Default tab
+      username: '',
+      cover_photo: '',
     };
+  },
+  created() {
+    this.getProfile();
   },
   methods: {
     setActiveTab(tab) {
       this.activeTab = tab;
     },
+    async getProfile() {
+      try {
+        // add a variable at the end of profile (username)
+        const response = await axios.get('/api/profile/');
+        this.username = response.data.username;
+        this.cover_photo = response.data.cover_photo;
+        // console.log(this.username);
+        // console.log(this.cover_photo);
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    },
   },
 };
 </script>
+
 
 <style scoped>
 /* General layout */

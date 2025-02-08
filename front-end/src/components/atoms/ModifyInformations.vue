@@ -1,25 +1,30 @@
 <template>
   <div class="editable-text-field">
-    <!-- Gray Overlay (Shown when not editing) -->
-    <div class="overlay" v-if="!isEditing">
+    <!-- Display Mode: Shows the current text and the "modify" button -->
+    <div class="display-mode" v-if="!isEditing">
       <div class="field-content">
         <img v-if="imageUrl" :src="imageUrl" alt="Avatar" class="avatar" />
         <span class="text-value">{{ truncatedValue }}</span>
       </div>
-      <button v-if="modifiable" class="edit-btn" @click="enableEditing">{{ $t("modify") }}</button>
+      <button v-if="modifiable" class="edit-btn" @click="enableEditing">
+        {{ $t("modify") }}
+      </button>
     </div>
 
-    <!-- Editable Input Field (Shown when editing) -->
-    <input
-      v-if="isEditing"
-      v-model="editableValue"
-      :placeholder="placeholder"
-      class="input-field"
-      @blur="saveChanges"
-      @keyup.enter="saveChanges"
-      ref="inputField"
-      maxlength="25"
-    />
+    <!-- Editing Mode: Shows the input field and a "save" button -->
+    <div class="editing-mode" v-else>
+      <input
+        v-model="editableValue"
+        :placeholder="placeholder"
+        class="input-field"
+        ref="inputField"
+        maxlength="25"
+        @keyup.enter="saveChanges"
+      />
+      <button class="save-btn" @click="saveChanges">
+        {{ $t("save") }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -68,7 +73,10 @@ export default {
     },
     saveChanges() {
       this.isEditing = false;
+      // Update the v-model value
       this.$emit("update:modelValue", this.editableValue);
+      // Emit an event to indicate that saving should occur
+      this.$emit("save");
     }
   },
   watch: {
@@ -79,6 +87,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .editable-text-field {
   position: relative;
@@ -86,10 +95,9 @@ export default {
   min-height: 40px;
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Display Mode Styles */
+.display-mode {
+  position: relative;
   width: 96%;
   height: 100%;
   display: flex;
@@ -99,6 +107,13 @@ export default {
   background: var(--overlay-color);
 }
 
+/* Editing Mode Styles */
+.editing-mode {
+  display: flex;
+  align-items: center;
+}
+
+/* Common Styles */
 .field-content {
   display: flex;
   align-items: center;
@@ -118,7 +133,8 @@ export default {
   padding: 10px;
 }
 
-.edit-btn {
+.edit-btn,
+.save-btn {
   background: none;
   color: var(--link-color);
   border: none;
@@ -127,7 +143,8 @@ export default {
   margin-right: 10px;
 }
 
-.edit-btn:hoover {
+.edit-btn:hover,
+.save-btn:hover {
   text-decoration: underline;
 }
 

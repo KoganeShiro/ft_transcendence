@@ -33,19 +33,9 @@ export default {
     },
     async onlogout() {
       try {
-        const refreshToken = this.getCookie('refresh');
-        if (!refreshToken) {
-          throw new Error('Refresh token not found');
-        }
-
         // Call the API to remove the refresh cookie
-        await axios.post('/api/logout/', { refresh: refreshToken }, {
-          withCredentials: true,
+        await axios.get('/api/logout/', {}, {
         });
-
-        // Clear the cookies
-        document.cookie = 'access=; Max-Age=0; path=/';
-        document.cookie = 'refresh=; Max-Age=0; path=/';
 
         // Redirect to the home page after successful logout
         this.$router.push("/");
