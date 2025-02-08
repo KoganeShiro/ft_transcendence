@@ -67,6 +67,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'user_mgm.permissions.CookieJWTAuthentication',
     ), 
+
     # 'DEFAULT_PERMISSION_CLASSES': (
     #     'rest_framework.permissions.IsAuthenticated',
     # ),
@@ -83,6 +84,7 @@ REST_FRAMEWORK = {
 # SESSION_ENGINE = "django.contrib.sessions.backends.cache"  # Optional: Store sessions in cache instead of DB
 #SESSION_COOKIE_AGE = 0  # Make session cookies expire immediately
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Auto-delete session on browser close
+
 
 
 SOCIAL_AUTH_STATE_SESSION = False  # Prevent PSA from storing state in session
