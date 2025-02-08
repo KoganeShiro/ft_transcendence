@@ -104,6 +104,8 @@ def save_avatar(backend, user, response, *args, **kwargs):
 
                 # Save the image to cover_photo
                 user.cover_photo.save(filename, ContentFile(avatar_response.content), save=True)
+                user.is_42 = True
+                user.save()
                 print(f"✅ Cover photo updated for {user.username}")
         except Exception as e:
             print(f"⚠️ Failed to update cover photo: {e}")
