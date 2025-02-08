@@ -15,6 +15,7 @@
     "chart.js": "^4.4.7",
     "gsap": "^3.12.5",
     "i18n": "^0.15.1",
+    "package-lock": "^1.0.5",
     "serve": "^14.2.4",
     "vite-plugin-env-compatible": "^2.0.1",
     "vue": "^3.5.13",

@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-f+&g!!lmxdld%5v!2&#q5oowy)p64m0pdys47ju9*g40r(z&kq'
+
 SECRET_KEY = os.environ.get('HASHER_CODE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -42,9 +42,9 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 REDIRECT_URI = 'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT') + '/api/auth/complete/42/'
 
 SOCIAL_AUTH_42_LOGIN_REDIRECT_URL = '/api/auth/get_token/'
-# SOCIAL_AUTH_42_KEY = 'u-s4t2ud-09ca6ba440f2f237ebfb37d37cfa280522f23fc10625ffe3eaf8639526912fd9'                      
+
 SOCIAL_AUTH_42_KEY = os.environ.get('AUTH_CLIENT_ID')                     
-# SOCIAL_AUTH_42_SECRET = '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'
+
 SOCIAL_AUTH_42_SECRET = os.environ.get('AUTH_SECRET')
 SOCIAL_AUTH_42_AUTHORIZATION_URL = 'https://api.intra.42.fr/oauth/authorize'
 SOCIAL_AUTH_42_ACCESS_TOKEN_URL = 'https://api.intra.42.fr/oauth/token'
@@ -65,14 +65,26 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'user_mgm.permissions.CookieJWTAuthentication',
     ), 
-     'DEFAULT_RENDERER_CLASSES': (
-         'rest_framework.renderers.JSONRenderer',
-     ),    
+
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+
+
+
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+  #   'DEFAULT_RENDERER_CLASSES': (
+  #       'rest_framework.renderers.JSONRenderer',
+  #   ),    
 }
 # SESSION_ENGINE = "django.contrib.sessions.backends.cache"  # Optional: Store sessions in cache instead of DB
 #SESSION_COOKIE_AGE = 0  # Make session cookies expire immediately
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Auto-delete session on browser close
+
 
 
 SOCIAL_AUTH_STATE_SESSION = False  # Prevent PSA from storing state in session
@@ -81,6 +93,7 @@ SOCIAL_AUTH_PIPELINE_CACHE_KEY = "psa_pipeline_cache_{uid}"  # Store pipeline in
 SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"  # Default DB storage, but can be overridden
 
 SOCIAL_AUTH_PIPELINE = (
+  #  'user_mgm.social_pipeline.clear_session_before_redirect',
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
@@ -176,13 +189,18 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+   # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'user_mgm.update_last_seen.UpdateLastSeenMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
 ]
 
 ROOT_URLCONF = 'backend.urls'

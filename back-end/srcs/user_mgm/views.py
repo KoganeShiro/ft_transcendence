@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer, LogoutSerializer, ProfileUpdateSerializer
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.contrib.auth import logout
 
 
 #Login User
@@ -20,16 +21,156 @@ class Login(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])        
         user.save()
+        tokens = response.data
+        response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")
+        response.set_cookie("refresh_token", tokens["refresh"], httponly=True, secure=True, samesite="Lax")
+        response.data = {
+            'username': user.username,
+            'email': user.email,
+            'id': user.id
+        }
+
+        logout(request)  # This removes the session ID cookie
+        response.delete_cookie('sessionid') # This deletes the session ID cookie
+ 
+
         return response
+    
+
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
+from datetime import timedelta
+
+User = get_user_model()
+
+@api_view(['POST', 'GET'])
+def refresh_tokens(request):
+    # Get the refresh token from the cookies
+    refresh_token = request.COOKIES.get('refresh_token')
+    
+    if not refresh_token:
+        return Response({'message': 'Refresh token not found'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        # Create RefreshToken object
+        refresh_token = RefreshToken(refresh_token)
+        
+        # Get the user ID from the refresh token payload
+        user_id = refresh_token.payload.get('user_id')
+        
+        if not user_id:
+            return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Retrieve the user from the database
+        user = User.objects.get(id=user_id)
+
+        # Generate new access token
+        access_token = str(refresh_token.access_token)
+        
+        # Generate new refresh token (rotating refresh token)
+        new_refresh_token = RefreshToken.for_user(user)
+
+        # Prepare the response
+        response = Response({'message': 'Tokens refreshed successfully'})
+
+        # Set the new access token as HttpOnly cookie
+        response.set_cookie(
+            'access_token', 
+            access_token,
+            httponly=True, 
+            secure=True,  # Ensure HTTPS in production
+            samesite='Lax', 
+            max_age=timedelta(hours=1)  # 1-hour expiration
+        )
+
+        # Set the new refresh token as HttpOnly cookie
+        response.set_cookie(
+            'refresh_token', 
+            str(new_refresh_token),
+            httponly=True, 
+            secure=True,  # Ensure HTTPS in production
+            samesite='Lax', 
+            max_age=timedelta(days=7)  # 7-day expiration
+        )
+        
+        return response
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+    
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class Logout(APIView):
     def post(self, request):
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        response = Response()
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+
      #   user = request.user        
      #   user.save()        
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return response
+    
+    @permission_classes([IsAuthenticated])
+    def get(self, request):
+        access_token = request.COOKIES.get('access_token')
+        refresh_token = request.COOKIES.get('refresh_token')
+        
+        if not access_token or not refresh_token:
+            return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = request.user
+        
+        # Blacklist the refresh token
+        try:
+            refresh_token = RefreshToken(refresh_token)
+            refresh_token.blacklist()
+        except Exception as e:
+            self.fail('bad_token')
+        
+        response = Response({'message': 'Logged out successfully'})
+        
+        # Delete the access and refresh token cookies
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+        
+        return response
+
+
+    # def get(self, request):     
+    #     access_token = request.COOKIES.get('access_token')
+    #     refresh_token = request.COOKIES.get('refresh_token')
+    #     if not access_token:
+    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+    #     if not refresh_token:
+    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     serializer = LogoutSerializer(data=request.cookies)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()   
+    #     response = Response()
+    #     response.delete_cookie('access_token')
+    #     response.delete_cookie('refresh_token')
+
+    #  #   user = request.user        
+    #  #   user.save()        
+    #     return response
+
+
 
 
 #Register User
@@ -129,8 +270,14 @@ from django.shortcuts import redirect
 from django.contrib.auth import login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth import logout
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view
+
+
 
 @api_view(['GET'])
+@permission_classes([AllowAny])  # This endpoint should also be public
 def social_auth_complete(request):
     
     """
@@ -139,9 +286,33 @@ def social_auth_complete(request):
     jwt_tokens = request.session.get('jwt_tokens')
 
     if jwt_tokens:
-        return Response(jwt_tokens)
+        logout(request)  # This removes the session ID cookie
+        response = Response(jwt_tokens)        
+        response.delete_cookie('sessionid') # This deletes the session ID cookie
+
+        response.set_cookie("access_token", jwt_tokens["access"], httponly=True, secure=True, samesite="Lax")
+        response.set_cookie("refresh_token", jwt_tokens["refresh"], httponly=True, secure=True, samesite="Lax")
+        return response
     
     return Response({'error': 'Authentication failed'}, status=400)
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from logging import getLogger
+
+logger = getLogger(__name__)
+
+
+@permission_classes([AllowAny])  # Make sure this is accessible to all users
+@api_view(['GET'])
+def social_auth_login(request):
+    logout(request)  # This removes the session ID cookie
+    logger.info('Logging out user before social auth')
+    return redirect('social:begin', '42')
 
 
