@@ -15,6 +15,8 @@
 import { mapGetters } from "vuex";
 import InvitationPopup from "@/components/Invitation.vue";
 import TournamentBanner from "@/components/NotifBanner.vue";
+//call the API to get the theme and the lang ?
+
 
 export default {
   name: "App",

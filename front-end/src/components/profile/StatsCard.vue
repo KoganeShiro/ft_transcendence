@@ -3,13 +3,13 @@
       <h2>{{ gameType }}</h2>
       <div class="stats-list">
         <div class="stat-item">
-          <strong>Current Rank:</strong> {{ stats.currentRank || 'N/A' }}
+          <strong>Current Rank:</strong> {{ stats.currentRank || ' N/A' }}
         </div>
         <div class="stat-item">
-          <strong>Total Matches:</strong> {{ stats.totalMatches || 0 }}
+          <strong>Total Matches:</strong> {{ stats.totalMatches || " N/A" }}
         </div>
         <div class="stat-item">
-          <strong>Tournament Wins:</strong> {{ stats.tournamentWins || 0 }}
+          <strong>Tournament Wins: </strong> {{ stats.tournamentWins || " N/A" }}
         </div>
       </div>
       
@@ -22,7 +22,7 @@
           <h3>Win/Loss Ratio</h3>
           <Doughnut :data="winLossData" :options="chartOptions" />
         </div>
-        <div class="chart">
+        <div v-if="gameType !== 'Tic Tac Toe'" class="chart">
           <h3>Point Exchange Statistics</h3>
           <Bar :data="pointExchangeData" :options="chartOptions" />
         </div>

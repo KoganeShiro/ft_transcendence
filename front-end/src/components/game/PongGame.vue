@@ -5,6 +5,8 @@
 </template>
 
 <script>
+// make a composition api
+// make pong game like a class with multiple constructor
 export default {
   data() {
     return {
@@ -37,6 +39,10 @@ export default {
     this.startGameLoop();
   },
   methods: {
+    //mettre en "public" les fonctions
+    getInstance() {
+      return this;
+    },
     handleKeyDown(event) {
       if (event.key === 'ArrowUp') this.keysPressed.up_right = true;
       if (event.key === 'ArrowDown') this.keysPressed.down_right = true;

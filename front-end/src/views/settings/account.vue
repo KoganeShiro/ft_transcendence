@@ -4,10 +4,13 @@
       <h1>{{ $t("account") }}</h1>
     </div>
     <div class="avatar-section">
-      <AvatarAtom 
+      <EditableAvatar 
+        :imageUrl="user.cover_photo" 
         :pseudo="user.name" 
         :showPseudo="false" 
+        @image-changed="onAvatarChanged"
       />
+
     </div>
     <div class="form-section">
       <div class="field">
@@ -15,23 +18,17 @@
         <EditableTextField 
           v-model="user.name" 
           :modifiable="true" 
-          placeholder="Enter your username" 
+          placeholder="Enter your-new-username"
+          @save="saveProfile"
         />
       </div>
-      <!-- <div class="field">
-        <label>{{ $t("email") }}</label>
-        <EditableTextField 
-          v-model="user.mail" 
-          :modifiable="true" 
-          placeholder="Enter your email" 
-        />
-      </div> -->
       <div class="field">
         <label>{{ $t("password") }}</label>
         <EditableTextField 
           v-model="user.password" 
           :modifiable="true" 
-          placeholder="Enter new password" 
+          placeholder="Enter your-new-password" 
+          @save="saveProfile"
         />
       </div>
     </div>
@@ -51,17 +48,17 @@
   </div>
 </template>
 
+
 <script>
-import axios from "axios";
-// import AvatarAtom from "@/components/atoms/Avatar.vue";
-import AvatarAtom from "@/components/settings/ModifyAvatar.vue";
+import API from '@/api.js';
+import EditableAvatar from "@/components/settings/ModifyAvatar.vue";
 import EditableTextField from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
 export default {
   name: "AccountCard",
   components: {
-    AvatarAtom,
+    EditableAvatar,
     EditableTextField,
     ButtonAtom,
   },
@@ -69,58 +66,98 @@ export default {
     return {
       user: {
         name: "",
-        mail: "",
         password: "",
         avatar: "",
+        cover_photo: "",
       },
       loading: false,
+      is42: false,
+      avatarFile: null,
     };
   },
   methods: {
     initAccount() {
       this.loading = true;
-      axios.get("/api/account")
+      API.get("/api/profile/")
         .then(response => {
           const data = response.data;
-          // this.user.name = data.name;
-          this.user.name = "username42";
-          this.user.mail = data.mail;
-          this.user.avatar = data.avatar || "/assets/profile.png";
+          this.user.name = data.username;
+          this.user.cover_photo = data.cover_photo;
           this.user.password = "*************";
+          this.is42 = data.is42;
         })
         .catch(error => {
           console.error("Error fetching account data:", error);
-          // Optionally, handle errors here (e.g., show an error message)
         })
         .finally(() => {
           this.loading = false;
         });
     },
+
+    onAvatarChanged(file) {
+      this.avatarFile = file;
+      const temporaryURL = URL.createObjectURL(file);
+      this.user.cover_photo = temporaryURL;
+      this.saveProfile();
+    },
+
     saveProfile() {
-      axios.patch("/api/account", {
-        name: this.user.name,
-        mail: this.user.mail,
-        password: this.user.password,
-      })
-      .then(response => {
-        alert(this.$t("profile_saved_successfully"));
-        // Optionally update local state based on response.
+      if (this.is42) {
+        alert(this.$t("42-account-cannot-be-modified"));
+        return;
+      }
+      
+      let request;
+      
+      if (this.avatarFile) {
+        const formData = new FormData();
+  
+        formData.append("cover_photo", this.avatarFile);
+
+        request = API.patch("/api/profile_update/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+      } else {
+        const payload = { username: this.user.name };
+        
+        if (this.user.password !== "*************") {
+          const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
+          if (!regex.test(this.user.password)) {
+            alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            this.initAccount();
+            return;
+          }
+          payload.password = this.user.password;
+        }
+        
+        request = API.patch("/api/profile_update/", payload);
+      }
+      
+      request.then(response => {
+          console.log("Profile saved successfully:", response.data);
+          this.initAccount();
+          this.avatarFile = null;
       })
       .catch(error => {
-        console.error("Error saving profile:", error);
-        alert(this.$t("error_saving_profile"));
+          console.error("Error saving profile:", error);
+          alert(this.$t("error_saving_profile"));
       });
     },
+
+
+
     removeAccount() {
       if (confirm(this.$t("delete-account-msg"))) {
-        axios.delete("/api/account")
+        API.get("/api/delete_account")
           .then(response => {
-            alert(this.$t("account_deleted_successfully"));
-            // Optionally, redirect the user or update the UI accordingly.
+            alert(this.$t("account-deleted-successfully"));
+            this.$router.push("/");
           })
           .catch(error => {
             console.error("Error deleting account:", error);
-            alert(this.$t("error_deleting_account"));
+            alert(this.$t("error-deleting-account"));
           });
       }
     },
@@ -130,6 +167,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .account-card {

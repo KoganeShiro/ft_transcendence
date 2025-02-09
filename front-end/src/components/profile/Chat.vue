@@ -37,6 +37,7 @@
 
 <script>
 import Avatar from "@/assets/profile2.png";
+import API from "@/api.js"
 
 export default {
   name: "ChatComponent",
