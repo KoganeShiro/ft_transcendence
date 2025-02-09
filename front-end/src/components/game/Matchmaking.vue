@@ -2,6 +2,7 @@
   <div class="matchmaking">
     <h1>Tournament Matchmaking</h1>
 
+    <!-- make a pop up: are you sure you want to leave the tournament ? -->
     <div class="round">
       <h2>First Round</h2>
       <div v-for="(match, index) in firstRound" :key="'first' + index" class="match">

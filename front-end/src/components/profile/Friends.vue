@@ -44,6 +44,9 @@
 import AddFriend from "@/components/profile/AddFriend.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import ChatComponent from "@/components/profile/Chat.vue";
+import API from "@/api.js"
+
+
 export default {
   components: {
     AddFriend,

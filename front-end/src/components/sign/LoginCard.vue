@@ -89,7 +89,7 @@ export default {
         // Handle token storage and redirection
         // document.cookie = `access=${response.data.access}; path=/`;
         // document.cookie = `refresh=${response.data.refresh}; path=/`;
-        this.$router.push("/profile");
+        // this.$router.push("/profile");
       } catch (error) {
         console.error("42 Login failed:", error);
         alert("42 Login failed. Please try again.");

@@ -4,10 +4,13 @@
       <h1>{{ $t("account") }}</h1>
     </div>
     <div class="avatar-section">
-      <AvatarAtom 
+      <EditableAvatar 
+        :imageUrl="user.cover_photo" 
         :pseudo="user.name" 
         :showPseudo="false" 
+        @image-changed="onAvatarChanged"
       />
+
     </div>
     <div class="form-section">
       <div class="field">
@@ -47,15 +50,15 @@
 
 
 <script>
-import axios from "axios";
-import AvatarAtom from "@/components/settings/ModifyAvatar.vue";
+import API from '@/api.js';
+import EditableAvatar from "@/components/settings/ModifyAvatar.vue";
 import EditableTextField from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 
 export default {
   name: "AccountCard",
   components: {
-    AvatarAtom,
+    EditableAvatar,
     EditableTextField,
     ButtonAtom,
   },
@@ -65,14 +68,17 @@ export default {
         name: "",
         password: "",
         avatar: "",
+        cover_photo: "",
       },
       loading: false,
+      is42: false,
+      avatarFile: null,
     };
   },
   methods: {
     initAccount() {
       this.loading = true;
-      axios.get("/api/profile")
+      API.get("/api/profile/")
         .then(response => {
           const data = response.data;
           this.user.name = data.username;
@@ -87,40 +93,71 @@ export default {
           this.loading = false;
         });
     },
+
+    onAvatarChanged(file) {
+      this.avatarFile = file;
+      const temporaryURL = URL.createObjectURL(file);
+      this.user.cover_photo = temporaryURL;
+      this.saveProfile();
+    },
+
     saveProfile() {
       if (this.is42) {
-        alert(this.$t("42_account_cannot_be_modified"));
+        alert(this.$t("42-account-cannot-be-modified"));
         return;
       }
-      const payload = { username: this.user.name };
       
-      if (this.user.password !== "*************") {
-        payload.password = this.user.password;
+      let request;
+      
+      if (this.avatarFile) {
+        const formData = new FormData();
+  
+        formData.append("cover_photo", this.avatarFile);
+
+        request = API.patch("/api/profile_update/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+      } else {
+        const payload = { username: this.user.name };
+        
+        if (this.user.password !== "*************") {
+          const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
+          if (!regex.test(this.user.password)) {
+            alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            this.initAccount();
+            return;
+          }
+          payload.password = this.user.password;
+        }
+        
+        request = API.patch("/api/profile_update/", payload);
       }
       
-      if (this.user.cover_photo) {
-        payload.cover_photo = this.user.cover_photo;
-      }
-      
-      axios.patch("/api/profile_update", payload)
-        .then(response => {
+      request.then(response => {
           console.log("Profile saved successfully:", response.data);
-        })
-        .catch(error => {
+          this.initAccount();
+          this.avatarFile = null;
+      })
+      .catch(error => {
           console.error("Error saving profile:", error);
           alert(this.$t("error_saving_profile"));
-        });
+      });
     },
+
+
 
     removeAccount() {
       if (confirm(this.$t("delete-account-msg"))) {
-        axios.delete("/api/account")
+        API.get("/api/delete_account")
           .then(response => {
-            alert(this.$t("account_deleted_successfully"));
+            alert(this.$t("account-deleted-successfully"));
+            this.$router.push("/");
           })
           .catch(error => {
             console.error("Error deleting account:", error);
-            alert(this.$t("error_deleting_account"));
+            alert(this.$t("error-deleting-account"));
           });
       }
     },

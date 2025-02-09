@@ -18,7 +18,13 @@
   <script>
   import PongGame from "@/components/game/PongGame.vue";
   import Versus from "@/components/game/Versus.vue";
-  
+//   import AI from "@/AI/pong_ai.js"
+
+//   let test = {key: 'w'};
+//   let instance = PongGame.methods.getInstance();
+//   console.log("pilou : ", instance);
+//   instance.handleKeyUp(test);
+
   export default {
 	name: 'SoloFront',
 	components: {

@@ -13,6 +13,7 @@
 
 <script>
 import axios from 'axios';
+import API from "@/api.js"
 import Card from "@/components/atoms/Card.vue";
 import Button from "@/components/atoms/Button.vue";
 import ButtonGroup from "@/components/atoms/ButtonGroup.vue";
@@ -34,11 +35,10 @@ export default {
     async onlogout() {
       try {
         // Call the API to remove the refresh cookie
-        await axios.get('/api/logout/', {}, {
+        await API.get('/api/logout/', {}, {
         });
 
         // Redirect to the home page after successful logout
-        this.$router.push("/");
       } catch (error) {
         console.error("Error during logout:", error);
         alert("Logout failed. Please try again.");

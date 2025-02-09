@@ -21,9 +21,9 @@
         maxlength="25"
         @keyup.enter="saveChanges"
       />
-      <button class="save-btn" @click="saveChanges">
+      <!-- <button class="save-btn" @click="saveChanges">
         {{ $t("save") }}
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -118,6 +118,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
+  /* padding: 15px; */
 }
 
 .avatar {

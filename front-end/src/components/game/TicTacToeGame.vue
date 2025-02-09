@@ -1,6 +1,7 @@
 <template>
   <div class="tic-tac-toe-game">
     <div class="board">
+      <!-- use touch handler event -->
       <div class="row" v-for="(row, rowIndex) in board" :key="'row-' + rowIndex">
         <div
           class="cell"
