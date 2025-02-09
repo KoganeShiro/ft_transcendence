@@ -32,12 +32,16 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'user_mgm.CustomUser'
 
+# API Key
+
+API_KEY = os.environ.get('API_KEY')
+
 # social login
 
 # Add social-auth-app-django settings
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 REDIRECT_URI = 'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT') + '/api/auth/complete/42/'
 
@@ -66,6 +70,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'user_mgm.permissions.CookieJWTAuthentication',
+        'user_mgm.permissions.APIKeyAuthentication',
     ), 
 
     # 'DEFAULT_PERMISSION_CLASSES': (
@@ -136,10 +141,14 @@ INSTALLED_APPS = [
 
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",
+#     "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
+# ]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CORS_ALLOW_CREDENTIALS = True  
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
@@ -180,6 +189,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),    
     'https://localhost',
+    'https://localhost:1443',
 ]
 
 

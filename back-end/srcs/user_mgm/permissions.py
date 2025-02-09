@@ -31,3 +31,26 @@ class CookieJWTAuthentication(JWTAuthentication):
 
         except Exception:
             return None  # Prevent errors from blocking AllowAny views
+
+
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
+from django.conf import settings
+
+class APIKeyAuthentication(BaseAuthentication):
+    """
+    Custom authentication class that verifies API keys passed in headers.
+    """
+    def authenticate(self, request):
+        # Get the API key from headers
+        api_key = request.headers.get('X-API-KEY')
+
+        if not api_key:
+            return None  # No authentication, move to the next authentication class
+
+        # Compare the API key with the one in settings (or fetch from DB)
+        if api_key != settings.API_KEY:
+            raise AuthenticationFailed("Invalid API key")
+
+        return (None, None)  # No user object needed for service-to-service auth
+
