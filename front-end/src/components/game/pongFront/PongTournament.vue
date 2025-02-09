@@ -50,7 +50,7 @@
 
 <script>
 import TextBox from "@/components/atoms/ModifyInformations.vue";
-import PongGame from "@/components/game/PongGame.vue";
+import PongGame from "@/components/game/pongGame/PongGame.vue";
 
 export default {
   name: "Matchmaking",

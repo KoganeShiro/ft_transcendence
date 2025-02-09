@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import PongGame from "@/components/game/PongGame.vue";
+import PongGame from "@/components/game/pongGame/PongGame.vue";
 import Versus from "@/components/game/Versus.vue";
 
 export default {

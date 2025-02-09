@@ -24,8 +24,7 @@ import ModeSelection from '../views/game/mode_selection.vue';
 import TicModeSelection from '../views/game/tic_mode_selection.vue';
 import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
-import CreateTournament from '../components/game/CreateTournament.vue';
-import waitingPlayers from '../views/game/waiting_players.vue';
+import CreateTournament from '../components/game/tournament/CreateTournament.vue';
 import Matchmaking from '../views/game/matchmaking.vue';
 import Invitation from '../components/Invitation.vue';
 import WaitingPlayers from '../views/game/waiting_players.vue';
@@ -178,11 +177,6 @@ const routes = [
     path: "/create-tournament",
     name: "CreateTournament",
     component: CreateTournament,
-  },
-  {
-    path: "/waiting-players",
-    name: "waitingPlayers",
-    component: waitingPlayers,
   },
 ];
 

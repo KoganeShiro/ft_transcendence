@@ -22,8 +22,8 @@
   <script>
   import HeaderOrganism from '@/components/header/navbar.vue';
   import FooterOrganism from '@/components/footer.vue';
-  // import PongFourPlayer from '@/components/game/PongFourPlayer.vue'; 
-  import PongGame from "@/components/game/PongGame.vue";
+  // import PongFourPlayer from '@/components/game/pongGame/PongFourPlayer.vue'; 
+  import PongGame from "@/components/game/pongGame/PongGame.vue";
   import Versus from "@/components/game/Versus.vue";
 
   

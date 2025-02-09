@@ -38,8 +38,8 @@
   <script>
   import HeaderOrganism from "@/components/header/navbar.vue";
   import FooterOrganism from "@/components/footer.vue";
-  import MatchmakingComponent from "@/components/game/Matchmaking.vue";
-  import PongGame from "@/components/game/PongGame.vue";
+  import MatchmakingComponent from "@/components/game/tournament/Matchmaking.vue";
+  import PongGame from "@/components/game/pongGame/PongGame.vue";
   import { useStore } from 'vuex';
   
   export default {
