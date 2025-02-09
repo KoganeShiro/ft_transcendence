@@ -16,9 +16,6 @@ import AddFriend from '../components/profile/AddFriend.vue';
 import Account from '../views/settings/account.vue';
 import Appearence from '../views/settings/appearence.vue';
 import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
-
-// import Loose from '../views/game/loose.vue';
-// import Win from '../views/game/win.vue';
 import GameChoice from '../views/game/game_choice.vue';
 import ModeSelection from '../views/game/mode_selection.vue';
 import TicModeSelection from '../views/game/tic_mode_selection.vue';
@@ -30,6 +27,8 @@ import Invitation from '../components/Invitation.vue';
 import WaitingPlayers from '../views/game/waiting_players.vue';
 import WinnerPopup from "@/views/game/winner.vue";
 import LoserPopup from "@/views/game/loser.vue";
+import OtherProfile from "@/views/other_profile.vue";
+import OtherStats from "@/views/other_stats.vue";
 
 
 const routes = [
@@ -37,6 +36,16 @@ const routes = [
     path: '/',
     name: 'welcome',
     component: Welcome,
+  },
+  {
+    path: '/other_profile/:username',
+    name: 'OtherProfile',
+    component: OtherProfile,
+  },
+  {
+    path: '/other_stats/:username',
+    name: 'OtherStats',
+    component: OtherStats,
   },
   {
     path: '/invitation',

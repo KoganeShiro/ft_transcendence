@@ -2,7 +2,7 @@
   <div class="chat-container">
     <!-- Chat Header -->
     <div class="chat-header">
-      <router-link :to="`/profile/${friend.id}`" class="friend-profile">
+      <router-link :to="`/other_profile/${friend.name}`" class="friend-profile">
         <!-- <img :src="friend.avatar" alt="Avatar" class="friend-avatar" /> -->
          <img :src="avatar" alt="Avatar" class="friend-avatar" />
         <h2>{{ friend.name }}</h2>

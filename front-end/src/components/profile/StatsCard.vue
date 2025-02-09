@@ -39,9 +39,9 @@
   export default {
     name: 'GameStatsCard',
     components: {
-      Line,       // used directly now
-      Doughnut,   // used directly now
-      Bar         // used directly now
+      Line,
+      Doughnut,
+      Bar
     },
     props: {
       gameType: {

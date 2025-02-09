@@ -58,7 +58,7 @@ export default {
       // Prototype list with hardcoded friends. In a real app, you'll call the backend
       // to fetch this list and update these objects accordingly.
       friends: [
-        { id: 1, name: "Alice", online: true },
+        { id: 1, name: "cejin", online: true },
         { id: 2, name: "Bob", online: false },
         { id: 3, name: "Charlie", online: true },
       ],
