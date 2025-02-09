@@ -11,11 +11,11 @@
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Game
+from .models import PongSolo
 from .serializers import GameSerializer, GameWriteSerializer
 
 class GameViewSet(viewsets.ModelViewSet):
-    queryset = Game.objects.all().order_by('-timestamp')  
+    queryset = PongSolo.objects.all().order_by('-timestamp')  
     permission_classes = [IsAuthenticated]  
 
     def get_serializer_class(self):
