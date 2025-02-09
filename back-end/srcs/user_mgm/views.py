@@ -294,8 +294,121 @@ def getStats(request, lookup_value=None):
     }
     return Response(preparedData)
 
+from .serializers import StatsUpdateSerializer
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def updateStats(request, lookup_value):
+    """
+    Fetch user profile using either user ID or username.
+    """
+    if request.user == None:
+    #if request.user == None or request.user.username == lookup_value:
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+    else:
+        return Response({'error': 'You are not allowed to update other users stats'}, status=400)
+
+    serializer = StatsUpdateSerializer(user, data=request.data, partial=True)
+    if serializer.is_valid():        
+        serializer.save()        
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
 
 
+import json
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_solo_progress(request, lookup_value):
+    try:
+        if request.user == None:
+        #if request.user == None or request.user.username == lookup_value:
+            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+        else:
+            return Response({'error': 'You are not allowed to update other users stats'}, status=400)               
+        
+        logger.debug('Updating progress for user %s', user.username)
+
+        # Parse JSON data from request
+        data = json.loads(request.body)
+        new_values = data.get("progress", [])
+        
+        # Validate that new_values is a list of integers
+        if not isinstance(new_values, list) or not all(isinstance(i, int) for i in new_values):
+            return Response({"error": "progress must be a list of integers"}, status=400)
+
+        # Append new values to the existing array
+        user.stat_pong_solo_progress.extend(new_values)
+        user.save()
+
+        return Response({"message": "Progress updated", "updated_progress": user.stat_pong_solo_progress}, status=200)
+    except json.JSONDecodeError:
+        return Response({"error": "Invalid JSON"}, status=400)
+
+
+
+import json
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_multi_progress(request, lookup_value):
+    try:
+        if request.user == None:
+        #if request.user == None or request.user.username == lookup_value:
+            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+        else:
+            return Response({'error': 'You are not allowed to update other users stats'}, status=400)               
+        
+        logger.debug('Updating progress for user %s', user.username)
+
+        # Parse JSON data from request
+        data = json.loads(request.body)
+        new_values = data.get("progress", [])
+        
+        # Validate that new_values is a list of integers
+        if not isinstance(new_values, list) or not all(isinstance(i, int) for i in new_values):
+            return Response({"error": "progress must be a list of integers"}, status=400)
+
+        # Append new values to the existing array
+        user.stat_pong_multi_progress.extend(new_values)
+        user.save()
+
+        return Response({"message": "Progress updated", "updated_progress": user.stat_pong_multi_progress}, status=200)
+    except json.JSONDecodeError:
+        return Response({"error": "Invalid JSON"}, status=400)
+
+
+
+
+import json
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_ttt_progress(request, lookup_value):
+    try:
+        if request.user == None:
+        #if request.user == None or request.user.username == lookup_value:
+            user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+        else:
+            return Response({'error': 'You are not allowed to update other users stats'}, status=400)               
+        
+        logger.debug('Updating progress for user %s', user.username)
+
+        # Parse JSON data from request
+        data = json.loads(request.body)
+        new_values = data.get("progress", [])
+        
+        # Validate that new_values is a list of integers
+        if not isinstance(new_values, list) or not all(isinstance(i, int) for i in new_values):
+            return Response({"error": "progress must be a list of integers"}, status=400)
+
+        # Append new values to the existing array
+        user.stat_ttt_progress.extend(new_values)
+        user.save()
+
+        return Response({"message": "Progress updated", "updated_progress": user.stat_ttt_progress}, status=200)
+    except json.JSONDecodeError:
+        return Response({"error": "Invalid JSON"}, status=400)
 
 
 
