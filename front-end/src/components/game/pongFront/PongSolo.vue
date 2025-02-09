@@ -65,7 +65,6 @@
 	margin-top: 20px;
 	border-radius: 8px;
 	padding: 10px;
-	background-color: none;
   }
   
   @media screen and (max-width: 810px) {

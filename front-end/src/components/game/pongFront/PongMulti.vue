@@ -3,7 +3,6 @@
 	  <div class="content">
 		<!-- <Versus /> -->
 		<div class="player-controls">
-		  <h2 class="mobile-hide">Commands</h2>
 		  <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
           <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
@@ -65,7 +64,6 @@
   .game-container {
 	border-radius: 8px;
 	padding: 10px;
-	background-color: none;
   }
 
   @media screen and (max-width: 810px) {

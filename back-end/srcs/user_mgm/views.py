@@ -150,25 +150,48 @@ class Logout(APIView):
         
         return response
 
+from social_django.models import UserSocialAuth
 
-    # def get(self, request):     
-    #     access_token = request.COOKIES.get('access_token')
-    #     refresh_token = request.COOKIES.get('refresh_token')
-    #     if not access_token:
-    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
-    #     if not refresh_token:
-    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+
+class deleteAccount(APIView):    
+    @permission_classes([IsAuthenticated])
+    def get(self, request):
+        access_token = request.COOKIES.get('access_token')
+        refresh_token = request.COOKIES.get('refresh_token')
         
-    #     serializer = LogoutSerializer(data=request.cookies)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()   
-    #     response = Response()
-    #     response.delete_cookie('access_token')
-    #     response.delete_cookie('refresh_token')
+        if not access_token or not refresh_token:
+            return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = request.user
+        
+        # Blacklist the refresh token
+        try:
+            refresh_token = RefreshToken(refresh_token)
+            refresh_token.blacklist()
+        except Exception as e:
+            self.fail('bad_token')
+        
+        user.username = 'anonymous' + str(user.id)
+        user.email = 'anonymous' + str(user.id) + '@transcendence.com'
+        user.is_active = False
+        user.cover_photo.delete()
+        user.cover_photo = None
+        user.set_unusable_password()
+        if user.is_42:
+            user.is_42 = False
+            UserSocialAuth.objects.filter(user_id=user.id).delete()      
 
-    #  #   user = request.user        
-    #  #   user.save()        
-    #     return response
+        user.save()
+
+        response = Response({'message': 'Account anonimized successfully'})        
+        # Delete the access and refresh token cookies
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+        
+        return response
+
+
+
 
 
 
@@ -206,8 +229,72 @@ def getProfile(request, lookup_value=None):
         'online': isOnline,
         'last_seen': serializer.data['last_seen'],
         'is_active': serializer.data['is_active'],
+        'is_42': serializer.data['is_42'],
     }
     return Response(preparedData)
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getStats(request, lookup_value=None):
+    """
+    Fetch user profile using either user ID or username.
+    """
+    if lookup_value is None:  # Default to the current user if no lookup is provided
+        user = request.user
+    else:
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+
+    serializer = ProfileSerializer(user, many=False)
+    isOnline = user.last_seen > timezone.now() - timezone.timedelta(minutes=5)
+    preparedData = {
+
+'stats': {
+        "Pong": {
+          'currentRank': serializer.data['stat_pong_solo_rank'],
+          'totalMatches': serializer.data['stat_pong_solo_wins_tot'] + serializer.data['stat_pong_solo_loss_tot'],
+          'tournamentWins': serializer.data['stat_pong_solo_tournament_wins'],
+          'wins': serializer.data['stat_pong_solo_wins_tot'],
+          'losses': serializer.data['stat_pong_solo_loss_tot'],
+          'rankProgression': serializer.data['stat_pong_solo_progress'],
+          'pointsWonUnder5Exchanges': serializer.data['stat_pong_solo_wins_tot_min5'],
+          'pointsWonUnder10Exchanges': serializer.data['stat_pong_solo_wins_tot_min10'],
+          'pointsWonOver10Exchanges': serializer.data['stat_pong_solo_wins_tot_max10'],
+          'pointsLostUnder5Exchanges': serializer.data['stat_pong_solo_loss_tot_min5'],
+          'pointsLostUnder10Exchanges': serializer.data['stat_pong_solo_loss_tot_min10'],
+          'pointsLostOver10Exchanges': serializer.data['stat_pong_solo_loss_tot_max10']
+        },
+        "4 Players Pong": {
+          'currentRank': serializer.data['stat_pong_multi_rank'],
+          'totalMatches': serializer.data['stat_pong_multi_wins_tot'] + serializer.data['stat_pong_multi_loss_tot'],
+          'wins': serializer.data['stat_pong_multi_wins_tot'],
+          'losses': serializer.data['stat_pong_multi_loss_tot'],
+          'rankProgression': serializer.data['stat_pong_multi_progress'],
+          'pointsWonUnder5Exchanges': serializer.data['stat_pong_multi_wins_tot_min5'],
+          'pointsWonUnder10Exchanges': serializer.data['stat_pong_multi_wins_tot_min10'],
+          'pointsWonOver10Exchanges': serializer.data['stat_pong_multi_wins_tot_max10'],
+          'pointsLostUnder5Exchanges': serializer.data['stat_pong_multi_loss_tot_min5'],
+          'pointsLostUnder10Exchanges': serializer.data['stat_pong_multi_loss_tot_min10'],
+          'pointsLostOver10Exchanges': serializer.data['stat_pong_multi_loss_tot_max10']
+        },
+        "Tic Tac Toe": {
+          'currentRank': serializer.data['stat_ttt_rank'],
+          'totalMatches': serializer.data['stat_ttt_wins_tot'] + serializer.data['stat_ttt_loss_tot'],          
+          'wins': serializer.data['stat_ttt_wins_tot'],
+          'losses': serializer.data['stat_ttt_loss_tot'],
+          'rankProgression': serializer.data['stat_ttt_progress'],
+          'averageMovesPerWin': serializer.data['stat_ttt_wins_av_movm'],
+          'averageMovesPerLoss': serializer.data['stat_ttt_loss_av_movm']                                                          
+        }
+      }
+
+
+    }
+    return Response(preparedData)
+
+
 
 
 
@@ -227,8 +314,16 @@ def updateProfile(request):
     user = request.user    
     serializer = ProfileUpdateSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
+        if 'cover_photo' in serializer.validated_data:
+            user.cover_photo.delete()  # Delete the old cover photo
         serializer.save()
-        return Response(serializer.data)
+        response = Response()
+        data = {
+            'username': user.username,
+            'email': user.email,
+            'id': user.id,
+        }
+        return Response(data)
     return Response(serializer.errors, status=400)
 
 # @api_view(['PUT', 'PATCH'])
@@ -287,11 +382,15 @@ def social_auth_complete(request):
 
     if jwt_tokens:
         logout(request)  # This removes the session ID cookie
-        response = Response(jwt_tokens)        
+        # response = Response(jwt_tokens)        
+        response = redirect("/profile")  # Redirect URL
         response.delete_cookie('sessionid') # This deletes the session ID cookie
 
         response.set_cookie("access_token", jwt_tokens["access"], httponly=True, secure=True, samesite="Lax")
         response.set_cookie("refresh_token", jwt_tokens["refresh"], httponly=True, secure=True, samesite="Lax")
+
+
+
         return response
     
     return Response({'error': 'Authentication failed'}, status=400)

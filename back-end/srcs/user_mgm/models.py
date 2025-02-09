@@ -5,6 +5,7 @@ from django.contrib.postgres.fields import ArrayField
 class CustomUser(AbstractUser):   
    username = models.CharField(max_length=150, unique=True)
    email = models.EmailField(blank=True)
+   is_42 = models.BooleanField(default=False)
    cover_photo = models.ImageField(upload_to='profile_image', blank=True)
    last_seen = models.DateTimeField(auto_now_add=True)
    theme = models.CharField(max_length=10, default='dark')

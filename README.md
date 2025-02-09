@@ -60,11 +60,14 @@
 - [x] Expand match info pop up
 
 - [-] Make sure that in tournament the player cannot go elsewhere
+<<<<<<< .merge_file_9xpTKH
 
 - [x] New mode, private match
 
 - [x] Add the private match component on tic tac toe
 - [x] !!! Make the tournament matchmaking page to game better !!!
+=======
+>>>>>>> .merge_file_cjtvWX
 
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
@@ -93,6 +96,7 @@
 - [x] Can logout
 - [x] Can connect using 42
 
+<<<<<<< .merge_file_9xpTKH
 - [ ] Call the back for stats
 - [ ] Call the back for history (5 last battles for each "games")
 - [ ] Call the back for friends list (max of 10)
@@ -106,6 +110,9 @@
 
 - [ ] Make each part into container
 
+=======
+        # Question about the back logic
+>>>>>>> .merge_file_cjtvWX
 - [x] Register --> send to the back username, password + avatar (default)
         --> password no problem without having it hashed in the front
 - [x] Login --> send to the back username + password
@@ -139,6 +146,42 @@
                 same for lose point
                         ==> one Bar Charts
 
+<<<<<<< .merge_file_9xpTKH
+=======
+
+- [ ] Play against AI logic (same as remote (private))
+- [ ] Play against another player logic --> 
+- [ ] Play against a friend (private match) logic -- >
+- [ ] Play against guest (local) logic
+   - [ ] Invite logic (for private match)
+- [ ] Tournament logic
+- [ ] Play with 4 players logic (should be similar to another player logic)
+
+
+        ## When I can communicate with the back
+- [ ] Make each part into container
+
+- [ ] Call the back for the game
+- [ ] Matchmaking logic
+- [ ] Tournament logic
+- [x] Games logic with following pages...
+
+- [x] Can register
+- [x] Can login
+- [-] Can logout
+
+- [ ] Call the back for stats
+- [ ] Call the back for history (ten last battles)
+- [ ] Call the back for friends list (max of 10)
+- [ ] Add a component for the chat ?
+
+- [ ] Call the back for account --> PATCH request to modify informations + avatar
+        - [ ] Can modify avatar
+        - [ ] Can modify username
+        - [ ] Can modify password
+        - [ ] Can modify email
+
+>>>>>>> .merge_file_cjtvWX
 - [ ] Pong AI
 
 - [ ] Implement power up

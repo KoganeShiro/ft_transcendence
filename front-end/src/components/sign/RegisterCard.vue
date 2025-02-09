@@ -148,6 +148,7 @@ export default {
         this.$router.push("/login");
       } catch (error) {
         console.error("Registration failed:", error);
+        //make a better error message if the user already exist
         alert("Registration failed. Please try again.");
       } finally {
         this.loading = false;
