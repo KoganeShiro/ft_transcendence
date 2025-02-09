@@ -75,31 +75,32 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = CustomUser        
         exclude = ('password',)
     
-    def update(self, instance, validated_data):
-        """
-        Allow partial updates by checking for each field individually.
-        """
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+    # def update(self, instance, validated_data):
+    #     """
+    #     Allow partial updates by checking for each field individually.
+    #     """
+    #     for attr, value in validated_data.items():
+    #         setattr(instance, attr, value)
         
-        # Calculate online status based on last_seen
-        current_time = timezone.now()
-        last_seen = instance.last_seen
-        time_difference = current_time - last_seen
-        if time_difference.total_seconds() < 600:
-            instance.online = True
-        else:
-            instance.online = False
+    #     # Calculate online status based on last_seen
+    #     current_time = timezone.now()
+    #     last_seen = instance.last_seen
+    #     time_difference = current_time - last_seen
+    #     if time_difference.total_seconds() < 600:
+    #         instance.online = True
+    #     else:
+    #         instance.online = False
         
-        instance.save()
-        return instance
+    #     instance.save()
+    #     return instance
 
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):    
 
     class Meta:
-        model = CustomUser        
+        model = CustomUser
+        fields = ('username', 'cover_photo', 'password')        
        # exclude = ('password',)
     
     def update(self, instance, validated_data):
@@ -108,6 +109,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         """
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])        
         instance.save()
         return instance
 
