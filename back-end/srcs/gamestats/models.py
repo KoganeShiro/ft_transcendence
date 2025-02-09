@@ -13,6 +13,7 @@ class PongSolo(models.Model):
     rank_player1_change = models.IntegerField(default=0)  # Player1's rank
     rank_player2_change = models.IntegerField(default=0)  # Player2's rank
     timestamp = models.DateTimeField(auto_now_add=True)  # Automatically set when created
+    
 
     def save(self, *args, **kwargs):
         if not self.pk:  # Only set defaults for new instances

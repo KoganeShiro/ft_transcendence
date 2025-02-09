@@ -16,9 +16,10 @@ class GameSerializer(serializers.ModelSerializer):
     winner = serializers.CharField(source='winner.username', read_only=True)
     loser = serializers.CharField(source='loser.username', read_only=True)
 
+
     class Meta:
         model = PongSolo
-        fields = ['id', 'player1', 'player2', 'winner', 'loser', 'timestamp']
+        fields = ['player1', 'player2', 'winner', 'loser', 'player1_score', 'player2_score', 'rank_player1_begin', 'rank_player2_begin', 'rank_player1_change', 'rank_player2_change', 'timestamp']
 
 class GameWriteSerializer(serializers.ModelSerializer):
     class Meta:
