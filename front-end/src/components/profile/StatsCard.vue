@@ -3,27 +3,27 @@
       <h2>{{ gameType }}</h2>
       <div class="stats-list">
         <div class="stat-item">
-          <strong>Current Rank:</strong> {{ stats.currentRank || ' N/A' }}
+          <strong>{{ $t("current-rank") }}</strong> {{ stats.currentRank || ' N/A' }}
         </div>
         <div class="stat-item">
-          <strong>Total Matches:</strong> {{ stats.totalMatches || " N/A" }}
+          <strong>{{ $t("total-game") }}</strong> {{ stats.totalMatches || " N/A" }}
         </div>
         <div class="stat-item">
-          <strong>Tournament Wins: </strong> {{ stats.tournamentWins || " N/A" }}
+          <strong>{{ $t("tournament-won") }}</strong> {{ stats.tournamentWins || " N/A" }}
         </div>
       </div>
       
       <div class="charts-container">
         <div class="chart">
-          <h3>Rank Progression</h3>
+          <h3>{{ $t("rank-progress") }}</h3>
           <Line :data="rankProgressionData" :options="chartOptions" />
         </div>
         <div class="chart">
-          <h3>Win/Loss Ratio</h3>
+          <h3>{{ $t("win/loss-ratio") }}</h3>
           <Doughnut :data="winLossData" :options="chartOptions" />
         </div>
         <div v-if="gameType !== 'Tic Tac Toe'" class="chart">
-          <h3>Point Exchange Statistics</h3>
+          <h3>{{ $t("point-exchange") }}</h3>
           <Bar :data="pointExchangeData" :options="chartOptions" />
         </div>
       </div>
@@ -64,7 +64,7 @@
         return {
           labels: progression.map((_, index) => `Match ${index + 1}`),
           datasets: [{
-            label: 'Rank Points',
+            label: 'rank-points',
             data: progression,
             borderColor: '#36A2EB',
             tension: 0.1,
@@ -178,6 +178,7 @@
     border-radius: 4px;
     position: relative;
     height: 300px;
+    margin-bottom: 50px;
   }
   </style>
   

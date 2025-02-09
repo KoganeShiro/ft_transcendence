@@ -152,6 +152,7 @@ export default {
           console.error("Error saving profile:", error);
           alert(this.$t("error_saving_profile"));
           this.loading = false;
+          this.initAccount();
       });
       this.initAccount();
     },

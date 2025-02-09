@@ -1,5 +1,5 @@
 # sudo docker build . --tag 42nginx:latest
-
+include .env
 # Project variables
 PROJECT_NAME = ft_transcendence
 DOCKER_COMPOSE = docker-compose
@@ -30,7 +30,7 @@ build:
 .PHONY: up
 up: 
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
-	@echo "https://localhost:1443"
+	@echo "go to: https://$(HOSTNAME):$(PORT) 🤩"
 
 # Stop and remove services
 .PHONY: down

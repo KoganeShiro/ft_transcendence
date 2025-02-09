@@ -14,6 +14,8 @@
     </div>
   </div>
 </template>
+
+
 <!-- 
 <script>
 import MatchDetails from '@/components/profile/MatchDetails.vue';

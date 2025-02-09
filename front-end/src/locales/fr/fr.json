@@ -72,6 +72,26 @@
     "join-game": "Rejoindre un match",
     "commands": "Commandes",
     "move-up": "Bouger vers le haut: ",
-    "move-down": "Bouger vers le bas: "
+    "move-down": "Bouger vers le bas: ",
+    "current-rank": "Classement actuel: ",
+    "total-game": "Nombre total de parties: ",
+    "tournament-won": "Tournois gagnés: ",
+    "rank-progress": "Progression dans le classement: ",
+    "win/loss-ratio": "Ratio de victoire/défaite",
+    "point-exchange": "Statistiques des Échange de points",
+    "game": "Match",
+    "exchange": "Échange",
+    "rank-points": "Points de classement",
+    "click-to-modify": "Cliquez pour modifier",
+    "score": "Score",
+    "modify": "Modifier",
+    "opponent-name": "Nom de l'adversaire",
+    "opponent-rank": "Classement de l'adversaire",
+    "your-rank": "Votre classement",
+    "game-invitation": "Invitation à un match",
+    "game-invitation-text": " vous invite à jouer à un match",
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "tourn-message": "Un nouveau tournoi a été créé !"
   }
   

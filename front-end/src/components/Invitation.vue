@@ -2,11 +2,11 @@
   <teleport to="body">
     <div v-if="showPopup" class="invitation-overlay">
       <div class="invitation-popup">
-        <h3>Match Invitation</h3>
-        <p>{{ inviterName }} has challenged you to a match!</p>
+        <h3>{{ $t("game-invitation") }}</h3>
+        <p>{{ inviterName }} {{ $t("game-invitation-text") }}</p>
         <div class="button-group">
-          <button @click="accept" class="accept-btn">Accept</button>
-          <button @click="decline" class="decline-btn">Decline</button>
+          <button @click="accept" class="accept-btn">{{ $t("accept") }}</button>
+          <button @click="decline" class="decline-btn">{{ $t("decline") }}</button>
         </div>
       </div>
     </div>

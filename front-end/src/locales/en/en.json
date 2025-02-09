@@ -72,6 +72,25 @@
     "join-game": "Join Game",
     "commands": "Commands",
     "move-up": "Move Up: ",
-    "move-down": "Move Down: "
+    "move-down": "Move Down: ",
+    "current-rank": "Current Rank: ",
+    "total-game": "Total Game: ",
+    "tournament-won": "Tournament Won: ",
+    "rank-progress": "Rank Progress: ",
+    "win/loss-ratio": "Win/Loss Ratio",
+    "point-exchange": "Point Exchange Stats",
+    "game": "Game",
+    "exchange": "Exchange",
+    "click-to-modify": "Click to modify",
+    "score": "Score",
+    "opponent-name": "Opponent Name",
+    "opponent-rank": "Opponent Rank",
+    "your-rank": "Your Rank",
+    "modify": "Modify",
+    "game-invitation": "Game Invitation",
+    "game-invitation-text": " challenge you to a game",
+    "accept": "Accept",
+    "decline": "Decline",
+    "tourn-message": "A new tournament has been created!"
 }
   

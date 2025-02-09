@@ -62,16 +62,14 @@
         this.activeTab = tab;
       },
       async getProfile() {
-        try {
-          const username = this.route.params.username;
-          const response = await API.get('/api/profile/' + username);
-          this.username = response.data.username;
-          this.cover_photo = response.data.cover_photo;
-  
-        } catch (error) {
-          console.error("Error fetching username:", error);
-        }
-      },
+      try {
+        const response = await axios.get('/api/profile/' + this.route.params.username);
+        this.username = response.data.username;
+        this.cover_photo = response.data.cover_photo;
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    },
     },
   };
   </script>

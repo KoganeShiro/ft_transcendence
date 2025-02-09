@@ -8,31 +8,31 @@
       <transition name="slide">
         <div v-if="isOpen" class="details">
           <div class="detail-item">
-            <span class="label">Match ID:</span>
+            <span class="label">{{ $t("game") }} id</span>
             {{ match.id }}
           </div>
-          <div class="detail-item">
+          <!-- <div class="detail-item">
             <span class="label">Mode :</span>
             {{ match.mode }}
-          </div>
+          </div> -->
           <div class="detail-item">
-            <span class="label">Tournament :</span>
+            <span class="label"> {{ $t("tournament") }} :</span>
             {{ match.tournamentRank }}
           </div>
           <div class="detail-item">
-            <span class="label">Score:</span>
+            <span class="label">{{ $t("score") }} : </span>
             {{ match.score }}
           </div>
           <div class="detail-item">
-            <span class="label">Opponent Name:</span>
+            <span class="label">{{ $t("opponent-name") }} :</span>
             {{ match.opponentName }}
           </div>
           <div class="detail-item">
-            <span class="label">Opponent Rank:</span>
+            <span class="label">{{ $t("opponent-rank") }} :</span>
             {{ match.opponentRank }}
           </div>
           <div class="detail-item">
-            <span class="label">Your Rank:</span>
+            <span class="label">{{ $t("your-rank") }} :</span>
             {{ match.yourRank }}
           </div>
         </div>

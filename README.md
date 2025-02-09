@@ -115,27 +115,30 @@
         - [x] Can modify avatar
         - [x] Can modify username
         - [x] Can modify password
+        - [x] Can delete account
 
 - [x] Logic of the friend profile, make another page ??
 
 
 
 - [-] Make sure that in tournament the player cannot go elsewhere
+- [ ] Are you sure you want to leave the tournament component
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 - [ ] Make the pong game responsive ==> may start searching for how to make the AI
 
-- [ ] Are you sure you want to leave the tournament component
-
 - [ ] Make the Tic Tac Toe AI
 
-- [ ] Play against AI logic (same as remote (private))
+- [ ] Play against guest (local) logic
+- [ ] Play against AI logic (on local)
+
 - [ ] Play against another player logic --> 
 - [ ] Play against a friend (private match) logic -- >
-- [ ] Play against guest (local) logic
    - [x] Invite logic (for private match)
+
 - [ ] Tournament logic
+
 - [ ] Play with 4 players logic (should be similar to another player logic)
 
 - [ ] Call the back for the game
@@ -146,15 +149,6 @@
 - [ ] Call the back for friends list (max of 10)
 
 - [ ] Make each part into container
-
-- [ ] Play against AI logic (same as remote (private))
-- [ ] Play against another player logic --> 
-- [ ] Play against a friend (private match) logic -- >
-- [ ] Play against guest (local) logic
-   - [ ] Invite logic (for private match)
-- [ ] Tournament logic
-- [ ] Play with 4 players logic (should be similar to another player logic)
-
 
 - [ ] Pong AI
 
@@ -207,12 +201,11 @@ git clone git@github.com:KoganeShiro/ft_transcendence.git
 cd ft_transcendence
 ```
 
-or the link of the github page ??
-
 ## Usage
-If you don't have make or docker and docker composed installed, you should in order to compile and run this project
+If you don't have make or docker and docker-compose installed, you should in order to compile and run this project
 
 If you did, then you can make and follow the instruction !
+
 ```
 make build
 make up

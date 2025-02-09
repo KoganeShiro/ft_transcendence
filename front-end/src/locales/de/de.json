@@ -72,6 +72,25 @@
     "join-game": "Spiel beitreten",
     "commands": "Befehle",
     "move-up": "Nach oben bewegen: ",
-    "move-down": "Nach unten bewegen: "
+    "move-down": "Nach unten bewegen: ",
+    "current-rank": "Aktueller Rang: ",
+    "total-game": "Gesamtspiel: ",
+    "tournament-won": "Gewonnene Turniere: ",
+    "rank-progress": "Rangfortschritt: ",
+    "win/loss-ratio": "Gewinn/Verlust-Verhältnis",
+    "point-exchange": "Punktaustauschstatistik",
+    "game": "Spiel",
+    "exchange": "Austausch",
+    "click-to-modify": "Klicken Sie hier, um zu ändern",
+    "score": "Punktzahl",
+    "opponent-name": "Name des Gegners",
+    "opponent-rank": "Rang des Gegners",
+    "your-rank": "Ihr Rang",
+    "modify": "Ändern",
+    "game-invitation": "Spiel Einladung",
+    "game-invitation-text": " lädt Sie zu einem Spiel ein",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "tourn-message": "Ein neues Turnier wurde erstellt!"
   }
   
