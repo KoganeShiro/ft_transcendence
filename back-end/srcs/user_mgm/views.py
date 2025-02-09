@@ -150,25 +150,48 @@ class Logout(APIView):
         
         return response
 
+from social_django.models import UserSocialAuth
 
-    # def get(self, request):     
-    #     access_token = request.COOKIES.get('access_token')
-    #     refresh_token = request.COOKIES.get('refresh_token')
-    #     if not access_token:
-    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
-    #     if not refresh_token:
-    #         return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+
+class deleteAccount(APIView):    
+    @permission_classes([IsAuthenticated])
+    def get(self, request):
+        access_token = request.COOKIES.get('access_token')
+        refresh_token = request.COOKIES.get('refresh_token')
         
-    #     serializer = LogoutSerializer(data=request.cookies)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()   
-    #     response = Response()
-    #     response.delete_cookie('access_token')
-    #     response.delete_cookie('refresh_token')
+        if not access_token or not refresh_token:
+            return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = request.user
+        
+        # Blacklist the refresh token
+        try:
+            refresh_token = RefreshToken(refresh_token)
+            refresh_token.blacklist()
+        except Exception as e:
+            self.fail('bad_token')
+        
+        user.username = 'anonymous' + str(user.id)
+        user.email = 'anonymous' + str(user.id) + '@transcendence.com'
+        user.is_active = False
+        user.cover_photo.delete()
+        user.cover_photo = None
+        user.set_unusable_password()
+        if user.is_42:
+            user.is_42 = False
+            UserSocialAuth.objects.filter(user_id=user.id).delete()      
 
-    #  #   user = request.user        
-    #  #   user.save()        
-    #     return response
+        user.save()
+
+        response = Response({'message': 'Account anonimized successfully'})        
+        # Delete the access and refresh token cookies
+        response.delete_cookie('access_token')
+        response.delete_cookie('refresh_token')
+        
+        return response
+
+
+
 
 
 
@@ -291,8 +314,16 @@ def updateProfile(request):
     user = request.user    
     serializer = ProfileUpdateSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
+        if 'cover_photo' in serializer.validated_data:
+            user.cover_photo.delete()  # Delete the old cover photo
         serializer.save()
-        return Response(serializer.data)
+        response = Response()
+        data = {
+            'username': user.username,
+            'email': user.email,
+            'id': user.id,
+        }
+        return Response(data)
     return Response(serializer.errors, status=400)
 
 # @api_view(['PUT', 'PATCH'])
