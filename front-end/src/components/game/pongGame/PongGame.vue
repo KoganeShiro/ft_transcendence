@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// make a composition api
 export default {
   data() {
     return {
@@ -34,18 +33,14 @@ export default {
   mounted() {
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
-    //add event listener for touch (mobile)
     this.startGameLoop();
+    
+    // Set a timeout to end the game after a certain period
     setTimeout(() => {
-      const result = { winner: "Player 1" }; // Replace with actual game logic
-      this.$emit("match-ended", result);
-    }, 15000);
+      this.endGame();
+    }, 15000); // Adjust the duration of the game as needed
   },
   methods: {
-    //mettre en "public" les fonctions
-    getInstance() {
-      return this;
-    },
     handleKeyDown(event) {
       if (event.key === 'ArrowUp') this.keysPressed.up_right = true;
       if (event.key === 'ArrowDown') this.keysPressed.down_right = true;
@@ -70,17 +65,19 @@ export default {
       this.gameLoop = requestAnimationFrame(loop);
     },
     updateGame(deltaTime) {
-      // Déplacement des paddles
       const paddleSpeed = 0.01;
       if (this.keysPressed.up_left) this.gameState.player1_y = Math.max(this.gameState.player1_y - paddleSpeed, 0);
       if (this.keysPressed.down_left) this.gameState.player1_y = Math.min(this.gameState.player1_y + paddleSpeed, 1);
       if (this.keysPressed.up_right) this.gameState.player2_y = Math.max(this.gameState.player2_y - paddleSpeed, 0);
-      if (this.keysPressed.down_right) this.gameState.player2_y = Math.min(this.gameState.player2_y + paddleSpeed, 1);      // Déplacement de la balle
+      if (this.keysPressed.down_right) this.gameState.player2_y = Math.min(this.gameState.player2_y + paddleSpeed, 1);
+
       this.gameState.ball_x += this.gameState.ball_velocity_x * deltaTime * this.ballSpeedFactor;
-      this.gameState.ball_y += this.gameState.ball_velocity_y * deltaTime * this.ballSpeedFactor;      // Gestion des collisions avec les murs
+      this.gameState.ball_y += this.gameState.ball_velocity_y * deltaTime * this.ballSpeedFactor;
+
       if (this.gameState.ball_y <= 0 || this.gameState.ball_y >= 1) {
         this.gameState.ball_velocity_y *= -1;
-      }      // Collision avec les paddles
+      }
+
       this.checkPaddleCollision();
       this.checkScore();
     },
@@ -101,11 +98,11 @@ export default {
     checkScore() {
       if (this.gameState.ball_x <= 0) {
         this.gameState.score2++;
-        this.resetBall(1); // La balle part à droite
+        this.resetBall(1);
       }
       if (this.gameState.ball_x >= 1) {
         this.gameState.score1++;
-        this.resetBall(-1); // La balle part à gauche
+        this.resetBall(-1);
       }
     },
     resetBall(direction) {
@@ -121,15 +118,22 @@ export default {
       const canvas = this.$refs.pongCanvas;
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'white';      // Dessiner la balle
+      ctx.fillStyle = 'white';
+      
       ctx.beginPath();
       ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, 7, 0, Math.PI * 2);
-      ctx.fill();      // Dessiner les paddles
+      ctx.fill();
+      
       ctx.fillRect(20, this.gameState.player1_y * canvas.height - 30, 10, 60);
-      ctx.fillRect(canvas.width - 30, this.gameState.player2_y * canvas.height - 30, 10, 60);      // Affichage des scores
+      ctx.fillRect(canvas.width - 30, this.gameState.player2_y * canvas.height - 30, 10, 60);
+      
       ctx.font = '30px Arial';
       ctx.fillText(this.gameState.score1, canvas.width / 4, 30);
       ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, 30);
+    },
+    endGame() {
+      const winner = this.gameState.score1 > this.gameState.score2 ? "Player 1" : "Player 2";
+      this.$emit("gameEnded", winner);
     }
   },
   beforeUnmount() {
@@ -151,5 +155,4 @@ export default {
   border-radius: 8px;
   background-color: black;
 }
-
 </style>

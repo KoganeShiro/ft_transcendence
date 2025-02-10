@@ -43,81 +43,35 @@
   </div>
 </template>
 
+
 <script>
-import { useRouter } from "vue-router";
-import { ref } from "vue";
-import Card from "@/components/atoms/Card.vue";
-import TextField from "@/components/atoms/TextField.vue";
-import PlayerCount from "@/components/game/PlayerCount.vue";
-import ButtonAtom from "@/components/atoms/Button.vue";
-import API from "@/api.js";
+import Card from '@/components/atoms/Card.vue';
+import TextField from '@/components/atoms/TextField.vue';
+import PlayerCount from '@/components/game/PlayerCount.vue';
+import ButtonAtom from '@/components/atoms/Button.vue';
 
 export default {
-  name: "CreateTournament",
-  components: {
-    Card,
-    TextField,
-    PlayerCount,
-    ButtonAtom,
+  components: { Card, TextField, PlayerCount, ButtonAtom },
+  data() {
+    return {
+      playerCount: 4, // Default player count
+      tournamentCode: ''
+    };
   },
   methods: {
     createTournament() {
-      const tournamentData = {
-        playerCount: this.playerCount,
-        isCreator: true,
-        tournamentCode: "T" + Math.floor(Math.random() * 10000),
-      };
-      this.$emit('tournament-created', tournamentData);
+      // Logic to create a tournament with the specified player count
+      this.$emit('tournamentCreated', { playerCount: this.playerCount }); // Emit event to parent component
     },
-    
     joinTournament() {
-      if (!this.tournamentCode) {
-        alert("Please enter a tournament code.");
-        return;
-      }
-      const tournamentData = {
-        tournamentCode: this.tournamentCode,
-        isCreator: false,
-      };
-      this.$emit('tournament-joined', tournamentData);
+      // Logic to join a tournament with the specified tournament code
+      this.$emit('tournamentJoined', this.tournamentCode); // Emit event to parent component
     }
   }
-    // setup() {
-    // const socket = inject('socket');
-    // const playerCount = ref(4);
-    // const tournamentCode = ref('');
-
-    // const createTournament = () => {
-    //   socket.value.send(JSON.stringify({
-    //     type: 'create_tournament',
-    //     playerCount: playerCount.value
-    //   }));
-    // };
-
-    // const joinTournament = () => {
-    //   if (!tournamentCode.value) {
-    //     alert('Please enter a tournament code.');
-    //     return;
-    //   }
-    //   socket.value.send(JSON.stringify({
-    //     type: 'join_tournament',
-    //     tournamentCode: tournamentCode.value
-    //   }));
-    // };
-
-    // return {
-    //   router,
-    //   playerCount,
-    //   tournamentCode,
-    //   createTournament,
-    //   joinTournament,
-    // };
-  // },
 };
 </script>
 
-  
-  <style scoped>
+<style scoped>
   .container {
     display: flex;
     flex-direction: column;

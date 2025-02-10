@@ -9,7 +9,7 @@
           :showPseudo="true" 
           pseudoPosition="bottom" 
         />
-        <router-link class="return-link" to="/">{{ $t("return-home") }}</router-link>
+        <router-link class="return-link" to="/game-choice">{{ $t("return-home") }}</router-link>
       </div>
     </div>
   </template>

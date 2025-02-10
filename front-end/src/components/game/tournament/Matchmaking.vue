@@ -1,52 +1,58 @@
-<!-- MatchItem.vue -->
 <template>
-  <div class="match">
-    <TextBox :modelValue="match.player1" :modifiable="false" class="field" />
-    <span class="vs">vs</span>
-    <TextBox :modelValue="match.player2" :modifiable="false" class="field" />
-    <div v-if="!match.completed" class="timer">
-      <!-- Using a progress bar or animated countdown can be considered -->
-      {{ match.timeLeft }} sec
+  <div>
+    <h2>{{ $t("matchmaking") }}</h2>
+    <div class="matches">
+      <MatchItem
+        v-for="match in matches"
+        :key="match.id"
+        :match="match"
+      />
     </div>
-    <div v-else class="status">
-      Completed
-    </div>
+    <div v-if="timer > 0">{{ timer }} {{ $t("seconds-until-match-starts") }}</div>
   </div>
 </template>
 
 <script>
-import TextBox from "@/components/atoms/ModifyInformations.vue";
+import MatchItem from '@/components/game/tournament/Match.vue';
+
 export default {
-  name: "MatchItem",
-  components: { TextBox },
-  props: {
-    match: { type: Object, required: true }
+  components: { MatchItem },
+  props: ['matches'],
+  data() {
+    return {
+      timer: 5
+    };
+  },
+  mounted() {
+    this.startTimer();
+  },
+  methods: {
+    startTimer() {
+      const interval = setInterval(() => {
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          clearInterval(interval);
+          this.$emit('matchStart');
+        }
+      }, 1000);
+    }
   }
 };
 </script>
 
 <style scoped>
-.match {
+.matches {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
   gap: 10px;
-  padding: 15px;
-  border-radius: 8px;
-  background: rgba(99, 99, 99, 0.1);
 }
-.vs {
-  font-weight: bold;
+
+.timer {
+  margin-top: 55px;
   font-size: 1.2em;
-  color: var(--text-color);
-}
-.timer, .status {
   font-weight: bold;
-  font-size: 1rem;
 }
-.field {
-  margin-bottom: 30px;
-}
+
 </style>

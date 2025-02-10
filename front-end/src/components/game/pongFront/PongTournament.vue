@@ -1,313 +1,114 @@
 <template>
-  <div class="tournament">
-    <component
-      :is="currentComponent"
-      :tournamentId="tournamentData.tournamentCode"
-      :isCreator="tournamentData.isCreator"
-      :playerCount="tournamentData.playerCount"
-      :playerNames="playerNames"
-      :matchData="matchData"
-      :winner="winner"
-      @tournament-created="handleTournamentCreated"
-      @tournament-joined="handleTournamentJoined"
-      @players-ready="handlePlayersReady"
-      @match-ready="handleMatchReady"
-      @match-ended="handleMatchEnded"
-      @quit-tournament="handleQuitTournament"
-    />
+  <div>
+    <CreateTournament v-if="currentStep === 'create'" @tournamentCreated="onTournamentCreated" @tournamentJoined="onTournamentJoined" />
+    <WaitingPlayers v-if="currentStep === 'waiting'" :players="players" :isCreator="isCreator" @startTournament="onStartTournament" />
+    <Matchmaking v-if="currentStep === 'matchmaking'" :matches="currentMatches" @matchStart="onMatchStart" />
+    <PongGame v-if="currentStep === 'game'" @gameEnded="onGameEnded" />
+    <TournamentWinner v-if="currentStep === 'winner'" :winner="winner" @goBack="onGoBack" />
+  </div>
 
-
-    <!-- Quit confirmation popup -->
-    <ConfirmQuitTournament 
+  <!-- Quit confirmation popup -->
+  <ConfirmQuitTournament 
       v-if="showQuitConfirm"
       @confirm="handleQuitConfirm" 
       @cancel="handleQuitCancel" 
     />
-  </div>
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import CreateTournament from "@/components/game/tournament/CreateTournament.vue";
-import WaitingPlayers from "@/views/game/waiting_players.vue";
-import Matchmaking from "@/components/game/tournament/Matchmaking.vue";
-import PongGame from "@/components/game/pongGame/PongGame.vue";
+import CreateTournament from '@/components/game/tournament/CreateTournament.vue';
+import WaitingPlayers from '@/components/game/tournament/WaitingPlayers.vue';
+import Matchmaking from '@/components/game/tournament/Matchmaking.vue';
+import PongGame from '@/components/game/tournament/Game.vue';
+import TournamentWinner from '@/components/game/tournament/Winner.vue'; // Ensure this path is correct
 import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
 
 export default {
-  name: "TournamentPage",
-  components: {
-    CreateTournament,
-    WaitingPlayers,
-    Matchmaking,
-    PongGame,
-    ConfirmQuitTournament,
+  components: { CreateTournament, WaitingPlayers, Matchmaking, PongGame, TournamentWinner, ConfirmQuitTournament },
+  props: {
+    mode: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
-      currentComponent: 'CreateTournament',
-      tournamentData: {
-        tournamentCode: '',
-        isCreator: false,
-        playerCount: 4
-      },
-      playerNames: [],
-      matchData: [],
-      winner: null,
-      showQuitConfirm: false
+      currentStep: 'create', // Ensure this is defined and initialized
+      tournamentId: '',
+      players: [],
+      matches: [],
+      isCreator: false,
+      winner: '',
+      currentMatchIndex: 0,
+      matchResults: [],
+      currentMatches: []
     };
   },
   methods: {
-    handleTournamentCreated(data) {
-      this.tournamentData = { ...data, isCreator: true };
-      this.currentComponent = 'WaitingPlayers';
+    onTournamentCreated(id) {
+      this.tournamentId = id;
+      this.isCreator = true;
+      this.currentStep = 'waiting';
+      // Add logic to fetch players and update `this.players`
     },
-    handleTournamentJoined(data) {
-      this.tournamentData = { ...data, isCreator: false };
-      this.currentComponent = 'WaitingPlayers';
+    onTournamentJoined(id) {
+      this.tournamentId = id;
+      this.currentStep = 'waiting';
+      // Add logic to fetch players and update `this.players`
     },
-    handlePlayersReady(players) {
-      this.playerNames = players;
-      this.currentComponent = 'Matchmaking';
+    onStartTournament() {
+      this.currentStep = 'matchmaking';
+      this.createInitialMatches();
     },
-    handleMatchReady() {
-      this.currentComponent = 'PongGame';
+    createInitialMatches() {
+      // Assuming players are in order: player1, player2, player3, player4
+      this.matches = [
+        { id: 1, player1: this.players[0], player2: this.players[1], completed: false, timeLeft: 5 },
+        { id: 2, player1: this.players[2], player2: this.players[3], completed: false, timeLeft: 5 }
+      ];
+      this.currentMatches = this.matches.slice(0, 2);
     },
-    handleMatchEnded(result) {
-      this.matchData.push(result);
-      if (this.tournamentIsOver()) {
-        this.winner = this.determineWinner();
-        this.currentComponent = 'Matchmaking'; // To display final results
+    onMatchStart() {
+      this.currentStep = 'game';
+    },
+    onGameEnded(winner) {
+      // Determine next match or winner
+      const match = this.currentMatches[this.currentMatchIndex];
+      match.winner = winner;
+      match.completed = true;
+
+      this.matchResults.push(winner);
+
+      // Move to next match
+      this.currentMatchIndex++;
+      console.log(this.currentMatchIndex);
+
+      if (this.currentMatchIndex === 2) {
+        // Create final match
+        this.currentMatches = [
+          { id: 3, player1: this.matchResults[0], player2: this.matchResults[1], completed: false, timeLeft: 5 }
+        ];
+        this.currentMatchIndex = 0;
+        this.currentStep = 'matchmaking';
+      } else if (this.currentMatchIndex === 1 && this.currentMatches.length === 1) {
+        // Tournament winner
+        this.winner = this.matchResults[0];
+        this.currentStep = 'winner';
       } else {
-        this.currentComponent = 'Matchmaking'; // For next round
+        this.currentStep = 'matchmaking';
       }
     },
-    handleQuitTournament() {
-      this.showQuitConfirm = true;
-    },
-    tournamentIsOver() {
-      // Logic to determine if the tournament is over
-    },
-    determineWinner() {
-      // Logic to determine the tournament winner
+    onGoBack() {
+      this.currentStep = 'create';
+      this.tournamentId = '';
+      this.players = [];
+      this.matches = [];
+      this.isCreator = false;
+      this.winner = '';
+      this.currentMatchIndex = 0;
+      this.matchResults = [];
+      this.currentMatches = [];
     }
-  },
-
-  setup() {
-    const phase = ref('create');
-    const tournamentData = ref({});
-    const showQuitConfirm = ref(false);
-    const pendingNavigation = ref(null);
-    let timer = null;
-
-    const currentComponent = computed(() => {
-      switch (phase.value) {
-        case "create":
-          return "CreateTournament";
-        case "waiting":
-          return "WaitingPlayers";
-        case "matchmaking":
-          return "Matchmaking";
-        case "game":
-          return "PongGame";
-        default:
-          return "CreateTournament";
-      }
-    });
-
-    const handleTournamentCreated = (data) => {
-      console.log("Tournament created:", data);
-      tournamentData.value = data;
-      startTournament();
-    };
-
-    const startTournament = () => {
-      phase.value = 'waiting';
-      timer = setTimeout(() => {
-        phase.value = 'matchmaking';
-        timer = setTimeout(() => {
-          phase.value = 'game';
-          timer = setTimeout(() => {
-            phase.value = 'matchmaking';
-            timer = setTimeout(() => {
-              phase.value = 'game';
-              timer = setTimeout(() => {
-                phase.value = 'create';
-                console.log("Tournament ended");
-              }, 15000); // Game 2 duration: 15 seconds
-            }, 5000); // Matchmaking 2 duration: 5 seconds
-          }, 15000); // Game 1 duration: 15 seconds
-        }, 5000); // Matchmaking 1 duration: 5 seconds
-      }, 10000); // Waiting players duration: 10 seconds
-    };
-
-    const attemptNavigation = (targetRoute) => {
-      pendingNavigation.value = targetRoute;
-      showQuitConfirm.value = true;
-    };
-
-    const handleQuitConfirm = () => {
-      if (pendingNavigation.value) {
-        // Implement router push here
-        console.log("Navigating to:", pendingNavigation.value);
-      }
-      pendingNavigation.value = null;
-      showQuitConfirm.value = false;
-    };
-
-    const handleQuitCancel = () => {
-      pendingNavigation.value = null;
-      showQuitConfirm.value = false;
-    };
-
-    onMounted(() => {
-      // Any setup code if needed
-    });
-
-    onUnmounted(() => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    });
-
-    return {
-      phase,
-      currentComponent,
-      tournamentData,
-      showQuitConfirm,
-      handleTournamentCreated,
-      attemptNavigation,
-      handleQuitConfirm,
-      handleQuitCancel
-    };
   }
 };
 </script>
-
-
-
-<!-- 
-<script>
-import CreateTournament from "@/components/game/tournament/CreateTournament.vue";
-import WaitingPlayers from "@/views/game/waiting_players.vue";
-import Matchmaking from "@/components/game/tournament/Matchmaking.vue";
-import PongGame from "@/components/game/pongGame/PongGame.vue";
-import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
-
-export default {
-  name: "TournamentPage",
-  components: {
-    CreateTournament,
-    WaitingPlayers,
-    Matchmaking,
-    PongGame,
-    ConfirmQuitTournament,
-  },
-  data() {
-    return {
-      phase: "create", // phases: 'create', 'waiting', 'matchmaking', 'game'
-      tournamentData: {},
-      showQuitConfirm: false,
-      pendingNavigation: null,
-    };
-  },
-  // setup() {
-  //   const socket = ref(null);
-  //   const phase = ref('create');
-
-  //   onMounted(() => {
-  //     socket.value = new WebSocket('ws://your-backend-url');
-      
-  //     socket.value.onmessage = (event) => {
-  //       const data = JSON.parse(event.data);
-  //       handleServerMessage(data);
-  //     };
-  //   });
-
-  //   onUnmounted(() => {
-  //     if (socket.value) {
-  //       socket.value.close();
-  //     }
-  //   });
-
-  //   const handleServerMessage = (data) => {
-  //     switch (data.type) {
-  //       case 'tournament_created':
-  //         phase.value = 'waiting';
-  //         break;
-  //       case 'players_ready':
-  //         phase.value = 'matchmaking';
-  //         break;
-  //       case 'match_ready':
-  //         phase.value = 'game';
-  //         break;
-  //       case 'match_ended':
-  //         phase.value = 'matchmaking';
-  //         break;
-  //     }
-  //   };
-
-  //   return { phase };
-  // },
-  computed: {
-    currentComponent() {
-      switch (this.phase) {
-        case "create":
-          return "CreateTournament";
-        case "waiting":
-          return "WaitingPlayers";
-        case "matchmaking":
-          return "Matchmaking";
-        case "game":
-          return "PongGame";
-        default:
-          return "CreateTournament";
-      }
-    },
-  },
-  methods: {
-    handleTournamentCreated(data) {
-      console.log("Tournament created:", data);
-      this.tournamentData = data;
-      this.phase = "waiting";
-    },
-    handlePlayersReady() {
-      console.log("All players are ready");
-      this.phase = "matchmaking";
-    },
-    // When Matchmaking is done (after 5s), transition to the game phase.
-    handleMatchReady() {
-      console.log("Matchmaking complete. Starting Pong game.");
-      this.phase = "game";
-    },
-    // When the Pong game ends (after 15s or game result), handle the match result.
-    handleMatchEnded(result) {
-      console.log("Match ended with result:", result);
-      // Here you could process the result, update rounds, etc.
-      // Then transition back to matchmaking for the next round.
-      this.phase = "matchmaking";
-    },
-    attemptNavigation(targetRoute) {
-      this.pendingNavigation = targetRoute;
-      this.showQuitConfirm = true;
-    },
-    handleQuitConfirm() {
-      if (this.pendingNavigation) {
-        this.$router.push(this.pendingNavigation);
-      }
-      this.pendingNavigation = null;
-      this.showQuitConfirm = false;
-    },
-    handleQuitCancel() {
-      this.pendingNavigation = null;
-      this.showQuitConfirm = false;
-    },
-  },
-};
-</script> -->
-
-<style scoped>
-.tournament {
-  text-align: center;
-}
-</style>

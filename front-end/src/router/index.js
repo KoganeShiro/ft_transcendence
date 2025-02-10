@@ -22,9 +22,8 @@ import TicModeSelection from '../views/game/tic_mode_selection.vue';
 import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
 import Tournament from '@/components/game/pongFront/PongTournament.vue';
-import Matchmaking from '../views/game/matchmaking.vue';
+// import Matchmaking from '../views/game/matchmaking.vue';
 import Invitation from '../components/Invitation.vue';
-import WaitingPlayers from '../views/game/waiting_players.vue';
 import WinnerPopup from "@/views/game/winner.vue";
 import LoserPopup from "@/views/game/loser.vue";
 import OtherProfile from "@/views/other_profile.vue";
@@ -62,16 +61,11 @@ const routes = [
     name: 'LoserPopup',
     component: LoserPopup,
   },
-  {
-    path: '/waiting-players',
-    name: 'WaitingPlayers',
-    component: WaitingPlayers,
-  },
-  {
-    path: '/matchmaking',
-    name: 'Matchmaking',
-    component: Matchmaking,
-  },
+  // {
+  //   path: '/matchmaking',
+  //   name: 'Matchmaking',
+  //   component: Matchmaking,
+  // },
   {
     path: '/privacy',
     name: 'PrivacyPolicy',
