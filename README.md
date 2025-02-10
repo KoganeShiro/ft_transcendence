@@ -122,7 +122,7 @@
 
 
 - [-] Make sure that in tournament the player cannot go elsewhere
-- [ ] Are you sure you want to leave the tournament component
+- [x] Are you sure you want to leave the tournament component
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
@@ -137,7 +137,7 @@
 - [ ] Play against a friend (private match) logic -- >
    - [x] Invite logic (for private match)
 
-- [ ] Tournament logic
+- [x] Tournament logic
 
 - [ ] Play with 4 players logic (should be similar to another player logic)
 

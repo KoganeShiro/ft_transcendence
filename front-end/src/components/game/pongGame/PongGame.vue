@@ -150,7 +150,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
- .canvas {
+.canvas {
   border: 2px solid var(--background-color);
   border-radius: 8px;
 }
