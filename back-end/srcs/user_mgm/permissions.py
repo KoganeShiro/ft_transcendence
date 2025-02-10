@@ -3,6 +3,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 from django.utils.translation import gettext_lazy as _
 from .models import CustomUser
 
+
 class CookieJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
         access_token = None
@@ -53,4 +54,17 @@ class APIKeyAuthentication(BaseAuthentication):
             raise AuthenticationFailed("Invalid API key")
 
         return (None, None)  # No user object needed for service-to-service auth
+    
+from rest_framework.permissions import IsAuthenticated
 
+class IsAPIUser(IsAuthenticated):
+    def has_permission(self, request, view):
+        # Check if the user is authenticated
+        is_authenticated = super().has_permission(request, view)
+        if not is_authenticated:
+            return False
+
+        # Additional check for POST, PUT, and PATCH methods
+        if request.user is not None:
+                return False
+        return True
