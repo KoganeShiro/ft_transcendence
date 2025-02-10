@@ -145,10 +145,12 @@ INSTALLED_APPS = [
 #     "http://localhost:8000",
 #     "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
 # ]
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOW_CREDENTIALS = True
+# SECURE_SSL_REDIRECT = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
