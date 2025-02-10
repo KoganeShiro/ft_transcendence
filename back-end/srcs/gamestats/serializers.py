@@ -7,21 +7,55 @@
 #         fields = '__all__'
 
 from rest_framework import serializers
-from .models import PongSolo
+from .models import PongSolo, PongMulti, TTT
 from django.contrib.auth.models import User
 
-class GameSerializer(serializers.ModelSerializer):    
+class PongSerializer(serializers.ModelSerializer):    
     player1 = serializers.CharField(source='player1.username', read_only=True)
     player2 = serializers.CharField(source='player2.username', read_only=True)
     winner = serializers.CharField(source='winner.username', read_only=True)
     loser = serializers.CharField(source='loser.username', read_only=True)
 
-
     class Meta:
         model = PongSolo
-        fields = ['player1', 'player2', 'winner', 'loser', 'player1_score', 'player2_score', 'rank_player1_begin', 'rank_player2_begin', 'rank_player1_change', 'rank_player2_change', 'timestamp']
+        fields = '__all__'
 
-class GameWriteSerializer(serializers.ModelSerializer):
+class PongWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = PongSolo
-        fields = ['player1', 'player2', 'winner', 'loser']
+        fields = '__all__'
+
+class MultiWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PongMulti
+        fields = '__all__'
+ 
+class TTTWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TTT
+        fields = '__all__'
+
+
+class MultiSerializer(serializers.ModelSerializer):
+    player1 = serializers.CharField(source='player1.username', read_only=True)
+    player2 = serializers.CharField(source='player2.username', read_only=True)
+    player3 = serializers.CharField(source='player3.username', read_only=True)
+    player4 = serializers.CharField(source='player4.username', read_only=True)    
+    winner = serializers.CharField(source='winner.username', read_only=True)    
+
+    class Meta:
+        model = PongMulti
+        fields = '__all__'
+
+
+class TTTSerializer(serializers.ModelSerializer):    
+    player1 = serializers.CharField(source='player1.username', read_only=True)
+    player2 = serializers.CharField(source='player2.username', read_only=True)
+    winner = serializers.CharField(source='winner.username', read_only=True)
+    loser = serializers.CharField(source='loser.username', read_only=True)
+
+    class Meta:
+        model = TTT
+        fields = '__all__'
+
+

@@ -55,7 +55,7 @@ class PongMulti(models.Model):
     rank_player3_change = models.IntegerField(default=0)  # Player3's rank
     rank_player4_change = models.IntegerField(default=0)  # Player4's rank
     timestamp = models.DateTimeField(auto_now_add=True)  # Automatically set when created
-    type = models.CharField(max_length=50, default='solo')
+    type = models.CharField(max_length=50, default='multi')
 
     def save(self, *args, **kwargs):
         if not self.pk:  # Only set defaults for new instances
