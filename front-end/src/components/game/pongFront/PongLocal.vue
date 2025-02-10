@@ -17,21 +17,21 @@
       </div>
 
       <div class="game-container">
-        <PongGame />
+        <PongLocal />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import PongGame from "@/components/game/pongGame/PongGame.vue";
 import Versus from "@/components/game/Versus.vue";
+import PongLocal from "@/components/game/pongGame/PongLocal.vue";
 
 export default {
   name: 'LocalFront',
   components: {
     Versus,
-    PongGame,
+    PongLocal,
   },
   data() {
     return {

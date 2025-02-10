@@ -85,9 +85,7 @@ export default {
       { image: getThemeImage('tournament', currentTheme.value), name: t("tournament"), mode: "tournament" },
     ]);
 
-    console.log(cards);
-
-
+    // console.log(cards);
     return { gameName, handleModeChoice, goBack, cards };
   },
 };

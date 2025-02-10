@@ -1,6 +1,6 @@
 <template>
-  <div class="template">
-    <HeaderOrganism />
+  <!-- <div class="template">
+    <HeaderOrganism /> -->
     <div class="container">
       <h2>{{ $t("waiting-players") }}...</h2>
       <p class="tournament-id">
@@ -34,8 +34,14 @@
         </div>
       </Card>
     </div>
-    <FooterOrganism />
-  </div>
+    <!-- <FooterOrganism /> -->
+    <!-- Quit confirmation popup: it appears when showQuitConfirm is true -->
+    <ConfirmQuitTournament
+      v-if="showQuitConfirm"
+      @confirm="quitTournament"
+      @cancel="showQuitConfirm = false"
+    />
+  <!-- </div> -->
 </template>
 
 <script>
@@ -45,6 +51,7 @@ import TextBox from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
+import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
 
 export default {
   name: "WaitingPlayers",
@@ -54,6 +61,7 @@ export default {
     HeaderOrganism,
     FooterOrganism,
     TextBox,
+    ConfirmQuitTournament, // Register the quit popup component
   },
   data() {
     return {
@@ -62,6 +70,7 @@ export default {
       tournamentId: "", // to store the tournament code from the route query
       startCountdown: 10, // countdown (in seconds) before automatic start
       tournamentStarted: false,
+      showQuitConfirm: false, // Controls the visibility of the quit confirmation popup
     };
   },
   setup() {
@@ -97,15 +106,24 @@ export default {
     startTournament() {
       this.tournamentStarted = true;
       // Navigate to the matchmaking/game page.
-      this.router.push("/matchmaking");
+      //show the matchmaking component
     },
+    // Method called when the user confirms quitting
+    quitTournament() {
+      // Navigate to the desired route, e.g., the game choice page.
+      this.router.push("/game-choice");
+      // Hide the quit confirmation popup.
+      this.showQuitConfirm = false;
+    },
+    // Optionally, you could add an attemptNavigation method to trigger the popup:
+    // attemptNavigation(targetRoute) {
+    //   // Store targetRoute if needed, then show the quit confirmation.
+    //   this.showQuitConfirm = true;
+    // }
   },
-  // Prevent navigation away from the waiting page
-  // beforeRouteLeave(to, from, next) {
-  //   next(false);
-  // },
 };
 </script>
+
 
 <style scoped>
 .container {

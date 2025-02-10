@@ -1,176 +1,160 @@
 <template>
-    <div class="template">
-      <HeaderOrganism />
-      <div class="container">
-        <!-- if the player loose, they are kick out of the tournament
-         let them a page message to let them know that they
-         can view the result in their history when the tournament is
-         finish -->
-        <div v-if="winner" class="winner-section">
-          <h1>🏆 Tournament Winner: {{ winner }} 🏆</h1>
-        </div>
-  
-        <div v-else class="matchmaking-section">
-          <MatchmakingComponent
-            :firstRound="firstRound"
-            :secondRound="secondRound"
-            :winner="winner"
+  <div class="matchmaking-container">
+    <section v-if="phase === 'matchmaking'" class="matchmaking">
+      <h1>Tournament Matchmaking</h1>
+      <p>Game will start in {{ matchmakingCountdown }} seconds...</p>
+      
+      <!-- Transition group for first round -->
+      <div class="round">
+        <h2>First Round</h2>
+        <transition-group name="match-transition" tag="div">
+          <MatchItem
+            v-for="(match, index) in firstRound"
+            :key="'first-' + index"
+            :match="match"
           />
-  
-          <div v-if="countdown > 0" class="countdown">
-            <h2>Match starts in {{ countdown }} seconds...</h2>
-          </div>
-  
-          <div v-if="gameStarted && !eliminated">
-            <PongGame :mode="'remote'" />
-            <h2>Playing Against: {{ currentOpponent }}</h2>
-          </div>
-  
-          <div v-if="gameStarted && eliminated">
-            <h2>You've been eliminated! Spectating matches...</h2>
-          </div>
-        </div>
+        </transition-group>
       </div>
-      <FooterOrganism />
-    </div>
-  </template>
-  
-  <script>
-  import HeaderOrganism from "@/components/header/navbar.vue";
-  import FooterOrganism from "@/components/footer.vue";
-  import MatchmakingComponent from "@/components/game/tournament/Matchmaking.vue";
-  import PongGame from "@/components/game/pongGame/PongGame.vue";
-  import { useStore } from 'vuex';
-  
-  export default {
-    components: {
-      HeaderOrganism,
-      FooterOrganism,
-      MatchmakingComponent,
-      PongGame,
-    },
-    setup() {
-      const store = useStore();
-    },
-    data() {
-      return {
-        firstRound: [
-          { player1: "Player 1", player2: "Player 3", completed: false },
-          { player1: "Player 2", player2: "Player 4", completed: false },
-        ],
-        secondRound: [],
-        winner: null,
-        countdown: 5, // Seconds before the match starts
-        gameStarted: false,
-        currentOpponent: null,
-        eliminated: false,
-        userPlayer: "Player 1", // Example, replace with actual logged-in user
-      };
-    },
-    methods: {
-      startCountdown() {
-        let timer = setInterval(() => {
-          if (this.countdown > 0) {
-            this.countdown--;
-          } else {
-            clearInterval(timer);
-            this.startGame();
-          }
-        }, 1000);
-      },
-      startGame() {
-        this.gameStarted = true;
-  
-        const userMatch = this.firstRound.find(
-          (match) =>
-            match.player1 === this.userPlayer || match.player2 === this.userPlayer
-        );
-  
-        if (userMatch) {
-          this.currentOpponent =
-            userMatch.player1 === this.userPlayer
-              ? userMatch.player2
-              : userMatch.player1;
+      
+      <!-- Second round only if present -->
+      <div class="round" v-if="secondRound.length">
+        <h2>Second Round</h2>
+        <transition-group name="match-transition" tag="div">
+          <MatchItem
+            v-for="(match, index) in secondRound"
+            :key="'second-' + index"
+            :match="match"
+          />
+        </transition-group>
+      </div>
+      
+      <div class="winner" v-if="winner">
+        <h2>Tournament Winner</h2>
+        <TextBox :modelValue="winner" :modifiable="false" class="field" />
+      </div>
+    </section>
+
+    <!-- Quit confirmation popup -->
+    <ConfirmQuitTournament
+      v-if="showQuitConfirm"
+      @confirm="quitTournament"
+      @cancel="showQuitConfirm = false"
+    />
+  </div>
+</template>
+
+<script>
+import TextBox from "@/components/atoms/ModifyInformations.vue";
+import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
+import MatchItem from "@/components/game/tournament/Matchmaking.vue";
+export default {
+  name: "Matchmaking",
+  components: {
+    TextBox,
+    ConfirmQuitTournament,
+    MatchItem
+  },
+  data() {
+    return {
+      phase: "matchmaking",
+      firstRound: [
+        { player1: "Player 1", player2: "Player 3", completed: false, timeLeft: 10 },
+        { player1: "Player 2", player2: "Player 4", completed: false, timeLeft: 10 }
+      ],
+      secondRound: [],
+      winner: null,
+      timers: [],
+      showQuitConfirm: false,
+      matchmakingCountdown: 3,
+      matchmakingTimer: null
+    };
+  },
+  mounted() {
+    this.startTimers();
+    this.startMatchmakingCountdown();
+  },
+  methods: {
+    startMatchmakingCountdown() {
+      this.matchmakingTimer = setInterval(() => {
+        if (this.matchmakingCountdown > 0) {
+          this.matchmakingCountdown--;
         } else {
-          this.eliminated = true; // Spectate if not playing
+          clearInterval(this.matchmakingTimer);
+          this.$emit("match-ready");
         }
-  
-        setTimeout(() => {
-          this.completeMatch();
-        }, 100000);
-      },
-      completeMatch() {
-        this.gameStarted = false;
-  
-        const userMatch = this.firstRound.find(
-          (match) =>
-            match.player1 === this.userPlayer || match.player2 === this.userPlayer
-        );
-  
-        if (userMatch) {
-          const matchWinner =
-            Math.random() < 0.5 ? userMatch.player1 : userMatch.player2;
-  
-          if (matchWinner !== this.userPlayer) {
-            this.eliminated = true;
-          }
-  
-          if (this.firstRound.every((match) => match.completed)) {
-            this.progressTournament(matchWinner);
-          }
-        }
-      },
-      progressTournament(lastWinner) {
-        if (this.secondRound.length === 0) {
-          this.secondRound = [{ player1: lastWinner, player2: "Random Player", completed: false }];
+      }, 1000);
+    },
+    startTimers() {
+      // Start individual match timers
+      this.firstRound.forEach((match, index) => {
+        this.startMatchTimer(match, index);
+      });
+    },
+    startMatchTimer(match, index) {
+      const timer = setInterval(() => {
+        if (match.timeLeft > 0) {
+          match.timeLeft--;
         } else {
-          this.winner = lastWinner;
+          clearInterval(timer);
+          this.completeMatch(match, index);
         }
-      },
-      restartTournament() {
-        this.firstRound = [
-          { player1: "Player 1", player2: "Player 3", completed: false },
-          { player1: "Player 2", player2: "Player 4", completed: false },
-        ];
-        this.secondRound = [];
-        this.winner = null;
-        this.eliminated = false;
-        this.countdown = 5;
-        this.startCountdown();
-      },
+      }, 1000);
+      this.timers.push(timer);
     },
-    mounted() {
-      this.startCountdown();
+    completeMatch(match, index) {
+      match.completed = true;
+      // Optionally determine a winner here, e.g. randomly
+      const matchWinner = Math.random() < 0.5 ? match.player1 : match.player2;
+      // You might update rounds or propagate events here
     },
-  };
-  </script>
-  
-  <style scoped>
-  .container {
-    display: flex;
+    quitTournament() {
+      this.$router.push("/game-choice");
+      this.showQuitConfirm = false;
+    }
+  },
+  beforeUnmount() {
+    this.timers.forEach(timer => clearInterval(timer));
+    if (this.matchmakingTimer) clearInterval(this.matchmakingTimer);
+  }
+};
+</script>
+
+<style scoped>
+.matchmaking-container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+.round {
+  margin-bottom: 30px;
+}
+.winner {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: gold;
+}
+/* Transition styles */
+.match-transition-enter-active,
+.match-transition-leave-active {
+  transition: all 0.5s ease;
+}
+.match-transition-enter-from,
+.match-transition-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+/* Responsive adjustments */
+@media (max-width: 800px) {
+  .matchmaking-container {
+    padding: 10px;
+  }
+  .match {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
     text-align: center;
   }
-  
-  .matchmaking-section {
-    margin-top: 20px;
+  .vs {
+    margin: 5px 0;
   }
-  
-  .countdown {
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffcc00;
-  }
-  
-  .winner-section {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: gold;
-  }
-  </style>
+}
+</style>

@@ -31,7 +31,7 @@ export default {
     try {
       const response = await API.get('/api/stats/');
       this.stats = response.data;
-      console.log('Stats:', this.stats);
+      // console.log('Stats:', this.stats);
       this.loading = false;
     } catch (error) {
       console.error('Error fetching stats:', error);

@@ -27,6 +27,10 @@ export default {
       type: String,
       default: "7px", // Default border radius
     },
+    padding: {
+      type: String,
+      default: "0px 0x",
+    },
   },
   computed: {
     buttonClass() {

@@ -50,6 +50,7 @@ import Card from "@/components/atoms/Card.vue";
 import TextField from "@/components/atoms/TextField.vue";
 import PlayerCount from "@/components/game/PlayerCount.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
+import API from "@/api.js";
 
 export default {
   name: "CreateTournament",
@@ -59,43 +60,59 @@ export default {
     PlayerCount,
     ButtonAtom,
   },
-  setup() {
-    const router = useRouter();
-    const playerCount = ref(4);
-    const tournamentCode = ref("");
-
-    const createTournament = () => {
-      // Simulate tournament creation by generating a random tournament code.
+  methods: {
+    createTournament() {
       const tournamentData = {
-        playerCount: playerCount.value,
+        playerCount: this.playerCount,
         isCreator: true,
         tournamentCode: "T" + Math.floor(Math.random() * 10000),
       };
-      console.log("Creating Tournament:", tournamentData);
-      // Navigate to the waiting players page with tournament data in the query.
-      router.push({ name: "waitingPlayers", query: tournamentData });
-    };
-
-    const joinTournament = () => {
-      if (!tournamentCode.value) {
+      this.$emit('tournament-created', tournamentData);
+    },
+    
+    joinTournament() {
+      if (!this.tournamentCode) {
         alert("Please enter a tournament code.");
         return;
       }
-      console.log("Joining Tournament with Code:", tournamentCode.value);
-      router.push({
-        name: "waitingPlayers",
-        query: { tournamentCode: tournamentCode.value, isCreator: false },
-      });
-    };
+      const tournamentData = {
+        tournamentCode: this.tournamentCode,
+        isCreator: false,
+      };
+      this.$emit('tournament-joined', tournamentData);
+    }
+  }
+    // setup() {
+    // const socket = inject('socket');
+    // const playerCount = ref(4);
+    // const tournamentCode = ref('');
 
-    return {
-      router,
-      playerCount,
-      tournamentCode,
-      createTournament,
-      joinTournament,
-    };
-  },
+    // const createTournament = () => {
+    //   socket.value.send(JSON.stringify({
+    //     type: 'create_tournament',
+    //     playerCount: playerCount.value
+    //   }));
+    // };
+
+    // const joinTournament = () => {
+    //   if (!tournamentCode.value) {
+    //     alert('Please enter a tournament code.');
+    //     return;
+    //   }
+    //   socket.value.send(JSON.stringify({
+    //     type: 'join_tournament',
+    //     tournamentCode: tournamentCode.value
+    //   }));
+    // };
+
+    // return {
+    //   router,
+    //   playerCount,
+    //   tournamentCode,
+    //   createTournament,
+    //   joinTournament,
+    // };
+  // },
 };
 </script>
 

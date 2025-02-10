@@ -6,7 +6,6 @@
 
 <script>
 // make a composition api
-// make pong game like a class with multiple constructor
 export default {
   data() {
     return {
@@ -37,6 +36,10 @@ export default {
     window.addEventListener('keyup', this.handleKeyUp);
     //add event listener for touch (mobile)
     this.startGameLoop();
+    setTimeout(() => {
+      const result = { winner: "Player 1" }; // Replace with actual game logic
+      this.$emit("match-ended", result);
+    }, 15000);
   },
   methods: {
     //mettre en "public" les fonctions
