@@ -6,6 +6,8 @@ RUN pip install -r Requirements.txt
 # COPY back-end/srcs .
 COPY back-end/entrypoint.sh . 
 
+RUN mkdir /mediafiles
+
 WORKDIR /usr/src/app
 EXPOSE 8000
 ENTRYPOINT ["/entrypoint.sh"]

@@ -28,7 +28,7 @@ build:
 
 # Start the services in detached mode
 .PHONY: up
-up: 
+up: build
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
 	@echo "https://localhost:1443"
 
