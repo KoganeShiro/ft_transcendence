@@ -30,8 +30,8 @@ class PongViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

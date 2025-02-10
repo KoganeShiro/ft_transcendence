@@ -43,7 +43,8 @@ export default {
     if (this.gameSocket) return;
 
     // console.log('Tentative de connexion WebSocket...');
-    this.gameSocket = new WebSocket('ws://localhost:8000/ws/pong/');
+    // this.gameSocket = new WebSocket('ws://localhost:8000/ws/pong/');
+    this.gameSocket = new WebSocket('wss://c1r6p9.42lehavre.fr:1443/ws/pong/');
 
     this.gameSocket.onopen = () => {
       // console.log('Connexion WebSocket réussie !');

@@ -20,7 +20,8 @@ export default {
   },
   mounted() {
     // Connexion au WebSocket
-    this.socket = new WebSocket('ws://localhost:8000/ws/chat/');
+    // this.socket = new WebSocket('ws://localhost:8000/ws/chat/');
+    this.socket = new WebSocket('wss://c1r6p9.42lehavre.fr:1443/ws/chat/');
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
