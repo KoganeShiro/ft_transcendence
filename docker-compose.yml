@@ -29,7 +29,8 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./back-end/srcs:/usr/src/app  
+      - ./back-end/srcs:/usr/src/app
+      - backend_media:/mediafiles  
     restart: always
     networks:
       - pong
@@ -98,6 +99,7 @@ networks:
 volumes:
   postgres_data:
   webserver_data:
+  backend_media:
 #  back-end_data:
 #    driver: local # specify the driver for the volume 
 #    driver_opts:
