@@ -27,6 +27,7 @@
 
     <style scoped>
     .button {
-      padding: 20px;
+      margin-top: 30px;
+      padding: 15px;
     }
     </style>

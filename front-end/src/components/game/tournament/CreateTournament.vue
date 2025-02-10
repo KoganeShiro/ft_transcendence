@@ -8,7 +8,7 @@
           <label class="label">{{ $t("number-players") }}</label>
           <PlayerCount v-model="playerCount" />
         </div>
-  
+
         <ButtonAtom
           class="create-button"
           variant="ghost"
@@ -18,7 +18,7 @@
           {{ $t("create-tournament") }}
         </ButtonAtom>
       </Card>
-  
+
       <!-- Join Tournament Card -->
       <Card class="card">
         <div class="section">
@@ -29,7 +29,7 @@
             v-model="tournamentCode"
           />
         </div>
-  
+
         <ButtonAtom
           class="join-button"
           variant="ghost"
@@ -43,8 +43,8 @@
   </div>
 </template>
 
-
 <script>
+import { inject, ref } from 'vue';
 import Card from '@/components/atoms/Card.vue';
 import TextField from '@/components/atoms/TextField.vue';
 import PlayerCount from '@/components/game/PlayerCount.vue';
@@ -52,24 +52,34 @@ import ButtonAtom from '@/components/atoms/Button.vue';
 
 export default {
   components: { Card, TextField, PlayerCount, ButtonAtom },
-  data() {
+  setup(_, { emit }) {
+    const showTournamentBanner = inject('showTournamentBanner');
+    const playerCount = ref(4);
+    const tournamentCode = ref('');
+
+    const createTournament = () => {
+      // Logic to create a tournament with the specified player count
+      const tournamentId = '12345'; // Replace with actual tournament ID from your logic
+      showTournamentBanner(tournamentId);
+      emit('tournamentCreated', { tournamentId });
+    };
+
+    const joinTournament = () => {
+      // Logic to join a tournament with the specified tournament code
+      //check if the tournament code is valid
+      emit('tournamentJoined', tournamentCode.value);
+    };
+
     return {
-      playerCount: 4, // Default player count
-      tournamentCode: ''
+      playerCount,
+      tournamentCode,
+      createTournament,
+      joinTournament,
     };
   },
-  methods: {
-    createTournament() {
-      // Logic to create a tournament with the specified player count
-      this.$emit('tournamentCreated', { playerCount: this.playerCount }); // Emit event to parent component
-    },
-    joinTournament() {
-      // Logic to join a tournament with the specified tournament code
-      this.$emit('tournamentJoined', this.tournamentCode); // Emit event to parent component
-    }
-  }
 };
 </script>
+
 
 <style scoped>
   .container {

@@ -153,6 +153,5 @@ export default {
  .canvas {
   border: 2px solid var(--background-color);
   border-radius: 8px;
-  background-color: black;
 }
 </style>

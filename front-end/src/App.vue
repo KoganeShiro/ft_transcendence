@@ -12,37 +12,46 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import InvitationPopup from "@/components/Invitation.vue";
-import TournamentBanner from "@/components/NotifBanner.vue";
-//call the API to get the theme and the lang ?
-
+import { ref, provide } from 'vue';
+import { mapGetters } from 'vuex';
+import InvitationPopup from '@/components/Invitation.vue';
+import TournamentBanner from '@/components/NotifBanner.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     InvitationPopup,
     TournamentBanner,
   },
+  setup() {
+    const shouldShowBanner = ref(false);
+    const tournamentId = ref('');
+
+    const showTournamentBanner = (id) => {
+      tournamentId.value = id;
+      shouldShowBanner.value = true;
+      setTimeout(() => {
+        shouldShowBanner.value = false;
+      }, 10000); // Hide banner after 10 seconds
+    };
+
+    provide('showTournamentBanner', showTournamentBanner);
+
+    return {
+      shouldShowBanner,
+      tournamentId,
+    };
+  },
   computed: {
-    ...mapGetters(["selectedTheme"]),
-    tournamentId() {
-      return this.$route.query.tournamentCode || "";
-    },
-    shouldShowBanner() {
-      return !!(
-        this.$route.query.tournamentCode &&
-        this.$route.query.isCreator === "true"
-      );
-    },
+    ...mapGetters(['selectedTheme']),
   },
   watch: {
     selectedTheme(newTheme) {
-      document.body.setAttribute("data-theme", newTheme);
+      document.body.setAttribute('data-theme', newTheme);
     },
   },
   mounted() {
-    document.body.setAttribute("data-theme", this.selectedTheme);
+    document.body.setAttribute('data-theme', this.selectedTheme);
   },
 };
 </script>

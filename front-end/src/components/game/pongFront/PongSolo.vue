@@ -16,7 +16,8 @@
   </template>
   
   <script>
-  import PongGame from "@/components/game/pongGame/PongGame.vue";
+//   import PongGame from "@/components/game/pongGame/PongGame.vue";
+import PongGame from "@/components/game/pongGame/Pong.vue";
   import Versus from "@/components/game/Versus.vue";
 //   import AI from "@/AI/pong_ai.js"
 
