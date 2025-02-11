@@ -24,6 +24,7 @@
   <script>
   import Versus from "@/components/game/Versus.vue";
   import PongGame from "@/components/game/pongGame/PongGame.vue";
+  import PongAI from "@/components/game/pongGame/PongAI.js"; // import our AI module
   
   export default {
 	name: 'SoloFront',
@@ -41,8 +42,7 @@
 	  this.$nextTick(() => {
 		const pongGameInstance = this.$refs.pongGameComponent;
 		if (pongGameInstance) {
-		  // To move the paddle upward, use handleKeyDown instead of handleKeyUp.
-		  pongGameInstance.handleKeyDown({ key: 'w' });
+		  console.log("PongGame instance available, commands can be used.");
 		} else {
 		  console.error("PongGame instance is not defined");
 		}
@@ -55,29 +55,6 @@
 	  }, 3000);
 	},
 	methods: {
-	  handleTimeUp() {
-		// Hide the Versus overlay when the time is up, revealing the game content
-		this.showVersus = false;
-		this.$nextTick(() => {
-		  const pongGameInstance = this.$refs.pongGameComponent;
-		  if (pongGameInstance) {
-			// To simulate a key press (e.g., moving the paddle upward), use handleKeyDown.
-			pongGameInstance.handleKeyDown({ key: 'w' });
-			
-			// ********* Place to call your AI logic *********
-			// Here you can start your AI match.
-			// For example, you could call:
-			// this.startAIMatch();
-			// or invoke a method on the PongGame component that starts the AI agent:
-			// pongGameInstance.startAIAgent();
-			// ************************************************
-		  }
-		});
-	  },
-	  // Uncomment and implement this method to integrate your AI logic.
-	  // startAIMatch() {
-	  //   // Your AI logic here.
-	  // },
 	  onOpponentFound() {
 		// Hide the Versus overlay to reveal the game content
 		this.showVersus = false;
@@ -85,11 +62,20 @@
 		if (pongGameInstance) {
 		  pongGameInstance.startGameLoop();
 		  console.log("onOpponentFound: PongGame instance available, game can start.");
+		  // Start the AI opponent:
+		  PongAI.start(pongGameInstance);
+		  console.log("PongAI.start() called.");
 		}
-	  }
+	  },
+	  // Optionally, implement handleTimeUp() if needed for other scenarios.
+	  handleTimeUp() {
+		// Your existing logic
+		this.showVersus = false;
+	  },
 	},
   };
   </script>
+  
   
   
   <style scoped>
