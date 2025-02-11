@@ -13,7 +13,9 @@
 		</div>
 		<div class="game-container">
 		  <!-- PongGame is always mounted so its methods remain available -->
-		  <PongGame ref="pongGameComponent" />
+		  <PongGame ref="pongGameComponent" @gameEnded="handleGameEnded" />
+		  <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+		  <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
 		</div>
 	  </div>
 	  <!-- Versus overlay displayed when showVersus is true -->
@@ -24,17 +26,28 @@
   <script>
   import Versus from "@/components/game/Versus.vue";
   import PongGame from "@/components/game/pongGame/PongGame.vue";
+  import WinnerPopup from "@/views/game/winner.vue";
+  import LoserPopup from "@/views/game/loser.vue";
   import PongAI from "@/components/game/pongGame/PongAI.js"; // import our AI module
+  import API from '@/api.js';
   
   export default {
 	name: 'SoloFront',
 	components: {
 	  Versus,
 	  PongGame,
+	  WinnerPopup,
+	  LoserPopup,
 	},
 	data() {
 	  return {
 		showVersus: true, // Initially showing the overlay, so commands and canvas are hidden
+		showWinner: false,
+		showLoser: false,
+		winnerName: '',
+		winnerImage: '',
+		loserName: '',
+		loserImage: '',
 	  };
 	},
 	mounted() {
@@ -67,16 +80,31 @@
 		  console.log("PongAI.start() called.");
 		}
 	  },
-	  // Optionally, implement handleTimeUp() if needed for other scenarios.
 	  handleTimeUp() {
 		// Your existing logic
 		this.showVersus = false;
 	  },
+	  async handleGameEnded(winner) {
+		try {
+		  const response = await API.get('/api/profile/');
+		  const { username, cover_photo } = response.data;
+  
+		  if (winner === "Player") {
+			this.winnerName = username;
+			this.winnerImage = cover_photo;
+			this.showWinner = true;
+		  } else {
+			this.loserName = username;
+			this.loserImage = cover_photo;
+			this.showLoser = true;
+		  }
+		} catch (error) {
+		  console.error("Error fetching user data:", error);
+		}
+	  },
 	},
   };
   </script>
-  
-  
   
   <style scoped>
   .pong-page {
@@ -117,8 +145,7 @@
 	  margin: 0px;
 	}
 	.content {
-		padding: 25px;
+	  padding: 25px;
 	}
   }
   </style>
-  

@@ -243,6 +243,7 @@ export default {
       }
       
       if (this.gameState.score1 >= 5 || this.gameState.score2 >= 5) {
+        this.resetBall(1); 
         this.endGame();
       }
     },
