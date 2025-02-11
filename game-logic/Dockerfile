@@ -19,8 +19,16 @@ COPY game-logic/entrypoint.sh .
 
 WORKDIR /usr/src/app
 EXPOSE 8001 
+
+
+# COPY game-logic/supervisord.conf /etc/supervisord.conf
+# CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+
 ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
 # CMD redis-server --daemonize yes && gunicorn back-gamelogic.chat_project.wsgi:application --bind 0.0.0.0:8001
-CMD ["redis-server" "--daemonize" "yes" "&&" "daphne", "-b", "0.0.0.0", "-p", "8001", "chat_project.asgi:application"]
+# CMD ["redis-server" "--daemonize" "yes" "&&" "daphne", "-b", "0.0.0.0", "-p", "8001", "chat_project.asgi:application"]
+# CMD ["sh", "-c", "redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8001 chat_project.asgi:application"]
+# CMD ["sh", "-c", "redis-server & daphne -b 0.0.0.0 -p 8001 chat_project.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8001", "chat_project.asgi:application"]

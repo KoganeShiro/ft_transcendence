@@ -17,5 +17,6 @@ back-end/include/*
 back-end/lib/*
 back-end/lib64/*
 *.pyc
+*.rdb
 /back-end/srcs/transcendence/*
 
