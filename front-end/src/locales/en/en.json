@@ -92,6 +92,7 @@
     "game-invitation-text": " challenge you to a game",
     "accept": "Accept",
     "decline": "Decline",
-    "tourn-message": "A new tournament has been created!"
+    "tourn-message": "A new tournament has been created!",
+    "go-back": "Go back"
 }
   

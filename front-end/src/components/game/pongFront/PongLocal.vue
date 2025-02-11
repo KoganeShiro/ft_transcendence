@@ -1,5 +1,7 @@
 <template>
   <div class="pong-page">
+    <!-- should make the versus component like the AI not
+     wait too much -->
     <Versus v-if="showVersus" @time-up="handleTimeUp" />
     
     <div v-else class="content">
@@ -30,7 +32,7 @@ import Versus from "@/components/game/Versus.vue";
 import PongLocal from "@/components/game/pongGame/PongLocal.vue";
 import WinnerPopup from "@/views/game/winner.vue";
 import LoserPopup from "@/views/game/loser.vue";
-import OpponentImage from '@/assets/profile2.png';
+import API from '@/api.js';
 
 export default {
   name: 'LocalFront',
@@ -55,16 +57,22 @@ export default {
     handleTimeUp() {
       this.showVersus = false;
     },
-    handleGameEnded(winner) {
-      if (winner === "Player") {
-        //call the back
-        // this.winnerName = "Player";
-        this.winnerImage = "";
-        this.showWinner = true;
-      } else {
-        // this.loserName = "Guest";
-        this.loserImage = OpponentImage;
-        this.showLoser = true;
+    async handleGameEnded(winner) {
+      try {
+        const response = await API.get('/api/profile/');
+        const { username, cover_photo } = response.data;
+
+        if (winner === "Player") {
+          this.winnerName = username;
+          this.winnerImage = cover_photo;
+          this.showWinner = true;
+        } else {
+          this.loserName = username;
+          this.loserImage = cover_photo;
+          this.showLoser = true;
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     },
   },

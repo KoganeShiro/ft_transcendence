@@ -93,6 +93,7 @@
     "game-invitation-text": " vous invite à jouer à un match",
     "accept": "Accepter",
     "decline": "Refuser",
-    "tourn-message": "Un nouveau tournoi a été créé !"
+    "tourn-message": "Un nouveau tournoi a été créé !",
+    "go-back": "Retour"
   }
   
