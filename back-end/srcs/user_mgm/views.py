@@ -304,7 +304,7 @@ def updateStats(request, lookup_value):
     Fetch user profile using either user ID or username.
     """
     #if request.user == None:
-    if request.user.name == 'api_user':
+    if request.user.username == 'api_user':
     #if request.user == None or request.user.username == lookup_value:
         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
     else:
@@ -326,7 +326,7 @@ def incrementStats(request, lookup_value):
     Fetch user profile using either user ID or username.
     """
     #if request.user == None:
-    if request.user.name == 'api_user':
+    if request.user.username == 'api_user':
     #if request.user == None or request.user.username == lookup_value:
         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
     else:
@@ -369,7 +369,7 @@ import json
 def add_solo_progress(request, lookup_value):
     try:
         #if request.user == None:
-        if request.user.name == 'api_user':
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:
@@ -402,7 +402,7 @@ import json
 def add_multi_progress(request, lookup_value):
     try:
         #if request.user == None:
-        if request.user.name == 'api_user':
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:
@@ -436,7 +436,7 @@ import json
 def add_ttt_progress(request, lookup_value):
     try:
         #if request.user == None:
-        if request.user.name == 'api_user':
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:
