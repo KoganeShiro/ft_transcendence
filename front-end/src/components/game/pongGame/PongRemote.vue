@@ -49,7 +49,9 @@
       connectToGame() {
         if (this.gameSocket) return;
   
-        this.gameSocket = new WebSocket('ws://localhost:8000/ws/pong/');
+        this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
+
+        // this.gameSocket = new WebSocket('wss://c1r6p9.42lehavre.fr:1443/ws/pong/');
   
         this.gameSocket.onopen = () => {
           this.gameSocket.send(JSON.stringify({
