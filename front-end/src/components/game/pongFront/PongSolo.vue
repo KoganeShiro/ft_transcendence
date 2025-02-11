@@ -47,6 +47,12 @@
 		  console.error("PongGame instance is not defined");
 		}
 	  });
+  
+	  // Wait for an opponent, then call onOpponentFound:
+	  setTimeout(() => {
+		console.log("Opponent found, starting game loop.");
+		this.onOpponentFound();
+	  }, 3000);
 	},
 	methods: {
 	  handleTimeUp() {
@@ -70,14 +76,21 @@
 	  },
 	  // Uncomment and implement this method to integrate your AI logic.
 	  // startAIMatch() {
-	  //   // Your AI logic here. This method could trigger functions or events
-	  //   // that allow your AI to start playing against the user in PongGame.
-	  //   // Example:
-	  //   // this.aiAgent.makeMove();
-	  // }
+	  //   // Your AI logic here.
+	  // },
+	  onOpponentFound() {
+		// Hide the Versus overlay to reveal the game content
+		this.showVersus = false;
+		const pongGameInstance = this.$refs.pongGameComponent;
+		if (pongGameInstance) {
+		  pongGameInstance.startGameLoop();
+		  console.log("onOpponentFound: PongGame instance available, game can start.");
+		}
+	  }
 	},
   };
   </script>
+  
   
   <style scoped>
   .pong-page {
@@ -107,13 +120,18 @@
 	}
 	.player-controls {
 	  width: 100%;
-	  padding: 5px;
+	  margin: 0px;
+	  padding: 0px;
 	  background: none;
 	  border: none;
 	}
 	.game-container {
-	  padding: 5px;
+	  padding: 0px;
 	  border: none;
+	  margin: 0px;
+	}
+	.content {
+		padding: 25px;
 	}
   }
   </style>

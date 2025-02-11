@@ -15,6 +15,7 @@ export default {
     return {
       // Flag to switch between desktop and mobile modes.
       isMobile: false,
+      isTablette: false,
       // Adjusted canvas dimensions: default for desktop; will be changed for mobile.
       canvasWidth: 900,
       canvasHeight: 500,
@@ -47,13 +48,19 @@ export default {
     };
   },
   mounted() {
-    // Detect mobile: use a simple heuristic (portrait mode)
-    this.isMobile = window.innerHeight > window.innerWidth;
-    console.log("Mounted: isMobile =", this.isMobile);
-    if (this.isMobile) {
-      // Change canvas dimensions for a portrait layout
-      this.canvasWidth = 500; // adjust as needed
-      this.canvasHeight = 900;
+    if (window.innerWidth < 480) {
+      // Mobile phone: very small width
+      this.isMobile = true;
+      if (window.innerHeight < 767) {
+        console.log("Very small phone detected.");
+        this.canvasWidth = 300;
+        this.canvasHeight = 430;
+      }
+      else {
+        this.canvasWidth = 300;
+        this.canvasHeight = 550;
+      }
+      console.log("window.innerHeight =", window.innerHeight);
       console.log("Mobile mode: canvasWidth =", this.canvasWidth, "canvasHeight =", this.canvasHeight);
       // Remove keyboard listeners (not needed for touch)
       window.removeEventListener("keydown", this.handleKeyDown);
@@ -64,15 +71,30 @@ export default {
         this.handleTouchMove,
         { passive: false }
       );
-      console.log("Touch listener added.");
+      console.log("Touch listener added for mobile.");
+    } else if (window.innerHeight > window.innerWidth) {
+      // Tablet (portrait mode but not a very small phone)
+      this.isTablette = true;
+      this.canvasWidth = 500; // adjust as needed for tablets
+      this.canvasHeight = 850;
+      console.log("Tablette mode: canvasWidth =", this.canvasWidth, "canvasHeight =", this.canvasHeight);
+      window.removeEventListener("keydown", this.handleKeyDown);
+      window.removeEventListener("keyup", this.handleKeyUp);
+      this.$refs.pongCanvas.addEventListener(
+        "touchmove",
+        this.handleTouchMove,
+        { passive: false }
+      );
+      console.log("Touch listener added for tablette.");
     } else {
-      // For desktop mode, add keyboard event listeners
+      // Desktop mode
       window.addEventListener("keydown", this.handleKeyDown);
       window.addEventListener("keyup", this.handleKeyUp);
       console.log("Keyboard listeners added for desktop.");
     }
-    this.startGameLoop();
+    //this.startGameLoop();
   },
+
   methods: {
     // Existing keyboard events for desktop remain unchanged.
     handleKeyDown(event) {
@@ -112,7 +134,7 @@ export default {
       console.log("Game loop started.");
     },
     updateGame(deltaTime) {
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         // Desktop: update vertical paddle positions using keys
         const paddleSpeed = 0.01;
         if (this.keysPressed.up_left)
@@ -128,7 +150,7 @@ export default {
       this.gameState.ball_x += this.gameState.ball_velocity_x * deltaTime * this.ballSpeedFactor;
       this.gameState.ball_y += this.gameState.ball_velocity_y * deltaTime * this.ballSpeedFactor;
 
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         // Desktop: bounce ball off top and bottom
         if (this.gameState.ball_y <= 0 || this.gameState.ball_y >= 1) {
           this.gameState.ball_velocity_y *= -1;
@@ -143,7 +165,7 @@ export default {
       this.checkScore();
     },
     checkPaddleCollision() {
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         // Desktop collision: paddles on the left and right.
         if (
           this.gameState.ball_x <= 0.05 &&
@@ -198,7 +220,7 @@ export default {
       }
     },
     checkScore() {
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         // Desktop scoring: when ball goes off left or right edges.
         if (this.gameState.ball_x <= 0) {
           this.gameState.score2++;
@@ -228,7 +250,7 @@ export default {
       // Reset ball position
       this.gameState.ball_x = 0.5;
       this.gameState.ball_y = 0.5;
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         this.gameState.player1_y = 0.5;
         this.gameState.player2_y = 0.5;
       } else {
@@ -236,7 +258,7 @@ export default {
         this.player1_x = 0.5;
       }
       // For desktop, set horizontal ball velocity; for mobile, vertical.
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         this.gameState.ball_velocity_x = 0.01 * direction;
         this.gameState.ball_velocity_y = 0;
       } else {
@@ -263,7 +285,7 @@ export default {
       );
       ctx.fill();
 
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         // Desktop: draw vertical paddles on left and right
         ctx.fillRect(20, this.gameState.player1_y * canvas.height - 30, 10, 60);
         ctx.fillRect(canvas.width - 30, this.gameState.player2_y * canvas.height - 30, 10, 60);
@@ -291,7 +313,7 @@ export default {
     },
     endGame() {
       let winner = "";
-      if (!this.isMobile) {
+      if (!this.isMobile && !this.isTablette) {
         winner = this.gameState.score1 > this.gameState.score2 ? "Player 1" : "Player 2";
       } else {
         winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Opponent";
@@ -301,7 +323,7 @@ export default {
     },
   },
   beforeUnmount() {
-    if (!this.isMobile) {
+    if (!this.isMobile && !this.isTablette) {
       window.removeEventListener("keydown", this.handleKeyDown);
       window.removeEventListener("keyup", this.handleKeyUp);
     } else {
