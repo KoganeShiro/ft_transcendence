@@ -72,6 +72,7 @@
             this.gameStarted = true;
           } else if (messageType === "role_assignment") {
             this.playerRole = data.role;
+            console.log(this.playerRole); //if player 1, we are left, if player 2, we are right
           }
           else if (messageType === "game_over") {
             console.log("**[DEBUG FRONTEND] Message game_over REÇU :", data); // RE-VÉRIFIEZ CE LOG SPÉCIFIQUE

@@ -3,6 +3,7 @@
     <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" />
     <Versus v-else-if="showVersus" @time-up="handleTimeUp" />
     
+    <!-- integrate the ai -->
     <div v-else class="content">
       <div class="game-container">
         <TicTacToeGame :mode="mode" :useImages="false" />

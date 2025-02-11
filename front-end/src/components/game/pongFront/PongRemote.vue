@@ -5,8 +5,8 @@
 	  <div v-else class="content">
 		<div class="player-controls">
 			<h2 class="mobile-hide">{{ $t('commands') }}</h2>
-          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
-          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
+          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">↑</span></p>
+          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">↓</span></p>
 		</div>
 		<div class="game-container">
 		  <PongRemote />

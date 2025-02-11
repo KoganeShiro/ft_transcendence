@@ -1,5 +1,5 @@
 <template>
-  <!-- Use a transition wrapper for a smooth fade-out -->
+  <!-- When opponent is found the player name and cover_photo is showing -->
   <transition name="fade" @after-leave="emitTimeUp">
     <div class="versus-container" v-if="show">
       <div class="versus-background">
@@ -11,6 +11,7 @@
           <div class="player">
             <AvatarAtom
               :pseudo="player1.pseudo"
+              :imageUrl="player1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
               :link="player1.link"
@@ -39,10 +40,11 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
 import defaultAvatar from '@/assets/searching.webp';
-import anotherAvatar from '@/assets/profile2.png';
+import guestAvatar from '@/assets/profile2.png';
+import API from '@/api.js';
 
 export default {
   name: 'Versus',
@@ -53,10 +55,14 @@ export default {
     player1: {
       type: Object,
       default: () => ({
-        imageUrl: 'https://via.placeholder.com/100',
         pseudo: 'Player 1',
+        imageUrl: 'https://via.placeholder.com/100',
         link: '#'
       })
+    },
+    opponentType: {
+      type: String,
+      default: 'guest',
     },
     // Duration in seconds before fading out after an opponent is found
     duration: {
@@ -78,29 +84,28 @@ export default {
       link: '',
     });
     
-    onMounted(() => {
+    onMounted(async () => {
+      try {
+        const response = await API.get('/api/profile/');
+        const { username, cover_photo } = response.data;
+        props.player1.pseudo = username;
+        props.player1.imageUrl = cover_photo;
+      } catch (error) {
+        console.error("Error fetching player data:", error);
+      }
+
       // Simulate finding an opponent after 2 seconds.
       setTimeout(() => {
-        player2.value.imageUrl = anotherAvatar;
-        player2.value.pseudo = 'OpponentName';
-      }, 3000);
+        player2.value.imageUrl = guestAvatar;
+        player2.value.pseudo = props.opponentType === 'AI' ? 'AI' : 'Guest';
+        opponentStatus.value = 'Opponent found!';
+        // Wait for props.duration seconds before starting the fade-out transition.
+        setTimeout(() => {
+          show.value = false; // This will trigger the fade transition.
+        }, props.duration * 1000);
+      }, 2000);
     });
     
-    // Watch for changes in player2 pseudo.
-    watch(
-      () => player2.value.pseudo,
-      (newVal) => {
-        if (newVal !== 'Waiting for an opponent...') {
-          opponentStatus.value = 'Opponent found!';
-          // Wait for props.duration seconds before starting the fade-out transition.
-          setTimeout(() => {
-            show.value = false; // This will trigger the fade transition.
-          }, props.duration * 1000);
-        }
-      }
-    );
-    
-    // When the fade transition is complete, emit an event so the parent can hide the overlay.
     const emitTimeUp = () => {
       emit('time-up');
     };

@@ -126,32 +126,41 @@
 - [x] Play against guest (local) logic
 - [x] Play against AI logic (on local)
 
-
-- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
-
-
-- [ ] Make the Tic Tac Toe AI
-- [ ] Play against another player logic --> 
-- [ ] Play against a friend (private match) logic -- >
+- [x] Play against another player logic --> 
+- [x] Play against a friend (private match) logic -- >
    - [x] Invite logic (for private match)
 
 - [x] Tournament logic
+- [x] Make each part into container
 
-- [ ] Play with 4 players logic (should be similar to another player logic)
 
-- [ ] Call the back for the game
-- [ ] Matchmaking logic
-- [ ] Tournament logic
+- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
+- [ ] Update the Versus component to call the back
+- [ ] Fix the winner/loser component in pong solo
+- [ ] Add the winner/loser component to ttt
 - [ ] Call the back for history (5 last battles for each "games")
-- [ ] Call the back for friends list (max of 10)
 
-- [ ] Make each part into container
+- [ ] Make the Tic Tac Toe AI
+
+- [ ] Let the user know who they are in remote
+- [ ] Part 2 Versus (on remote)
+
+- [?] Call the back for the game
+- [ ] Matchmaking with back
+- [ ] Tournament with back
+
+- [ ] Call the back for friends list (max of 10)
+- [ ] Call the back for adding friends
+- [ ] Call the back for removing friends
+- [ ] Call the back for the chat
+- [ ] Call the back for sending msg
 
 - [ ] Pong AI
 
 - [ ] Implement power up
 
+- [ ] Play with 4 players logic (should be similar to another player logic)
 - [ ] More than 2 players game page (x2)
 
 
