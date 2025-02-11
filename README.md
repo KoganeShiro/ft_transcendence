@@ -59,58 +59,19 @@
 
 - [x] Expand match info pop up
 
-- [-] Make sure that in tournament the player cannot go elsewhere
-
 - [x] New mode, private match
 
 - [x] Add the private match component on tic tac toe
 - [x] !!! Make the tournament matchmaking page to game better !!!
 
+- [x] If user is connected with 42, cannot modify their account information
 
-- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
-
-- [ ] Make the pong game responsive ==> may start searching for how to make the AI
-
-- [ ] If user is connected with 42, cannot modify their account information
-
-- [ ] Make the Tic Tac Toe AI
-
-- [ ] Play against AI logic (same as remote (private))
-- [ ] Play against another player logic --> 
-- [ ] Play against a friend (private match) logic -- >
-- [ ] Play against guest (local) logic
-   - [x] Invite logic (for private match)
-- [ ] Tournament logic
-- [ ] Play with 4 players logic (should be similar to another player logic)
-
-- [ ] Call the back for the game
-- [ ] Matchmaking logic
-- [ ] Tournament logic
-- [x] Games logic with following pages...
-
-- [x] Can register
-- [x] Can login
-- [x] Can logout
-- [x] Can connect using 42
-
-- [ ] Call the back for stats
-- [ ] Call the back for history (5 last battles for each "games")
-- [ ] Call the back for friends list (max of 10)
-- [x] Add a component for the chat
-
-- [ ] Call the back for account --> PATCH request to modify informations + avatar
-        - [ ] Can modify avatar
-        - [ ] Can modify username
-        - [ ] Can modify password
-        
-
-- [ ] Make each part into container
 
 - [x] Register --> send to the back username, password + avatar (default)
         --> password no problem without having it hashed in the front
 - [x] Login --> send to the back username + password
 
-- [ ] Account, possibility to change the username + password
+- [x] Account, possibility to change the username + password
 
 - [x] How do we add a friend ?
         We add a friend by username, if we don't want block
@@ -138,6 +99,56 @@
         - nb de point gagne inferieur a +10 echange
                 same for lose point
                         ==> one Bar Charts
+
+- [x] Games logic with following pages...
+
+- [x] Can register
+- [x] Can login
+- [x] Can logout
+- [x] Can connect using 42
+
+- [x] Call the back for stats
+
+- [x] Add a component for the chat
+
+- [x] Call the back for account --> PATCH request to modify informations + avatar
+        - [x] Can modify avatar
+        - [x] Can modify username
+        - [x] Can modify password
+        - [x] Can delete account
+
+- [x] Logic of the friend profile, make another page ??
+
+
+
+- [-] Make sure that in tournament the player cannot go elsewhere
+- [x] Are you sure you want to leave the tournament component
+
+- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
+
+- [ ] Make the pong game responsive ==> may start searching for how to make the AI
+
+- [ ] Make the Tic Tac Toe AI
+
+- [ ] Play against guest (local) logic
+- [ ] Play against AI logic (on local)
+
+- [ ] Play against another player logic --> 
+- [ ] Play against a friend (private match) logic -- >
+   - [x] Invite logic (for private match)
+
+- [x] Tournament logic
+
+- [ ] Play with 4 players logic (should be similar to another player logic)
+
+- [ ] Call the back for the game
+- [ ] Matchmaking logic
+- [ ] Tournament logic
+
+- [ ] Call the back for history (5 last battles for each "games")
+- [ ] Call the back for friends list (max of 10)
+
+- [ ] Make each part into container
 
 - [ ] Pong AI
 
@@ -190,12 +201,11 @@ git clone git@github.com:KoganeShiro/ft_transcendence.git
 cd ft_transcendence
 ```
 
-or the link of the github page ??
-
 ## Usage
-If you don't have make or docker and docker composed installed, you should in order to compile and run this project
+If you don't have make or docker and docker-compose installed, you should in order to compile and run this project
 
 If you did, then you can make and follow the instruction !
+
 ```
 make build
 make up

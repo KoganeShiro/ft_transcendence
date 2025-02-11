@@ -1,205 +1,128 @@
 <template>
-  <div class="matchmaking-container">
-    <!-- Matchmaking Phase -->
-    <div v-if="phase === 'matchmaking'" class="matchmaking">
-      <h1>Tournament Matchmaking</h1>
-      
-      <div class="round">
-        <h2>First Round</h2>
-        <div
-          v-for="(match, index) in firstRound"
-          :key="'first' + index"
-          class="match"
-        >
-          <TextBox :modelValue="match.player1" :modifiable="false" class="field"/>
-          <span class="vs">vs</span>
-          <TextBox :modelValue="match.player2" :modifiable="false" class="field"/>
-          <div class="timer" v-if="!match.completed">{{ match.timeLeft }}</div>
-          <div class="status" v-else>Completed</div>
-        </div>
-      </div>
-      
-      <div class="round" v-if="secondRound.length > 0">
-        <h2>Second Round</h2>
-        <div
-          v-for="(match, index) in secondRound"
-          :key="'second' + index"
-          class="match"
-        >
-          <TextBox :modelValue="match.player1" :modifiable="false" class="field"/>
-          <span class="vs">vs</span>
-          <TextBox :modelValue="match.player2" :modifiable="false" class="field"/>
-          <div class="timer" v-if="!match.completed">{{ match.timeLeft }}</div>
-          <div class="status" v-else>Completed</div>
-        </div>
-      </div>
-      
-      <div class="winner" v-if="winner">
-        <h2>Tournament Winner</h2>
-        <TextBox :modelValue="winner" :modifiable="false" class="field"/>
-      </div>
-    </div>
-
-    <!-- Game Phase -->
-    <div v-if="phase === 'game'" class="game-view">
-      <!-- PongGame emits "game-ended" when finished -->
-      <PongGame @game-ended="handleGameEnded" />
-    </div>
+  <div>
+    <CreateTournament v-if="currentStep === 'create'" @tournamentCreated="onTournamentCreated" @tournamentJoined="onTournamentJoined" />
+    <WaitingPlayers v-if="currentStep === 'waiting'" :players="players" :isCreator="isCreator" :tournamentId="tournamentId" @startTournament="onStartTournament" />
+    <Matchmaking v-if="currentStep === 'matchmaking'" :matches="currentMatches" @matchStart="onMatchStart" />
+    <PongGame v-if="currentStep === 'game'" :matches="currentMatches" @gameEnded="onGameEnded" />
+    <TournamentWinner v-if="currentStep === 'winner'" :winner="winner" @goBack="onGoBack" />
+    <ConfirmQuitTournament v-if="showQuitConfirm" @confirm="handleQuitConfirm" @cancel="handleQuitCancel" />
   </div>
 </template>
 
 <script>
-import TextBox from "@/components/atoms/ModifyInformations.vue";
-import PongGame from "@/components/game/PongGame.vue";
+import CreateTournament from '@/components/game/tournament/CreateTournament.vue';
+import WaitingPlayers from '@/components/game/tournament/WaitingPlayers.vue';
+import Matchmaking from '@/components/game/tournament/Matchmaking.vue';
+import PongGame from '@/components/game/tournament/Game.vue';
+import TournamentWinner from '@/components/game/tournament/Winner.vue';
+import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
 
 export default {
-  name: "Matchmaking",
-  components: {
-    TextBox,
-    PongGame,
-  },
+  components: { CreateTournament, WaitingPlayers, Matchmaking, PongGame, TournamentWinner, ConfirmQuitTournament },
   data() {
     return {
-      // Phase can be 'matchmaking' or 'game'
-      phase: "matchmaking",
-      firstRound: [
-        { player1: "Player 1", player2: "Player 3", completed: false, timeLeft: 10 },
-        { player1: "Player 2", player2: "Player 4", completed: false, timeLeft: 10 },
-      ],
-      secondRound: [],
-      winner: null,
-      timers: [],
+      currentStep: 'create',
+      tournamentId: '',
+      players: [],
+      matches: [],
+      isCreator: false,
+      winner: '',
+      currentMatchIndex: 0,
+      matchResults: [],
+      currentMatches: [],
+      showQuitConfirm: false,
+      pendingRoute: null, // To store the pending route
     };
   },
-  mounted() {
-    this.startTimers();
-  },
   methods: {
-    startTimers() {
-      // Start timers for all matches in the first round.
-      this.firstRound.forEach((match, index) => {
-        this.startMatchTimer(match, "first", index);
-      });
+    onTournamentCreated({ tournamentId }) {
+      this.tournamentId = tournamentId;
+      this.isCreator = true;
+      this.currentStep = 'waiting';
+      this.players = []; // Fetch players and update `this.players` as needed
     },
-    startMatchTimer(match, round, index) {
-      const timer = setInterval(() => {
-        if (match.timeLeft > 0) {
-          match.timeLeft--;
-        } else {
-          clearInterval(timer);
-          this.completeMatch(match, round, index);
-        }
-      }, 1000);
-      this.timers.push(timer);
+    onTournamentJoined(tournamentId) {
+      this.tournamentId = tournamentId;
+      this.currentStep = 'waiting';
+      this.players = []; // Fetch players and update `this.players` as needed
     },
-    completeMatch(match, round, index) {
-      match.completed = true;
-      // For demonstration, choose a winner randomly for this match.
-      const matchWinner = Math.random() < 0.5 ? match.player1 : match.player2;
-      
-      // In this example, when all matches in the first round are complete,
-      // we transition to the game phase.
-      if (round === "first" && this.firstRound.every(m => m.completed)) {
-        // Transition to game phase
-        this.phase = "game";
-      }
-      // (You could add logic for the second round if needed)
+    onStartTournament() {
+      this.currentStep = 'matchmaking';
+      this.createInitialMatches();
     },
-    handleGameEnded(result) {
-      // When PongGame ends, log the result and then reset the matchmaking for the next match.
-      console.log("Game ended with result:", result);
-      // Remove the PongGame by switching phase, then restart matchmaking:
-      this.resetMatchmaking();
-      // Optionally, you can update rounds here based on the game result.
-      this.phase = "matchmaking";
-    },
-    resetMatchmaking() {
-      // Clear any existing timers
-      this.timers.forEach(timer => clearInterval(timer));
-      this.timers = [];
-      // Reset the rounds and winner.
-      this.firstRound = [
-        { player1: "Player 1", player2: "Player 3", completed: false, timeLeft: 10 },
-        { player1: "Player 2", player2: "Player 4", completed: false, timeLeft: 10 },
+    createInitialMatches() {
+      // Assuming players are in order: player1, player2, player3, player4
+      this.matches = [
+        { id: 1, player1: this.players[0], player2: this.players[1], completed: false, timeLeft: 5 },
+        { id: 2, player1: this.players[2], player2: this.players[3], completed: false, timeLeft: 5 }
       ];
-      this.secondRound = [];
-      this.winner = null;
-      // Restart timers for new matchmaking round.
-      this.startTimers();
+      this.currentMatches = this.matches.slice(0, 2);
     },
+    onMatchStart() {
+      this.currentStep = 'game';
+    },
+    onGameEnded(winner) {
+      // Add the winner to the match results
+      this.matchResults.push(winner);
+
+      console.log(this.matchResults.length);
+      console.log(this.currentMatchIndex);
+
+      // Move to the next match
+      this.currentMatchIndex++;
+
+      if (this.matchResults.length === 2) {
+        // Create the final match between the winners of the initial matches
+        this.currentMatches = [
+          { id: 3, player1: this.matchResults[0], player2: this.matchResults[1], completed: false, timeLeft: 5 }
+        ];
+        this.currentMatchIndex = 0;
+        this.currentStep = 'matchmaking';
+      } else if (this.matchResults.length === 3) {
+        // Determine the tournament winner
+        this.winner = this.matchResults[2];
+        this.currentStep = 'winner';
+      } else {
+        // Continue to the next match
+        this.currentStep = 'matchmaking';
+      }
+    },
+    onGoBack() {
+      this.showQuitConfirm = true;
+    },
+    handleQuitConfirm() {
+      this.showQuitConfirm = false;
+
+      // If there's a pending route, navigate to it
+      if (this.pendingRoute) {
+        this.$router.push(this.pendingRoute);
+        this.pendingRoute = null;
+      } else {
+        // Reset the tournament state
+        this.currentStep = 'create';
+        this.tournamentId = '';
+        this.players = [];
+        this.matches = [];
+        this.isCreator = false;
+        this.winner = '';
+        this.currentMatchIndex = 0;
+        this.matchResults = [];
+        this.currentMatches = [];
+      }
+    },
+    handleQuitCancel() {
+      this.showQuitConfirm = false;
+      this.pendingRoute = null; // Clear the pending route
+    }
   },
-  beforeUnmount() {
-    this.timers.forEach(timer => clearInterval(timer));
-  },
+  beforeRouteLeave(to, from, next) {
+    if (this.currentStep !== 'create' && this.currentStep !== 'winner') {
+      this.showQuitConfirm = true;
+      this.pendingRoute = to.path; // Store the pending route
+      next(false); // Cancel the navigation
+    } else {
+      next(); // Allow the navigation
+    }
+  }
 };
 </script>
-
-
-<style scoped>
-.matchmaking-container {
-  max-width: 90%;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-}
-
-.round {
-  margin-bottom: 30px;
-}
-
-.match {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 10px;
-  padding: 15px;
-  border-radius: 8px;
-  background: rgba(99, 99, 99, 0.1);
-}
-
-.vs {
-  font-weight: bold;
-  font-size: 1.2em;
-  color: var(--text-color);
-}
-
-.status {
-  font-weight: bold;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.timer {
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.field {
-  margin-bottom: 30px;
-}
-
-.winner {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: gold;
-}
-
-/* Game view styling */
-.game-view {
-  margin-top: 20px;
-}
-@media (max-width: 800px) {
-  .matchmaking-container {
-    margin-left: 0;
-  }
-  .match {
-    flex-direction: column;
-    text-align: center;
-  }
-  .vs {
-    margin: 5px 0;
-  }
-}
-</style>

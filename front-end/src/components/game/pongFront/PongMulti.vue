@@ -3,7 +3,6 @@
 	  <div class="content">
 		<!-- <Versus /> -->
 		<div class="player-controls">
-		  <h2 class="mobile-hide">Commands</h2>
 		  <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
           <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
@@ -22,8 +21,8 @@
   <script>
   import HeaderOrganism from '@/components/header/navbar.vue';
   import FooterOrganism from '@/components/footer.vue';
-  // import PongFourPlayer from '@/components/game/PongFourPlayer.vue'; 
-  import PongGame from "@/components/game/PongGame.vue";
+  // import PongFourPlayer from '@/components/game/pongGame/PongFourPlayer.vue'; 
+  import PongGame from "@/components/game/pongGame/PongGame.vue";
   import Versus from "@/components/game/Versus.vue";
 
   
@@ -65,7 +64,6 @@
   .game-container {
 	border-radius: 8px;
 	padding: 10px;
-	background-color: none;
   }
 
   @media screen and (max-width: 810px) {

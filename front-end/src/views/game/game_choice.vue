@@ -69,8 +69,8 @@ export default {
       }
     ]);
 
-    console.log(getThemeImage('pong', currentTheme.value));
-    console.log(getThemeImage('tic-tac-toe', currentTheme.value));
+    // console.log(getThemeImage('pong', currentTheme.value));
+    // console.log(getThemeImage('tic-tac-toe', currentTheme.value));
 
     const handleGameChoice = (gameName) => {
       if (gameName === "Pong") {

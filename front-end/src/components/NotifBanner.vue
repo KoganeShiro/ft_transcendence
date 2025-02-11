@@ -2,7 +2,7 @@
   <div v-if="visible" class="tournament-banner">
     <div class="banner-content">
       <p class="banner-message">
-        {{ message }} <strong>#{{ tournamentId }}</strong>
+        {{ $t("tourn-message") }} <strong>#{{ tournamentId }}</strong>
       </p>
       <button class="close-btn" @click="closeBanner">×</button>
     </div>

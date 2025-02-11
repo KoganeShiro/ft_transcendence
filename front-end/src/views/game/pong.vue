@@ -38,7 +38,7 @@ import { computed } from "vue";
 import PongSolo from "@/components/game/pongFront/PongSolo.vue";
 import PongRemote from "@/components/game/pongFront/PongRemote.vue";
 import PongFourPlayer from "@/components/game/pongFront/PongMulti.vue";
-import PongGame from "@/components/game/PongGame.vue";
+import PongGame from "@/components/game/pongGame/PongGame.vue";
 import PongLocal from "@/components/game/pongFront/PongLocal.vue";
 import PongTournament from "@/components/game/pongFront/PongTournament.vue";
 import PongWithFriend from "@/components/game/pongFront/PongWithFriend.vue";

@@ -1,9 +1,11 @@
 <template>
   <div class="pong-page">
+    <!-- should make the versus component like the AI not
+     wait too much -->
     <Versus v-if="showVersus" @time-up="handleTimeUp" />
     
     <div v-else class="content">
-        <div class="player-controls">
+      <div class="player-controls">
         <div class="left-cmd">
           <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
@@ -17,31 +19,61 @@
       </div>
 
       <div class="game-container">
-        <PongGame />
+        <PongLocal @gameEnded="handleGameEnded" />
+        <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+        <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import PongGame from "@/components/game/PongGame.vue";
 import Versus from "@/components/game/Versus.vue";
+import PongLocal from "@/components/game/pongGame/PongLocal.vue";
+import WinnerPopup from "@/views/game/winner.vue";
+import LoserPopup from "@/views/game/loser.vue";
+import API from '@/api.js';
 
 export default {
   name: 'LocalFront',
   components: {
     Versus,
-    PongGame,
+    PongLocal,
+    WinnerPopup,
+    LoserPopup,
   },
   data() {
     return {
       showVersus: true,
+      showWinner: false,
+      showLoser: false,
+      winnerName: '',
+      winnerImage: '',
+      loserName: '',
+      loserImage: '',
     };
   },
   methods: {
     handleTimeUp() {
-      // Hide the Versus overlay when the time is up
       this.showVersus = false;
+    },
+    async handleGameEnded(winner) {
+      try {
+        const response = await API.get('/api/profile/');
+        const { username, cover_photo } = response.data;
+
+        if (winner === "Player") {
+          this.winnerName = username;
+          this.winnerImage = cover_photo;
+          this.showWinner = true;
+        } else {
+          this.loserName = username;
+          this.loserImage = cover_photo;
+          this.showLoser = true;
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     },
   },
 };

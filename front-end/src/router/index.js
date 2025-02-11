@@ -16,21 +16,18 @@ import AddFriend from '../components/profile/AddFriend.vue';
 import Account from '../views/settings/account.vue';
 import Appearence from '../views/settings/appearence.vue';
 import LanguageSwitcher from '../components/settings/LanguageSwitcher.vue';
-
-// import Loose from '../views/game/loose.vue';
-// import Win from '../views/game/win.vue';
 import GameChoice from '../views/game/game_choice.vue';
 import ModeSelection from '../views/game/mode_selection.vue';
 import TicModeSelection from '../views/game/tic_mode_selection.vue';
 import PongFront from '../views/game/pong.vue';
 import TicTacToe from '../views/game/tic_tac_toe.vue';
-import CreateTournament from '../components/game/CreateTournament.vue';
-import waitingPlayers from '../views/game/waiting_players.vue';
-import Matchmaking from '../views/game/matchmaking.vue';
+import Tournament from '@/components/game/pongFront/PongTournament.vue';
+// import Matchmaking from '../views/game/matchmaking.vue';
 import Invitation from '../components/Invitation.vue';
-import WaitingPlayers from '../views/game/waiting_players.vue';
 import WinnerPopup from "@/views/game/winner.vue";
 import LoserPopup from "@/views/game/loser.vue";
+import OtherProfile from "@/views/other_profile.vue";
+import OtherStats from "@/views/other_stats.vue";
 
 
 const routes = [
@@ -38,6 +35,16 @@ const routes = [
     path: '/',
     name: 'welcome',
     component: Welcome,
+  },
+  {
+    path: '/other_profile/:username',
+    name: 'OtherProfile',
+    component: OtherProfile,
+  },
+  {
+    path: '/other_stats/:username',
+    name: 'OtherStats',
+    component: OtherStats,
   },
   {
     path: '/invitation',
@@ -54,16 +61,11 @@ const routes = [
     name: 'LoserPopup',
     component: LoserPopup,
   },
-  {
-    path: '/waiting-players',
-    name: 'WaitingPlayers',
-    component: WaitingPlayers,
-  },
-  {
-    path: '/matchmaking',
-    name: 'Matchmaking',
-    component: Matchmaking,
-  },
+  // {
+  //   path: '/matchmaking',
+  //   name: 'Matchmaking',
+  //   component: Matchmaking,
+  // },
   {
     path: '/privacy',
     name: 'PrivacyPolicy',
@@ -175,14 +177,9 @@ const routes = [
     component: TicTacToe,
   },
   {
-    path: "/create-tournament",
-    name: "CreateTournament",
-    component: CreateTournament,
-  },
-  {
-    path: "/waiting-players",
-    name: "waitingPlayers",
-    component: waitingPlayers,
+    path: "/tournament",
+    name: "Tournament",
+    component: Tournament,
   },
 ];
 

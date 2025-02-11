@@ -71,20 +71,21 @@ export default {
         cover_photo: "",
       },
       loading: false,
-      is42: false,
       avatarFile: null,
     };
   },
   methods: {
     initAccount() {
+      if (this.loading) return;
       this.loading = true;
+
       API.get("/api/profile/")
         .then(response => {
           const data = response.data;
           this.user.name = data.username;
           this.user.cover_photo = data.cover_photo;
           this.user.password = "*************";
-          this.is42 = data.is42;
+          this.is42 = data.is_42;
         })
         .catch(error => {
           console.error("Error fetching account data:", error);
@@ -102,8 +103,13 @@ export default {
     },
 
     saveProfile() {
+      if (this.loading) return;
+      this.loading = true;
+  
       if (this.is42) {
         alert(this.$t("42-account-cannot-be-modified"));
+        this.loading = false;
+        this.initAccount();
         return;
       }
       
@@ -126,6 +132,7 @@ export default {
           const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
           if (!regex.test(this.user.password)) {
             alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            this.loading = false;
             this.initAccount();
             return;
           }
@@ -137,30 +144,39 @@ export default {
       
       request.then(response => {
           console.log("Profile saved successfully:", response.data);
-          this.initAccount();
           this.avatarFile = null;
+          this.loading = false;
+          this.user.password = "*************";
       })
       .catch(error => {
           console.error("Error saving profile:", error);
           alert(this.$t("error_saving_profile"));
+          this.loading = false;
+          this.initAccount();
       });
+      this.initAccount();
     },
 
-
-
     removeAccount() {
+      if (this.loading) return;
+      this.loading = true;
+    
       if (confirm(this.$t("delete-account-msg"))) {
-        API.get("/api/delete_account")
+        API.get("/api/delete_account/")
           .then(response => {
             alert(this.$t("account-deleted-successfully"));
             this.$router.push("/");
+            this.loading = false;
           })
           .catch(error => {
             console.error("Error deleting account:", error);
             alert(this.$t("error-deleting-account"));
+            this.loading = false;
           });
+          this.initAccount();
       }
     },
+
   },
   mounted() {
     this.initAccount();

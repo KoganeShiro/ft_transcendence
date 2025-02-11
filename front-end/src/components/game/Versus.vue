@@ -83,7 +83,6 @@ export default {
       setTimeout(() => {
         player2.value.imageUrl = anotherAvatar;
         player2.value.pseudo = 'OpponentName';
-        player2.value.link = 'https://opponent-profile.com';
       }, 3000);
     });
     
@@ -141,7 +140,7 @@ export default {
   background-color: var(--text-box-color, rgba(0,0,0,0.8));
   padding: 100px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;

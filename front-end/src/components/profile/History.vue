@@ -14,6 +14,8 @@
     </div>
   </div>
 </template>
+
+
 <!-- 
 <script>
 import MatchDetails from '@/components/profile/MatchDetails.vue';
@@ -141,7 +143,9 @@ export default {
         {
           id: '4pong1',
           gameType: '4 Players Pong',
-          opponent: 'Team Red',
+          opponent: 'player 1',
+          opponent2: 'player 2',
+          opponent3: 'player 3',
           won: true,
           date: '2023-07-15T19:00:00Z',
           score: '10-8-7-6',
@@ -151,7 +155,9 @@ export default {
         {
           id: '4pong2',
           gameType: '4 Players Pong',
-          opponent: 'Team Blue',
+          opponent: 'player 1',
+          opponent2: 'player 2',
+          opponent3: 'player 3',
           won: false,
           date: '2023-07-14T21:15:00Z',
           score: '9-10-8-7',
@@ -161,7 +167,9 @@ export default {
         {
           id: '4pong3',
           gameType: '4 Players Pong',
-          opponent: 'Team Green',
+          opponent: 'player 1',
+          opponent2: 'player 2',
+          opponent3: 'player 3',
           won: true,
           date: '2023-07-13T17:30:00Z',
           score: '10-9-8-7',
@@ -171,7 +179,9 @@ export default {
         {
           id: '4pong4',
           gameType: '4 Players Pong',
-          opponent: 'Team Yellow',
+          opponent: 'player 1',
+          opponent2: 'player 2',
+          opponent3: 'player 3',
           won: false,
           date: '2023-07-12T20:45:00Z',
           score: '8-10-7-6',

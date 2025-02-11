@@ -38,6 +38,7 @@
 
 <script>
 import API from '@/api.js';
+import axios from 'axios';
 import PseudoSidebar from "@/components/profile/PseudoSidebar.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
@@ -78,7 +79,7 @@ export default {
     async getProfile() {
       try {
         // add a variable at the end of profile (username)
-        const response = await API.get('/api/profile/');
+        const response = await axios.get('/api/profile/');
         this.username = response.data.username;
         this.cover_photo = response.data.cover_photo;
         // console.log(this.username);

@@ -6,7 +6,7 @@
             <div class="avatar-image" @click="triggerFileInput">
               <img :src="currentImage" :alt="pseudo" />
               <div class="overlay">
-                <span>Click to modify</span>
+                <span>{{$t("click-to-modify")}}</span>
               </div>
             </div>
             <span v-if="showPseudo" class="pseudo">{{ pseudo }}</span>
@@ -16,7 +16,7 @@
           <div class="avatar-image" @click="triggerFileInput">
             <img :src="currentImage" :alt="pseudo" />
             <div class="overlay">
-              <span>Click to modify</span>
+              <span>{{$t("click-to-modify")}}</span>
             </div>
           </div>
           <span v-if="showPseudo" class="pseudo">{{ pseudo }}</span>

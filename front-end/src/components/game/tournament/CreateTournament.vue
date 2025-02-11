@@ -8,7 +8,7 @@
           <label class="label">{{ $t("number-players") }}</label>
           <PlayerCount v-model="playerCount" />
         </div>
-  
+
         <ButtonAtom
           class="create-button"
           variant="ghost"
@@ -18,7 +18,7 @@
           {{ $t("create-tournament") }}
         </ButtonAtom>
       </Card>
-  
+
       <!-- Join Tournament Card -->
       <Card class="card">
         <div class="section">
@@ -29,7 +29,7 @@
             v-model="tournamentCode"
           />
         </div>
-  
+
         <ButtonAtom
           class="join-button"
           variant="ghost"
@@ -44,52 +44,33 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
-import { ref } from "vue";
-import Card from "@/components/atoms/Card.vue";
-import TextField from "@/components/atoms/TextField.vue";
-import PlayerCount from "@/components/game/PlayerCount.vue";
-import ButtonAtom from "@/components/atoms/Button.vue";
+import { inject, ref } from 'vue';
+import Card from '@/components/atoms/Card.vue';
+import TextField from '@/components/atoms/TextField.vue';
+import PlayerCount from '@/components/game/PlayerCount.vue';
+import ButtonAtom from '@/components/atoms/Button.vue';
 
 export default {
-  name: "CreateTournament",
-  components: {
-    Card,
-    TextField,
-    PlayerCount,
-    ButtonAtom,
-  },
-  setup() {
-    const router = useRouter();
+  components: { Card, TextField, PlayerCount, ButtonAtom },
+  setup(_, { emit }) {
+    const showTournamentBanner = inject('showTournamentBanner');
     const playerCount = ref(4);
-    const tournamentCode = ref("");
+    const tournamentCode = ref('');
 
     const createTournament = () => {
-      // Simulate tournament creation by generating a random tournament code.
-      const tournamentData = {
-        playerCount: playerCount.value,
-        isCreator: true,
-        tournamentCode: "T" + Math.floor(Math.random() * 10000),
-      };
-      console.log("Creating Tournament:", tournamentData);
-      // Navigate to the waiting players page with tournament data in the query.
-      router.push({ name: "waitingPlayers", query: tournamentData });
+      // Logic to create a tournament with the specified player count
+      const tournamentId = '12345'; // Replace with actual tournament ID from your logic
+      showTournamentBanner(tournamentId);
+      emit('tournamentCreated', { tournamentId });
     };
 
     const joinTournament = () => {
-      if (!tournamentCode.value) {
-        alert("Please enter a tournament code.");
-        return;
-      }
-      console.log("Joining Tournament with Code:", tournamentCode.value);
-      router.push({
-        name: "waitingPlayers",
-        query: { tournamentCode: tournamentCode.value, isCreator: false },
-      });
+      // Logic to join a tournament with the specified tournament code
+      //check if the tournament code is valid
+      emit('tournamentJoined', tournamentCode.value);
     };
 
     return {
-      router,
       playerCount,
       tournamentCode,
       createTournament,
@@ -99,8 +80,8 @@ export default {
 };
 </script>
 
-  
-  <style scoped>
+
+<style scoped>
   .container {
     display: flex;
     flex-direction: column;

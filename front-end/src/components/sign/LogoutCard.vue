@@ -34,11 +34,11 @@ export default {
     },
     async onlogout() {
       try {
-        // Call the API to remove the refresh cookie
-        await API.get('/api/logout/', {}, {
+        await axios.get('/api/logout/', {}, {
         });
 
-        // Redirect to the home page after successful logout
+        this.$router.push("/");
+
       } catch (error) {
         console.error("Error during logout:", error);
         alert("Logout failed. Please try again.");

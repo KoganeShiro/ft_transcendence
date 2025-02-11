@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
-import invitations from './invitation'
-import game from './game'
+import invitations from './invitation';
+import game from './game';
 
 export default createStore({
   state: {
@@ -29,6 +29,10 @@ export default createStore({
     },
     changeTheme({ commit }, theme) {
       commit("setTheme", theme);
+    },
+    initializeApp({ commit }) {
+      console.log("initializeApp action called");
+      //  can commit mutations or dispatch other actions
     }
   },
   getters: {
