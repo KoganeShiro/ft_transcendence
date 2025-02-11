@@ -135,6 +135,7 @@ INSTALLED_APPS = [
  # added for social login
     'social_django', 
     'corsheaders',
+    'drf_yasg',
    # 'dj_rest_auth',
 
     #'user_mgm',
@@ -192,6 +193,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),    
     'https://localhost',
     'https://localhost:1443',
+    'http://back-end:8000',
 ]
 
 

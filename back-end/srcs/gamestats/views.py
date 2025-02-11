@@ -71,7 +71,7 @@ class PongViewSet(viewsets.ModelViewSet):
     
 class MultiViewSet(viewsets.ModelViewSet):
     queryset = PongMulti.objects.all().order_by('-timestamp')  
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT', 'PATCH']:  # Use write serializer for input
