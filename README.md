@@ -119,20 +119,18 @@
 
 - [x] Logic of the friend profile, make another page ??
 
-
-
 - [-] Make sure that in tournament the player cannot go elsewhere
 - [x] Are you sure you want to leave the tournament component
 
+- [x] Make the pong game responsive ==> may start searching for how to make the AI
+- [x] Play against guest (local) logic
+- [x] Play against AI logic (on local)
+
+
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
-- [ ] Make the pong game responsive ==> may start searching for how to make the AI
 
 - [ ] Make the Tic Tac Toe AI
-
-- [ ] Play against guest (local) logic
-- [ ] Play against AI logic (on local)
-
 - [ ] Play against another player logic --> 
 - [ ] Play against a friend (private match) logic -- >
    - [x] Invite logic (for private match)
