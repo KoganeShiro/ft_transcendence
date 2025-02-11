@@ -9,10 +9,11 @@ active_games = {}
 class PongConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.game_id = str(uuid.uuid4())  # Générer un ID unique pour chaque partie
-        self.room_group_name = f"pong_{self.game_id}"  # Créer un groupe unique pour chaque partie
+        # self.game_id = str(uuid.uuid4())  # Générer un ID unique pour chaque partie
+        self.room_group_name = "" #f"pong_{self.game_id}"  # Créer un groupe unique pour chaque partie
         self.game_loop_task = None  
         self.game_speed = 0.04  
+        self.initial_ball_speed = 30
         self.initial_ball_velocity_x = 0.01 * random.choice([-1, 1])
         self.initial_ball_velocity_y = 0  
         self.ball_speed_factor = 30  
@@ -29,18 +30,49 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         #definition des stats 
         self.game_statistic = {
-            "rank": 0,
             "won_under5": 0,
             "lost_under5": 0,
             "won_under10": 0,
             "lost_under10": 0,
             "won_upper10": 0,
             "lost_upper10": 0,
-
         }
         
-        # Définition de l'état du jeu ici
-        self.game_state = {
+
+    async def connect(self):
+        """ Gérer la connexion des joueurs et l'affectation aux parties """
+        await self.accept()
+            # Vérifier s'il existe une partie en attente d'un deuxième joueur
+        for game_id, game in active_games.items():
+            if game["player1_socket"] and not game["player2_socket"]:
+                self.game_id = game_id  # On récupère bien le game_id existant
+                self.room_group_name = f"pong_{self.game_id}"
+                active_games[self.game_id]["player2_socket"] = self.channel_name
+                self.game_state = game.get("game_state")
+                self.player2_socket = self.channel_name
+
+                # Ajouter le joueur au groupe et démarrer la partie
+                await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+                await self.send(text_data=json.dumps({
+                    'type': 'role_assignment', # Type de message optionnel, mais bonne pratique
+                    'role': 'player2',
+                }))
+                
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "players_ready",  # Nouveau type de message pour signaler que 2 joueurs sont prêts
+                        "message": "Deux joueurs connectés, la partie peut commencer !" # Message optionnel
+                    }
+                )
+                
+                await self.start_game()
+                return  # Stop ici pour éviter de recréer une partie
+
+        # Si aucune partie en attente, créer une nouvelle
+        self.game_id = str(uuid.uuid4())  # Uniquement si pas de partie existante
+        self.room_group_name = f"pong_{self.game_id}"
+        initial_game_state = { # Définir l'état initial du jeu **ICI** (dans connect(), pour les nouvelles parties)
             "ball_x": 0.5,
             "ball_y": 0.5,
             "ball_velocity_x": self.initial_ball_velocity_x,
@@ -50,59 +82,21 @@ class PongConsumer(AsyncWebsocketConsumer):
             "score1": 0,
             "score2": 0,
         }
-
-    async def connect(self):
-        """ Gérer la connexion des joueurs et l'affectation aux parties """
-        await self.accept()
-        # print(game)
-            # Vérifier s'il existe une partie en attente d'un deuxième joueur
-        for game_id, game in active_games.items():
-            if game["player1_socket"] and not game["player2_socket"]:
-                self.game_id = game_id  # On récupère bien le game_id existant
-                self.room_group_name = f"pong_{self.game_id}"
-                active_games[self.game_id]["player2_socket"] = self.channel_name
-                self.player2_socket = self.channel_name
-
-                # print(f"👤 Joueur 2 rejoint la room {self.room_group_name}")
-
-                # Ajouter le joueur au groupe et démarrer la partie
-                await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-                # print(f"✅ group_add - Consumer {self.channel_name} AJOUTÉ au groupe {self.room_group_name}") # LOG CONFIRMATION GROUP_ADD JOUEUR 2
-                await self.send(text_data=json.dumps({
-                    'type': 'role_assignment', # Type de message optionnel, mais bonne pratique
-                    'role': 'player2',
-                }))
-                # print(f"WebSocket CONNECT - Joueur {self.channel_name} rejoint le groupe {self.room_group_name}") # LOG ESSENTIEL - CONFIRMATION AJOUT AU GROUPE
-                
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "players_ready",  # Nouveau type de message pour signaler que 2 joueurs sont prêts
-                        "message": "Deux joueurs connectés, la partie peut commencer !" # Message optionnel
-                    }
-                )
-                # print(f"📢 group_send 'players_ready' envoyé au groupe {self.room_group_name}") # LOG DE CONFIRMATION DE L'ENVOI DU MESSAGE AU GROUPE
-
-                
-                await self.start_game()
-                return  # Stop ici pour éviter de recréer une partie
-
-        # Si aucune partie en attente, créer une nouvelle
-        self.game_id = str(uuid.uuid4())  # Uniquement si pas de partie existante
-        self.room_group_name = f"pong_{self.game_id}"
         active_games[self.game_id] = {
             "player1_socket": self.channel_name,
             "player2_socket": None,
-            "game_state": self.game_state,
+            "game_state": initial_game_state, # **INITIALISER game_state DANS active_games AVEC initial_game_state (DÉFINI JUSTE AU-DESSUS) !**
         }
+        # **RÉCUPÉRER L'ÉTAT DU JEU DE active_games ET L'ASSIGNER À self.game_state :**
+        game = active_games.get(self.game_id) # Récupérer le jeu de active_games (maintenant qu'il est créé)
+        if game: # Vérification (toujours bonne pratique)
+            self.game_state = game.get("game_state") # **INITIALISER CORRECTEMENT self.game_state EN RÉCUPÉRANT LA VERSION DE active_games !**
         self.player1_socket = self.channel_name
         await self.send(text_data=json.dumps({
             'type': 'role_assignment', # Type de message optionnel, mais bonne pratique
             'role': 'player1',
         }))
-        # print(f"🆕 Nouvelle partie créée {self.game_id}, en attente du joueur 2")
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        # print(f"✅ group_add - Consumer {self.channel_name} AJOUTÉ au groupe {self.room_group_name}") # LOG CONFIRMATION GROUP_ADD JOUEUR 1
 
     async def receive(self, text_data):
         """ Gérer les entrées des joueurs indépendamment """
@@ -111,17 +105,12 @@ class PongConsumer(AsyncWebsocketConsumer):
         player = 'null'
         
         type_message = text_data_json.get('type') # Récupérer le type de message (optionnel)
-    
-        # if type_message == "init":
-            # print(f"INIT message :{text_data_json}")
         
         if type_message == "moves":
             # print(f"Moves : {text_data}")
             player = text_data_json.get('player')
             moves = text_data_json.get('moves')
         
-        # print(f"Message reçu par {self.channel_name}- Groupe: {self.room_group_name} - Message: {text_data_json}")  # Affiche le message reçu
-
         if self.channel_name == self.player1_socket:
             await self.handle_player_moves(moves, player)
         elif self.channel_name == self.player2_socket:
@@ -132,41 +121,30 @@ class PongConsumer(AsyncWebsocketConsumer):
         if game:
             game_state = game.get("game_state")
             if game_state:
-                
-                # print(f"Envoyer l'état du jeu à tous les joueurs depuis {self.channel_name}")
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
                         "type": "game_update",
-                        "game_state": game_state  # Envoi de l'état du jeu à partir de active_games
-                    }
+                        "game_state": game_state 
+                    },
                 )
 
     async def start_game(self):
         """ Démarre la partie lorsque deux joueurs sont connectés """
-        # print("🎮 Démarrage du jeu !")
         self.game_loop_task = asyncio.create_task(self.game_loop())
 
         
-    def reset_ball(self, direction): # <--- AJOUT DE LA MÉTHODE reset_ball CÔTÉ SERVEUR
+    def reset_ball(self, direction):
         self.game_state["ball_x"] = 0.5
         self.game_state["ball_y"] = 0.5
         self.game_state["player1_y"] = 0.5
         self.game_state["player2_y"] = 0.5
-        self.game_state["ball_velocity_x"] = 0.01 * direction  # IDENTIQUE AU CLIENT (0.01)
+        self.game_state["ball_velocity_x"] = 0.01 * direction 
         self.game_state["ball_velocity_y"] = 0
-        self.ball_speed_factor = self.initial_ball_speed # Utiliser self.initial_ball_speed, défini dans __init__
+        self.ball_speed_factor = self.initial_ball_speed
 
-    # async def game_update(self, event):
-    #     """ Envoyer les mises à jour du jeu aux joueurs """
-    #     # await self.send(text_data=json.dumps({
-    #     #     "game_state": event["game_state"]
-    #     # }))
-    
+ 
     async def handle_player_moves(self, move, player):
-        # print(f"DEBUT handle_player_moves - player: {player}, moves: {move}") # LOG DÉBUT
-        # print(f"🔵 SERVEUR - DEBUT handle_player_moves - player: {player}, moves: {move}") # LOG DÉBUT
-        # print(f"ℹ️ SERVEUR - game_state BEFORE move processing: {self.game_state}") # ADD THIS LOG - GAME STATE BEFORE
 
         """ Gérer les mouvements des joueurs de manière asynchrone """
         if player == "player1":
@@ -185,12 +163,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             elif move.get("down", False):
                 self.game_state["player2_y"] = min(self.game_state["player2_y"] + self.paddle_speed, 1)
             # print(f"Player2 AFTER {self.game_state}")
-        # print(f"🔴 SERVEUR - FIN handle_player_moves - game_state AFTER movements de {player}: {self.game_state}") # LOG FIN
-        # print(f"FIN handle_player_moves - game_state après mouvements: {self.game_state}") # LOG FIN
 
 
     async def game_loop(self):
-        # print("DEBUT game_loop") # LOG DÉBUT
         previous_time = time.time()
 
         while True:
@@ -198,7 +173,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             delta_time = current_time - previous_time
             previous_time = current_time
 
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.01)
 
             # Mettre à jour la position de la balle
             self.game_state["ball_x"] += self.game_state["ball_velocity_x"] * delta_time * self.ball_speed_factor
@@ -235,18 +210,46 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["score2"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
                 self.reset_ball(1)
-                self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
+                self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
+
+                if self.game_state["score2"] >= 5:
+                    winner = "Player 2"
+                    await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
+                    return 
 
             elif self.game_state["ball_x"] >= 1:
                 self.game_state["score1"] += 1
                 self.reset_ball(-1)
-                self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
+                self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
 
-            # print(f"game_loop - game_state avant update_game_state: {self.game_state}") # LOG ÉTAT DU JEU
+                if self.game_state["score1"] >= 5:
+                    winner = "Player 1"
+                    await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
+                    return 
+
             await self.update_game_state()
         
-        # print("FIN game_loop") # LOG FIN (devrait ne pas être atteint en boucle infinie)
 
+    async def end_game(self, winner):
+        """ Arrêter la boucle de jeu et annoncer le vainqueur """
+        if self.game_loop_task: # Vérifier si la game_loop_task existe et est en cours
+            self.game_loop_task.cancel() # Annuler la game_loop_task pour arrêter la boucle de jeu
+            try:
+                await self.game_loop_task # Attendre que la tâche soit bien annulée (bonne pratique)
+            except asyncio.CancelledError:
+                pass # Tâche annulée, c'est normal
+
+        # Envoyer un message "game_over" à tous les joueurs du groupe pour annoncer le vainqueur
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "game_over", # Type de message pour indiquer la fin du jeu
+                "message": f"{winner} a gagné la partie !", # Message annonçant le vainqueur
+                "winner": winner, # Envoyer aussi le nom du vainqueur pour que le front-end puisse l'afficher
+            }
+        )
+        print(f"Partie terminée ! Vainqueur : {winner}")
+        
 
     async def update_game_state(self):
         message = {
@@ -257,9 +260,8 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.room_group_name,  # Nom du groupe auquel envoyer le message
             message  # Le message à envoyer
         )
-        print(f"🟢 Message: {message}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
+        # print(f"🟢 {self.game_state}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
 
-            
 
     def calculate_ball_angle(self, ball_y, paddle_y):
             # Calculer l'écart entre la balle et le centre du paddle
@@ -272,23 +274,32 @@ class PongConsumer(AsyncWebsocketConsumer):
     
     async def players_ready(self, event):
         message = event['message'] # Récupérer le message optionnel
-        # print(f"🟢 RECUE du message 'players_ready' par {self.channel_name} - Message: {message}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
         await self.send(text_data=json.dumps({
             "type": "players_ready",
             "message": message
         }))
-        
+    
+    
+    async def game_over(self, event): # <--- AJOUTEZ CETTE FONCTION DE GESTION (HANDLER) POUR game_over
+        """ Gérer le message 'game_over' diffusé au groupe """
+        game_over_message = event['message'] # Récupérer le message de fin de partie de l'event
+        winner = event['winner'] # Récupérer le nom du vainqueur de l'event
+
+        message = {
+            "type": "game_over",
+            "message": game_over_message, # Renvoyer le message de fin de partie au front-end
+            "winner": winner # Renvoyer le nom du vainqueur au front-end
+        }
+        # ENVOYER le message 'game_over' (avec le message et le vainqueur) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
+        await self.send(text_data=json.dumps(message))
+    
+    
     async def game_update(self, event):
         """ Gérer le message 'game_update' diffusé au groupe """
         game_state = event['game_state'] # Récupérer l'état du jeu du message
-        # print(f"🔄 RECUE du message 'game_update' par {self.channel_name} - game_state: {game_state}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
         message = {
-                        "type": "game_update",
-                        "game_state": game_state
-                }
-        # ENVOYER le message 'game_update' (avec l'état du jeu) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
-        await self.send(text_data=json.dumps({
             "type": "game_update",
-            "game_state": game_state 
-        }))
-        print(f"🔄 {message}")
+            "game_state": game_state
+        }
+        # ENVOYER le message 'game_update' (avec l'état du jeu) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
+        await self.send(text_data=json.dumps(message))
