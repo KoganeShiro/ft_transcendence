@@ -4,10 +4,10 @@ import os
 API_KEY = os.environ.get('API_KEY')
 
 
-url = "http://back-end:8000/api/" + apiname...
+url = "http://back-end:8000/api/games/pong/"
 
 headers = {
-    "X-API-KEY": API_KEY  # API Key in custom header
+    "X-API-KEY": os.environ.get('API_KEY')
 }
 
 response = requests.get(url, headers=headers)

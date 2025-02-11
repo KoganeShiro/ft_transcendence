@@ -37,6 +37,9 @@ class CookieJWTAuthentication(JWTAuthentication):
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 class APIKeyAuthentication(BaseAuthentication):
     """
@@ -45,6 +48,7 @@ class APIKeyAuthentication(BaseAuthentication):
     def authenticate(self, request):
         # Get the API key from headers
         api_key = request.headers.get('X-API-KEY')
+        logging.debug(f"API key: {api_key}")
 
         if not api_key:
             return None  # No authentication, move to the next authentication class
@@ -52,9 +56,10 @@ class APIKeyAuthentication(BaseAuthentication):
         # Compare the API key with the one in settings (or fetch from DB)
         if api_key != settings.API_KEY:
             raise AuthenticationFailed("Invalid API key")
-
-        return (None, None)  # No user object needed for service-to-service auth
-    
+        logging.debug("API key is valid")
+        user, created = CustomUser.objects.get_or_create(username='api_user')
+        # return (None, None)  # No user object needed for service-to-service auth
+        return (user, None)
 from rest_framework.permissions import IsAuthenticated
 
 class IsAPIUser(IsAuthenticated):

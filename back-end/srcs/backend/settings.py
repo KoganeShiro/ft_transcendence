@@ -135,6 +135,7 @@ INSTALLED_APPS = [
  # added for social login
     'social_django', 
     'corsheaders',
+    'drf_yasg',
    # 'dj_rest_auth',
 
     #'user_mgm',
@@ -145,10 +146,12 @@ INSTALLED_APPS = [
 #     "http://localhost:8000",
 #     "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
 # ]
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-CORS_ALLOW_CREDENTIALS = True  
+CORS_ALLOW_CREDENTIALS = True
+# SECURE_SSL_REDIRECT = True
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
@@ -190,6 +193,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://' + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),    
     'https://localhost',
     'https://localhost:1443',
+    'http://back-end:8000',
 ]
 
 

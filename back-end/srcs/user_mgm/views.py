@@ -224,6 +224,7 @@ def getProfile(request, lookup_value=None):
     serializer = ProfileSerializer(user, many=False)
     isOnline = user.last_seen > timezone.now() - timezone.timedelta(minutes=5)
     preparedData = {
+        'id': serializer.data['id'],
         'username': serializer.data['username'],
         'cover_photo': serializer.data['cover_photo'],
         'online': isOnline,
@@ -302,7 +303,8 @@ def updateStats(request, lookup_value):
     """
     Fetch user profile using either user ID or username.
     """
-    if request.user == None:
+    #if request.user == None:
+    if request.user.username == 'api_user':
     #if request.user == None or request.user.username == lookup_value:
         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
     else:
@@ -315,13 +317,59 @@ def updateStats(request, lookup_value):
     return Response(serializer.errors, status=400)
 
 
+from .serializers import StatsIncrementSerializer
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def incrementStats(request, lookup_value):
+    """
+    Fetch user profile using either user ID or username.
+    """
+    #if request.user == None:
+    if request.user.username == 'api_user':
+    #if request.user == None or request.user.username == lookup_value:
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+    else:
+        return Response({'error': 'You are not allowed to increment users stats'}, status=400)
+    
+    data = request.data.copy()
+        # Ensure stat_pong_solo_progress is a list
+    if 'stat_pong_solo_progress' in data and isinstance(data['stat_pong_solo_progress'], int):
+        data['stat_pong_solo_progress'] = [data['stat_pong_solo_progress']]
+
+    # Ensure stat_pong_multi_progress is a list
+    if 'stat_pong_multi_progress' in data and isinstance(data['stat_pong_multi_progress'], int):
+        data['stat_pong_multi_progress'] = [data['stat_pong_multi_progress']]
+
+    # Ensure stat_ttt_progress is a list
+    if 'stat_ttt_progress' in data and isinstance(data['stat_ttt_progress'], int):
+        data['stat_ttt_progress'] = [data['stat_ttt_progress']]
+
+    serializer = StatsIncrementSerializer(user, data=data, partial=True)
+    if serializer.is_valid():        
+        serializer.save()        
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
 import json
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_solo_progress(request, lookup_value):
     try:
-        if request.user == None:
+        #if request.user == None:
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:
@@ -353,7 +401,8 @@ import json
 @permission_classes([IsAuthenticated])
 def add_multi_progress(request, lookup_value):
     try:
-        if request.user == None:
+        #if request.user == None:
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:
@@ -386,7 +435,8 @@ import json
 @permission_classes([IsAuthenticated])
 def add_ttt_progress(request, lookup_value):
     try:
-        if request.user == None:
+        #if request.user == None:
+        if request.user.username == 'api_user':
         #if request.user == None or request.user.username == lookup_value:
             user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
         else:

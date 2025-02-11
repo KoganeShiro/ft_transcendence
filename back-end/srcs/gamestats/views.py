@@ -30,8 +30,10 @@ class PongViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -41,8 +43,11 @@ class PongViewSet(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):        
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
@@ -52,8 +57,10 @@ class PongViewSet(viewsets.ModelViewSet):
     
     def partial_update(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")                
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")                
         return self.update(request, *args, **kwargs)
 
 
@@ -71,7 +78,7 @@ class PongViewSet(viewsets.ModelViewSet):
     
 class MultiViewSet(viewsets.ModelViewSet):
     queryset = PongMulti.objects.all().order_by('-timestamp')  
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT', 'PATCH']:  # Use write serializer for input
@@ -80,8 +87,10 @@ class MultiViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -91,8 +100,10 @@ class MultiViewSet(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):        
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
@@ -102,8 +113,10 @@ class MultiViewSet(viewsets.ModelViewSet):
     
     def partial_update(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")                
+        if request.user.usernamename != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")                
         return self.update(request, *args, **kwargs)
 
     
@@ -116,10 +129,12 @@ class TTTViewSet(viewsets.ModelViewSet):
             return TTTWriteSerializer
         return TTTSerializer  # Use read serializer for output
     
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):        
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")        
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -129,8 +144,10 @@ class TTTViewSet(viewsets.ModelViewSet):
     
     def update(self, request, *args, **kwargs):        
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")        
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")        
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
@@ -140,8 +157,10 @@ class TTTViewSet(viewsets.ModelViewSet):
     
     def partial_update(self, request, *args, **kwargs):
         self.check_permissions(request)  # Check permissions explicitly
-        if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
-            raise PermissionDenied("User is not authenticated or not an API user")                
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        # if not request.user.is_authenticated or not isinstance(request.user, IsAPIUser):
+        #     raise PermissionDenied("User is not authenticated or not an API user")                
         return self.update(request, *args, **kwargs)
 
     
