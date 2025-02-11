@@ -52,7 +52,7 @@ export default {
       // Mobile phone: very small width
       this.isMobile = true;
       if (window.innerHeight < 767) {
-        console.log("Very small phone detected.");
+        // console.log("Very small phone detected.");
         this.canvasWidth = 300;
         this.canvasHeight = 430;
       }
@@ -60,8 +60,6 @@ export default {
         this.canvasWidth = 300;
         this.canvasHeight = 550;
       }
-      console.log("window.innerHeight =", window.innerHeight);
-      console.log("Mobile mode: canvasWidth =", this.canvasWidth, "canvasHeight =", this.canvasHeight);
       // Remove keyboard listeners (not needed for touch)
       window.removeEventListener("keydown", this.handleKeyDown);
       window.removeEventListener("keyup", this.handleKeyUp);
@@ -71,13 +69,12 @@ export default {
         this.handleTouchMove,
         { passive: false }
       );
-      console.log("Touch listener added for mobile.");
+      // console.log("Touch listener added for mobile.");
     } else if (window.innerWidth < 811) {
       // Tablet (portrait mode but not a very small phone)
       this.isTablette = true;
       this.canvasWidth = 500; // adjust as needed for tablets
       this.canvasHeight = 850;
-      console.log("Tablette mode: canvasWidth =", this.canvasWidth, "canvasHeight =", this.canvasHeight);
       window.removeEventListener("keydown", this.handleKeyDown);
       window.removeEventListener("keyup", this.handleKeyUp);
       this.$refs.pongCanvas.addEventListener(
@@ -85,27 +82,25 @@ export default {
         this.handleTouchMove,
         { passive: false }
       );
-      console.log("Touch listener added for tablette.");
     } else {
       // Desktop mode
       window.addEventListener("keydown", this.handleKeyDown);
       window.addEventListener("keyup", this.handleKeyUp);
-      console.log("Keyboard listeners added for desktop.");
     }
-    //this.startGameLoop();
+    this.startGameLoop();
   },
 
   methods: {
     // Existing keyboard events for desktop remain unchanged.
     handleKeyDown(event) {
-      console.log("Key down:", event.key);
+      // console.log("Key down:", event.key);
       if (event.key === "ArrowUp") this.keysPressed.up_right = true;
       if (event.key === "ArrowDown") this.keysPressed.down_right = true;
       if (event.key === "w" || event.key === "W") this.keysPressed.up_left = true;
       if (event.key === "s" || event.key === "S") this.keysPressed.down_left = true;
     },
     handleKeyUp(event) {
-      console.log("Key up:", event.key);
+      // console.log("Key up:", event.key);
       if (event.key === "ArrowUp") this.keysPressed.up_right = false;
       if (event.key === "ArrowDown") this.keysPressed.down_right = false;
       if (event.key === "w" || event.key === "W") this.keysPressed.up_left = false;
@@ -119,7 +114,7 @@ export default {
       // Calculate normalized horizontal position (0 to 1)
       const touchX = (touch.clientX - rect.left) / rect.width;
       this.player1_x = touchX;
-      console.log("Touch move: player1_x =", this.player1_x);
+      // console.log("Touch move: player1_x =", this.player1_x);
     },
     startGameLoop() {
       let previousTime = performance.now();
@@ -131,7 +126,7 @@ export default {
         this.gameLoop = requestAnimationFrame(loop);
       };
       this.gameLoop = requestAnimationFrame(loop);
-      console.log("Game loop started.");
+      // console.log("Game loop started.");
     },
     updateGame(deltaTime) {
       if (!this.isMobile && !this.isTablette) {
@@ -175,7 +170,7 @@ export default {
           this.gameState.ball_velocity_x *= -1;
           this.gameState.ball_velocity_y = (this.gameState.ball_y - this.gameState.player1_y) * 0.1;
           this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          console.log("Desktop collision: Player 1 hit.");
+          // console.log("Desktop collision: Player 1 hit.");
         }
         if (
           this.gameState.ball_x >= 0.95 &&
@@ -185,7 +180,7 @@ export default {
           this.gameState.ball_velocity_x *= -1;
           this.gameState.ball_velocity_y = (this.gameState.ball_y - this.gameState.player2_y) * 0.1;
           this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          console.log("Desktop collision: Player 2 hit.");
+          // console.log("Desktop collision: Player 2 hit.");
         }
       } else {
         // Mobile collision:
@@ -202,7 +197,7 @@ export default {
           // Optionally adjust horizontal velocity based on hit position
           this.gameState.ball_velocity_x = (this.gameState.ball_x - this.player1_x) * 0.1;
           this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          console.log("Mobile collision: Player paddle hit.");
+          // console.log("Mobile collision: Player paddle hit.");
         }
         // Simple opponent paddle at the top (centered horizontally)
         const opponentPaddleX = 0.5;
@@ -215,37 +210,38 @@ export default {
           this.gameState.ball_velocity_y *= -1;
           this.gameState.ball_velocity_x = (this.gameState.ball_x - opponentPaddleX) * 0.1;
           this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          console.log("Mobile collision: Opponent paddle hit.");
+          // console.log("Mobile collision: Opponent paddle hit.");
         }
       }
     },
     checkScore() {
+      // Desktop scoring: when ball goes off left or right edges.
       if (!this.isMobile && !this.isTablette) {
-        // Desktop scoring: when ball goes off left or right edges.
         if (this.gameState.ball_x <= 0) {
           this.gameState.score2++;
-          console.log("Desktop score: Player 2 scores.");
           this.resetBall(1);
         }
         if (this.gameState.ball_x >= 1) {
           this.gameState.score1++;
-          console.log("Desktop score: Player 1 scores.");
           this.resetBall(-1);
         }
       } else {
         // Mobile scoring: when ball goes off the top or bottom.
         if (this.gameState.ball_y >= 1) {
           this.gameState.score2++;
-          console.log("Mobile score: Opponent scores.");
-          this.resetBall(-1); // player missed
+          this.resetBall(-1);
         }
         if (this.gameState.ball_y <= 0) {
           this.gameState.score1++;
-          console.log("Mobile score: Player scores.");
-          this.resetBall(1); // opponent missed
+          this.resetBall(1);
         }
       }
+      if (this.gameState.score1 >= 5 || this.gameState.score2 >= 5) {
+        this.resetBall(1);
+        this.endGame();
+      }
     },
+
     resetBall(direction) {
       // Reset ball position
       this.gameState.ball_x = 0.5;
@@ -266,7 +262,7 @@ export default {
         this.gameState.ball_velocity_x = 0;
       }
       this.ballSpeedFactor = this.initialBallSpeed;
-      console.log("Ball reset. Direction:", direction);
+      // console.log("Ball reset. Direction:", direction);
     },
     updateCanvas() {
       const canvas = this.$refs.pongCanvas;
@@ -312,15 +308,19 @@ export default {
       }
     },
     endGame() {
-      let winner = "";
-      if (!this.isMobile && !this.isTablette) {
-        winner = this.gameState.score1 > this.gameState.score2 ? "Player 1" : "Player 2";
-      } else {
-        winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Opponent";
+      // Stop the game loop
+      this.isGameRunning = false;
+      if (this.gameLoop) {
+        cancelAnimationFrame(this.gameLoop);
       }
-      console.log("Game ended. Winner:", winner);
+      
+      // Determine the winner
+      const winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Guest";
+      
+      // Emit an event to the parent component with the winner’s name.
       this.$emit("gameEnded", winner);
     },
+
   },
   beforeUnmount() {
     if (!this.isMobile && !this.isTablette) {

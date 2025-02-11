@@ -24,15 +24,13 @@
     },
     data() {
       return {
-        winnerName: "Username42", // Replace with dynamic data if needed
+        winnerName: "", // Replace with dynamic data if needed
         winnerImage: "",        // URL for the winner's image; if empty, AvatarAtom uses its default
       };
     },
     methods: {
       closePopup() {
-        // For example, navigate to the home page
-        this.$router.push("/");
-        // Alternatively, emit an event: this.$emit('close');
+        this.$router.push("/game-choice");
       },
     },
   };

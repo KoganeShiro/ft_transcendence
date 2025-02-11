@@ -81,7 +81,7 @@ export default {
       { image: getThemeImage('remote', currentTheme.value), name: t("multi-remote"), mode: "remote" },
       { image: getThemeImage('local', currentTheme.value), name: t("multi-local"), mode: "local" },
       { image: getThemeImage('withFriend', currentTheme.value), name: t("with-friends"), mode: "withFriend" },
-      { image: getThemeImage('multi', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
+      // { image: getThemeImage('multi', currentTheme.value), name: t("more-than-2"), mode: "multiplayer" },
       { image: getThemeImage('tournament', currentTheme.value), name: t("tournament"), mode: "tournament" },
     ]);
 

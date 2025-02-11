@@ -9,21 +9,21 @@
           <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
 		</div>
 		<div class="game-container">
-		  <PongGame />
+		  <PongRemote />
 		</div>
 	  </div>
 	</div>
   </template>
   
   <script>
-  import PongGame from "@/components/game/pongGame/PongGame.vue";
+  import PongRemote from "@/components/game/pongGame/PongRemote.vue";
   import Versus from "@/components/game/Versus.vue";
   
   export default {
 	name: 'RemoteFront',
 	components: {
 	  Versus,
-	  PongGame,
+	  PongRemote,
 	},
 	data() {
 	  return {

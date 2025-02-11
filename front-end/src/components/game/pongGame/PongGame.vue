@@ -220,32 +220,33 @@ export default {
       }
     },
     checkScore() {
+      // Desktop scoring: when ball goes off left or right edges.
       if (!this.isMobile && !this.isTablette) {
-        // Desktop scoring: when ball goes off left or right edges.
         if (this.gameState.ball_x <= 0) {
           this.gameState.score2++;
-          console.log("Desktop score: Player 2 scores.");
           this.resetBall(1);
         }
         if (this.gameState.ball_x >= 1) {
           this.gameState.score1++;
-          console.log("Desktop score: Player 1 scores.");
           this.resetBall(-1);
         }
       } else {
         // Mobile scoring: when ball goes off the top or bottom.
         if (this.gameState.ball_y >= 1) {
           this.gameState.score2++;
-          console.log("Mobile score: Opponent scores.");
-          this.resetBall(-1); // player missed
+          this.resetBall(-1);
         }
         if (this.gameState.ball_y <= 0) {
           this.gameState.score1++;
-          console.log("Mobile score: Player scores.");
-          this.resetBall(1); // opponent missed
+          this.resetBall(1);
         }
       }
+      
+      if (this.gameState.score1 >= 5 || this.gameState.score2 >= 5) {
+        this.endGame();
+      }
     },
+
     resetBall(direction) {
       // Reset ball position
       this.gameState.ball_x = 0.5;

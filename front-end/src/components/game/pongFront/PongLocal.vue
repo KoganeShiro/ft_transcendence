@@ -3,7 +3,7 @@
     <Versus v-if="showVersus" @time-up="handleTimeUp" />
     
     <div v-else class="content">
-        <div class="player-controls">
+      <div class="player-controls">
         <div class="left-cmd">
           <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
@@ -17,7 +17,9 @@
       </div>
 
       <div class="game-container">
-        <PongLocal />
+        <PongLocal @gameEnded="handleGameEnded" />
+        <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+        <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
       </div>
     </div>
   </div>
@@ -26,22 +28,44 @@
 <script>
 import Versus from "@/components/game/Versus.vue";
 import PongLocal from "@/components/game/pongGame/PongLocal.vue";
+import WinnerPopup from "@/views/game/winner.vue";
+import LoserPopup from "@/views/game/loser.vue";
+import OpponentImage from '@/assets/profile2.png';
 
 export default {
   name: 'LocalFront',
   components: {
     Versus,
     PongLocal,
+    WinnerPopup,
+    LoserPopup,
   },
   data() {
     return {
       showVersus: true,
+      showWinner: false,
+      showLoser: false,
+      winnerName: '',
+      winnerImage: '',
+      loserName: '',
+      loserImage: '',
     };
   },
   methods: {
     handleTimeUp() {
-      // Hide the Versus overlay when the time is up
       this.showVersus = false;
+    },
+    handleGameEnded(winner) {
+      if (winner === "Player") {
+        //call the back
+        // this.winnerName = "Player";
+        this.winnerImage = "";
+        this.showWinner = true;
+      } else {
+        // this.loserName = "Guest";
+        this.loserImage = OpponentImage;
+        this.showLoser = true;
+      }
     },
   },
 };
