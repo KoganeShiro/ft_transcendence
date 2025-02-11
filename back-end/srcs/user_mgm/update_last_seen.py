@@ -10,7 +10,7 @@ class UpdateLastSeenMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if request.user.is_authenticated:
+        if request.user != None and request.user.is_authenticated:
             user = request.user
             user.last_seen = now()
             user.save(update_fields=['last_seen'])  # Only updates the 'last_seen' field

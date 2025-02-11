@@ -1,5 +1,8 @@
 #!/bin/sh
 # If SSL Certif does not exist, create it
+
+sed -i "s/HOSTNAME/$HOSTNAME/g" /etc/nginx/nginx.conf
+
 if [ ! -f "/etc/nginx/certs/ft_transcendence.crt" ]; then
 
     mkdir -p /etc/nginx/certs
@@ -14,6 +17,8 @@ if [ ! -f "/etc/nginx/certs/ft_transcendence.crt" ]; then
 else
     echo "Certificate already exists in /etc/nginx/certs/ft_transcendence.crt"
 fi
+
+cat /etc/nginx/nginx.conf
 
 # Start nginx in the foreground
 # exec nginx -g "daemon off;"

@@ -19,7 +19,7 @@ RUN chmod +x /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
 
 COPY webserver/nginx.conf /etc/nginx/nginx.conf
 
-RUN sed -i 's/HOSTNAME/$HOSTNAME/g' /etc/nginx/nginx.conf
+# RUN sed -i "s/HOSTNAME/$HOSTNAME/g" /etc/nginx/nginx.conf
 
 # COPY webserver/certs/ /etc/nginx/certs/ 
 #move the certs copy to run part with script
