@@ -95,6 +95,56 @@ class ProfileSerializer(serializers.ModelSerializer):
     #     return instance
 
 
+class StatsUpdateSerializer(serializers.ModelSerializer):    
+
+    class Meta:
+        model = CustomUser
+        fields = ('stat_pong_solo_rank', 'stat_pong_solo_progress', 'stat_pong_solo_wins_tot', 'stat_pong_solo_loss_tot', 'stat_pong_solo_tournament_wins', 'stat_pong_solo_tournament_loss', 'stat_pong_solo_wins_tot_min5', 'stat_pong_solo_loss_tot_min5', 'stat_pong_solo_wins_tot_min10', 'stat_pong_solo_loss_tot_min10', 'stat_pong_solo_wins_tot_max10', 'stat_pong_solo_loss_tot_max10', 'stat_pong_multi_rank', 'stat_pong_multi_progress', 'stat_pong_multi_wins_tot', 'stat_pong_multi_loss_tot', 'stat_pong_multi_wins_tot_min5', 'stat_pong_multi_loss_tot_min5', 'stat_pong_multi_wins_tot_min10', 'stat_pong_multi_loss_tot_min10', 'stat_pong_multi_wins_tot_max10', 'stat_pong_multi_loss_tot_max10', 'stat_ttt_rank', 'stat_ttt_progress', 'stat_ttt_wins_tot', 'stat_ttt_loss_tot', 'stat_ttt_wins_av_movm', 'stat_ttt_loss_av_movm')
+              
+       # exclude = ('password',)
+    
+    def update(self, instance, validated_data):
+        """
+        Allow partial updates by checking for each field individually.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)        
+        instance.save()
+        return instance
+    
+
+class StatsIncrementSerializer(serializers.ModelSerializer):    
+
+    class Meta:
+        model = CustomUser
+        fields = ('stat_pong_solo_rank', 'stat_pong_solo_progress', 'stat_pong_solo_wins_tot', 'stat_pong_solo_loss_tot', 'stat_pong_solo_tournament_wins', 'stat_pong_solo_tournament_loss', 'stat_pong_solo_wins_tot_min5', 'stat_pong_solo_loss_tot_min5', 'stat_pong_solo_wins_tot_min10', 'stat_pong_solo_loss_tot_min10', 'stat_pong_solo_wins_tot_max10', 'stat_pong_solo_loss_tot_max10', 'stat_pong_multi_rank', 'stat_pong_multi_progress', 'stat_pong_multi_wins_tot', 'stat_pong_multi_loss_tot', 'stat_pong_multi_wins_tot_min5', 'stat_pong_multi_loss_tot_min5', 'stat_pong_multi_wins_tot_min10', 'stat_pong_multi_loss_tot_min10', 'stat_pong_multi_wins_tot_max10', 'stat_pong_multi_loss_tot_max10', 'stat_ttt_rank', 'stat_ttt_progress', 'stat_ttt_wins_tot', 'stat_ttt_loss_tot', 'stat_ttt_wins_av_movm', 'stat_ttt_loss_av_movm')
+              
+    def update(self, instance, validated_data):
+        """
+        Allow partial updates by checking for each field individually.
+        """
+        for attr, value in validated_data.items():
+            if attr == 'stat_pong_solo_progress':
+                if isinstance(value, list):
+                    instance.stat_pong_solo_progress.extend(value)
+                else:
+                    instance.stat_pong_solo_progress.append(value)
+            elif attr == 'stat_pong_multi_progress':
+                if isinstance(value, list):
+                    instance.stat_pong_multi_progress.extend(value)
+                else:
+                    instance.stat_pong_multi_progress.append(value)
+            elif attr == 'stat_ttt_progress':
+                if isinstance(value, list):
+                    instance.stat_ttt_progress.extend(value)
+                else:
+                    instance.stat_ttt_progress.append(value)             
+            else:
+                setattr(instance, attr, getattr(instance, attr) + value)
+        instance.save()
+        return instance
+
+
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):    
 

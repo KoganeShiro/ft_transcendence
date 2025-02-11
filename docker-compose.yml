@@ -29,7 +29,8 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./back-end/srcs:/usr/src/app  
+      - ./back-end/srcs:/usr/src/app
+      - backend_media:/mediafiles  
     restart: always
     networks:
       - pong
@@ -65,6 +66,58 @@ services:
       start_period: 30s
     # command: ["npm", "start", "--", "--port", "5173"]
 
+  # gamefront:
+  #   build:      
+  #     dockerfile: game-logic/frontend/mon-projet-vue3/Dockerfile
+  #   container_name: gamefront
+  #   expose:      
+  #     - "3000"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./game-logic/frontend/mon-projet-vue3:/app  
+  #   restart: always
+  #   networks:
+  #     - pong
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 30s
+  #   # command: ["npm", "start", "--", "--port", "5173"]
+
+  game-logic:
+    build:      
+      dockerfile: game-logic/Dockerfile
+    container_name: game-logic
+    expose:      
+      - "8001"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./game-logic/back-gamelogic:/usr/src/app      
+    restart: always
+    networks:
+      - pong
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+
+
+
+
+
 
 
 
@@ -98,6 +151,7 @@ networks:
 volumes:
   postgres_data:
   webserver_data:
+  backend_media:
 #  back-end_data:
 #    driver: local # specify the driver for the volume 
 #    driver_opts:
