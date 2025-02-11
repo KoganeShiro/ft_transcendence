@@ -72,7 +72,7 @@ export default {
         { passive: false }
       );
       console.log("Touch listener added for mobile.");
-    } else if (window.innerWidth < 800) {
+    } else if (window.innerWidth < 811) {
       // Tablet (portrait mode but not a very small phone)
       this.isTablette = true;
       this.canvasWidth = 500; // adjust as needed for tablets
