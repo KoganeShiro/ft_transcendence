@@ -5,7 +5,7 @@ COPY game-logic/Requirements.txt .
 RUN apt-get update && apt-get install -y redis-server && rm -rf /var/lib/apt/lists/*
 
 
-COPY game-logic/back-gamelogic/redis-stable.tar.gz /tmp/
+# COPY game-logic/back-gamelogic/redis-stable.tar.gz /tmp/
 
 # RUN cd /tmp && tar -xvzf redis-stable.tar.gz && \
     # cd redis-stable && make && make install
