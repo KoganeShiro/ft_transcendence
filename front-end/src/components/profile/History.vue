@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <h1>{{ $t("history") }}</h1>
-    <div v-if="loading">Loading history...</div>
+    <div v-if="loading">{{ $t("loading") }}</div>
     <div v-else>
       <div v-for="(gameType, index) in gameTypes" :key="index" class="game-section">
         <h2>{{ gameType }}</h2>
@@ -15,8 +15,6 @@
   </div>
 </template>
 
-
-<!-- 
 <script>
 import MatchDetails from '@/components/profile/MatchDetails.vue';
 
@@ -29,44 +27,48 @@ export default {
       history: [],
       loading: true,
       error: null,
-      gameTypes: ['Pong', '4 Players Pong', 'Tic Tac Toe']
+      // gameTypes: ['Pong', '4 Players Pong', 'Tic Tac Toe']
+      gameTypes: ['Pong', 'Tic Tac Toe']
     };
   },
   methods: {
-    async fetchMatchDetails(id) {
+    async fetchMatchDetails(id, gameType) {
       try {
-        const response = await fetch(`/api/matches/${id}`);
+        const response = await fetch(`/api/games/${gameType.toLowerCase()}/${id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return await response.json();
+        const data = await response.json();
+        return data;
       } catch (error) {
         console.error(`Error fetching match ${id}:`, error);
         return null;
       }
     },
     getMatchesByType(gameType) {
-      return this.history.filter(match => match.gameType === gameType);
+      return this.history.filter(match => match.type === gameType);
     }
   },
   async mounted() {
     try {
       this.loading = true;
       
-      // First API call to get last X matches IDs
-      const response = await fetch('/api/matches/history?limit=5');
+      // Fetch last 5 Pong games
+      let response = await fetch('/api/games/last_five_pong_games');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const matchIds = await response.json();
-
-      // Fetch match details one by one
-      for (const id of matchIds) {
-        const matchDetail = await this.fetchMatchDetails(id);
-        if (matchDetail) {
-          this.history.push(matchDetail);
-        }
+      let pongGames = await response.json();
+      
+      // Fetch last 5 Tic Tac Toe games
+      response = await fetch('/api/games/last_five_ttt_games');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      let tttGames = await response.json();
+      
+      // Combine the games into the history array
+      this.history = [...pongGames, ...tttGames];
 
       this.loading = false;
     } catch (error) {
@@ -76,9 +78,10 @@ export default {
     }
   },
 };
-</script> -->
+</script>
 
-<script>
+
+<!-- <script>
 import MatchDetails from '@/components/profile/MatchDetails.vue';
 
 export default {
@@ -262,7 +265,7 @@ export default {
   },
   // Remove the mounted hook since we're using hard-coded data
 };
-</script>
+</script> -->
 
 
 <style scoped>
