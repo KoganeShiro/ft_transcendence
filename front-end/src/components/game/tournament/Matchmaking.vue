@@ -8,7 +8,7 @@
         :match="match"
       />
     </div>
-    <div v-if="timer > 0">{{ timer }} {{ $t("seconds-until-match-starts") }}</div>
+    <div v-if="timer > 0">{{ timer }} {{ $t("until-start") }}</div>
   </div>
 </template>
 

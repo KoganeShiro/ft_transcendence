@@ -314,7 +314,7 @@ export default {
       } else {
         winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Opponent";
       }
-      console.log("Game ended. Winner:", winner);
+      // console.log("Game ended. Winner:", winner);
       this.$emit("gameEnded", winner);
     },
 
@@ -327,7 +327,7 @@ export default {
       this.$refs.pongCanvas.removeEventListener("touchmove", this.handleTouchMove);
     }
     cancelAnimationFrame(this.gameLoop);
-    console.log("Game loop stopped, listeners removed.");
+    // console.log("Game loop stopped, listeners removed.");
   },
 };
 </script>

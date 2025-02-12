@@ -40,6 +40,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
 import defaultAvatar from '@/assets/searching.webp';
 import guestAvatar from '@/assets/profile2.png';
@@ -71,7 +72,8 @@ export default {
   setup(props, { emit }) {
     // Control visibility and status message
     const show = ref(true);
-    const opponentStatus = ref('Waiting for an opponent...');
+    const { t } = useI18n();
+    const opponentStatus = ref(t("search-opponent"));
 
     // Create a local reactive copy for player1 info
     const localPlayer1 = ref({

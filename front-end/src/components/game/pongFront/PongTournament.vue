@@ -13,7 +13,8 @@
 import CreateTournament from '@/components/game/tournament/CreateTournament.vue';
 import WaitingPlayers from '@/components/game/tournament/WaitingPlayers.vue';
 import Matchmaking from '@/components/game/tournament/Matchmaking.vue';
-import PongGame from '@/components/game/tournament/Game.vue';
+// import PongGame from '@/components/game/tournament/Game.vue';
+import PongGame from '@/components/game/pongGame/PongLocal.vue';
 import TournamentWinner from '@/components/game/tournament/Winner.vue';
 import ConfirmQuitTournament from "@/components/game/tournament/ConfirmQuitTournament.vue";
 
