@@ -1,5 +1,4 @@
 <template>
-  <!-- When opponent is found the player name and cover_photo is showing -->
   <transition name="fade" @after-leave="emitTimeUp">
     <div class="versus-container" v-if="show">
       <div class="versus-background">
@@ -7,14 +6,14 @@
           <h1>{{ opponentStatus }}</h1>
         </div>
         <div class="versus-content">
-          <!-- Player 1 Avatar -->
+          <!-- Player 1 Avatar using the locally managed user profile -->
           <div class="player">
             <AvatarAtom
-              :pseudo="player1.pseudo"
-              :imageUrl="player1.imageUrl"
+              :pseudo="localPlayer1.pseudo"
+              :imageUrl="localPlayer1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
-              :link="player1.link"
+              :link="localPlayer1.link"
               class="animate-avatar"
             />
           </div>
@@ -22,7 +21,7 @@
           <div class="versus-text">
             <h1>VS</h1>
           </div>
-          <!-- Player 2 Avatar -->
+          <!-- Player 2 Avatar (opponent) -->
           <div class="player">
             <AvatarAtom
               :imageUrl="player2.imageUrl"
@@ -56,56 +55,59 @@ export default {
       type: Object,
       default: () => ({
         pseudo: 'Player 1',
-        imageUrl: 'https://via.placeholder.com/100',
-        link: '#'
-      })
+        imageUrl: defaultAvatar,
+        link: '',
+      }),
     },
     opponentType: {
       type: String,
-      default: 'guest',
+      default: '',
     },
-    // Duration in seconds before fading out after an opponent is found
     duration: {
       type: Number,
       default: 3,
     },
   },
   setup(props, { emit }) {
-    // Control the overlay visibility
+    // Control visibility and status message
     const show = ref(true);
-    
-    // Reactive status message
     const opponentStatus = ref('Waiting for an opponent...');
-    
-    // Create a reactive object for player2 with default values.
+
+    // Create a local reactive copy for player1 info
+    const localPlayer1 = ref({
+      pseudo: props.player1.pseudo,
+      imageUrl: props.player1.imageUrl,
+      link: props.player1.link || '',
+    });
+
+    // Create reactive object for player2 (opponent)
     const player2 = ref({
       imageUrl: defaultAvatar,
-      pseudo: 'Waiting for an opponent...',
+      pseudo: 'loading...',
       link: '',
     });
-    
+
     onMounted(async () => {
+      // Fetch the user profile and update localPlayer1
       try {
         const response = await API.get('/api/profile/');
         const { username, cover_photo } = response.data;
-        props.player1.pseudo = username;
-        props.player1.imageUrl = cover_photo;
+        localPlayer1.value.pseudo = username;
+        localPlayer1.value.imageUrl = cover_photo;
       } catch (error) {
         console.error("Error fetching player data:", error);
       }
 
-      // Simulate finding an opponent after 2 seconds.
       setTimeout(() => {
         player2.value.imageUrl = guestAvatar;
         player2.value.pseudo = props.opponentType === 'AI' ? 'AI' : 'Guest';
         opponentStatus.value = 'Opponent found!';
-        // Wait for props.duration seconds before starting the fade-out transition.
         setTimeout(() => {
-          show.value = false; // This will trigger the fade transition.
+          show.value = false;
         }, props.duration * 1000);
       }, 2000);
     });
-    
+
     const emitTimeUp = () => {
       emit('time-up');
     };
@@ -113,12 +115,14 @@ export default {
     return {
       show,
       opponentStatus,
+      localPlayer1,
       player2,
       emitTimeUp,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {

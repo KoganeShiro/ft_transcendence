@@ -1,12 +1,17 @@
 <template>
   <div class="ttt-page">
     <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" />
-    <Versus v-else-if="showVersus" @time-up="handleTimeUp" />
+    <Versus
+      v-else-if="showVersus"
+      :opponentType="opponent"
+      @time-up="handleTimeUp"
+    />
     
     <div v-else class="content">
       <div class="game-container">
-        <!-- Pass the mode down to the game component -->
-        <TicTacToeGame :mode="mode" :useImages="false" />
+        <TicTacToeGame :mode="mode" :useImages="false" @game-ended="handleGameEnded" />
+        <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+        <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
       </div>
     </div>
   </div>
@@ -18,6 +23,9 @@ import { useRoute } from "vue-router";
 import TicTacToeGame from "@/components/game/TicTacToeGame.vue";
 import Versus from "@/components/game/Versus.vue";
 import MatchPopup from "@/components/game/pongFront/PrivateMatch.vue";
+import WinnerPopup from "@/views/game/winner.vue";
+import LoserPopup from "@/views/game/loser.vue";
+import API from '@/api.js';
 
 export default {
   name: 'LocalFront',
@@ -25,12 +33,22 @@ export default {
     Versus,
     TicTacToeGame,
     MatchPopup,
+    WinnerPopup,
+    LoserPopup,
   },
   setup() {
     const route = useRoute();
     const mode = computed(() => route.params.mode);
-    console.log("LocalFront: mode computed value =", mode.value);
-    return { mode };
+    const opponent = computed(() => {
+    if (mode.value === "solo") {
+          return "AI";
+        } else if (mode.value === "local") {
+          return "Guest";
+        } else {
+          return "";
+        }
+      });
+    return { mode, opponent };
   },
   data() {
     return {
@@ -38,6 +56,13 @@ export default {
       showVersus: true,
       matchAction: '',
       matchCode: '',
+      showWinner: false,
+      showLoser: false,
+      winnerName: '',
+      winnerImage: '',
+      loserName: '',
+      loserImage: '',
+      requestSent: false,
     };
   },
   methods: {
@@ -52,10 +77,29 @@ export default {
     handleTimeUp() {
       this.showVersus = false;
     },
+    async handleGameEnded(winner) {
+      if (this.requestSent) return;
+      this.requestSent = true;
+      try {
+        const response = await API.get('/api/profile/');
+        const { username, cover_photo } = response.data;
+        console.log("handleGameEnded: winner =", winner);
+        if (winner === "X") {
+          this.winnerName = username;
+          this.winnerImage = cover_photo;
+          this.showWinner = true;
+        } else {
+          this.loserName = username;
+          this.loserImage = cover_photo;
+          this.showLoser = true;
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    },
   },
 };
 </script>
-  
 
 <style scoped>
 .ttt-page {

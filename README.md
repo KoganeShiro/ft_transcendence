@@ -141,10 +141,10 @@ to hardcode games --> https://localhost:1443/api/games/ttt/
 
 to see stats --> https://localhost:1443/api/stats/<username>
 
-- [ ] Update the Versus component to call the back
-- [ ] Fix the winner/loser component in pong solo
-- [ ] Add the winner/loser component to ttt
-- [ ] Call the back for history (5 last battles for each "games")
+- [x] Update the Versus component to call the back
+- [x] Fix the winner/loser component in pong solo
+- [x] Add the winner/loser component to ttt
+- [x] Call the back for history (5 last battles for each "games")
 
 - [x] Make the Tic Tac Toe AI
 

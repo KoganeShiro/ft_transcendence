@@ -20,9 +20,6 @@
         </div>
       </div>
     </div>
-    <div v-if="gameOver" class="message">
-      <p>{{ message }}</p>
-    </div>
   </div>
 </template>
 
@@ -44,7 +41,7 @@ export default {
     xImage: { type: String, default: () => defaultXImage },
     oImage: { type: String, default: () => defaultOImage },
   },
-  setup(props) {
+  setup(props, { emit }) {
     // Game state
     const state = reactive({
       board: [
@@ -54,7 +51,6 @@ export default {
       ],
       // Record moves for each player (max. 3)
       moves: { X: [], O: [] },
-      // In solo mode, human always plays "X" and AI plays "O".
       currentPlayer: "X",
       gameOver: false,
       message: "",
@@ -135,6 +131,7 @@ export default {
         ) {
           state.gameOver = true;
           state.message = `${state.board[a.row][a.col]} Wins!`;
+          emit('game-ended', state.board[a.row][a.col]);
           return true;
         }
       }

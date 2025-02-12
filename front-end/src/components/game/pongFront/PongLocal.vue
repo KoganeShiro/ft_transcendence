@@ -1,8 +1,11 @@
 <template>
   <div class="pong-page">
-    <!-- should make the versus component like the AI not
-     wait too much -->
-    <Versus v-if="showVersus" @time-up="handleTimeUp" />
+     <Versus
+      v-if="showVersus"
+      :opponentType="'Guest'"
+      @time-up="handleTimeUp"
+      class="versus-overlay"
+    />
     
     <div v-else class="content">
       <div class="player-controls">
@@ -51,30 +54,34 @@ export default {
       winnerImage: '',
       loserName: '',
       loserImage: '',
+      requestSent: false,
     };
   },
+  
   methods: {
     handleTimeUp() {
       this.showVersus = false;
     },
     async handleGameEnded(winner) {
-      try {
-        const response = await API.get('/api/profile/');
-        const { username, cover_photo } = response.data;
-
-        if (winner === "Player") {
-          this.winnerName = username;
-          this.winnerImage = cover_photo;
-          this.showWinner = true;
-        } else {
-          this.loserName = username;
-          this.loserImage = cover_photo;
-          this.showLoser = true;
+        if (this.requestSent) return;
+        this.requestSent = true;
+        try {
+          const response = await API.get('/api/profile/');
+          const { username, cover_photo } = response.data;
+          console.log("handleGameEnded: winner =", winner);
+          if (winner === "Player 1") {
+            this.winnerName = username;
+            this.winnerImage = cover_photo;
+            this.showWinner = true;
+          } else {
+            this.loserName = username;
+            this.loserImage = cover_photo;
+            this.showLoser = true;
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    },
+      },
   },
 };
 </script>

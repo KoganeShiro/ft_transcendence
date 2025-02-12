@@ -28,7 +28,6 @@ export default {
       loading: false,
       error: null,
       gameTypes: ['Pong', 'Tic Tac Toe'],
-      games: ['pong', 'ttt'],
     };
   },
   methods: {
