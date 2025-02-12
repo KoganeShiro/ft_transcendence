@@ -5,12 +5,7 @@
 # echo Run database migrations
 # python manage.py migrate
 
-
-
-
-
-
-
+redis-server --daemonize yes
 
 
 
