@@ -119,41 +119,53 @@
 
 - [x] Logic of the friend profile, make another page ??
 
-
-
 - [-] Make sure that in tournament the player cannot go elsewhere
 - [x] Are you sure you want to leave the tournament component
 
-- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
+- [x] Make the pong game responsive ==> may start searching for how to make the AI
+- [x] Play against guest (local) logic
+- [x] Play against AI logic (on local)
 
-- [ ] Make the pong game responsive ==> may start searching for how to make the AI
-
-- [ ] Make the Tic Tac Toe AI
-
-- [ ] Play against guest (local) logic
-- [ ] Play against AI logic (on local)
-
-- [ ] Play against another player logic --> 
-- [ ] Play against a friend (private match) logic -- >
+- [x] Play against another player logic --> 
+- [x] Play against a friend (private match) logic -- >
    - [x] Invite logic (for private match)
 
 - [x] Tournament logic
+- [x] Make each part into container
 
-- [ ] Play with 4 players logic (should be similar to another player logic)
 
-- [ ] Call the back for the game
-- [ ] Matchmaking logic
-- [ ] Tournament logic
+- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
-- [ ] Call the back for history (5 last battles for each "games")
+to hardcode games --> https://localhost:1443/api/games/ttt/
+                        https://localhost:1443/api/games/pong/
+
+to see stats --> https://localhost:1443/api/stats/<username>
+
+- [x] Update the Versus component to call the back
+- [x] Fix the winner/loser component in pong solo
+- [x] Add the winner/loser component to ttt
+- [x] Call the back for history (5 last battles for each "games")
+
+- [x] Make the Tic Tac Toe AI
+
+- [ ] Let the user know who they are in remote
+- [ ] Part 2 Versus (on remote)
+
+- [?] Call the back for the game
+- [ ] Matchmaking with back
+- [ ] Tournament with back
+
 - [ ] Call the back for friends list (max of 10)
-
-- [ ] Make each part into container
+- [ ] Call the back for adding friends
+- [ ] Call the back for removing friends
+- [ ] Call the back for the chat
+- [ ] Call the back for sending msg
 
 - [ ] Pong AI
 
 - [ ] Implement power up
 
+- [ ] Play with 4 players logic (should be similar to another player logic)
 - [ ] More than 2 players game page (x2)
 
 

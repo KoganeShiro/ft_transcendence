@@ -94,6 +94,22 @@
     "accept": "Accepter",
     "decline": "Refuser",
     "tourn-message": "Un nouveau tournoi a été créé !",
-    "go-back": "Retour"
+    "go-back": "Retour",
+    "your_score": "Votre score",
+    "opponent_score": "Score de l'adversaire",
+    "your_rank_begin": "Votre classement",
+    "opponent_rank_begin": "Classement de l'adversaire",
+    "your_rank_change": "Votre nouveau classement",
+    "opponent_rank_change": "Le nouveau classement de l'adversaire",
+    "your_nb_move": "Votre nombre de coups",
+    "opponent_nb_move": "Nombre de coups de l'adversaire",
+    "timestamp": "Date",
+    "winner": "Gagnant",
+    "loser": "Perdant",
+    "search-opponent": "Rechercher un adversaire",
+    "matchmaking": "Recherche d'adversaire",
+    "starting-tournament": "Démarrage du tournoi",
+    "until-start": " seconds avant le début du match",
+    "in": "dans"
   }
   

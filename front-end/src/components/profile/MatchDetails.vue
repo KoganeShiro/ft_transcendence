@@ -1,70 +1,131 @@
-<!-- Make conditions -->
 <template>
-    <div class="match-details">
-      <div class="summary" @click="toggleDetails">
-        {{ summaryText }}
-        <span class="chevron">{{ isOpen ? '▼' : '▶' }}</span>
-      </div>
-      <transition name="slide">
-        <div v-if="isOpen" class="details">
+  <div class="match-details">
+    <div class="summary" @click="toggleDetails">
+      {{ summaryText }}
+      <span class="chevron">{{ isOpen ? '▼' : '▶' }}</span>
+    </div>
+    <transition name="slide">
+      <div v-if="isOpen" class="details">
+        <div class="detail-item">
+          <span class="label">{{ $t("winner") }}:</span>
+          {{ gameDetails.winner }}
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("loser") }}:</span>
+          {{ gameDetails.loser }}
+        </div>
+        <div v-if="localGameType === 'pong'">
           <div class="detail-item">
-            <span class="label">{{ $t("game") }} id</span>
-            {{ match.id }}
-          </div>
-          <!-- <div class="detail-item">
-            <span class="label">Mode :</span>
-            {{ match.mode }}
-          </div> -->
-          <div class="detail-item">
-            <span class="label"> {{ $t("tournament") }} :</span>
-            {{ match.tournamentRank }}
-          </div>
-          <div class="detail-item">
-            <span class="label">{{ $t("score") }} : </span>
-            {{ match.score }}
+            <span class="label">{{ $t("your_score") }}:</span>
+            {{ gameDetails.player1_score }}
           </div>
           <div class="detail-item">
-            <span class="label">{{ $t("opponent-name") }} :</span>
-            {{ match.opponentName }}
-          </div>
-          <div class="detail-item">
-            <span class="label">{{ $t("opponent-rank") }} :</span>
-            {{ match.opponentRank }}
-          </div>
-          <div class="detail-item">
-            <span class="label">{{ $t("your-rank") }} :</span>
-            {{ match.yourRank }}
+            <span class="label">{{ $t("opponent_score") }}:</span>
+            {{ gameDetails.player2_score }}
           </div>
         </div>
-      </transition>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      match: {
-        type: Object,
-        required: true
-      }
+        <div v-if="localGameType === 'ttt'">
+          <div class="detail-item">
+            <span class="label">{{ $t("your_nb_move") }}:</span>
+            {{ gameDetails.player1_turn }}
+          </div>
+          <div class="detail-item">
+            <span class="label">{{ $t("opponent_nb_move") }}:</span>
+            {{ gameDetails.player2_turn }}
+          </div>
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("your_rank_begin") }}:</span>
+          {{ gameDetails.rank_player1_begin }}
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("opponent_rank_begin") }}:</span>
+          {{ gameDetails.rank_player2_begin }}
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("your_rank_change") }}:</span>
+          {{ gameDetails.rank_player1_change }}
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("opponent_rank_change") }}:</span>
+          {{ gameDetails.rank_player2_change }}
+        </div>
+        <div class="detail-item">
+          <span class="label">{{ $t("timestamp") }}:</span>
+          {{ formattedTimestamp || 'N/A' }}
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+import { format } from 'date-fns';
+
+export default {
+  props: {
+    match: {
+      type: Object,
+      required: true,
     },
-    data() {
-      return {
-        isOpen: false
-      };
+    gameType: {
+      type: String,
+      required: true,
     },
-    computed: {
-      summaryText() {
-        return `vs ${this.match.opponent}: ${this.match.won ? 'Win' : 'Loss'}`;
-      }
+    history: {
+      type: Array,
+      required: true,
     },
-    methods: {
-      toggleDetails() {
-        this.isOpen = !this.isOpen;
+  },
+  data() {
+    return {
+      isOpen: false,
+      gameDetails: {},
+      localGameType: this.gameType === 'Tic Tac Toe' ? 'ttt' : this.gameType.toLowerCase(),
+    };
+  },
+  computed: {
+    summaryText() {
+      const result = this.match.winner === this.match.player1 ? 'win' : 'lose';
+      return `${this.match.player1} vs ${this.match.player2}: ${result}`;
+    },
+    formattedTimestamp() {
+      return this.gameDetails.timestamp ? format(new Date(this.gameDetails.timestamp), 'PPpp') : 'N/A';
+    },
+  },
+  methods: {
+    async toggleDetails() {
+      if (!this.isOpen) {
+        try {
+          const response = await fetch(`/api/games/${this.localGameType}/${this.match.id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          this.gameDetails = await response.json();
+          console.log('Game details:', this.gameDetails);
+        } catch (error) {
+          console.error('Error fetching game details:', error);
+          this.gameDetails = {
+            winner: 'N/A',
+            loser: 'N/A',
+            player1_score: 'N/A',
+            player2_score: 'N/A',
+            player1_turn: 'N/A',
+            player2_turn: 'N/A',
+            rank_player1_begin: 'N/A',
+            rank_player2_begin: 'N/A',
+            rank_player1_change: 'N/A',
+            rank_player2_change: 'N/A',
+            timestamp: 'N/A',
+          };
+        }
       }
-    }
-  };
-  </script>
+      this.isOpen = !this.isOpen;
+    },
+  },
+};
+</script>
+
   
   <style scoped>
   .match-details {

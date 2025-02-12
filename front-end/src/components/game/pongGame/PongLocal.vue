@@ -308,16 +308,13 @@ export default {
       }
     },
     endGame() {
-      // Stop the game loop
-      this.isGameRunning = false;
-      if (this.gameLoop) {
-        cancelAnimationFrame(this.gameLoop);
+      let winner = "";
+      if (!this.isMobile && !this.isTablette) {
+        winner = this.gameState.score1 > this.gameState.score2 ? "Player 1" : "Player 2";
+      } else {
+        winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Opponent";
       }
-      
-      // Determine the winner
-      const winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Guest";
-      
-      // Emit an event to the parent component with the winner’s name.
+      // console.log("Game ended. Winner:", winner);
       this.$emit("gameEnded", winner);
     },
 
@@ -330,7 +327,7 @@ export default {
       this.$refs.pongCanvas.removeEventListener("touchmove", this.handleTouchMove);
     }
     cancelAnimationFrame(this.gameLoop);
-    console.log("Game loop stopped, listeners removed.");
+    // console.log("Game loop stopped, listeners removed.");
   },
 };
 </script>

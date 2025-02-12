@@ -74,15 +74,16 @@
             this.gameStarted = true;
           } else if (messageType === "role_assignment") {
             this.playerRole = data.role;
+            console.log(this.playerRole); //if player 1, we are left, if player 2, we are right
           }
           else if (messageType === "game_over") {
-            console.log("**[DEBUG FRONTEND] Message game_over REÇU :", data); // RE-VÉRIFIEZ CE LOG SPÉCIFIQUE
+            // console.log("**[DEBUG FRONTEND] Message game_over REÇU :", data); // RE-VÉRIFIEZ CE LOG SPÉCIFIQUE
             this.gameStarted = false;
             this.gameOverMessage = data.message;
             this.winner = data.winner;
-            console.log("this.gameOverMessage après game_over:", this.gameOverMessage); // AJOUTEZ CE LOG POUR VÉRIFIER LA VARIABLE VUE.JS
-            console.log("this.winner après game_over:", this.winner); // AJOUTEZ CE LOG POUR VÉRIFIER LA VARIABLE VUE.JS
-            console.log("Partie terminée côté front-end : " + data.message);
+            // console.log("this.gameOverMessage après game_over:", this.gameOverMessage); // AJOUTEZ CE LOG POUR VÉRIFIER LA VARIABLE VUE.JS
+            // console.log("this.winner après game_over:", this.winner); // AJOUTEZ CE LOG POUR VÉRIFIER LA VARIABLE VUE.JS
+            // console.log("Partie terminée côté front-end : " + data.message);
           }
         };
   

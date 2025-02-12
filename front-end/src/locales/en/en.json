@@ -93,6 +93,21 @@
     "accept": "Accept",
     "decline": "Decline",
     "tourn-message": "A new tournament has been created!",
-    "go-back": "Go back"
+    "go-back": "Go back",
+    "your_score": "Your Score",
+    "opponent_score": "Opponent Score",
+    "your_rank_begin": "Your Rank",
+    "opponent_rank_begin": "Opponent Rank",
+    "your_rank_change": "Your new Rank",
+    "opponent_rank_change": "Opponent new Rank",
+    "your_nb_move": "Your number of moves",
+    "opponent_nb_move": "Opponent number of moves",
+    "timestamp": "Date",
+    "winner": "Winner",
+    "loser": "Loser",
+    "search-opponent": "Searching an opponent",
+    "starting-tournament": "Starting tournament",
+    "until-start": " seconds until match start",
+    "in": "in"
 }
   

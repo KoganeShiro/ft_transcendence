@@ -1,7 +1,6 @@
 <template>
   <div class="tic-tac-toe-game">
     <div class="board">
-      <!-- use touch handler event -->
       <div class="row" v-for="(row, rowIndex) in board" :key="'row-' + rowIndex">
         <div
           class="cell"
@@ -14,7 +13,6 @@
             <img v-if="useImages && xImage" :src="xImage" alt="X" class="symbol" />
             <span v-else class="text-symbol x-symbol">X</span>
           </template>
-
           <template v-else-if="cell === 'O'">
             <img v-if="useImages && oImage" :src="oImage" alt="O" class="symbol" />
             <span v-else class="text-symbol o-symbol">O</span>
@@ -22,45 +20,93 @@
         </div>
       </div>
     </div>
-    <div v-if="gameOver" class="message">
-      <p>{{ message }}</p>
-    </div>
   </div>
 </template>
 
 <script>
-import { reactive, ref, computed } from "vue";
+import { reactive, computed } from "vue";
 import defaultXImage from "@/assets/x.svg";
 import defaultOImage from "@/assets/o.svg";
+// Import the AI module which provides the getAIMove function.
+import { getAIMove } from "@/components/game/TttAI.js";
 
 export default {
   name: "TicTacToeGame",
   props: {
+    mode: {
+      type: String,
+      default: "local", // "solo" means play against computer; otherwise guest (local) two-player mode.
+    },
     useImages: { type: Boolean, default: true },
     xImage: { type: String, default: () => defaultXImage },
     oImage: { type: String, default: () => defaultOImage },
   },
-  setup(props) {
+  setup(props, { emit }) {
+    // Game state
     const state = reactive({
       board: [
         [null, null, null],
         [null, null, null],
         [null, null, null],
       ],
+      // Record moves for each player (max. 3)
       moves: { X: [], O: [] },
       currentPlayer: "X",
       gameOver: false,
       message: "",
     });
 
-    // Computed property: Twinkle the first move if there are 3 moves already
+    // Computed property to show a "twinkle" effect when 3 moves exist.
     const twinkleMove = computed(() => {
       return state.moves[state.currentPlayer].length === 3
         ? state.moves[state.currentPlayer][0]
         : null;
     });
 
+    /**
+     * Modified click handler with an extra optional parameter.
+     * @param {number} row - Row index.
+     * @param {number} col - Column index.
+     * @param {boolean} [isAI=false] - Indicates if the move is initiated by the AI.
+     */
+    function handleCellClick(row, col, isAI = false) {
+      // Do nothing if game is over or the cell is not empty.
+      if (state.gameOver || state.board[row][col] !== null) return;
 
+      // In solo mode, block human clicks if it's the AI's turn.
+      if (props.mode === "solo" && state.currentPlayer === "O" && !isAI) return;
+
+      // Remove the oldest move if already 3 moves exist.
+      if (state.moves[state.currentPlayer].length === 3) {
+        const oldMove = state.moves[state.currentPlayer].shift();
+        state.board[oldMove.row][oldMove.col] = null;
+      }
+
+      // Place the new move.
+      state.board[row][col] = state.currentPlayer;
+      state.moves[state.currentPlayer].push({ row, col });
+
+      // Check for a winner.
+      if (checkWinner()) return;
+
+      // Switch player.
+      state.currentPlayer = state.currentPlayer === "X" ? "O" : "X";
+
+      // In solo mode, if it's now the AI's turn, schedule the AI move.
+      if (props.mode === "solo" && state.currentPlayer === "O" && !state.gameOver) {
+        // This log explains why the AI is making its move:
+        console.log("AI move triggered because it's now AI's turn in solo mode.");
+        setTimeout(() => {
+          const aiMove = getAIMove(state.board, state.moves, state.currentPlayer);
+          if (aiMove) {
+            // Pass true for the isAI flag so that this move isn’t blocked.
+            handleCellClick(aiMove.row, aiMove.col, true);
+          }
+        }, 500);
+      }
+    }
+
+    // Function to check for a winning pattern.
     function checkWinner() {
       const winPatterns = [
         // Rows
@@ -84,36 +130,18 @@ export default {
           state.board[a.row][a.col] === state.board[c.row][c.col]
         ) {
           state.gameOver = true;
-          state.message = `${state.currentPlayer} Wins!`;
+          state.message = `${state.board[a.row][a.col]} Wins!`;
+          emit('game-ended', state.board[a.row][a.col]);
           return true;
         }
       }
       return false;
     }
 
-    function handleCellClick(row, col) {
-      if (state.gameOver || state.board[row][col] !== null) return;
-
-      // Remove the oldest move if already 3 moves exist
-      if (state.moves[state.currentPlayer].length === 3) {
-        const oldMove = state.moves[state.currentPlayer].shift(); 
-        state.board[oldMove.row][oldMove.col] = null;
-      }
-
-      // Place the new move
-      state.board[row][col] = state.currentPlayer;
-      state.moves[state.currentPlayer].push({ row, col });
-
-      // Check for winner
-      if (checkWinner()) return;
-
-      state.currentPlayer = state.currentPlayer === "X" ? "O" : "X";
-    }
-
-
     return {
       board: state.board,
       message: state.message,
+      gameOver: state.gameOver,
       handleCellClick,
       twinkleMove,
       useImages: props.useImages,

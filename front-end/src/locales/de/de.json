@@ -93,6 +93,21 @@
     "accept": "Akzeptieren",
     "decline": "Ablehnen",
     "tourn-message": "Ein neues Turnier wurde erstellt!",
-    "go-back": "Zurück"
+    "go-back": "Zurück",
+    "your_score": "Ihr Score",
+    "opponent_score": "Gegner Score",
+    "your_rank_begin": "Ihr Anfangsrang",
+    "opponent_rank_begin": "Gegner Anfangsrang",
+    "your_rank_change": "Ihr neuer Rang",
+    "opponent_rank_change": "Gegner neuer Rang",
+    "your_nb_move": "Ihre Anzahl an Zügen",
+    "opponent_nb_move": "Gegner Anzahl an Zügen",
+    "timestamp": "Datum",
+    "winner": "Gewinner",
+    "loser": "Verlierer",
+    "search-opponent": "Suche nach einem Gegner",
+    "starting-tournament": "Turnier startet",
+    "until-start": " Sekunden bis zum Start des Spiels",
+    "in": "in"
   }
   

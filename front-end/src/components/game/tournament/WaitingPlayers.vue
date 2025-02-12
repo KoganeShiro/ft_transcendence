@@ -28,7 +28,7 @@
         </ButtonAtom>
       </div>
       <div v-if="startCountdown > 0 && !tournamentStarted">
-        <p :class="{ 'start-text': !isCreator }" >Starting tournament in {{ startCountdown }} seconds...</p>
+        <p :class="{ 'start-text': !isCreator }" > {{ $t("start-tournament") }} {{ $t("in") }} {{ startCountdown }} seconds...</p>
       </div>
     </Card>
   </div>
