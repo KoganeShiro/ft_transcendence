@@ -136,12 +136,17 @@
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
+to hardcode games --> https://localhost:1443/api/games/ttt/
+                        https://localhost:1443/api/games/pong/
+
+to see stats --> https://localhost:1443/api/stats/<username>
+
 - [ ] Update the Versus component to call the back
 - [ ] Fix the winner/loser component in pong solo
 - [ ] Add the winner/loser component to ttt
 - [ ] Call the back for history (5 last battles for each "games")
 
-- [ ] Make the Tic Tac Toe AI
+- [x] Make the Tic Tac Toe AI
 
 - [ ] Let the user know who they are in remote
 - [ ] Part 2 Versus (on remote)
