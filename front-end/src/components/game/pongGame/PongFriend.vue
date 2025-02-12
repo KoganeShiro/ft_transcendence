@@ -27,7 +27,12 @@
         </div>
       </div>
   
-      <canvas ref="pongCanvas"></canvas>
+      <canvas
+      ref="pongCanvas"
+      class="canvas"
+      :width="900"
+      :height="500"
+    ></canvas>
   
       <div v-if="gameStarted && !gameOverMessage">
         <p>Score: Player 1 - {{ gameState.score1 }} | Player 2 - {{ gameState.score2 }}</p>
@@ -117,7 +122,7 @@
         if (this.gameSocket) return;
         const localGameMode = gameMode;
         const roomName = 'default_room'; // Choisissez un nom de room par défaut pour l'instant
-        this.gameSocket = new WebSocket(`ws://localhost:8000/ws/friendPong/${roomName}/`);  
+        this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/friendPong/${roomName}/`);  
         this.gameSocket.onopen = () => {
             console.log("avant envoie");
             console.log(localGameMode);
@@ -208,9 +213,9 @@
         ctx.fillStyle = 'white';
   
         // Dimensions responsives (calculées en pourcentage du canvas)
-        const ballRadius = Math.min(canvas.width, canvas.height) * 0.02;
+        const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
         const paddleMarginHorizontal = canvas.width * 0.03;
-        const paddleWidth = canvas.width * 0.015;
+        const paddleWidth = canvas.width * 0.013;
         const paddleHeight = canvas.height * 0.1;
         const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
         const scoreMarginTop = scoreFontSize + 10;
@@ -290,14 +295,13 @@
   </script>
   
   <style scoped>
-  /* #gameCanvas {
-    border: 1px solid black;
-    background-color: #000;
-  } */
-  
-  canvas {
-    width: 100%;  /* Canvas prend 100% de la largeur du div parent */
-    height: auto; /* La hauteur s'ajuste automatiquement pour maintenir le ratio d'aspect (si vous le souhaitez) */
-    display: block; /* Supprime l'espace blanc potentiel sous le canvas */
-  }
+  #pongField {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.canvas {
+  border: 2px solid var(--background-color);
+  border-radius: 8px;
+}
   </style>

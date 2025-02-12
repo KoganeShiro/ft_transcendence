@@ -1,25 +1,25 @@
 <template>
   <div class="pong-page">
-    <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" />
+    <!-- <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" /> -->
     
-    <div v-else class="content">
+    <!-- <div v-else class="content">
       <Versus v-if="showVersus" @time-up="handleVersusTimeUp" />
       <div v-else>
         <div class="player-controls">
           <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
           <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
-        </div>
+        </div> -->
         <div class="game-container">
           <PongGame />
         </div>
       </div>
-    </div>
-  </div>
+    <!-- </div>
+  </div> -->
 </template>
 
 <script>
-import PongGame from "@/components/game/pongGame/PongGame.vue";
+import PongGame from "@/components/game/pongGame/PongFriend.vue";
 import Versus from "@/components/game/Versus.vue";
 import MatchPopup from "@/components/game/pongFront/PrivateMatch.vue";
 
