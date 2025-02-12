@@ -44,6 +44,7 @@ urlpatterns = [
 
     path("api/", include("user_mgm.urls")),
     path("api/games/", include("gamestats.urls")),
+    path("api/friends/", include("friends.urls")),
     path("admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
