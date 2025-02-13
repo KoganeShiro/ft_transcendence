@@ -151,8 +151,11 @@ to see stats --> https://localhost:1443/api/stats/<username>
 
 - [ ] Update the game with friend component
         Should click on create game and then get the code, so you could send it to your friend (keep into memory where you are)
+
 - [ ] Let the user know who they are in remote + with friend
-- [ ] Part 2 Versus (on remote)
+- [ ] Part 2 Versus (on remote because loading)
+
+- [ ] New front for ttt in remote ?
 
 - [?] Call the back for the game
 - [ ] Matchmaking with back
