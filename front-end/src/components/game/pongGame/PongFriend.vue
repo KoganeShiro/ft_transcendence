@@ -101,20 +101,20 @@
         },
         playerRole: null,
         gameOverMessage: null,
+        lastSentTime: 0,
         winner: null,
         keysPressed: {
           up: false,
           down: false,
         },
         frameCount: 0,
-        lastFrameTime: performance.now(),
+        lastFrameTime: 0,
         fps: 0,
         currentGameMode: null,
-        matchCode: "",
         isCreatingPrivateRoom: false,
         isJoiningPrivateRoom: false,
-        privateRoomCode: "",
-        joinCode: "",
+        privateRoomCode: null,
+        joinCode: '',
         isCopied: false,
         localPlayer: { name: "Player 1" },
         opponentPlayer: { name: "Opponent" },
@@ -130,8 +130,8 @@
   showCreatePrivateRoom() {
     this.isCreatingPrivateRoom = true;
     this.isJoiningPrivateRoom = false;
-    this.privateRoomCode = "";
-    this.joinCode = "";
+    this.privateRoomCode = null;
+    this.joinCode = '';
   },
   createPrivateRoom() {
     this.privateRoomCode = "Generating...";
@@ -196,7 +196,7 @@
       } 
       
       else if (messageType === "role_assignment") {
-        this.playerRole = data.role === "player1" && this.currentGameMode === "join_private" ? "player2" : data.role;
+        this.playerRole = data.role;
         console.log(this.playerRole);
       }
 
@@ -221,8 +221,6 @@
     };
   },
   handleMatchReady(payload) {
-    this.matchCode = payload.code;
-    this.currentGameMode = payload.mode;
     console.log(payload);
     if (payload.opponent) {
         this.opponentPlayer = { name: payload.opponent };
@@ -243,12 +241,17 @@
       down: this.keysPressed.down,
     };
     const message = {
-      type: "player_moves",
+      type: "moves",
+      player: this.playerRole,
       moves: moves,
     };
-    // console.log("Sending player moves:", message);
+    console.log("Sending player moves:", message);
     this.gameSocket.send(JSON.stringify(message));
   },
+  updateGameState(message) {
+    this.gameState = message.game_state; 
+    this.updateCanvas();
+},
   updateCanvas() {
     if (!this.gameStarted) return; // Ensure the game has started before updating the canvas
     const canvas = this.$refs.pongCanvas;
@@ -256,48 +259,39 @@
     //   console.warn("Canvas not found – it might not be rendered yet.");
       return;
     }
+
+    console.log("Updating canvas...");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
 
     const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
-    const paddleMarginHorizontal = canvas.width * 0.03;
-    const paddleWidth = canvas.width * 0.013;
-    const paddleHeight = canvas.height * 0.1;
-    const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
-    const scoreMarginTop = scoreFontSize + 10;
-
-    ctx.beginPath();
-    ctx.arc(
-      this.gameState.ball_x * canvas.width,
-      this.gameState.ball_y * canvas.height,
-      ballRadius,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
-
-    ctx.fillRect(
-      paddleMarginHorizontal,
-      this.gameState.player1_y * canvas.height - paddleHeight / 2,
-      paddleWidth,
-      paddleHeight
-    );
-    ctx.fillRect(
-      canvas.width - paddleMarginHorizontal - 2 * paddleWidth,
-      this.gameState.player2_y * canvas.height - paddleHeight / 2,
-      paddleWidth,
-      paddleHeight
-    );
-
-    ctx.font = `${scoreFontSize}px Arial`;
-    ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
-    ctx.fillText(this.gameState.score2, (3 * canvas.width) / 4, scoreMarginTop);
+        const paddleMarginHorizontal = canvas.width * 0.03;
+        const paddleWidth = canvas.width * 0.013;
+        const paddleHeight = canvas.height * 0.1;
+        const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
+        const scoreMarginTop = scoreFontSize + 10;
+  
+        // Dessiner la balle
+        ctx.beginPath();
+        ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, ballRadius, 0, Math.PI * 2);
+        ctx.fill();
+  
+        // Dessiner les paddles (centrés verticalement et positionnés avec marges horizontales)
+        ctx.fillRect(paddleMarginHorizontal, this.gameState.player1_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
+        ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth - paddleWidth, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight); // Ajustement pour positionner correctement Paddle 2
+  
+        // Affichage des scores (positionnés avec marge verticale basée sur la taille de la police)
+        ctx.font = `${scoreFontSize}px Arial`;
+        ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
+        ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
   },
+
   animationLoop() {
-    if (this.gameStarted) {
-        this.updateCanvas();
+    if (!this.gameStarted) {
+        return;
     }
+    this.updateCanvas();
     this.frameCount++;
     const currentTime = performance.now();
     const deltaTime = currentTime - this.lastFrameTime;
@@ -308,26 +302,27 @@
     }
     requestAnimationFrame(this.animationLoop);
     },
-  handleKeyDown(event) {
-    if (!this.playerRole) return;
-    if (event.key === "ArrowUp") {
-      this.keysPressed.up = true;
-    }
-    if (event.key === "ArrowDown") {
-      this.keysPressed.down = true;
-    }
-    this.sendPlayerMoves();
-  },
-  handleKeyUp(event) {
-    if (!this.playerRole) return;
-    if (event.key === "ArrowUp") {
-      this.keysPressed.up = false;
-    }
-    if (event.key === "ArrowDown") {
-      this.keysPressed.down = false;
-    }
-    this.sendPlayerMoves();
-  },
+    handleKeyDown(event) {
+        if (!this.playerRole) return;
+        if (event.key === 'ArrowUp') {
+          this.keysPressed.up = true;
+        }
+        if (event.key === 'ArrowDown') {
+          this.keysPressed.down = true;
+        }
+        this.sendPlayerMoves();
+      },
+  
+      handleKeyUp(event) {
+        if (!this.playerRole) return;
+        if (event.key === 'ArrowUp'){
+          this.keysPressed.up = false;
+        }
+        if (event.key === 'ArrowDown') {
+          this.keysPressed.down = false;
+        }
+        this.sendPlayerMoves();
+      },
   copyToClipboard() {
     const el = document.createElement("textarea");
     el.value = this.privateRoomCode;
@@ -356,6 +351,7 @@ beforeUnmount() {
 },
   };
   </script>
+
   
   <style scoped>
   .pong-game-wrapper {
