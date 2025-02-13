@@ -108,10 +108,12 @@ export default {
 
       setTimeout(() => {
         opponentStatus.value = 'Opponent found!';
-        setTimeout(() => {
-          show.value = false;
-        }, props.duration * 1010);
-      }, 1000);
+        //wait for the back to me the opponent info
+
+        // setTimeout(() => {
+        //   show.value = false;
+        // }, props.duration * 1000);
+      }, 2000);
     });
 
     const emitTimeUp = () => {
