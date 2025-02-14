@@ -39,6 +39,7 @@ export default {
   setup() {
     const route = useRoute();
     const mode = computed(() => route.params.mode);
+    console.log(mode.value);
     const opponent = computed(() => {
     if (mode.value === "solo") {
           return "AI";
@@ -48,6 +49,7 @@ export default {
           return "";
         }
       });
+      console.log(opponent);
     return { mode, opponent };
   },
   data() {
