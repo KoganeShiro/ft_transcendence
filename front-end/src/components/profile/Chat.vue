@@ -12,14 +12,14 @@
     </div>
 
     <!-- Chat Messages -->
-    <div class="chat-messages">
+    <div class="chat-messages" ref="chatMessages">
       <div
-        v-for="(message, index) in messages"
-        :key="index"
-        :class="['chat-message', message.sender === 'me' ? 'sent' : 'received']"
+        v-for="(message, index) in sortedMessages"
+        :key="message.id || index"
+        :class="['chat-message', message.sender === friend.name ? 'received' : 'sent']"
       >
         <p>{{ message.text }}</p>
-        <span class="timestamp">{{ message.timestamp }}</span>
+        <span class="timestamp">{{ formattedTimestamp(message.timestamp) }}</span>
       </div>
     </div>
 
@@ -38,7 +38,8 @@
 
 <script>
 import Avatar from "@/assets/profile.png";
-import API from "@/api.js"
+import API from "@/api.js";
+import { format } from "date-fns";
 
 export default {
   name: "ChatComponent",
@@ -50,68 +51,119 @@ export default {
   },
   data() {
     return {
-      messages: [
-        // Prototype messages. In a real app, you might fetch these from your backend.
-        { text: "Hi there!", sender: "friend", timestamp: "10:00 AM" },
-        { text: "Hello!", sender: "me", timestamp: "10:01 AM" },
-      ],
+      messages: [],
       newMessage: "",
+      pollingInterval: null,
+      lastReceivedMessageId: null,
     };
   },
   mounted() {
-    // PROTOTYPE: Call your backend to load the conversation with this friend.
-    // Example using Axios:
-    // axios.get(`/api/chat/${this.friend.id}`)
-    //   .then(response => {
-    //     this.messages = response.data;
-    //   })
-    //   .catch(error => console.error("Error loading chat:", error));
     this.getAvatar();
+    this.fetchMessages();
+    this.startPolling();
+  },
+  beforeDestroy() {
+    this.stopPolling();
   },
   methods: {
     getAvatar() {
       API.get(`/api/profile/${this.friend.name}`)
-      .then(response => {
-        if (response.data && response.data.cover_photo) {
-          this.friend.avatar = response.data.cover_photo;
-        } else {
+        .then(response => {
+          if (response.data && response.data.cover_photo) {
+            this.friend.avatar = response.data.cover_photo;
+          } else {
+            this.friend.avatar = Avatar;
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching friend's cover photo:", error);
           this.friend.avatar = Avatar;
+        });
+    },
+    // Fetch the last 15 messages for this friend.
+    fetchMessages() {
+      API.post(`/api/friends/get_last_15_messages/`, { username: this.friend.name })
+      .then(response => {
+        const newMessages = response.data.map(msg => ({
+          id: msg.id,
+          sender: msg.sender,
+          text: msg.message,
+          timestamp: msg.timestamp,
+        }));
+        // Filter only messages received from the friend
+        const receivedMessages = newMessages.filter(msg => msg.sender === this.friend.name);
+        const lastReceived = receivedMessages.length ? receivedMessages[receivedMessages.length - 1] : null;
+
+        this.messages = newMessages;
+
+        // If there's a new received message that is different from the stored one, scroll to bottom.
+        if (lastReceived && lastReceived.id !== this.lastReceivedMessageId) {
+          this.lastReceivedMessageId = lastReceived.id;
+          this.scrollToBottom();
         }
       })
       .catch(error => {
-        console.error("Error fetching friend's cover photo:", error);
+        console.error("Error fetching messages:", error);
       });
+  },
+
+    // Format ISO timestamp to a readable string.
+    formattedTimestamp(ts) {
+      return ts ? format(new Date(ts), "PPpp") : "N/A";
     },
     sendMessage() {
       if (!this.newMessage.trim()) return;
 
-      // should call the backend to send the message
+      // For messages sent by the current user, set sender as "me".
       const message = {
         text: this.newMessage,
         sender: "me",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: new Date().toISOString(),
       };
       this.messages.push(message);
 
-      //api/friends/send_message/
-      /*
-        {"receiver" : "moi"
-        "message" : "hey, want to play pong together ?"}
-      */
+      // Send the message to the backend.
+      API.post("/api/friends/send_message/", {
+        receiver: this.friend.name,
+        message: this.newMessage,
+      })
+        .then(response => {
+          console.log("Message sent successfully:", response.data);
+          this.scrollToBottom();
+        })
+        .catch(error => {
+          console.error("Error sending message:", error);
+        });
 
-      // PROTOTYPE: Here you would call your backend to send the message.
-      // axios.post(`/api/chat/${this.friend.id}`, { message: this.newMessage })
-      //   .then(response => {
-      //     // Optionally update your messages list with the response
-      //   })
-      //   .catch(error => console.error("Error sending message:", error));
-
-      // Clear the input field
+      // Clear the input.
       this.newMessage = "";
     },
     closeChat() {
-      // Emit an event to the parent to close the chat component
       this.$emit("close-chat");
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const chatMessages = this.$refs.chatMessages;
+        if (chatMessages) {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      });
+    },
+    startPolling() {
+      this.pollingInterval = setInterval(this.fetchMessages, 5000);
+    },
+    stopPolling() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval);
+        this.pollingInterval = null;
+      }
+    },
+  },
+  computed: {
+    sortedMessages() {
+      return this.messages.sort(
+        (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+      );
     },
   },
 };

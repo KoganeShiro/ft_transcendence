@@ -52,9 +52,11 @@
 
     <!-- Chat Component -->
     <ChatComponent
+      ref="chatComponent"
       v-if="activeChatFriend"
       :friend="activeChatFriend"
       @close-chat="activeChatFriend = null"
+      @fetch-messages="fetchMessages"
     />
   </div>
 </template>
@@ -65,7 +67,6 @@ import ButtonAtom from "@/components/atoms/Button.vue";
 import ChatComponent from "@/components/profile/Chat.vue";
 import API from "@/api.js";
 import Avatar from "@/assets/profile.png";
-
 
 export default {
   components: {
@@ -158,27 +159,35 @@ export default {
         });
     },
     openChat(friend) {
-      // Open the chat component for the selected friend.
-      this.getAvatar(friend);
       this.activeChatFriend = friend;
+      this.$nextTick(() => {
+        if (this.$refs.chatComponent && this.$refs.chatComponent.getAvatar) {
+          this.$refs.chatComponent.getAvatar();
+        }
+        if (this.$refs.chatComponent && this.$refs.chatComponent.fetchMessages) {
+          this.$refs.chatComponent.fetchMessages(friend);
+        }
+      });
     },
-    getAvatar(friend) {
-      API.get(`/api/profile/${friend.name}`)
-        .then(response => {
-          if (response.data && response.data.cover_photo) {
-            friend.avatar = response.data.cover_photo;
-          } else {
-            friend.avatar = Avatar;
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching friend's cover photo:", error);
-        });
+    fetchMessages(friend) {
+      if (friend) {
+        API.post(`/api/friends/get_last_15_messages/`, { username: friend.name })
+          .then(response => {
+            friend.messages = response.data.map(msg => ({
+              id: msg.id,
+              sender: msg.sender,
+              text: msg.message,
+              timestamp: msg.timestamp,
+            }));
+          })
+          .catch(error => {
+            console.error("Error fetching messages:", error);
+          });
+      }
     },
   },
 };
 </script>
-
 
 <style scoped>
 .page-container {

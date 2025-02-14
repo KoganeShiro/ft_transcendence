@@ -159,7 +159,7 @@ to see stats --> https://localhost:1443/api/stats/<username>
    - /api/friends/send_message/
   */
 
-{"receiver" : "moi"
+{"receiver" : "moi",
 "message" : "hey, want to play pong together ?"}
 
 get last 15 messages
@@ -196,11 +196,11 @@ get last 15 messages
 - [ ] Matchmaking with back
 - [ ] Tournament with back
 
-- [ ] Call the back for friends list (max of 10)
-- [ ] Call the back for adding friends
-- [ ] Call the back for removing friends
-- [ ] Call the back for the chat
-- [ ] Call the back for sending msg
+- [x] Call the back for friends list (max of 10 ?)
+- [x] Call the back for adding friends
+- [x] Call the back for removing friends
+- [x] Call the back for the chat
+- [x] Call the back for sending msg
 
 - [ ] Pong AI
 
