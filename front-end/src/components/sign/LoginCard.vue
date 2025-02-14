@@ -64,7 +64,7 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-        console.log("Login successful:", response.data);
+        // console.log("Login successful:", response.data);
         // Handle token storage and redirection
         // document.cookie = `access=${response.data.access}; path=/`;
         // document.cookie = `refresh=${response.data.refresh}; path=/`;

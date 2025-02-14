@@ -15,6 +15,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 active_games = {}
 class FriendPongConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -34,6 +35,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         self.paddle_acceleration_left = 0
         self.paddle_acceleration_right = 0
         self.name = None
+
         self.player1_socket = None  
         self.player2_socket = None
         self.score_tab = [[0, 0]] #tableau pour suivre la progression des scores
@@ -64,6 +66,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         moves = 'null'
         player = 'null'
+
         type_message = text_data_json.get('type') # Récupérer le type de message (optionnel)
         info = text_data_json.get('info')
         self.name = info.get('playerName')
@@ -76,14 +79,16 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 await self.handle_create_private_room() # Fonction séparée pour la logique de création
             elif join_code:
                 await self.handle_join_private_room(join_code) # Fonction séparée pour la logique de join
-            else:
+
+            else: # Si message "init" mais sans mode clair (ni create_private ni join_code), erreur
+                print("**[DEBUG BACKEND - RECEIVE - INIT] Erreur : Message 'init' reçu sans mode privé valide.**")
                 await self.close() # Fermer la connexion si init incorrect
 
         elif type_message == "moves":
             # print(f"Moves : {text_data}")
             player = text_data_json.get('player')
             moves = text_data_json.get('moves')
-            
+
             if self.channel_name == self.player1_socket:
                 await self.handle_player_moves(moves, player)
             elif self.channel_name == self.player2_socket:
@@ -133,6 +138,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             active_games[self.room_group_name] = {
                 "player1_name": None,
                 "player2_name": None,
+
                 "player1_socket": None,
                 "player2_socket": None,
                 "game_state": None,
@@ -146,6 +152,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             self.player1_socket = self.channel_name
             self.player1_name = self.name
             game["player1_name"] = self.name
+
             role = 'player1'
 
             initial_game_state = {
@@ -154,7 +161,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             }
             game["game_state"] = initial_game_state
             self.game_state = initial_game_state
-
 
         elif not game["player2_socket"]: # Second joueur rejoignant la room privée
             game["player2_socket"] = self.channel_name
@@ -188,7 +194,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             await self.close() # Fermer la connexion car room pleine
 
         await self.send(text_data=json.dumps({'type': 'role_assignment', 'role': role}))
-
 
 
     async def start_game(self):

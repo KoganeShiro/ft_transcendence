@@ -1,8 +1,8 @@
 <template>
   <div class="ttt-page">
-    <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" />
+    <!-- <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" /> -->
     <Versus
-      v-else-if="showVersus"
+      v-if="showVersus"
       :opponentType="opponent"
       @time-up="handleTimeUp"
     />
@@ -22,7 +22,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import TicTacToeGame from "@/components/game/TicTacToeGame.vue";
 import Versus from "@/components/game/Versus.vue";
-import MatchPopup from "@/components/game/pongFront/PrivateMatch.vue";
+// import MatchPopup from "@/components/game/pongFront/PrivateMatch.vue";
 import WinnerPopup from "@/views/game/winner.vue";
 import LoserPopup from "@/views/game/loser.vue";
 import API from '@/api.js';
@@ -32,13 +32,14 @@ export default {
   components: {
     Versus,
     TicTacToeGame,
-    MatchPopup,
+    // MatchPopup,
     WinnerPopup,
     LoserPopup,
   },
   setup() {
     const route = useRoute();
     const mode = computed(() => route.params.mode);
+    console.log(mode.value);
     const opponent = computed(() => {
     if (mode.value === "solo") {
           return "AI";
@@ -48,6 +49,7 @@ export default {
           return "";
         }
       });
+      console.log(opponent);
     return { mode, opponent };
   },
   data() {

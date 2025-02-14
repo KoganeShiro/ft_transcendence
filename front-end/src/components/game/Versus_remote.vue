@@ -85,12 +85,14 @@ export default {
     const localPlayer1 = ref({
       pseudo: props.player1.pseudo,
       imageUrl: props.player1.imageUrl,
+      link: props.player1.link || '',
     });
 
     // Create reactive object for player2 (opponent)
     const player2 = ref({
       imageUrl: props.player2.imageUrl,
       pseudo: props.player2.pseudo,
+      link: props.player2.link || '',
     });
 
     onMounted(async () => {
@@ -106,10 +108,12 @@ export default {
 
       setTimeout(() => {
         opponentStatus.value = 'Opponent found!';
-        setTimeout(() => {
-          show.value = false;
-        }, props.duration * 1010);
-      }, 1000);
+        //wait for the back to me the opponent info
+
+        // setTimeout(() => {
+        //   show.value = false;
+        // }, props.duration * 1000);
+      }, 2000);
     });
 
     const emitTimeUp = () => {
