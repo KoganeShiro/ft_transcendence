@@ -3,8 +3,9 @@
     <!-- Chat Header -->
     <div class="chat-header">
       <router-link :to="`/other_profile/${friend.name}`" class="friend-profile">
-        <!-- <img :src="friend.avatar" alt="Avatar" class="friend-avatar" /> -->
-         <img :src="avatar" alt="Avatar" class="friend-avatar" />
+        <div class="avatar-image">
+          <img :src="friend.avatar" alt="Avatar" class="friend-avatar" />
+        </div>
         <h2>{{ friend.name }}</h2>
       </router-link>
       <button class="close-btn" @click="closeChat">X</button>
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import Avatar from "@/assets/profile2.png";
+import Avatar from "@/assets/profile.png";
 import API from "@/api.js"
 
 export default {
@@ -55,7 +56,6 @@ export default {
         { text: "Hello!", sender: "me", timestamp: "10:01 AM" },
       ],
       newMessage: "",
-      avatar: Avatar,
     };
   },
   mounted() {
@@ -66,18 +66,38 @@ export default {
     //     this.messages = response.data;
     //   })
     //   .catch(error => console.error("Error loading chat:", error));
+    this.getAvatar();
   },
   methods: {
+    getAvatar() {
+      API.get(`/api/profile/${this.friend.name}`)
+      .then(response => {
+        if (response.data && response.data.cover_photo) {
+          this.friend.avatar = response.data.cover_photo;
+        } else {
+          this.friend.avatar = Avatar;
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching friend's cover photo:", error);
+      });
+    },
     sendMessage() {
       if (!this.newMessage.trim()) return;
 
-      // Add the new message to the messages list.
+      // should call the backend to send the message
       const message = {
         text: this.newMessage,
         sender: "me",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       this.messages.push(message);
+
+      //api/friends/send_message/
+      /*
+        {"receiver" : "moi"
+        "message" : "hey, want to play pong together ?"}
+      */
 
       // PROTOTYPE: Here you would call your backend to send the message.
       // axios.post(`/api/chat/${this.friend.id}`, { message: this.newMessage })
@@ -127,6 +147,20 @@ export default {
   align-items: center;
   text-decoration: none;
   color: inherit;
+}
+
+.avatar-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.avatar-image img {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
 }
 
 .friend-avatar {

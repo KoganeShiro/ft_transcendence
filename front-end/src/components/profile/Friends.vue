@@ -64,6 +64,8 @@ import AddFriend from "@/components/profile/AddFriend.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import ChatComponent from "@/components/profile/Chat.vue";
 import API from "@/api.js";
+import Avatar from "@/assets/profile.png";
+
 
 export default {
   components: {
@@ -157,7 +159,21 @@ export default {
     },
     openChat(friend) {
       // Open the chat component for the selected friend.
+      this.getAvatar(friend);
       this.activeChatFriend = friend;
+    },
+    getAvatar(friend) {
+      API.get(`/api/profile/${friend.name}`)
+        .then(response => {
+          if (response.data && response.data.cover_photo) {
+            friend.avatar = response.data.cover_photo;
+          } else {
+            friend.avatar = Avatar;
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching friend's cover photo:", error);
+        });
     },
   },
 };
@@ -233,7 +249,10 @@ export default {
 }
 
 @media (max-width: 768px) {
-    /* need to make the remove btn smaller */
+    .btn-group {
+      padding: 3px 7px;
+      font-size: 15px;
+    }
   }
 
 </style>
