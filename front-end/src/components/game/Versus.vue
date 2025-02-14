@@ -85,14 +85,12 @@ export default {
     const localPlayer1 = ref({
       pseudo: props.player1.pseudo,
       imageUrl: props.player1.imageUrl,
-      link: props.player1.link || '',
     });
 
     // Create reactive object for player2 (opponent)
     const player2 = ref({
       imageUrl: props.player2.imageUrl,
       pseudo: props.player2.pseudo,
-      link: props.player2.link || '',
     });
 
     onMounted(async () => {

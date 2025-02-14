@@ -140,6 +140,9 @@
 
 - [x] Make the Tic Tac Toe AI
 
+- [x] Update the game with friend component
+        Should click on create game and then get the code, so you could send it to your friend (keep into memory where you are)
+
 
 to hardcode games --> https://localhost:1443/api/games/ttt/
                         https://localhost:1443/api/games/pong/
@@ -149,11 +152,10 @@ to see stats --> https://localhost:1443/api/stats/<username>
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 
-- [ ] Update the game with friend component
-        Should click on create game and then get the code, so you could send it to your friend (keep into memory where you are)
 
 - [ ] Let the user know who they are in remote + with friend
 - [ ] Part 2 Versus (on remote because loading)
+- [ ] Add the winner/loser component
 
 - [ ] New front for ttt in remote ?
 
