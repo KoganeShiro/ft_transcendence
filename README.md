@@ -150,6 +150,37 @@ to hardcode games --> https://localhost:1443/api/games/ttt/
 to see stats --> https://localhost:1443/api/stats/<username>
 
 {"username" : "moi"}
+  /*
+   - /api/friends/block_user/
+   - /api/friends/unblock_user/
+   - /api/friends/remove_user/
+   - /api/friends/add_user/
+   - /api/friends/get_last_15_messages/
+   - /api/friends/send_message/
+  */
+
+{"receiver" : "moi"
+"message" : "hey, want to play pong together ?"}
+
+get last 15 messages
+
+{
+   {
+      "id": 5,
+      "sender": "moi",
+      "receiver": "cejin",
+      "message": "great ! How about you ? something interesting ?",
+      "timestamp": "2025-02-14T08:16:38.869318+01:00"
+   }
+   {
+      "id": 4,
+      "sender": "moi",
+      "receiver": "cejin",
+      "message": "hey there, how is it going ?",
+      "timestamp": "2025-02-14T08:15:39.869318+01:00"
+   }
+}
+
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 

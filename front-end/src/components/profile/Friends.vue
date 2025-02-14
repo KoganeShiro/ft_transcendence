@@ -3,9 +3,9 @@
     <h1>{{ $t("friends") }}</h1>
     <div v-if="isLoading">Loading...</div>
 
-    <div class="friends-list">
+    <div class="friends-list" v-else>
       <ul>
-        <!-- call /api/friends/user_friends/ -->
+        <!-- Dynamically display the friends list -->
         <li v-for="(friend, index) in friends" :key="friend.id">
           <div class="friend-info" @click="openChat(friend)">
             <!-- Online/Offline status dot -->
@@ -15,39 +15,42 @@
             ></span>
             <span class="friend-name">{{ friend.name }}</span>
           </div>
-          <!-- call /api/friends/block_user/ -->
-          <ButtonAtom
-            variant="attention"
-            @click="block(index)"
-            class="remove-btn"
-          >
-            {{ $t("block") }}
-          </ButtonAtom>
-          <!-- if block, the button will transform into unblock -->
-          <ButtonAtom
-            variant="attention"
-            @click="unblock(index)"
-            class="remove-btn"
-          >
-            {{ $t("unblock") }}
-          </ButtonAtom>
-          <!-- call /api/friends/remove_friend/ -->
-           <!-- the friend is will not be shown -->
-          <ButtonAtom
-            variant="attention"
-            @click="removeFriend(index)"
-            class="remove-btn"
-          >
-            {{ $t("remove") }}
-          </ButtonAtom>
+          <!-- Block/Unblock and Remove buttons -->
+          <div class="btn-group">
+            <ButtonAtom
+              v-if="!friend.blocked"
+              variant="block"
+              @click="block(index)"
+              class="remove-btn"
+            >
+              {{ $t("block") }}
+            </ButtonAtom>
+            <ButtonAtom
+              v-else
+              variant="unblock"
+              @click="unblock(index)"
+              class="remove-btn"
+            >
+              {{ $t("unblock") }}
+            </ButtonAtom>
+            <ButtonAtom
+              variant="attention"
+              @click="removeFriend(index)"
+              class="remove-btn"
+            >
+              {{ $t("remove") }}
+            </ButtonAtom>
+          </div>
         </li>
       </ul>
     </div>
-    <!-- call /api/friends/add_friend -->
+
+    <!-- Add Friend Component -->
     <div class="add-friend">
       <AddFriend :friends="friends" @add-friend="addFriend" />
     </div>
 
+    <!-- Chat Component -->
     <ChatComponent
       v-if="activeChatFriend"
       :friend="activeChatFriend"
@@ -60,8 +63,7 @@
 import AddFriend from "@/components/profile/AddFriend.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
 import ChatComponent from "@/components/profile/Chat.vue";
-import API from "@/api.js"
-
+import API from "@/api.js";
 
 export default {
   components: {
@@ -71,60 +73,96 @@ export default {
   },
   data() {
     return {
-      // Prototype list with hardcoded friends. In a real app, you'll call the backend
-      // to fetch this list and update these objects accordingly.
-      friends: [
-        { id: 1, name: "cejin", online: true },
-        { id: 2, name: "Bob", online: false },
-        { id: 3, name: "Charlie", online: true },
-      ],
-      // isLoading: false, // Uncomment if you decide to handle a loading state
-      activeChatFriend: null, // Stores the selected friend for chat
+      isLoading: false,
+      friends: [],
+      activeChatFriend: null,
     };
   },
   mounted() {
-    // PROTOTYPE: Here is where you would call the backend to get the list of friends.
-    // Example using Axios:
-    // this.isLoading = true;
-    // axios.get('/api/friends')
-    //   .then(response => {
-    //     // Assume response.data is an array of friends with { id, name, online } fields
-    //     this.friends = response.data;
-    //   })
-    //   .catch(error => console.error('Error fetching friends:', error))
-    //   .finally(() => { this.isLoading = false; });
+    // Fetch the initial friend list.
+    this.fetchFriends();
   },
   methods: {
+    // Helper method to fetch and update the friend list.
+    fetchFriends() {
+      this.isLoading = true;
+      API.get('/api/friends/user_friends/')
+        .then(response => {
+          // Map the API response to your local friend structure.
+          this.friends = response.data.map((friend, index) => ({
+            id: index,
+            name: friend.username,
+            online: friend.online_status,
+            blocked: false, // Default value; adjust if your backend provides this.
+          }));
+        })
+        .catch(error => {
+          console.error("Error fetching friends:", error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
     addFriend(newFriend) {
-      // PROTOTYPE: In a real app, call the backend to add the friend and then update the list.
-      // axios.post('/api/friends', newFriend)
-      //   .then(response => {
-      //     // Assume response.data is the newly added friend
-      //     this.friends.push(response.data);
-      //   })
-      //   .catch(error => console.error('Error adding friend:', error));
-      this.friends.push({
-        id: Date.now(), // Prototype unique id
-        name: newFriend.name,
-        online: false, // Default status
-      });
+      console.log("Adding friend:", newFriend);
+      // POST to /api/friends/add_friend/ with the friend's username.
+      API.post('/api/friends/add_friend/', { username: newFriend.name })
+        .then(() => {
+          console.log("Friend added:", newFriend.name);
+          // Refresh the friend list after adding.
+          this.fetchFriends();
+        })
+        .catch(error => {
+          console.error("Error adding friend:", error);
+        });
     },
     removeFriend(index) {
-      // PROTOTYPE: In a real app, call the backend to remove the friend before updating the list.
-      // axios.delete(`/api/friends/${this.friends[index].id}`)
-      //   .then(() => {
-      //     this.friends.splice(index, 1);
-      //   })
-      //   .catch(error => console.error('Error removing friend:', error));
-      this.friends.splice(index, 1);
+      const friend = this.friends[index];
+      // POST to /api/friends/remove_friend/ with the friend's username.
+      API.post('/api/friends/remove_friend/', { username: friend.name })
+        .then(() => {
+          console.log("Removed friend:", friend.name);
+          // Refresh the friend list after removal.
+          this.fetchFriends();
+        })
+        .catch(error => {
+          console.error("Error removing friend:", error);
+        });
+    },
+    block(index) {
+      const friend = this.friends[index];
+      // POST to /api/friends/block_user/ with the friend's username.
+      API.post('/api/friends/block_user/', { username: friend.name })
+        .then(() => {
+          console.log("Blocked friend:", friend.name);
+          // Refresh the friend list after blocking.
+          this.fetchFriends();
+        })
+        .catch(error => {
+          console.error("Error blocking friend:", error);
+        });
+    },
+    unblock(index) {
+      const friend = this.friends[index];
+      // POST to /api/friends/unblock_user/ with the friend's username.
+      API.post('/api/friends/unblock_user/', { username: friend.name })
+        .then(() => {
+          console.log("Unblocked friend:", friend.name);
+          // Refresh the friend list after unblocking.
+          this.fetchFriends();
+        })
+        .catch(error => {
+          console.error("Error unblocking friend:", error);
+        });
     },
     openChat(friend) {
-      // Open the chat component with the selected friend
+      // Open the chat component for the selected friend.
       this.activeChatFriend = friend;
     },
   },
 };
 </script>
+
 
 <style scoped>
 .page-container {
@@ -191,5 +229,11 @@ export default {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+  margin-right: 7px;
 }
+
+@media (max-width: 768px) {
+    /* need to make the remove btn smaller */
+  }
+
 </style>
