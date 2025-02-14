@@ -4,6 +4,16 @@ import time
 import random
 from channels.generic.websocket import AsyncWebsocketConsumer
 import uuid  
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,  # Niveau de log, peut être DEBUG, INFO, etc.
+    format='%(asctime)s - %(levelname)s - %(message)s', 
+    handlers=[
+        logging.StreamHandler()  # Affiche les logs dans la console
+    ]
+)
+logger = logging.getLogger(__name__)
 
 active_games = {}
 class PongConsumer(AsyncWebsocketConsumer):
@@ -27,6 +37,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.player2_socket = None 
         self.score_tab = [[0, 0]] #tableau pour suivre la progression des scores
         self.ready_event = asyncio.Event()  # Ajout d'un événement pour attendre 2 joueurs
+        self.player1_name = None  # Important: Initialiser à None
+        self.player2_name = None  # Important: Initialiser à None
+        self.name = None  # Important: Initialiser à None
 
         #definition des stats 
         self.game_statistic = {
@@ -85,9 +98,10 @@ class PongConsumer(AsyncWebsocketConsumer):
         active_games[self.game_id] = {
             "player1_socket": self.channel_name,
             "player2_socket": None,
+            "player1_name": None,
+            "player2_name": None,
             "game_state": initial_game_state, # **INITIALISER game_state DANS active_games AVEC initial_game_state (DÉFINI JUSTE AU-DESSUS) !**
         }
-        # **RÉCUPÉRER L'ÉTAT DU JEU DE active_games ET L'ASSIGNER À self.game_state :**
         game = active_games.get(self.game_id) # Récupérer le jeu de active_games (maintenant qu'il est créé)
         if game: # Vérification (toujours bonne pratique)
             self.game_state = game.get("game_state") # **INITIALISER CORRECTEMENT self.game_state EN RÉCUPÉRANT LA VERSION DE active_games !**
@@ -99,13 +113,42 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-        """ Gérer les entrées des joueurs indépendamment """
         text_data_json = json.loads(text_data)
+        type_message = text_data_json.get('type')
+        info = text_data_json.get('info')
+        
         moves = 'null'
         player = 'null'
-        
-        type_message = text_data_json.get('type') # Récupérer le type de message (optionnel)
-        
+
+        if info:  # Si on reçoit un message avec les infos du joueur (nom)
+                self.name = info.get('playerName')
+                logger.debug(f"Joueur {self.channel_name} a envoyé son nom : {self.name}")
+
+                game = active_games.get(self.game_id)
+                if game:
+                    if not game["player1_name"]:
+                        game["player1_name"] = self.name
+                        self.player1_name = self.name
+                    elif not game["player2_name"]:
+                        game["player2_name"] = self.name
+                        self.player2_name = self.name
+
+                        player1_name = game["player1_name"]
+                        player2_name = game["player2_name"]
+
+                        logger.debug(f"Les deux joueurs sont connectés : {player1_name} et {player2_name}")
+
+                        await self.channel_layer.group_send(
+                            self.room_group_name,
+                            {
+                                "type": "players_ready",
+                                "message": "Deux joueurs connectés, la partie peut commencer !",
+                                "player1": player1_name,
+                                "player2": player2_name,
+                            }
+                        )
+                        await self.start_game()
+                        
         if type_message == "moves":
             # print(f"Moves : {text_data}")
             player = text_data_json.get('player')
@@ -273,10 +316,14 @@ class PongConsumer(AsyncWebsocketConsumer):
     
     
     async def players_ready(self, event):
-        message = event['message'] # Récupérer le message optionnel
+        message = event.get('message')
+        player1 = event.get('player1')
+        player2 = event.get('player2')
         await self.send(text_data=json.dumps({
             "type": "players_ready",
-            "message": message
+            "message": message,
+            "player1": player1,
+            "player2": player2, 
         }))
     
     

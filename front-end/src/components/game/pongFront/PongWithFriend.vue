@@ -5,10 +5,12 @@
       ref="pongGame"
     />
   </div>
+
 </template>
 
 <script>
 import PongGame from "@/components/game/pongGame/PongFriend.vue";
+
 
 export default {
   name: "PongWithFriend",
