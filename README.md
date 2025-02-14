@@ -149,6 +149,8 @@ to hardcode games --> https://localhost:1443/api/games/ttt/
 
 to see stats --> https://localhost:1443/api/stats/<username>
 
+{"username" : "moi"}
+
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 

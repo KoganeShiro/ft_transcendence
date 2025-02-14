@@ -3,7 +3,7 @@
     <!-- <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" /> -->
     <Versus
       v-if="showVersus"
-      :opponentType="opponent"
+      :opponentType="opponent_username"
       @time-up="handleTimeUp"
     />
     
@@ -49,8 +49,9 @@ export default {
           return "";
         }
       });
-      console.log(opponent);
-    return { mode, opponent };
+      const opponent_username = opponent.value;
+      console.log(opponent_username);
+    return { mode, opponent_username };
   },
   data() {
     return {

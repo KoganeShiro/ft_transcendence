@@ -102,6 +102,26 @@ export default {
       this.saveProfile();
     },
 
+    validatePassword(password) {
+      const errors = [];
+      if (password.length < 8) {
+        errors.push("be at least 8 characters long");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("contain at least one lowercase letter");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("contain at least one uppercase letter");
+      }
+      if (!/\d/.test(password)) {
+        errors.push("contain at least one number");
+      }
+      if (!/[^A-Za-z0-9]/.test(password)) {
+        errors.push("contain at least one special character");
+      }
+      return errors;
+    },
+
     saveProfile() {
       if (this.loading) return;
       this.loading = true;
@@ -129,13 +149,15 @@ export default {
         const payload = { username: this.user.name };
         
         if (this.user.password !== "*************") {
-          const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
-          if (!regex.test(this.user.password)) {
-            alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+          const passwordErrors = this.validatePassword(this.user.password);
+          if (passwordErrors.length > 0) {
+            // Display a personalized alert message listing the missing criteria.
+            alert("Your password must " + passwordErrors.join(", ") + ".");
             this.loading = false;
             this.initAccount();
             return;
           }
+          // If validation passes, assign the password to the payload.
           payload.password = this.user.password;
         }
         

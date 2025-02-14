@@ -13,6 +13,7 @@
               :imageUrl="localPlayer1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
+              :link="localPlayer1.link"
               class="animate-avatar"
             />
           </div>
@@ -27,6 +28,7 @@
               :pseudo="player2.pseudo"
               :showPseudo="true"
               pseudoPosition="bottom"
+              :link="player2.link"
               class="animate-avatar"
             />
           </div>
@@ -37,12 +39,13 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
 import defaultAvatar from '@/assets/searching.webp';
 import guestAvatar from '@/assets/profile2.png';
 import API from '@/api.js';
+import io from 'socket.io-client';
 
 export default {
   name: 'Versus',
@@ -55,14 +58,6 @@ export default {
       default: () => ({
         pseudo: 'Player 1',
         imageUrl: defaultAvatar,
-        link: '',
-      }),
-    },
-    player2: {
-      type: Object,
-      default: () => ({
-        pseudo: 'Opponent',
-        imageUrl: guestAvatar,
         link: '',
       }),
     },
@@ -90,10 +85,13 @@ export default {
 
     // Create reactive object for player2 (opponent)
     const player2 = ref({
-      imageUrl: props.player2.imageUrl,
-      pseudo: props.player2.pseudo,
-      link: props.player2.link || '',
+      imageUrl: defaultAvatar,
+      pseudo: 'loading...',
+      link: '',
     });
+
+    // WebSocket connection
+    const socket = io('http://your-backend-url'); // Replace with your backend URL
 
     onMounted(async () => {
       // Fetch the user profile and update localPlayer1
@@ -106,14 +104,22 @@ export default {
         console.error("Error fetching player data:", error);
       }
 
-      setTimeout(() => {
+      // Listen for opponent found event
+      socket.on('opponent-found', (data) => {
+        player2.value.imageUrl = data.cover_photo || guestAvatar;
+        player2.value.pseudo = data.username || 'Opponent';
         opponentStatus.value = 'Opponent found!';
-        //wait for the back to me the opponent info
+        setTimeout(() => {
+          show.value = false;
+        }, props.duration * 1000);
+      });
 
-        // setTimeout(() => {
-        //   show.value = false;
-        // }, props.duration * 1000);
-      }, 2000);
+      // Emit event to search for opponent
+      socket.emit('search-opponent', { player1: localPlayer1.value });
+    });
+
+    onUnmounted(() => {
+      socket.disconnect();
     });
 
     const emitTimeUp = () => {

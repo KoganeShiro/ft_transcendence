@@ -1,11 +1,11 @@
 <template>
   <div class="page-container">
     <h1>{{ $t("friends") }}</h1>
-    <!-- Loading indicator (if you decide to use one) -->
-    <!-- <div v-if="isLoading">Loading...</div> -->
+    <div v-if="isLoading">Loading...</div>
 
     <div class="friends-list">
       <ul>
+        <!-- call /api/friends/user_friends/ -->
         <li v-for="(friend, index) in friends" :key="friend.id">
           <div class="friend-info" @click="openChat(friend)">
             <!-- Online/Offline status dot -->
@@ -15,23 +15,39 @@
             ></span>
             <span class="friend-name">{{ friend.name }}</span>
           </div>
-          <!-- Remove Friend Button -->
+          <!-- call /api/friends/block_user/ -->
+          <ButtonAtom
+            variant="attention"
+            @click="block(index)"
+            class="remove-btn"
+          >
+            {{ $t("block") }}
+          </ButtonAtom>
+          <!-- if block, the button will transform into unblock -->
+          <ButtonAtom
+            variant="attention"
+            @click="unblock(index)"
+            class="remove-btn"
+          >
+            {{ $t("unblock") }}
+          </ButtonAtom>
+          <!-- call /api/friends/remove_friend/ -->
+           <!-- the friend is will not be shown -->
           <ButtonAtom
             variant="attention"
             @click="removeFriend(index)"
             class="remove-btn"
           >
-            {{ $t("block") }}
+            {{ $t("remove") }}
           </ButtonAtom>
         </li>
       </ul>
     </div>
-
+    <!-- call /api/friends/add_friend -->
     <div class="add-friend">
       <AddFriend :friends="friends" @add-friend="addFriend" />
     </div>
 
-    <!-- Prototype: Chat component is conditionally rendered when a friend is selected -->
     <ChatComponent
       v-if="activeChatFriend"
       :friend="activeChatFriend"

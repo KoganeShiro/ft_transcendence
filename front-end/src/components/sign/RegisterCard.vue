@@ -106,30 +106,52 @@ export default {
       return valid;
     },
     goodPassword(password) {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?;&=.<>:|\-\/+()#])[A-Za-z\d@$!%*?;&=.<>:|\-\/+()#]{8,}$/;
-      return regex.test(password);
-    },
-    async onRegister() {
-      if (this.loading) return;
-      this.loading = true;
+    const errors = [];
+    // Check for minimum length
+    if (password.length < 8) {
+      errors.push("be at least 8 characters long");
+    }
+    // Check for a lowercase letter
+    if (!/[a-z]/.test(password)) {
+      errors.push("contain at least one lowercase letter");
+    }
+    // Check for an uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      errors.push("contain at least one uppercase letter");
+    }
+    // Check for a number
+    if (!/\d/.test(password)) {
+      errors.push("contain at least one number");
+    }
+    // Check for a special character (any non-alphanumeric character)
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      errors.push("contain at least one special character");
+    }
+    return errors;
+  },
+  async onRegister() {
+    if (this.loading) return;
+    this.loading = true;
 
-      if (!this.formValid()) {
-        alert("Please fill in all fields and accept the Terms and Services!");
-        this.loading = false;
-        return;
-      }
-      if (this.password !== this.confirmPassword) {
-        alert("Passwords do not match!");
-        this.loading = false;
-        return;
-      }
-      if (!this.goodPassword(this.password)) {
-        alert(
-          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-        );
-        this.loading = false;
-        return;
-      }
+    if (!this.formValid()) {
+      alert("Please fill in all fields and accept the Terms and Services!");
+      this.loading = false;
+      return;
+    }
+    if (this.password !== this.confirmPassword) {
+      alert("Passwords do not match!");
+      this.loading = false;
+      return;
+    }
+    
+    // Validate the password and capture any missing requirements.
+    const passwordErrors = this.goodPassword(this.password);
+    if (passwordErrors.length > 0) {
+      // Create a personalized alert message listing the missing criteria.
+      alert("Your password must " + passwordErrors.join(", ") + ".");
+      this.loading = false;
+      return;
+    }
 
       // Build payload for POST request
       const payload = {

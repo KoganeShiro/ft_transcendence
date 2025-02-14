@@ -13,6 +13,7 @@
               :imageUrl="localPlayer1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
+              :link="localPlayer1.link"
               class="animate-avatar"
             />
           </div>
@@ -27,6 +28,7 @@
               :pseudo="player2.pseudo"
               :showPseudo="true"
               pseudoPosition="bottom"
+              :link="player2.link"
               class="animate-avatar"
             />
           </div>
@@ -58,14 +60,6 @@ export default {
         link: '',
       }),
     },
-    player2: {
-      type: Object,
-      default: () => ({
-        pseudo: 'Opponent',
-        imageUrl: guestAvatar,
-        link: '',
-      }),
-    },
     opponentType: {
       type: String,
       default: '',
@@ -85,12 +79,14 @@ export default {
     const localPlayer1 = ref({
       pseudo: props.player1.pseudo,
       imageUrl: props.player1.imageUrl,
+      link: props.player1.link || '',
     });
 
     // Create reactive object for player2 (opponent)
     const player2 = ref({
-      imageUrl: props.player2.imageUrl,
-      pseudo: props.player2.pseudo,
+      imageUrl: defaultAvatar,
+      pseudo: 'loading...',
+      link: '',
     });
 
     onMounted(async () => {
@@ -105,11 +101,20 @@ export default {
       }
 
       setTimeout(() => {
+        player2.value.imageUrl = guestAvatar;
+        player2.value.pseudo = props.opponentType;
+        if (player2.value.pseudo === '') {
+          player2.value.pseudo = 'Opponent';
+        }
+        else if (player2.value.pseudo !== 'AI' && player2.value.pseudo !== 'Guest') {
+          // Fetch the opponent's profile and update player2
+          console.log("another player");
+        }
         opponentStatus.value = 'Opponent found!';
         setTimeout(() => {
           show.value = false;
-        }, props.duration * 1010);
-      }, 1000);
+        }, props.duration * 1000);
+      }, 2000);
     });
 
     const emitTimeUp = () => {
@@ -126,6 +131,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {
