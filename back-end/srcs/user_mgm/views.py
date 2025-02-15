@@ -272,19 +272,19 @@ def getStats(request, lookup_value=None):
           'pointsLostUnder10Exchanges': serializer.data['stat_pong_solo_loss_tot_min10'],
           'pointsLostOver10Exchanges': serializer.data['stat_pong_solo_loss_tot_max10']
         },
-        "4 Players Pong": {
-          'currentRank': serializer.data['stat_pong_multi_rank'],
-          'totalMatches': serializer.data['stat_pong_multi_wins_tot'] + serializer.data['stat_pong_multi_loss_tot'],
-          'wins': serializer.data['stat_pong_multi_wins_tot'],
-          'losses': serializer.data['stat_pong_multi_loss_tot'],
-          'rankProgression': serializer.data['stat_pong_multi_progress'],
-          'pointsWonUnder5Exchanges': serializer.data['stat_pong_multi_wins_tot_min5'],
-          'pointsWonUnder10Exchanges': serializer.data['stat_pong_multi_wins_tot_min10'],
-          'pointsWonOver10Exchanges': serializer.data['stat_pong_multi_wins_tot_max10'],
-          'pointsLostUnder5Exchanges': serializer.data['stat_pong_multi_loss_tot_min5'],
-          'pointsLostUnder10Exchanges': serializer.data['stat_pong_multi_loss_tot_min10'],
-          'pointsLostOver10Exchanges': serializer.data['stat_pong_multi_loss_tot_max10']
-        },
+        # "4 Players Pong": {
+        #   'currentRank': serializer.data['stat_pong_multi_rank'],
+        #   'totalMatches': serializer.data['stat_pong_multi_wins_tot'] + serializer.data['stat_pong_multi_loss_tot'],
+        #   'wins': serializer.data['stat_pong_multi_wins_tot'],
+        #   'losses': serializer.data['stat_pong_multi_loss_tot'],
+        #   'rankProgression': serializer.data['stat_pong_multi_progress'],
+        #   'pointsWonUnder5Exchanges': serializer.data['stat_pong_multi_wins_tot_min5'],
+        #   'pointsWonUnder10Exchanges': serializer.data['stat_pong_multi_wins_tot_min10'],
+        #   'pointsWonOver10Exchanges': serializer.data['stat_pong_multi_wins_tot_max10'],
+        #   'pointsLostUnder5Exchanges': serializer.data['stat_pong_multi_loss_tot_min5'],
+        #   'pointsLostUnder10Exchanges': serializer.data['stat_pong_multi_loss_tot_min10'],
+        #   'pointsLostOver10Exchanges': serializer.data['stat_pong_multi_loss_tot_max10']
+        # },
         "Tic Tac Toe": {
           'currentRank': serializer.data['stat_ttt_rank'],
           'totalMatches': serializer.data['stat_ttt_wins_tot'] + serializer.data['stat_ttt_loss_tot'],          
