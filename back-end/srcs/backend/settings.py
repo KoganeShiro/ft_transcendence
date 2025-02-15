@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('HASHER_CODE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -310,10 +310,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, '/transcendence/media')
-# MEDIA_ROOT = ('./transcendence/media')
+# for testing purposes
+# MEDIA_URL = '/media/'
 MEDIA_ROOT = ('/mediafiles')
+
+# for production
+MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
