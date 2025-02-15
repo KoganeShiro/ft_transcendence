@@ -63,13 +63,16 @@
             {{ $t('move-down') }}<span class="span">↓</span>
           </p>
         </div>
+        <div class="username">
+        <p class="player-left">{{ localPlayer.pseudo }}</p>
+        <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+      </div>
         <canvas
           ref="pongCanvas"
           class="canvas"
           :width="900"
           :height="500"
         ></canvas>
-        <!-- Winner and Loser popups -->
         <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
         <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
       </div>
@@ -436,9 +439,7 @@ export default {
   border: 2px solid var(--background-color);
   border-radius: 8px;
 }
-.player-controls {
-  margin-bottom: 10px;
-}
+
 .pong-page {
   color: #fff;
   position: relative;
@@ -452,8 +453,28 @@ export default {
   width: 30%;
   background-color: rgba(17, 16, 16, 0.53);
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
 }
+
+.username {
+  display: flex;
+  justify-content: space-between;
+}
+
+.player-left, .player-right {
+  font-weight: bold;
+  background-color: rgba(17, 16, 16, 0.53);
+  border-radius: 8px;
+  padding: 0px;
+}
+
+.player-left {
+  margin-left: 50px;
+}
+.player-right {
+  margin-right: 50px;
+}
+
 .game-container {
   margin-top: 20px;
   border-radius: 8px;

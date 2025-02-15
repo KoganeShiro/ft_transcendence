@@ -388,19 +388,22 @@ get last 15 messages
 - [x] Call the back for sending msg
 - [x] Check if we can play with friend
 
+- [x] Let the user know who they are in remote + with friend
+- [x] Add the friends component to have the chat in the play with game
+
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 
-- [ ] Check for block and unblock
 - [x] Test if remove, cannot add friend anymore
+- [ ] Check for block and unblock
 
-- [ ] Let the user know who they are in remote + with friend
-- [ ] Part 2 Versus (on remote because loading)
-- [ ] Add the winner/loser component on versus friend + remote
+- [-] Part 2 Versus (on remote because loading)
+- [/] Add the winner/loser component on versus friend + remote
 
-- [ ] Add the friends component to have the chat in the play with game
-- [ ] Limiter les char des messages
+- [ ] Reload to know the status change
+- [ ] Limiter les char des messages ?
+- [ ] Check the padding so there is no scroll or change to w/s
 - [ ] Fix les bugs de collision
 
 - [ ] Check we call of the api to only call it when i am on the chat

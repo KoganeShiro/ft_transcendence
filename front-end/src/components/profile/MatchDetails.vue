@@ -90,6 +90,7 @@ export default {
       return `${this.match.player1} vs ${this.match.player2}: ${result}`;
     },
     formattedTimestamp() {
+      // return this.gameDetails.timestamp ? format(new Date(this.gameDetails.timestamp), 'HH:mm') : 'N/A';
       return this.gameDetails.timestamp ? format(new Date(this.gameDetails.timestamp), 'PPpp') : 'N/A';
     },
   },

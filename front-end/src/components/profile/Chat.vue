@@ -55,6 +55,7 @@ export default {
       newMessage: "",
       pollingInterval: null,
       lastReceivedMessageId: null,
+      isActive: true,
     };
   },
   mounted() {
@@ -63,6 +64,7 @@ export default {
     this.startPolling();
   },
   beforeDestroy() {
+    //this.isActive = false;
     this.stopPolling();
   },
   methods: {
@@ -82,6 +84,7 @@ export default {
     },
     // Fetch the last 15 messages for this friend.
     fetchMessages() {
+      // if (this.isActive == false) return;
       API.post(`/api/friends/get_last_15_messages/`, { username: this.friend.name })
       .then(response => {
         const newMessages = response.data.map(msg => ({
@@ -109,7 +112,7 @@ export default {
 
     // Format ISO timestamp to a readable string.
     formattedTimestamp(ts) {
-      return ts ? format(new Date(ts), "PPpp") : "N/A";
+      return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     },
     sendMessage() {
       if (!this.newMessage.trim()) return;
@@ -139,6 +142,7 @@ export default {
       this.newMessage = "";
     },
     closeChat() {
+      this.stopPolling();
       this.$emit("close-chat");
     },
     scrollToBottom() {
@@ -164,6 +168,13 @@ export default {
       return this.messages.sort(
         (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
       );
+    },
+  },
+  watch: {
+    friend(newFriend, oldFriend) {
+      if (newFriend !== oldFriend) {
+        this.fetchMessages();
+      }
     },
   },
 };
@@ -271,6 +282,32 @@ export default {
   margin-top: 2px;
   text-align: right;
   margin-right: 5px;
+}
+
+.content {
+  flex: 1;
+}
+
+input[type="text"] {
+  margin-top: 10px;
+  padding: 5px;
+  width: calc(100% - 12px);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 /* Chat input styling */

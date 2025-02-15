@@ -1,18 +1,11 @@
 <template>
   <div>
-    <!-- <h1>Pong Game</h1> -->
     <canvas 
       ref="pongCanvas"
       class="canvas"
-      :width=900
-      :height=500>
+      :width="900"
+      :height="500">
     </canvas>
-    <!-- <div v-if="gameStarted && !gameOverMessage">  <p>Score: Player 1 - {{ gameState.score1 }} | Player 2 - {{ gameState.score2 }}</p>
-    </div>
-    <div v-else-if="gameOverMessage"> <h2>Partie Terminée !</h2>
-      <p>{{ gameOverMessage }}</p> <p>Le vainqueur est : <strong>{{ winner }}</strong></p> </div>
-    <div v-else-if="!gameStarted"> <p>Waiting for players...</p>
-    </div> -->
   </div>
 </template>
 
@@ -20,6 +13,7 @@
 import API from '@/api.js';
 
 export default {
+  name: 'PongRemote',
   data() {
     return {
       gameSocket: null,
@@ -32,110 +26,128 @@ export default {
         player2_y: 0.5,
       },
       gameStarted: false,
-      lastSentTime: 0,
       playerRole: null,
-      gameOverMessage: null,
-      winner: null,
       keysPressed: {
         up: false,
         down: false,
       },
-      localPlayer: "Player 1",
-      opponentPlayer: "Opponent",
+      localPlayer: {
+        pseudo: "Player1",
+        imageUrl: "",
+        link: ""
+      },
+      opponentPlayer: {
+        pseudo: "loading...",
+        imageUrl: "",
+        link: ""
+      },
       frameCount: 0,
       lastFrameTime: 0,
       fps: 0,
     };
   },
-
   methods: {
     connectToGame() {
       if (this.gameSocket) return;
-
-      this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);  
+      this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
+      
       this.gameSocket.onopen = () => {
+        // Get local player info via API
         API.get('/api/profile/').then(response => {
-        const username = response.data.username;
-        this.localPlayer = username;
-        let initMessagePayload = {
-          type: "init", // Indiquer que c'est un message d'initialisation
-          info: {
-            game: "creat", // Mode de jeu (create_private ou join_private)
-            playerName: username,
-          }
-        };
-        this.gameSocket.send(JSON.stringify(initMessagePayload));
-        // this.sendInitialMoves();
-      });
-    }
+          const username = response.data.username;
+          this.localPlayer.pseudo = username;
+          // Optionally update imageUrl and link if available
+          // Emit updated local player to the parent
+          this.$emit('players-update', {
+            localPlayer: this.localPlayer,
+            opponentPlayer: this.opponentPlayer
+          });
+          // Send init message to WebSocket
+          const initMessagePayload = {
+            type: "init",
+            info: {
+              game: "creat",
+              playerName: username,
+            }
+          };
+          this.gameSocket.send(JSON.stringify(initMessagePayload));
+        });
+      };
+
       this.gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const messageType = data.type;
-  
+        
         if (messageType === "game_update") {
           this.gameState = data.game_state;
           this.updateCanvas();
-        } 
-        else if (messageType === "players_ready") {
-          if(this.playerRole === "player1"){
-            this.opponentPlayer = data.player2;
+        } else if (messageType === "players_ready") {
+          // Determine opponent username based on player role
+          let opponentUsername = "";
+          if (this.playerRole === "player1") {
+            opponentUsername = data.player2;
+          } else {
+            opponentUsername = data.player1;
           }
-          else{
-            this.opponentPlayer = data.player1;
-          }
-          console.log("Oponant :", this.opponentPlayer);
+          // Initially update opponentPlayer with the received username
+          this.opponentPlayer.pseudo = opponentUsername;
+          // Now call the API to get the opponent's full profile details
+          API.get(`/api/profile/${opponentUsername}`)
+            .then(response => {
+              // Update opponentPlayer with data from the API
+              this.opponentPlayer.pseudo = response.data.username;
+              this.opponentPlayer.imageUrl = response.data.cover_photo;
+              // Optionally update link if available
+              // Emit updated players data to the parent
+              this.$emit('players-update', {
+                localPlayer: this.localPlayer,
+                opponentPlayer: this.opponentPlayer
+              });
+            })
+            .catch(err => {
+              console.error("Error fetching opponent profile", err);
+              // Fallback: keep the username and clear the image if necessary
+              this.opponentPlayer.pseudo = opponentUsername;
+              this.opponentPlayer.imageUrl = "";
+              this.$emit('players-update', {
+                localPlayer: this.localPlayer,
+                opponentPlayer: this.opponentPlayer
+              });
+            });
           this.gameStarted = true;
-        } 
-        else if (messageType === "role_assignment") {
+        } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
-          console.log(this.playerRole); //if player 1, we are left, if player 2, we are right
-        }
-        else if (messageType === "game_over") {
+        } else if (messageType === "game_over") {
           this.gameStarted = false;
-          this.gameOverMessage = data.message;
-          this.winner = data.winner;
+          // Handle game over logic if needed
         }
       };
 
-        this.gameSocket.onclose = () => {
+      this.gameSocket.onclose = () => {
         this.gameSocket = null;
         this.gameStarted = false;
       };
     },
-
-    // Envoi des mouvements du joueur
     sendPlayerMoves() {
       if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
-      
-      const moves = { // Créez l'objet 'moves' directement avec les clés "up" et "down"
-        up: this.keysPressed.up,    // Utilisez this.keysPressed.up directement
-        down: this.keysPressed.down  // Utilisez this.keysPressed.down directement
+      const moves = {
+        up: this.keysPressed.up,
+        down: this.keysPressed.down
       };
-
       const message = {
         type: "moves",
-        player: this.playerRole, // Gardez le rôle du joueur pour identification
-        moves: moves             // Envoyez l'objet 'moves'
+        player: this.playerRole,
+        moves: moves
       };
-
       this.gameSocket.send(JSON.stringify(message));
     },
-
-    // Mettre à jour l'état du jeu à chaque cycle
-    updateGameState(message) { // <-- REVENIR AU PARAMÈTRE "message" (PLUS CLAIR)
-        this.gameState = message.game_state; 
-        this.updateCanvas();
-      },
-
-    // Dessiner l'état du jeu sur le canvas
     updateCanvas() {
       const canvas = this.$refs.pongCanvas;
       const ctx = canvas.getContext('2d');
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'white';
 
-      // Dimensions responsives (calculées en pourcentage du canvas)
+      // Calculate dimensions
       const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
       const paddleMarginHorizontal = canvas.width * 0.03;
       const paddleWidth = canvas.width * 0.012;
@@ -143,38 +155,32 @@ export default {
       const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
       const scoreMarginTop = scoreFontSize + 10;
 
-      // Dessiner la balle
+      // Draw the ball
       ctx.beginPath();
       ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, ballRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // Dessiner les paddles (centrés verticalement et positionnés avec marges horizontales)
+      // Draw paddles
       ctx.fillRect(paddleMarginHorizontal, this.gameState.player1_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
-      ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth - paddleWidth, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight); // Ajustement pour positionner correctement Paddle 2
+      ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth * 2, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
 
-      // Affichage des scores (positionnés avec marge verticale basée sur la taille de la police)
+      // Draw scores
       ctx.font = `${scoreFontSize}px Arial`;
       ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
       ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
     },
-
     animationLoop() {
-
       this.updateCanvas();
-
       this.frameCount++;
-
-      const currentTime = performance.now(); // TEMPS ACTUEL EN MILLISECONDES
-        const deltaTime = currentTime - this.lastFrameTime; // TEMPS ÉCOULÉ DEPUIS LA FRAME PRÉCÉDENTE
-        if (deltaTime >= 1000) { // SI PLUS DE 1 SECONDE S'EST ÉCOULÉE
-          this.fps = this.frameCount; // METTRE À JOUR FPS (FRAMES PAR SECONDE)
-          this.frameCount = 0; // RÉINITIALISER COMPTEUR DE FRAMES
-          this.lastFrameTime = currentTime; // METTRE À JOUR LE TEMPS DE LA DERNIÈRE FRAME
-        }
-
+      const currentTime = performance.now();
+      const deltaTime = currentTime - this.lastFrameTime;
+      if (deltaTime >= 1000) {
+        this.fps = this.frameCount;
+        this.frameCount = 0;
+        this.lastFrameTime = currentTime;
+      }
       requestAnimationFrame(this.animationLoop);
     },
-
     handleKeyDown(event) {
       if (!this.playerRole) return;
       if (event.key === 'ArrowUp') {
@@ -185,10 +191,9 @@ export default {
       }
       this.sendPlayerMoves();
     },
-
     handleKeyUp(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp'){
+      if (event.key === 'ArrowUp') {
         this.keysPressed.up = false;
       }
       if (event.key === 'ArrowDown') {
@@ -197,23 +202,18 @@ export default {
       this.sendPlayerMoves();
     },
   },
-
   mounted() {
     this.connectToGame();
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
     this.animationLoop();
   },
-
   beforeUnmount() {
-    // Fermer la connexion WebSocket avant de détruire le composant
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);
     if (this.gameSocket) {
       this.gameSocket.close();
     }
   },
-
 };
 </script>
-
