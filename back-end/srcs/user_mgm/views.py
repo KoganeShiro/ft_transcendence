@@ -11,6 +11,52 @@ from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, Profil
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
+from django.http import HttpResponse
+from io import BytesIO
+import qrcode
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def setup_2fa(request):
+    """Setup 2FA for the user by generating a QR code."""
+    user = request.user
+
+    if not user.mfasecret:
+        user.generate_otp_secret()  # Generate a secret key if not set
+
+    totp = user.get_totp_instance()
+    qr_uri = totp.provisioning_uri(name=user.username, issuer_name="Transcendence")
+
+    # Generate QR code
+    qr = qrcode.make(qr_uri)
+    buffer = BytesIO()
+    qr.save(buffer)
+    buffer.seek(0)
+    user.mfa_enabled = True
+    # make a verification page
+    user.mfa_verified = True
+    user.save()
+
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+
+# def verify_otp(request):
+#     """Verify OTP entered by user."""
+#     if request.method == "POST":
+#         otp = request.POST.get("otp")
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None and user.get_totp_instance().verify(otp):
+#             login(request, user)
+#             return redirect("home")  # Redirect to homepage
+
+#         return render(request, "verify.html", {"error": "Invalid credentials or OTP"})
+
+#     return render(request, "verify.html")
+
+
 
 
 #Login User
@@ -18,24 +64,39 @@ class Login(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     
     def post(self, request, *args, **kwargs):
+        otp = request.data.get("otp")
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])        
         tokens = response.data
-        response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")
+        response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")        
         response.set_cookie("refresh_token", tokens["refresh"], httponly=True, secure=True, samesite="Lax")
-        response.data = {
-            'username': user.username,
-            'email': user.email,
-            'id': user.id,
-            'is_42': user.is_42,
-            'theme': user.theme,
-            'lang': user.lang
-        }
-
+        if user.mfa_enabled and user.mfa_verified:
+            if user.get_totp_instance().verify(otp):
+                logout(request)  # This removes the session ID cookie
+                response.delete_cookie('sessionid') # This deletes the session ID cookie
+                response.data = {
+                    'username': user.username,
+                    'email': user.email,
+                    'id': user.id,
+                    'is_42': user.is_42,
+                    'theme': user.theme,
+                    'lang': user.lang
+                    }
+                
+                return response
+            else:
+                return Response({'error': 'Invalid OTP'}, status=400)
+        else:
+            response.data = {
+                'username': user.username,
+                'email': user.email,
+                'id': user.id,
+                'is_42': user.is_42,
+                'theme': user.theme,
+                'lang': user.lang
+            }
         logout(request)  # This removes the session ID cookie
         response.delete_cookie('sessionid') # This deletes the session ID cookie
- 
-
         return response
     
 
