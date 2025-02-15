@@ -149,10 +149,14 @@ def get_last_15_messages(request):
         return Response({'error': 'User does not exist'}, status=404)
     
     user = request.user
-    last_15_messages = messages.objects.filter(
-        (Q(sender=user) & Q(receiver=other_user)) | 
-        (Q(sender=other_user) & Q(receiver=user))
-    ).order_by('-timestamp')[:15]
+    is_blocked = blocked_User.objects.filter(blocker=user, blocked=other_user).exists()
+    if not is_blocked:
+        last_15_messages = messages.objects.filter(
+            (Q(sender=user) & Q(receiver=other_user)) | 
+            (Q(sender=other_user) & Q(receiver=user))
+        ).order_by('-timestamp')[:15]
+    else:
+        last_15_messages = []
     
     serializer = messagesSerializer(last_15_messages, many=True)
     

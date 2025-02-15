@@ -20,7 +20,6 @@ class Login(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])        
-        user.save()
         tokens = response.data
         response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")
         response.set_cookie("refresh_token", tokens["refresh"], httponly=True, secure=True, samesite="Lax")
