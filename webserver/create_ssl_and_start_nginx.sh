@@ -18,7 +18,7 @@ else
     echo "Certificate already exists in /etc/nginx/certs/ft_transcendence.crt"
 fi
 
-cat /etc/nginx/nginx.conf
+# cat /etc/nginx/nginx.conf
 
 # Start nginx in the foreground
 # exec nginx -g "daemon off;"
