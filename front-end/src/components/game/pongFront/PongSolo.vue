@@ -21,7 +21,7 @@
       <!-- Versus overlay displayed when showVersus is true -->
       <Versus
       v-if="showVersus"
-      :opponentType="'AI'"
+      :player2="'AI'"
       @time-up="handleTimeUp"
       class="versus-overlay"
     />

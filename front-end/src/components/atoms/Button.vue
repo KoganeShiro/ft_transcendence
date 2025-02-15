@@ -136,7 +136,29 @@ export default {
 
 .btn-attention:hover {
   background-color: var(--back);
+  transform: scale(1.05);
 }
+
+.btn-block {
+  background-color: #8f2246;
+  padding: 10px;
+  color: white;
+}
+
+.btn-block:hover {
+  background-color: #5a001e;
+}
+
+.btn-unblock {
+  background-color: #79228f;
+  padding: 10px;
+  color: white;
+}
+
+.btn-unblock:hover {
+  background-color: #41005a;
+}
+
 
 .btn-lang {
   background-color: transparent;

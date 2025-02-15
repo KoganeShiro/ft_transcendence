@@ -23,8 +23,8 @@
           <!-- Player 2 Avatar (opponent) -->
           <div class="player">
             <AvatarAtom
-              :imageUrl="player2.imageUrl"
-              :pseudo="player2.pseudo"
+              :imageUrl="opponent.imageUrl"
+              :pseudo="opponent.pseudo"
               :showPseudo="true"
               pseudoPosition="bottom"
               class="animate-avatar"
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
 import defaultAvatar from '@/assets/searching.webp';
@@ -46,29 +46,21 @@ import API from '@/api.js';
 
 export default {
   name: 'Versus',
-  components: {
-    AvatarAtom,
-  },
+  components: { AvatarAtom },
   props: {
     player1: {
       type: Object,
       default: () => ({
         pseudo: 'Player 1',
         imageUrl: defaultAvatar,
-        link: '',
       }),
     },
     player2: {
       type: Object,
       default: () => ({
         pseudo: 'Opponent',
-        imageUrl: guestAvatar,
-        link: '',
+        imageUrl: defaultAvatar,
       }),
-    },
-    opponentType: {
-      type: String,
-      default: '',
     },
     duration: {
       type: Number,
@@ -76,25 +68,50 @@ export default {
     },
   },
   setup(props, { emit }) {
-    // Control visibility and status message
     const show = ref(true);
     const { t } = useI18n();
     const opponentStatus = ref(t("search-opponent"));
 
-    // Create a local reactive copy for player1 info
+    // Local reactive copy for player1 info
     const localPlayer1 = ref({
       pseudo: props.player1.pseudo,
       imageUrl: props.player1.imageUrl,
+      link: props.player1.link,
     });
 
-    // Create reactive object for player2 (opponent)
-    const player2 = ref({
-      imageUrl: props.player2.imageUrl,
-      pseudo: props.player2.pseudo,
+    // Local opponent object we want to keep in sync with props.player2
+    const opponent = ref({
+      pseudo: 'loading...',
+      imageUrl: defaultAvatar,
+      link: ''
     });
 
+    // Function to update the opponent info
+    function updateOpponent(playerData) {
+      opponent.value.pseudo = playerData.pseudo || 'Opponent';
+      opponent.value.link = playerData.link;
+      opponent.value.imageUrl = playerData.imageUrl || guestAvatar;
+      
+      // Optionally fetch updated profile info if needed
+      if (opponent.value.pseudo && opponent.value.pseudo !== 'AI' && opponent.value.pseudo !== 'Guest') {
+        API.get(`/api/profile/${playerData.pseudo}`)
+          .then(response => {
+            const { username, cover_photo } = response.data;
+            opponent.value.pseudo = username;
+            opponent.value.imageUrl = cover_photo;
+          })
+          .catch(error => {
+            console.error("Error fetching player data:", error);
+          });
+      }
+      opponentStatus.value = 'Opponent found!';
+      setTimeout(() => {
+        show.value = false;
+      }, props.duration * 1000);
+    }
+
+    // Initial fetch for localPlayer1
     onMounted(async () => {
-      // Fetch the user profile and update localPlayer1
       try {
         const response = await API.get('/api/profile/');
         const { username, cover_photo } = response.data;
@@ -103,13 +120,8 @@ export default {
       } catch (error) {
         console.error("Error fetching player data:", error);
       }
-
-      setTimeout(() => {
-        opponentStatus.value = 'Opponent found!';
-        setTimeout(() => {
-          show.value = false;
-        }, props.duration * 1010);
-      }, 1000);
+      // Initialize opponent info from prop on mount
+      updateOpponent(props.player2);
     });
 
     const emitTimeUp = () => {
@@ -120,12 +132,14 @@ export default {
       show,
       opponentStatus,
       localPlayer1,
-      player2,
+      opponent,
       emitTimeUp,
     };
   },
 };
 </script>
+
+
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {

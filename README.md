@@ -149,25 +149,64 @@ to hardcode games --> https://localhost:1443/api/games/ttt/
 
 to see stats --> https://localhost:1443/api/stats/<username>
 
+{"username" : "moi"}
+  /*
+   - /api/friends/block_user/
+   - /api/friends/unblock_user/
+   - /api/friends/remove_user/
+   - /api/friends/add_user/
+   - /api/friends/get_last_15_messages/
+   - /api/friends/send_message/
+  */
+
+{"receiver" : "moi",
+"message" : "hey, want to play pong together ?"}
+
+get last 15 messages
+
+{
+   {
+      "id": 5,
+      "sender": "moi",
+      "receiver": "cejin",
+      "message": "great ! How about you ? something interesting ?",
+      "timestamp": "2025-02-14T08:16:38.869318+01:00"
+   }
+   {
+      "id": 4,
+      "sender": "moi",
+      "receiver": "cejin",
+      "message": "hey there, how is it going ?",
+      "timestamp": "2025-02-14T08:15:39.869318+01:00"
+   }
+}
+- [x] Call the back for friends list (max of 10 ?)
+- [x] Call the back for adding friends
+- [x] Call the back for removing friends
+- [x] Call the back for the chat
+- [x] Call the back for sending msg
+
+
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 
+- [ ] Check for block and unblock
+- [x] Test if remove, cannot add friend anymore
 
 - [ ] Let the user know who they are in remote + with friend
 - [ ] Part 2 Versus (on remote because loading)
-- [ ] Add the winner/loser component
+- [ ] Add the winner/loser component on versus friend + remote
 
-- [ ] New front for ttt in remote ?
+- [ ] Add the friends component to have the chat in the play with game
+
+- [ ] Check if we can play with friend
 
 - [?] Call the back for the game
-- [ ] Matchmaking with back
-- [ ] Tournament with back
+- [ ] Matchmaking
+- [ ] Tournament
 
-- [ ] Call the back for friends list (max of 10)
-- [ ] Call the back for adding friends
-- [ ] Call the back for removing friends
-- [ ] Call the back for the chat
-- [ ] Call the back for sending msg
+- [ ] New front for ttt in remote ?
+- [ ] Modify the lang and the theme to put it in the database
 
 - [ ] Pong AI
 

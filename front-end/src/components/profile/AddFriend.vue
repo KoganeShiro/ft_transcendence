@@ -1,6 +1,8 @@
 <template>
     <div class="add-friend">
       <div class="add-friend-form">
+        <!-- call /api/add_friend -->
+         <!-- should check if the user exist, if no, let the user know -->
         <input
           type="text"
           v-model="newFriend"

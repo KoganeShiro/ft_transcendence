@@ -2,7 +2,7 @@
   <div class="pong-page">
      <Versus
       v-if="showVersus"
-      :opponentType="'Guest'"
+      :player2="'Guest'"
       @time-up="handleTimeUp"
       class="versus-overlay"
     />
