@@ -15,17 +15,20 @@ def user_friends(request):
     user = request.user
     blocked_users = blocked_User.objects.filter(blocker=user).values_list('blocked_id', flat=True)  
     friends = Friendship.objects.filter(
-        (Q(user=user) | Q(friend=user)) &         
-        ~Q(friend__in=blocked_users)
+#        (Q(user=user) | Q(friend=user)) &         
+#        ~Q(friend__in=blocked_users)
+        (Q(user=user) | Q(friend=user))
     ).select_related('user', 'friend')
     
     friends_list = []
     for friendship in friends:
         friend = friendship.friend if friendship.user == user else friendship.user
         is_online = friend.last_seen > timezone.now() - timezone.timedelta(minutes=5)
+        is_blocked = blocked_User.objects.filter(blocker=user, blocked=friend).exists()
         friends_list.append({
             'username': friend.username,
-            'online_status': is_online
+            'online_status': is_online,
+            'is_blocked': is_blocked
         })
     
     return Response(friends_list)

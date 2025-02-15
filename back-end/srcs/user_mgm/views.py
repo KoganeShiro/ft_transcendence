@@ -27,7 +27,10 @@ class Login(TokenObtainPairView):
         response.data = {
             'username': user.username,
             'email': user.email,
-            'id': user.id
+            'id': user.id,
+            'is_42': user.is_42,
+            'theme': user.theme,
+            'lang': user.lang
         }
 
         logout(request)  # This removes the session ID cookie
@@ -230,7 +233,9 @@ def getProfile(request, lookup_value=None):
         'online': isOnline,
         'last_seen': serializer.data['last_seen'],
         'is_active': serializer.data['is_active'],
-        'is_42': serializer.data['is_42'],
+        'is_42': serializer.data['is_42'],                    
+        'theme': serializer.data['theme'],
+        'lang': serializer.data['lang'],
     }
     return Response(preparedData)
 

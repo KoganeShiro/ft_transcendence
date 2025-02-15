@@ -36,10 +36,10 @@ services:
       - pong
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/admin/ || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 10s
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
   front-end:
@@ -60,10 +60,10 @@ services:
       - pong
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 10s
     # command: ["npm", "start", "--", "--port", "5173"]
 
   # gamefront:
@@ -111,7 +111,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 10s
     command: ["python", "manage.py", "runserver", "0.0.0.0:8001"]
 
 
@@ -138,10 +138,10 @@ services:
       - pong
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      interval: 5s
       timeout: 10s
       retries: 3
-      start_period: 5s
+      start_period: 10s
 
 
 networks:
