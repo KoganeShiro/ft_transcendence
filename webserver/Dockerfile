@@ -17,7 +17,13 @@ RUN apt-get update && \
 COPY webserver/create_ssl_and_start_nginx.sh /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
 RUN chmod +x /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
 
+RUN mkdir -p /usr/share/nginx/mediafiles
+RUN chown -R www-data:www-data /usr/share/nginx/mediafiles
+RUN chmod -R 755 /usr/share/nginx/mediafiles
+
 COPY webserver/nginx.conf /etc/nginx/nginx.conf
+
+COPY webserver/favicon.ico /usr/share/nginx/favicon.ico
 
 # RUN sed -i "s/HOSTNAME/$HOSTNAME/g" /etc/nginx/nginx.conf
 

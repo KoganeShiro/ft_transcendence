@@ -11,7 +11,8 @@ services:
     depends_on:
       - back-end
     volumes:
-      - webserver_data:/usr/share/nginx/html    
+      - webserver_data:/usr/share/nginx/html
+      - mediafiles:/usr/share/nginx/mediafiles
     restart: always
     networks:
       - pong
@@ -30,10 +31,12 @@ services:
         condition: service_healthy
     volumes:
       - ./back-end/srcs:/usr/src/app
-      - backend_media:/mediafiles  
+      # - backend_media:/mediafiles
+      - mediafiles:/mediafiles  
     restart: always
     networks:
       - pong
+      - db
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/admin/ || exit 1"]
       interval: 10s
@@ -64,31 +67,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    # command: ["npm", "start", "--", "--port", "5173"]
 
-  # gamefront:
-  #   build:      
-  #     dockerfile: game-logic/frontend/mon-projet-vue3/Dockerfile
-  #   container_name: gamefront
-  #   expose:      
-  #     - "3000"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   volumes:
-  #     - ./game-logic/frontend/mon-projet-vue3:/app  
-  #   restart: always
-  #   networks:
-  #     - pong
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 30s
-  #   # command: ["npm", "start", "--", "--port", "5173"]
 
   game-logic:
     build:      
@@ -108,17 +87,11 @@ services:
       - pong
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 3
       start_period: 10s
     command: ["python", "manage.py", "runserver", "0.0.0.0:8001"]
-
-
-
-
-
-
 
 
 
@@ -135,7 +108,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - pong
+      # - pong
+      - db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -147,29 +121,11 @@ services:
 networks:
   pong:
     driver: bridge
+  db:
+    driver: bridge
 
 volumes:
   postgres_data:
   webserver_data:
-  backend_media:
-#  back-end_data:
-#    driver: local # specify the driver for the volume 
-#    driver_opts:
-#      type: 'none'
-#      o: 'bind'
-#      device: 'back-end/src'  # Ou stocker le dossier sur votre ordinateur en local
-
-#volumes:
-#  database:
-#    driver: local
-#    driver_opts:
-#      type: 'none' 
-#      o: 'bind'
-#      device: '/home/${LOGIN}/data/postgres' 
-
-#     user_service:
-#        driver: local # specify the driver for the volume 
-#        driver_opts:
-#          type: 'none'
-#          o: 'bind'
-#          device: '.'  # Ou stocker le dossier sur votre ordinateur en local
+ # backend_media:
+  mediafiles:
