@@ -21,7 +21,7 @@ def setup_2fa(request):
     """Setup 2FA for the user by generating a QR code."""
     user = request.user
 
-    if not user.mfasecret:
+    if not user.enc_mfa_secret:
         user.generate_otp_secret()  # Generate a secret key if not set
 
     totp = user.get_totp_instance()
@@ -32,31 +32,32 @@ def setup_2fa(request):
     buffer = BytesIO()
     qr.save(buffer)
     buffer.seek(0)
-    user.mfa_enabled = True
-    # make a verification page
-    user.mfa_verified = True
     user.save()
 
     return HttpResponse(buffer.getvalue(), content_type="image/png")
 
-
-# def verify_otp(request):
-#     """Verify OTP entered by user."""
-#     if request.method == "POST":
-#         otp = request.POST.get("otp")
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None and user.get_totp_instance().verify(otp):
-#             login(request, user)
-#             return redirect("home")  # Redirect to homepage
-
-#         return render(request, "verify.html", {"error": "Invalid credentials or OTP"})
-
-#     return render(request, "verify.html")
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def enable_2fa(request):
+    """Activate 2FA for the user."""
+    user = request.user
+    otp = request.data.get("otp")
+    if user.get_totp_instance().verify(otp):
+        user.mfa_enabled = True
+        user.save()
+        return Response({"message": "2FA enabled successfully"})
+    else:
+        return Response({'error': 'Invalid OTP'}, status=400)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def disable_2fa(request):
+    """Deactivate 2FA for the user."""
+    user = request.user    
+    user.mfa_enabled = False
+    user.save()
+    return Response({"message": "2FA disabled successfully"})
 
 
 #Login User
@@ -70,7 +71,7 @@ class Login(TokenObtainPairView):
         tokens = response.data
         response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")        
         response.set_cookie("refresh_token", tokens["refresh"], httponly=True, secure=True, samesite="Lax")
-        if user.mfa_enabled and user.mfa_verified:
+        if user.mfa_enabled:
             if user.get_totp_instance().verify(otp):
                 logout(request)  # This removes the session ID cookie
                 response.delete_cookie('sessionid') # This deletes the session ID cookie
@@ -85,7 +86,10 @@ class Login(TokenObtainPairView):
                 
                 return response
             else:
-                return Response({'error': 'Invalid OTP'}, status=400)
+                negresponse = Response({'error': 'Invalid OTP'}, status=400)
+                logout(request)  # This removes the session ID cookie
+                negresponse.delete_cookie('sessionid') # This deletes the session ID cookie
+                return negresponse
         else:
             response.data = {
                 'username': user.username,

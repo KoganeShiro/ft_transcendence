@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import get_all_users, getProfile, updateProfile, refresh_tokens, getStats, deleteAccount, updateStats, add_solo_progress, add_multi_progress, add_ttt_progress, incrementStats, setup_2fa
+from .views import get_all_users, getProfile, updateProfile, refresh_tokens, getStats, deleteAccount, updateStats, add_solo_progress, add_multi_progress, add_ttt_progress, incrementStats, setup_2fa, enable_2fa, disable_2fa
 
 import logging
 # from .views import callback
@@ -16,7 +16,9 @@ urlpatterns = [
     path('logout/', views.Logout.as_view(), name='auth_logout'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('delete_account/', views.deleteAccount.as_view(), name='delete_account'),
-    path('2fa_setup/', setup_2fa, name='2fa_setup'),
+    path('setup_2fa/', setup_2fa, name='2fa_setup'),
+    path('enable_2fa/', enable_2fa, name='2fa_enable'),
+    path('disable_2fa/', disable_2fa, name='2fa_disable'),
 
     #Profile
     path('profile/', getProfile, name='my_profile'),

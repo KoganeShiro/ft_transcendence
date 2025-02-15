@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 import pyotp
+from cryptography.fernet import Fernet
+from django.conf import settings
 
 
 class CustomUser(AbstractUser):   
@@ -14,9 +16,10 @@ class CustomUser(AbstractUser):
    theme = models.CharField(max_length=10, default='dark')
    lang = models.CharField(max_length=5, default='en')
 
-   mfasecret = models.CharField(max_length=100, blank=True)   
+   #mfasecret = models.CharField(max_length=100, blank=True)   
    mfa_enabled = models.BooleanField(default=False)
-   mfa_verified = models.BooleanField(default=False)
+  # mfa_verified = models.BooleanField(default=False)
+   enc_mfa_secret = models.BinaryField(blank=True, null=True)
 
    stat_pong_solo_rank = models.IntegerField(default=0)
    stat_pong_solo_progress = ArrayField(models.IntegerField(), default=list)
@@ -51,10 +54,29 @@ class CustomUser(AbstractUser):
 
    def generate_otp_secret(self):
         """Generate a new OTP secret key."""
-        self.mfasecret = pyotp.random_base32()
+        secret = pyotp.random_base32()
+        self.enc_mfa_secret = self.encrypt_mfa_secret(secret)
         self.save()
     
    def get_totp_instance(self):
         """Return a TOTP instance based on the secret key."""
-        return pyotp.TOTP(self.mfasecret)
+        secret = self.decrypt_mfa_secret()
+        if secret:
+            return pyotp.TOTP(secret)
+        return None
+        
+   
+   def encrypt_mfa_secret(self, secret):
+        cipher = Fernet(settings.OTP_ENC_KEY.encode())
+        return cipher.encrypt(secret.encode())
+   
+   def decrypt_mfa_secret(self):
+        if not self.enc_mfa_secret:
+            return None
+        cipher = Fernet(settings.OTP_ENC_KEY.encode())
+        return cipher.decrypt(self.enc_mfa_secret).decode()
+   
+
+
+
 
