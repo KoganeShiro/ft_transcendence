@@ -180,27 +180,33 @@ get last 15 messages
       "timestamp": "2025-02-14T08:15:39.869318+01:00"
    }
 }
-
-
-- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
-
-
-
-- [ ] Let the user know who they are in remote + with friend
-- [ ] Part 2 Versus (on remote because loading)
-- [ ] Add the winner/loser component
-
-- [ ] New front for ttt in remote ?
-
-- [?] Call the back for the game
-- [ ] Matchmaking with back
-- [ ] Tournament with back
-
 - [x] Call the back for friends list (max of 10 ?)
 - [x] Call the back for adding friends
 - [x] Call the back for removing friends
 - [x] Call the back for the chat
 - [x] Call the back for sending msg
+
+
+- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
+
+
+- [ ] Check for block and unblock
+- [x] Test if remove, cannot add friend anymore
+
+- [ ] Let the user know who they are in remote + with friend
+- [ ] Part 2 Versus (on remote because loading)
+- [ ] Add the winner/loser component on versus friend + remote
+
+- [ ] Add the friends component to have the chat in the play with game
+
+- [ ] Check if we can play with friend
+
+- [?] Call the back for the game
+- [ ] Matchmaking
+- [ ] Tournament
+
+- [ ] New front for ttt in remote ?
+- [ ] Modify the lang and the theme to put it in the database
 
 - [ ] Pong AI
 

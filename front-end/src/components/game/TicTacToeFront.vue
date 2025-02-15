@@ -3,7 +3,7 @@
     <!-- <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" /> -->
     <Versus
       v-if="showVersus"
-      :opponentType="opponent_username"
+      :player2="opponent_username"
       @time-up="handleTimeUp"
     />
     

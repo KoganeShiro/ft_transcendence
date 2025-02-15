@@ -89,8 +89,6 @@ export default {
       isCreatingRoom: false,
       showPopup: true,
       showVersus: false,
-      localPlayer: "Player 1",
-      opponentPlayer: "Opponent",
       gameSocket: null,
       gameStarted: false,
       gameState: {
@@ -118,8 +116,14 @@ export default {
       privateRoomCode: null,
       joinCode: '',
       isCopied: false,
-      localPlayer: { name: "Player 1" },
-      opponentPlayer: { name: "Opponent" },
+      localPlayer: {
+        pseudo: 'Player1',
+        imageUrl: ''
+      },
+      opponentPlayer:  {
+        pseudo: 'Opponent',
+        imageUrl: ''
+      },
     };
   },
   methods: {
@@ -173,7 +177,7 @@ connectToGame(gameMode) {
   this.gameSocket.onopen = () => {
     API.get('/api/profile/').then(response => {
     const username = response.data.username;
-    this.localPlayer = username;
+    this.localPlayer.pseudo = username;
     let initMessagePayload = {
       type: "init", // Indiquer que c'est un message d'initialisation
       info: {
@@ -225,12 +229,12 @@ connectToGame(gameMode) {
 handleMatchReady(payload) {
   console.log("Attention magie...",payload);
   if (this.playerRole === "player2") {
-    this.opponentPlayer = payload.player1
+    this.opponentPlayer.pseudo = payload.player1
   }
   else {
-    this.opponentPlayer = payload.player2
+    this.opponentPlayer.pseudo = payload.player2
   }
-  console.log("Oponent : ", this.opponentPlayer)
+  console.log("Oponent : ", this.opponentPlayer.pseudo);
   this.showPopup = false;
   this.showVersus = true;
   console.log("Match ready. Starting game...");
@@ -265,7 +269,7 @@ updateCanvas() {
     return;
   }
 
-  console.log("Updating canvas...");
+  // console.log("Updating canvas...");
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "white";
