@@ -7,8 +7,14 @@
 #         fields = '__all__'
 
 from rest_framework import serializers
-from .models import PongSolo, PongMulti, TTT
+from .models import PongSolo, PongMulti, TTT, PongTournament
 from django.contrib.auth.models import User
+
+class PongTournamentSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = PongTournament
+        fields = '__all__'
+
 
 class PongSerializer(serializers.ModelSerializer):    
     player1 = serializers.CharField(source='player1.username', read_only=True)
@@ -58,4 +64,8 @@ class TTTSerializer(serializers.ModelSerializer):
         model = TTT
         fields = '__all__'
 
+class TTTWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TTT
+        fields = '__all__'
 

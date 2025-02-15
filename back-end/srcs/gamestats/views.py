@@ -11,13 +11,51 @@
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import PongSolo, PongMulti, TTT
-from .serializers import PongSerializer, PongWriteSerializer, MultiSerializer, TTTSerializer, MultiWriteSerializer, TTTWriteSerializer
+from .models import PongSolo, PongMulti, TTT, PongTournament
+from .serializers import PongSerializer, PongWriteSerializer, MultiSerializer, TTTSerializer, MultiWriteSerializer, TTTWriteSerializer, PongTournamentSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import PermissionDenied 
 from rest_framework.decorators import action
 from user_mgm.permissions import IsAPIUser
+
+class PongTournamentViewSet(viewsets.ModelViewSet):
+    queryset = PongTournament.objects.all().order_by('-timestamp')
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH']:
+            return PongTournamentSerializer
+        return PongTournamentSerializer
+
+    def create(self, request, *args, **kwargs):
+        self.check_permissions(request)
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        self.check_permissions(request)
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        self.check_permissions(request)
+        if request.user.username != 'api_user':
+            raise PermissionDenied("User is not authenticated or not an API user")
+        return self.update(request, *args, **kwargs)
+
+
 
 class PongViewSet(viewsets.ModelViewSet):
     queryset = PongSolo.objects.all().order_by('-timestamp')

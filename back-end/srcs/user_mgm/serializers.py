@@ -150,7 +150,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'cover_photo', 'password')        
+        fields = ('username', 'cover_photo', 'password', 'lang', 'theme')
        # exclude = ('password',)
     
     def update(self, instance, validated_data):
