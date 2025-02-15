@@ -93,7 +93,8 @@ export default {
       opponent.value.imageUrl = playerData.imageUrl || guestAvatar;
       
       // Optionally fetch updated profile info if needed
-      if (opponent.value.pseudo && opponent.value.pseudo !== 'AI' && opponent.value.pseudo !== 'Guest') {
+      if (opponent.value.pseudo && opponent.value.pseudo !== 'AI'
+            && opponent.value.pseudo !== 'Guest' && opponent.value.pseudo !== 'Opponent') {
         API.get(`/api/profile/${playerData.pseudo}`)
           .then(response => {
             const { username, cover_photo } = response.data;

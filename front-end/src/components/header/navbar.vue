@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <header class="header">
-      <router-link to="" class="header-link">
+      <router-link to="/game-choice" class="header-link">
         <h1>FT_TRANSCENDENCE</h1>
       </router-link>
       <button v-if="showBurgerMenu" class="menu-btn" @click="toggleMenu">
