@@ -68,10 +68,10 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         player = 'null'
 
         type_message = text_data_json.get('type') # Récupérer le type de message (optionnel)
-        info = text_data_json.get('info')
-        self.name = info.get('playerName')
 
         if type_message == 'init': # **NOUVEAU : Gestion du message "init" à la connexion**
+            info = text_data_json.get('info')
+            self.name = info.get('playerName')
             game_mode = text_data_json.get('info', {}).get('game') # Récupérer le mode de jeu depuis le JSON
             join_code = text_data_json.get('info', {}).get('join_code') # Récupérer le code de join (si présent)
 
