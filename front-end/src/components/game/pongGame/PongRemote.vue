@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <canvas 
       ref="pongCanvas"
@@ -7,15 +7,47 @@
       :height="500">
     </canvas>
   </div>
+</template> -->
+
+<template>
+  <div class="pong-container">
+    <Versus 
+      v-if="showVersus"
+      :player1="localPlayer"
+      :player2="opponentPlayer"
+      @time-up="handleTimeUp"
+    />
+    <div v-else class="content">
+    <div class="player-controls">
+      <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+      <p class="mobile-hide">{{ $t('move-up') }}<span class="span">w</span></p>
+      <p class="mobile-hide">{{ $t('move-down') }} <span class="span">s</span></p>
+    </div>
+    <div class="username">
+      <p class="player-left">{{ localPlayer.pseudo }}</p>
+      <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+    </div>
+    <canvas 
+      ref="pongCanvas"
+      class="canvas"
+      :width="900"
+      :height="500">
+    </canvas>
+  </div>
+  </div>
 </template>
 
 <script>
 import API from '@/api.js';
+import Versus from '@/components/game/Versus_remote.vue';
+import defaultAvatar from '@/assets/profile.png';
 
 export default {
   name: 'PongRemote',
+  components: { Versus },
   data() {
     return {
+      showVersus: true, // controls overlay visibility
       gameSocket: null,
       gameState: {
         ball_x: 0.5,
@@ -27,144 +59,205 @@ export default {
       },
       gameStarted: false,
       playerRole: null,
-      keysPressed: {
-        up: false,
-        down: false,
-      },
-      localPlayer: {
-        pseudo: "Player1",
-        imageUrl: "",
-        link: ""
-      },
-      opponentPlayer: {
-        pseudo: "loading...",
-        imageUrl: "",
-        link: ""
-      },
+      keysPressed: { up: false, down: false },
+      localPlayer: { pseudo: "Player1", imageUrl: "" },
+      opponentPlayer: { pseudo: "loading...", imageUrl: "" },
       frameCount: 0,
       lastFrameTime: 0,
       fps: 0,
+      showWinner: false,
+      showLoser: false,
+      winnerName: "",
+      winnerImage: "",
+      loserName: "",
+      loserImage: "",
+      requestSent: false,
     };
   },
   methods: {
     connectToGame() {
       if (this.gameSocket) return;
       this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
-      
+
       this.gameSocket.onopen = () => {
-        // Get local player info via API
-        API.get('/api/profile/').then(response => {
-          const username = response.data.username;
-          this.localPlayer.pseudo = username;
-          // Optionally update imageUrl and link if available
-          // Emit updated local player to the parent
-          this.$emit('players-update', {
-            localPlayer: this.localPlayer,
-            opponentPlayer: this.opponentPlayer
+        console.log("[PongRemote] WebSocket connected.");
+        // Fetch local profile data
+        API.get('/api/profile/')
+          .then(response => {
+            const username = response.data.username;
+            console.log("[PongRemote] Local profile received:", response.data);
+            this.localPlayer.pseudo = username;
+            this.$emit('players-update', {
+              localPlayer: this.localPlayer,
+              opponentPlayer: this.opponentPlayer
+            });
+            const initMessagePayload = {
+              type: "init",
+              info: { game: "creat", playerName: username }
+            };
+            this.gameSocket.send(JSON.stringify(initMessagePayload));
           });
-          // Send init message to WebSocket
-          const initMessagePayload = {
-            type: "init",
-            info: {
-              game: "creat",
-              playerName: username,
-            }
-          };
-          this.gameSocket.send(JSON.stringify(initMessagePayload));
-        });
       };
 
       this.gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const messageType = data.type;
+        // console.log("[PongRemote] Received message:", data);
         
         if (messageType === "game_update") {
           this.gameState = data.game_state;
           this.updateCanvas();
         } else if (messageType === "players_ready") {
-          // Determine opponent username based on player role
+          console.log("[PongRemote] players_ready received:", data);
           let opponentUsername = "";
+          // Use playerRole to determine opponent username (fallback if role missing)
           if (this.playerRole === "player1") {
             opponentUsername = data.player2;
           } else {
-            opponentUsername = data.player1;
+            opponentUsername = data.player1 || data.player2;
           }
-          // Initially update opponentPlayer with the received username
+          console.log("[PongRemote] Opponent username received:", opponentUsername);
           this.opponentPlayer.pseudo = opponentUsername;
-          // Now call the API to get the opponent's full profile details
+          if (opponentUsername === "loading...") {
+            console.log("[PongRemote] Opponent not found yet, waiting...");
+            return;
+          }
+          console.log("[PongRemote] Calling API to get opponent profile for:", opponentUsername);
           API.get(`/api/profile/${opponentUsername}`)
             .then(response => {
-              // Update opponentPlayer with data from the API
+              console.log("[PongRemote] Opponent profile received:", response.data);
               this.opponentPlayer.pseudo = response.data.username;
               this.opponentPlayer.imageUrl = response.data.cover_photo;
-              // Optionally update link if available
-              // Emit updated players data to the parent
+              // Emit updated players data if needed
               this.$emit('players-update', {
                 localPlayer: this.localPlayer,
                 opponentPlayer: this.opponentPlayer
               });
+              // Signal that an opponent was found: hide the Versus overlay after a delay
+              this.handleOpponentFound();
             })
             .catch(err => {
-              console.error("Error fetching opponent profile", err);
-              // Fallback: keep the username and clear the image if necessary
+              console.error("[PongRemote] Error fetching opponent profile:", err);
+              // Fallback: use the received username with no image
               this.opponentPlayer.pseudo = opponentUsername;
-              this.opponentPlayer.imageUrl = "";
+              this.opponentPlayer.imageUrl = defaultAvatar;
               this.$emit('players-update', {
                 localPlayer: this.localPlayer,
                 opponentPlayer: this.opponentPlayer
               });
+              this.handleOpponentFound();
             });
           this.gameStarted = true;
         } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
+          console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
         } else if (messageType === "game_over") {
           this.gameStarted = false;
-          // Handle game over logic if needed
+          this.winner = data.winner;
+          this.handleGameEnded(data.winner);
+          console.log("[PongRemote] Game over. winner: ", data.winner);
         }
       };
 
       this.gameSocket.onclose = () => {
+        console.log("[PongRemote] WebSocket closed.");
         this.gameSocket = null;
         this.gameStarted = false;
       };
     },
+    handleOpponentFound() {
+      console.log("[PongRemote] Opponent found, will hide Versus overlay after delay.");
+      // Delay hiding Versus overlay by 3 seconds (adjust as needed)
+      setTimeout(() => {
+        this.handleTimeUp();
+      }, 3000);
+    },
+    handleTimeUp() {
+      console.log("[PongRemote] Versus time-up, hiding overlay.");
+      this.showVersus = false;
+      // Optionally emit an event to the parent if needed:
+      this.$emit('opponent-found');
+    },
+
+    async handleGameEnded(winner) {
+    if (this.requestSent) return;
+    this.requestSent = true;
+    try {
+      console.log("Game ended. Winner:", winner);
+      // Always fetch both profiles.
+      const localResponse = await API.get("/api/profile/");
+      const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
+
+      if (winner === "player1") {
+        // Player1 is declared winner.
+        if (this.playerRole === "player1") {
+          // Local is player1 and wins.
+          this.winnerName = localResponse.data.username;
+          this.winnerImage = localResponse.data.cover_photo;
+          this.loserName = opponentResponse.data.username;
+          this.loserImage = opponentResponse.data.cover_photo;
+          this.showWinner = true;
+          this.showLoser = false;
+        } else {
+          // Local is player2 and loses.
+          this.winnerName = opponentResponse.data.username; // player1's data (opponent)
+          this.winnerImage = opponentResponse.data.cover_photo;
+          this.loserName = localResponse.data.username;
+          this.loserImage = localResponse.data.cover_photo;
+          this.showWinner = false;
+          this.showLoser = true;
+        }
+      } else if (winner === "player2") {
+        // Player2 is declared winner.
+        if (this.playerRole === "player2") {
+          // Local is player2 and wins.
+          this.winnerName = localResponse.data.username;
+          this.winnerImage = localResponse.data.cover_photo;
+          this.loserName = opponentResponse.data.username;
+          this.loserImage = opponentResponse.data.cover_photo;
+          this.showWinner = true;
+          this.showLoser = false;
+        } else {
+          // Local is player1 and loses.
+          this.winnerName = opponentResponse.data.username; // player2's data (opponent)
+          this.winnerImage = opponentResponse.data.cover_photo;
+          this.loserName = localResponse.data.username;
+          this.loserImage = localResponse.data.cover_photo;
+          this.showWinner = false;
+          this.showLoser = true;
+        }
+      } else {
+        console.error("Unknown winner:", winner);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  },
+
+
     sendPlayerMoves() {
       if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
-      const moves = {
-        up: this.keysPressed.up,
-        down: this.keysPressed.down
-      };
-      const message = {
-        type: "moves",
-        player: this.playerRole,
-        moves: moves
-      };
+      const moves = { up: this.keysPressed.up, down: this.keysPressed.down };
+      const message = { type: "moves", player: this.playerRole, moves: moves };
       this.gameSocket.send(JSON.stringify(message));
     },
     updateCanvas() {
       const canvas = this.$refs.pongCanvas;
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'white';
-
-      // Calculate dimensions
       const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
       const paddleMarginHorizontal = canvas.width * 0.03;
       const paddleWidth = canvas.width * 0.012;
       const paddleHeight = canvas.height * 0.1;
       const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
       const scoreMarginTop = scoreFontSize + 10;
-
-      // Draw the ball
       ctx.beginPath();
       ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, ballRadius, 0, Math.PI * 2);
       ctx.fill();
-
-      // Draw paddles
       ctx.fillRect(paddleMarginHorizontal, this.gameState.player1_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
       ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth * 2, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
-
-      // Draw scores
       ctx.font = `${scoreFontSize}px Arial`;
       ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
       ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
@@ -183,22 +276,14 @@ export default {
     },
     handleKeyDown(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp') {
-        this.keysPressed.up = true;
-      }
-      if (event.key === 'ArrowDown') {
-        this.keysPressed.down = true;
-      }
+      if (event.key === 'w') this.keysPressed.up = true;
+      if (event.key === 's') this.keysPressed.down = true;
       this.sendPlayerMoves();
     },
     handleKeyUp(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp') {
-        this.keysPressed.up = false;
-      }
-      if (event.key === 'ArrowDown') {
-        this.keysPressed.down = false;
-      }
+      if (event.key === 'w') this.keysPressed.up = false;
+      if (event.key === 's') this.keysPressed.down = false;
       this.sendPlayerMoves();
     },
   },
@@ -211,9 +296,60 @@ export default {
   beforeUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);
-    if (this.gameSocket) {
-      this.gameSocket.close();
-    }
+    if (this.gameSocket) this.gameSocket.close();
   },
 };
 </script>
+
+<style scoped>
+.pong-container {
+  position: relative;
+}
+
+.content {
+	text-align: center;
+  }
+  .player-controls {
+	margin: 10px auto;
+	width: 30%;
+	background-color: rgba(17, 16, 16, 0.53);
+	border-radius: 8px;
+	padding: 10px;
+  }
+  .username {
+	display: flex;
+	justify-content: space-between;
+  }
+  .player-left, .player-right {
+	font-weight: bold;
+	background-color: rgba(17, 16, 16, 0.53);
+	border-radius: 8px;
+	padding: 10px;
+  }
+  .player-left {
+	margin-left: 50px;
+  }
+  .player-right {
+	margin-right: 50px;
+  }
+  .game-container {
+	margin-top: 20px;
+	border-radius: 8px;
+	background-color: none;
+  }
+  @media screen and (max-width: 810px) {
+	.mobile-hide {
+	  display: none;
+	}
+	.player-controls {
+	  width: 100%;
+	  padding: 5px;
+	  background: none;
+	  border: none;
+	}
+	.game-container {
+	  padding: 5px;
+	  border: none;
+	}
+  }
+</style>

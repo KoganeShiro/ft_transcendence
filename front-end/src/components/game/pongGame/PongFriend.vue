@@ -57,10 +57,10 @@
         <div class="player-controls">
           <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">
-            {{ $t('move-up') }}<span class="span">↑</span>
+            {{ $t('move-up') }}<span class="span">w</span>
           </p>
           <p class="mobile-hide">
-            {{ $t('move-down') }}<span class="span">↓</span>
+            {{ $t('move-down') }}<span class="span">s</span>
           </p>
         </div>
         <div class="username">
@@ -324,20 +324,20 @@ export default {
     },
     handleKeyDown(event) {
       if (!this.playerRole) return;
-      if (event.key === "ArrowUp") {
+      if (event.key === "w") {
         this.keysPressed.up = true;
       }
-      if (event.key === "ArrowDown") {
+      if (event.key === "s") {
         this.keysPressed.down = true;
       }
       this.sendPlayerMoves();
     },
     handleKeyUp(event) {
       if (!this.playerRole) return;
-      if (event.key === "ArrowUp") {
+      if (event.key === "w") {
         this.keysPressed.up = false;
       }
-      if (event.key === "ArrowDown") {
+      if (event.key === "s") {
         this.keysPressed.down = false;
       }
       this.sendPlayerMoves();
@@ -445,11 +445,11 @@ export default {
   position: relative;
 }
 .content {
-  padding: 20px;
+  /* padding: 20px; */
   text-align: center;
 }
 .player-controls {
-  margin: 20px auto;
+  margin: 10px auto;
   width: 30%;
   background-color: rgba(17, 16, 16, 0.53);
   border-radius: 8px;
@@ -478,7 +478,7 @@ export default {
 .game-container {
   margin-top: 20px;
   border-radius: 8px;
-  padding: 10px;
+  /* padding: 10px; */
 }
 .span {
   font-weight: bold;

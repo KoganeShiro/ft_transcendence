@@ -1,6 +1,5 @@
-<template>
+<!-- <template>
 	<div class="pong-page">
-	  <!-- Show Versus until the time is up -->
 	  <Versus
 		v-if="showVersus"
 		:player1="localPlayer"
@@ -8,7 +7,6 @@
 		@time-up="handleTimeUp"
 	  />
 	  
-	  <!-- Once Versus is gone, show the game -->
 	  <div v-else class="content">
 		<div class="player-controls">
 		  <h2 class="mobile-hide">{{ $t('commands') }}</h2>
@@ -20,43 +18,39 @@
 		  <p class="player-right">{{ opponentPlayer.pseudo }}</p>
 		</div>
 		<div class="game-container">
-		  <!-- PongRemote emits the players-update event -->
-		  <PongRemote @players-update="updatePlayers" />
+		  <PongRemote @players-update="updatePlayers" @opponent-found="handleOpponentFound" />
 		  <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
 		  <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
 		</div>
+	  </div>
+	</div>
+  </template> -->
+
+  <template>
+	<div class="pong-page">
+	  <div class="game-container">
+		<PongRemote 
+		  @players-update="updatePlayers" 
+		  @opponent-found="handleOpponentFound"
+		  @game-over="handleGameOver" />
+		<WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+		<LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
 	  </div>
 	</div>
   </template>
   
   <script>
   import PongRemote from "@/components/game/pongGame/PongRemote.vue";
-  import Versus from "@/components/game/Versus.vue";
   import WinnerPopup from "@/views/game/winner.vue";
   import LoserPopup from "@/views/game/loser.vue";
   
   export default {
 	name: 'RemoteFront',
-	components: {
-	  Versus,
-	  PongRemote,
-	  WinnerPopup,
-	  LoserPopup,
-	},
+	components: { PongRemote, WinnerPopup, LoserPopup },
 	data() {
 	  return {
-		showVersus: true,
-		localPlayer: {
-		  pseudo: 'Player 1',
-		  imageUrl: '',
-		  link: ''
-		},
-		opponentPlayer: {
-		  pseudo: 'loading...',
-		  imageUrl: '',
-		  link: ''
-		},
-		// Additional data for popups (if needed)
+		localPlayer: { pseudo: 'Player 1', imageUrl: '' },
+		opponentPlayer: { pseudo: 'loading...', imageUrl: '' },
 		showWinner: false,
 		showLoser: false,
 		winnerName: '',
@@ -66,70 +60,35 @@
 	  };
 	},
 	methods: {
-	  handleTimeUp() {
-		this.showVersus = false;
-	  },
 	  updatePlayers({ localPlayer, opponentPlayer }) {
-		// Update parent's state with the players data emitted by PongRemote
+		console.log("[RemoteFront] updatePlayers:", localPlayer, opponentPlayer);
 		this.localPlayer = localPlayer;
 		this.opponentPlayer = opponentPlayer;
+	  },
+	  handleOpponentFound() {
+		console.log("[RemoteFront] Opponent found event received.");
+	  },
+	  handleGameOver(gameOverData) {
+		console.log("[RemoteFront] Game over event received:", gameOverData);
+		if (gameOverData.type === 'win') {
+		  this.winnerName = gameOverData.winnerName;
+		  this.winnerImage = gameOverData.winnerImage;
+		  this.showWinner = true;
+		} else if (gameOverData.type === 'loss') {
+		  this.loserName = gameOverData.loserName;
+		  this.loserImage = gameOverData.loserImage;
+		  this.showLoser = true;
+		}
 	  },
 	},
   };
   </script>
   
+
+  
   <style scoped>
   .pong-page {
-	color: #fff;
 	position: relative;
   }
-  .content {
-	padding: 20px;
-	text-align: center;
-  }
-  .player-controls {
-	margin: 20px auto;
-	width: 30%;
-	background-color: rgba(17, 16, 16, 0.53);
-	border-radius: 8px;
-	padding: 10px;
-  }
-  .username {
-	display: flex;
-	justify-content: space-between;
-  }
-  .player-left, .player-right {
-	font-weight: bold;
-	background-color: rgba(17, 16, 16, 0.53);
-	border-radius: 8px;
-	padding: 10px;
-  }
-  .player-left {
-	margin-left: 50px;
-  }
-  .player-right {
-	margin-right: 50px;
-  }
-  .game-container {
-	margin-top: 20px;
-	border-radius: 8px;
-	padding: 10px;
-	background-color: none;
-  }
-  @media screen and (max-width: 810px) {
-	.mobile-hide {
-	  display: none;
-	}
-	.player-controls {
-	  width: 100%;
-	  padding: 5px;
-	  background: none;
-	  border: none;
-	}
-	.game-container {
-	  padding: 5px;
-	  border: none;
-	}
-  }
+
   </style>
-  

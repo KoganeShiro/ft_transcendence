@@ -390,6 +390,7 @@ get last 15 messages
 
 - [x] Let the user know who they are in remote + with friend
 - [x] Add the friends component to have the chat in the play with game
+- [x] Check the padding so there is no scroll or change to w/s
 
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
@@ -403,7 +404,6 @@ get last 15 messages
 
 - [ ] Reload to know the status change
 - [ ] Limiter les char des messages ?
-- [ ] Check the padding so there is no scroll or change to w/s
 - [ ] Fix les bugs de collision
 
 - [ ] Check we call of the api to only call it when i am on the chat
@@ -411,6 +411,9 @@ get last 15 messages
 - [?] Call the back for the game
 - [ ] Matchmaking
 - [ ] Tournament
+
+- [ ] Add new text field in login
+- [ ] Add front for 2fa in account
 
 - [ ] New front for ttt in remote ?
 - [ ] Modify the lang and the theme to put it in the database

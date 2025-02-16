@@ -13,7 +13,6 @@
               :imageUrl="player1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
-              :link="player1.link"
               class="animate-avatar"
             />
           </div>
@@ -28,7 +27,6 @@
               :imageUrl="player2.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
-              :link="player2.link"
               class="animate-avatar"
             />
           </div>
@@ -39,21 +37,21 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
+import API from '@/api.js';
+import defaultAvatar from '@/assets/profile2.png';
 
 export default {
   name: 'Versus',
-  components: {
-    AvatarAtom,
-  },
+  components: { AvatarAtom },
   props: {
     player1: {
       type: Object,
       default: () => ({
         pseudo: 'Player 1',
         imageUrl: '',
-        link: ''
       }),
     },
     player2: {
@@ -61,7 +59,6 @@ export default {
       default: () => ({
         pseudo: 'loading...',
         imageUrl: '',
-        link: ''
       }),
     },
     duration: {
@@ -70,18 +67,39 @@ export default {
     },
   },
   setup(props, { emit }) {
+    const { t } = useI18n();
     const show = ref(true);
-    const opponentStatus = ref('Searching for opponent...');
+    const opponentStatus = ref(t("search-opponent"));
 
-    // Watch the opponent's pseudo – when it updates from "loading...", change the status
+    onMounted(async() => {
+      try {
+        const response = await API.get('/api/profile/');
+        const { username, cover_photo } = response.data;
+        props.player1.pseudo = username;
+        props.player1.imageUrl = cover_photo;
+        props.player2.imageUrl = defaultAvatar;
+      } catch (error) {
+        console.error("Error fetching player data:", error);
+      }
+      console.log("[Versus] Mounted with initial opponent:", props.player2);
+    });
+
+    // Watch changes on player2.pseudo
     watch(
       () => props.player2.pseudo,
-      (newVal) => {
-        if (newVal !== 'loading...') {
-          opponentStatus.value = 'Opponent found!';
+      async (newPseudo) => {
+        console.log("[Versus] player2.pseudo changed to:", newPseudo);
+        if (newPseudo !== 'loading...') {
+          console.log("[Versus] Valid opponent found: ", newPseudo);
+          opponentStatus.value = t("opponent-found");
+          // Wait for the specified duration then call time-up
           setTimeout(() => {
+            console.log("[Versus] Emitting time-up after opponent found.");
             show.value = false;
+            emit('time-up');
           }, props.duration * 1000);
+        } else {
+          console.log("[Versus] Still waiting for a valid opponent.");
         }
       }
     );
