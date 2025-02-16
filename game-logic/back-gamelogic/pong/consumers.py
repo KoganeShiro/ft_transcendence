@@ -308,7 +308,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score2"] >= 5:
-                    winner = "Player 2"
+                    winner = "player2"
                     await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
                     return 
 
@@ -318,7 +318,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score1"] >= 5:
-                    winner = "Player 1"
+                    winner = "player1"
                     await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
                     return 
 

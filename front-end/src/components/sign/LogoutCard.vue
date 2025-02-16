@@ -26,6 +26,11 @@ export default {
     InputGroup,
     ButtonGroup,
   },
+  data() {
+    return {
+      isLoggingOut: false,
+    };
+  },
   methods: {
     getCookie(name) {
       const value = `; ${document.cookie}`;
@@ -33,6 +38,9 @@ export default {
       if (parts.length === 2) return parts.pop().split(';').shift();
     },
     async onlogout() {
+      if (this.isLoggingOut) return;
+
+      this.isLoggingOut = true;
       try {
         await axios.get('/api/logout/', {}, {
         });
@@ -40,12 +48,8 @@ export default {
         this.$router.push("/");
 
       } catch (error) {
-        console.error("Error during logout:", error);
-        alert("Logout failed. Please try again.");
+        this.isLoggingOut = false;
       }
-    },
-    ongoback() {
-      this.$router.push("/profile");
     },
   },
 };

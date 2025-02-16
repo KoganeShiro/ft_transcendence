@@ -3,7 +3,7 @@
     <!-- <MatchPopup v-if="showPopup" @match-selected="handleMatchSelection" /> -->
     <Versus
       v-if="showVersus"
-      :player2="opponent_username"
+      :player2="opponentPlayer"
       @time-up="handleTimeUp"
     />
     
@@ -40,18 +40,19 @@ export default {
     const route = useRoute();
     const mode = computed(() => route.params.mode);
     console.log(mode.value);
-    const opponent = computed(() => {
-    if (mode.value === "solo") {
-          return "AI";
-        } else if (mode.value === "local") {
-          return "Guest";
-        } else {
-          return "";
-        }
-      });
-      const opponent_username = opponent.value;
-      console.log(opponent_username);
-    return { mode, opponent_username };
+    const opponentPlayer = computed(() => {
+      const player = {
+        pseudo: "Opponent",
+        imageUrl: "",
+      };
+      if (mode.value === "solo") {
+        player.pseudo = "AI";
+      } else if (mode.value === "local") {
+        player.pseudo = "Guest";
+      }
+      return player;
+    });
+    return { mode, opponentPlayer };
   },
   data() {
     return {
@@ -66,6 +67,10 @@ export default {
       loserName: '',
       loserImage: '',
       requestSent: false,
+      opponentPlayer: {
+        pseudo: "Opponent",
+        imageUrl: "",
+      },
     };
   },
   methods: {
@@ -91,9 +96,11 @@ export default {
           this.winnerName = username;
           this.winnerImage = cover_photo;
           this.showWinner = true;
+          this.showLoser = false;
         } else {
           this.loserName = username;
           this.loserImage = cover_photo;
+          this.showWinner = false;
           this.showLoser = true;
         }
       } catch (error) {

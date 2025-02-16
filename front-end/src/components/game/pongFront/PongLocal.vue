@@ -2,7 +2,7 @@
   <div class="pong-page">
      <Versus
       v-if="showVersus"
-      :player2="'Guest'"
+      :player2="opponentPlayer"
       @time-up="handleTimeUp"
       class="versus-overlay"
     />
@@ -55,6 +55,10 @@ export default {
       loserName: '',
       loserImage: '',
       requestSent: false,
+      opponentPlayer: {
+        pseudo: "Guest",
+        imageUrl: "",
+      },
     };
   },
   

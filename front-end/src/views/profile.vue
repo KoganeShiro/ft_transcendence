@@ -20,7 +20,6 @@
       <!-- Right section: Scrollable content -->
       <div class="content">
         <div v-if="activeTab === 'stats'" class="card">
-          <!-- ProfileStats :json="jsonFile" -->
           <ProfileStats />
         </div>
         <div v-if="activeTab === 'history'" class="card">
@@ -64,7 +63,7 @@ export default {
         { key: "history", label: this.$t('history'), route: "#history" },
         { key: "friends", label: this.$t('friends'), route: "#friends" },
       ],
-      activeTab: "stats", // Default tab
+      activeTab: localStorage.getItem('activeTab') || "stats", // Default tab
       username: '',
       cover_photo: '',
     };
@@ -75,15 +74,13 @@ export default {
   methods: {
     setActiveTab(tab) {
       this.activeTab = tab;
+      localStorage.setItem('activeTab', tab); // Save the active tab to local storage
     },
     async getProfile() {
       try {
-        // add a variable at the end of profile (username)
         const response = await axios.get('/api/profile/');
         this.username = response.data.username;
         this.cover_photo = response.data.cover_photo;
-        // console.log(this.username);
-        // console.log(this.cover_photo);
       } catch (error) {
         console.error("Error fetching username:", error);
       }
@@ -91,7 +88,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* General layout */

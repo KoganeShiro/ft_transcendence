@@ -1,27 +1,43 @@
+
 <template>
-  <div>
-    <!-- <h1>Pong Game</h1> -->
+  <div class="pong-container">
+    <Versus 
+      v-if="showVersus"
+      :player1="localPlayer"
+      :player2="opponentPlayer"
+      @time-up="handleTimeUp"
+    />
+    <div v-else class="content">
+    <div class="player-controls">
+      <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+      <p class="mobile-hide">{{ $t('move-up') }}<span class="span">w</span></p>
+      <p class="mobile-hide">{{ $t('move-down') }} <span class="span">s</span></p>
+    </div>
+    <div class="username">
+      <p class="player-left">{{ localPlayer.pseudo }}</p>
+      <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+    </div>
     <canvas 
       ref="pongCanvas"
       class="canvas"
-      :width=900
-      :height=500>
+      :width="900"
+      :height="500">
     </canvas>
-    <!-- <div v-if="gameStarted && !gameOverMessage">  <p>Score: Player 1 - {{ gameState.score1 }} | Player 2 - {{ gameState.score2 }}</p>
-    </div>
-    <div v-else-if="gameOverMessage"> <h2>Partie Terminée !</h2>
-      <p>{{ gameOverMessage }}</p> <p>Le vainqueur est : <strong>{{ winner }}</strong></p> </div>
-    <div v-else-if="!gameStarted"> <p>Waiting for players...</p>
-    </div> -->
+  </div>
   </div>
 </template>
 
 <script>
 import API from '@/api.js';
+import Versus from '@/components/game/Versus_remote.vue';
+import defaultAvatar from '@/assets/profile.png';
 
 export default {
+  name: 'PongRemote',
+  components: { Versus },
   data() {
     return {
+      showVersus: true, // controls overlay visibility
       gameSocket: null,
       gameState: {
         ball_x: 0.5,
@@ -32,189 +48,307 @@ export default {
         player2_y: 0.5,
       },
       gameStarted: false,
-      lastSentTime: 0,
       playerRole: null,
-      gameOverMessage: null,
-      winner: null,
-      keysPressed: {
-        up: false,
-        down: false,
-      },
-      localPlayer: "Player 1",
-      opponentPlayer: "Opponent",
+      keysPressed: { up: false, down: false },
+      localPlayer: { pseudo: "Player1", imageUrl: "" },
+      opponentPlayer: { pseudo: "loading...", imageUrl: "" },
       frameCount: 0,
       lastFrameTime: 0,
       fps: 0,
+      showWinner: false,
+      showLoser: false,
+      winnerName: "",
+      winnerImage: "",
+      loserName: "",
+      loserImage: "",
+      requestSent: false,
     };
   },
-
   methods: {
     connectToGame() {
       if (this.gameSocket) return;
+      this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
 
-      this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);  
       this.gameSocket.onopen = () => {
-        API.get('/api/profile/').then(response => {
-        const username = response.data.username;
-        this.localPlayer = username;
-        let initMessagePayload = {
-          type: "init", // Indiquer que c'est un message d'initialisation
-          info: {
-            game: "creat", // Mode de jeu (create_private ou join_private)
-            playerName: username,
-          }
-        };
-        this.gameSocket.send(JSON.stringify(initMessagePayload));
-        // this.sendInitialMoves();
-      });
-    }
+        console.log("[PongRemote] WebSocket connected.");
+        // Fetch local profile data
+        API.get('/api/profile/')
+          .then(response => {
+            const username = response.data.username;
+            console.log("[PongRemote] Local profile received:", response.data);
+            this.localPlayer.pseudo = username;
+            this.$emit('players-update', {
+              localPlayer: this.localPlayer,
+              opponentPlayer: this.opponentPlayer
+            });
+            const initMessagePayload = {
+              type: "init",
+              info: { game: "creat", playerName: username }
+            };
+            this.gameSocket.send(JSON.stringify(initMessagePayload));
+          });
+      };
+
       this.gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const messageType = data.type;
-  
+        // console.log("[PongRemote] Received message:", data);
+        
         if (messageType === "game_update") {
           this.gameState = data.game_state;
           this.updateCanvas();
-        } 
-        else if (messageType === "players_ready") {
-          if(this.playerRole === "player1"){
-            this.opponentPlayer = data.player2;
+        } else if (messageType === "players_ready") {
+          console.log("[PongRemote] players_ready received:", data);
+          let opponentUsername = "";
+          // Use playerRole to determine opponent username (fallback if role missing)
+          if (this.playerRole === "player1") {
+            opponentUsername = data.player2;
+          } else {
+            opponentUsername = data.player1 || data.player2;
           }
-          else{
-            this.opponentPlayer = data.player1;
+          console.log("[PongRemote] Opponent username received:", opponentUsername);
+          this.opponentPlayer.pseudo = opponentUsername;
+          if (opponentUsername === "loading...") {
+            console.log("[PongRemote] Opponent not found yet, waiting...");
+            return;
           }
-          console.log("Oponant :", this.opponentPlayer);
+          console.log("[PongRemote] Calling API to get opponent profile for:", opponentUsername);
+          API.get(`/api/profile/${opponentUsername}`)
+            .then(response => {
+              console.log("[PongRemote] Opponent profile received:", response.data);
+              this.opponentPlayer.pseudo = response.data.username;
+              this.opponentPlayer.imageUrl = response.data.cover_photo;
+              // Emit updated players data if needed
+              this.$emit('players-update', {
+                localPlayer: this.localPlayer,
+                opponentPlayer: this.opponentPlayer
+              });
+              // Signal that an opponent was found: hide the Versus overlay after a delay
+              this.handleOpponentFound();
+            })
+            .catch(err => {
+              console.error("[PongRemote] Error fetching opponent profile:", err);
+              // Fallback: use the received username with no image
+              this.opponentPlayer.pseudo = opponentUsername;
+              this.opponentPlayer.imageUrl = defaultAvatar;
+              this.$emit('players-update', {
+                localPlayer: this.localPlayer,
+                opponentPlayer: this.opponentPlayer
+              });
+              this.handleOpponentFound();
+            });
           this.gameStarted = true;
-        } 
-        else if (messageType === "role_assignment") {
+        } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
-          console.log(this.playerRole); //if player 1, we are left, if player 2, we are right
-        }
-        else if (messageType === "game_over") {
-          console.log(data);
+          console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
+        } else if (messageType === "game_over") {
           this.gameStarted = false;
-          this.gameOverMessage = data.message;
           this.winner = data.winner;
+          this.handleGameEnded(data.winner);
         }
       };
 
-        this.gameSocket.onclose = () => {
+      this.gameSocket.onclose = () => {
+        console.log("[PongRemote] WebSocket closed.");
         this.gameSocket = null;
         this.gameStarted = false;
       };
     },
-
-    // Envoi des mouvements du joueur
-    sendPlayerMoves() {
-      if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
-      
-      const moves = { // Créez l'objet 'moves' directement avec les clés "up" et "down"
-        up: this.keysPressed.up,    // Utilisez this.keysPressed.up directement
-        down: this.keysPressed.down  // Utilisez this.keysPressed.down directement
-      };
-
-      const message = {
-        type: "moves",
-        player: this.playerRole, // Gardez le rôle du joueur pour identification
-        moves: moves             // Envoyez l'objet 'moves'
-      };
-
-      this.gameSocket.send(JSON.stringify(message));
+    handleOpponentFound() {
+      console.log("[PongRemote] Opponent found, will hide Versus overlay after delay.");
+      // Delay hiding Versus overlay by 3 seconds (adjust as needed)
+      setTimeout(() => {
+        this.handleTimeUp();
+      }, 3000);
+    },
+    handleTimeUp() {
+      console.log("[PongRemote] Versus time-up, hiding overlay.");
+      this.showVersus = false;
+      // Optionally emit an event to the parent if needed:
+      this.$emit('opponent-found');
     },
 
-    // Mettre à jour l'état du jeu à chaque cycle
-    updateGameState(message) { // <-- REVENIR AU PARAMÈTRE "message" (PLUS CLAIR)
-        this.gameState = message.game_state; 
-        this.updateCanvas();
-      },
+    async handleGameEnded(winner) {
+  if (this.requestSent) return;
+  this.requestSent = true;
+  try {
+    console.log("Game ended. Winner:", winner);
+    // Always fetch both profiles.
+    const localResponse = await API.get("/api/profile/");
+    const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
 
-    // Dessiner l'état du jeu sur le canvas
+    let gameOverData = {};
+    // Use the player's role to determine if the local player won or lost.
+    if (winner === "player1") {
+      if (this.playerRole === "player1") {
+        // Local wins.
+        gameOverData = {
+          type: "win",
+          winnerName: localResponse.data.username,
+          winnerImage: localResponse.data.cover_photo,
+          loserName: opponentResponse.data.username,
+          loserImage: opponentResponse.data.cover_photo
+        };
+      } else {
+        // Local loses.
+        gameOverData = {
+          type: "loss",
+          winnerName: opponentResponse.data.username,
+          winnerImage: opponentResponse.data.cover_photo,
+          loserName: localResponse.data.username,
+          loserImage: localResponse.data.cover_photo
+        };
+      }
+    } else if (winner === "player2") {
+      if (this.playerRole === "player2") {
+        // Local wins.
+        gameOverData = {
+          type: "win",
+          winnerName: localResponse.data.username,
+          winnerImage: localResponse.data.cover_photo,
+          loserName: opponentResponse.data.username,
+          loserImage: opponentResponse.data.cover_photo
+        };
+      } else {
+        // Local loses.
+        gameOverData = {
+          type: "loss",
+          winnerName: opponentResponse.data.username,
+          winnerImage: opponentResponse.data.cover_photo,
+          loserName: localResponse.data.username,
+          loserImage: localResponse.data.cover_photo
+        };
+      }
+    } else {
+      console.error("Unknown winner:", winner);
+      return;
+    }
+    // Emit the game-over event with the popup data.
+    this.$emit("game-over", gameOverData);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+},
+
+
+
+
+    sendPlayerMoves() {
+      if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
+      const moves = { up: this.keysPressed.up, down: this.keysPressed.down };
+      const message = { type: "moves", player: this.playerRole, moves: moves };
+      this.gameSocket.send(JSON.stringify(message));
+    },
     updateCanvas() {
       const canvas = this.$refs.pongCanvas;
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'white';
-
-      // Dimensions responsives (calculées en pourcentage du canvas)
       const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
       const paddleMarginHorizontal = canvas.width * 0.03;
       const paddleWidth = canvas.width * 0.012;
       const paddleHeight = canvas.height * 0.1;
       const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
       const scoreMarginTop = scoreFontSize + 10;
-
-      // Dessiner la balle
       ctx.beginPath();
       ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, ballRadius, 0, Math.PI * 2);
       ctx.fill();
-
-      // Dessiner les paddles (centrés verticalement et positionnés avec marges horizontales)
       ctx.fillRect(paddleMarginHorizontal, this.gameState.player1_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
-      ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth - paddleWidth, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight); // Ajustement pour positionner correctement Paddle 2
-
-      // Affichage des scores (positionnés avec marge verticale basée sur la taille de la police)
+      ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth * 2, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
       ctx.font = `${scoreFontSize}px Arial`;
       ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
       ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
     },
-
     animationLoop() {
-
+      if (this.gameStarted == false) return;
       this.updateCanvas();
-
       this.frameCount++;
-
-      const currentTime = performance.now(); // TEMPS ACTUEL EN MILLISECONDES
-        const deltaTime = currentTime - this.lastFrameTime; // TEMPS ÉCOULÉ DEPUIS LA FRAME PRÉCÉDENTE
-        if (deltaTime >= 1000) { // SI PLUS DE 1 SECONDE S'EST ÉCOULÉE
-          this.fps = this.frameCount; // METTRE À JOUR FPS (FRAMES PAR SECONDE)
-          this.frameCount = 0; // RÉINITIALISER COMPTEUR DE FRAMES
-          this.lastFrameTime = currentTime; // METTRE À JOUR LE TEMPS DE LA DERNIÈRE FRAME
-        }
-
+      const currentTime = performance.now();
+      const deltaTime = currentTime - this.lastFrameTime;
+      if (deltaTime >= 1000) {
+        this.fps = this.frameCount;
+        this.frameCount = 0;
+        this.lastFrameTime = currentTime;
+      }
       requestAnimationFrame(this.animationLoop);
     },
-
     handleKeyDown(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp') {
-        this.keysPressed.up = true;
-      }
-      if (event.key === 'ArrowDown') {
-        this.keysPressed.down = true;
-      }
+      if (event.key === 'w') this.keysPressed.up = true;
+      if (event.key === 's') this.keysPressed.down = true;
       this.sendPlayerMoves();
     },
-
     handleKeyUp(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp'){
-        this.keysPressed.up = false;
-      }
-      if (event.key === 'ArrowDown') {
-        this.keysPressed.down = false;
-      }
+      if (event.key === 'w') this.keysPressed.up = false;
+      if (event.key === 's') this.keysPressed.down = false;
       this.sendPlayerMoves();
     },
   },
-
   mounted() {
     this.connectToGame();
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
     this.animationLoop();
   },
-
   beforeUnmount() {
-    // Fermer la connexion WebSocket avant de détruire le composant
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);
-    if (this.gameSocket) {
-      this.gameSocket.close();
-    }
+    if (this.gameSocket) this.gameSocket.close();
   },
-
 };
 </script>
 
+<style scoped>
+.pong-container {
+  position: relative;
+}
+
+.content {
+	text-align: center;
+  }
+  .player-controls {
+	margin: 10px auto;
+	width: 30%;
+	background-color: rgba(17, 16, 16, 0.53);
+	border-radius: 8px;
+	padding: 10px;
+  }
+  .username {
+	display: flex;
+	justify-content: space-between;
+  }
+  .player-left, .player-right {
+	font-weight: bold;
+	background-color: rgba(17, 16, 16, 0.53);
+	border-radius: 8px;
+	padding: 10px;
+  }
+  .player-left {
+	margin-left: 50px;
+  }
+  .player-right {
+	margin-right: 50px;
+  }
+  .game-container {
+	margin-top: 20px;
+	border-radius: 8px;
+	background-color: none;
+  }
+  @media screen and (max-width: 810px) {
+	.mobile-hide {
+	  display: none;
+	}
+	.player-controls {
+	  width: 100%;
+	  padding: 5px;
+	  background: none;
+	  border: none;
+	}
+	.game-container {
+	  padding: 5px;
+	  border: none;
+	}
+  }
+</style>
