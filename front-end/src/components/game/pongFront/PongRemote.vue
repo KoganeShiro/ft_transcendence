@@ -33,8 +33,14 @@
 		  @players-update="updatePlayers" 
 		  @opponent-found="handleOpponentFound"
 		  @game-over="handleGameOver" />
-		<WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
-		<LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
+		<WinnerPopup 
+		  v-if="showWinner" 
+		  :winnerName="winnerName" 
+		  :winnerImage="winnerImage" />
+		<LoserPopup 
+		  v-if="showLoser" 
+		  :loserName="loserName" 
+		  :loserImage="loserImage" />
 	  </div>
 	</div>
   </template>
@@ -71,20 +77,20 @@
 	  handleGameOver(gameOverData) {
 		console.log("[RemoteFront] Game over event received:", gameOverData);
 		if (gameOverData.type === 'win') {
-		  this.winnerName = gameOverData.winnerName;
-		  this.winnerImage = gameOverData.winnerImage;
-		  this.showWinner = true;
+			this.winnerName = gameOverData.winnerName;
+			this.winnerImage = gameOverData.winnerImage;
+			this.showWinner = true;
 		} else if (gameOverData.type === 'loss') {
-		  this.loserName = gameOverData.loserName;
-		  this.loserImage = gameOverData.loserImage;
-		  this.showLoser = true;
+			this.loserName = gameOverData.loserName;
+			this.loserImage = gameOverData.loserImage;
+			this.showLoser = true;
 		}
-	  },
+	},
+
 	},
   };
   </script>
   
-
   
   <style scoped>
   .pong-page {

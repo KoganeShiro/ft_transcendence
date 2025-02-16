@@ -154,8 +154,10 @@ export default {
         } else if (messageType === "game_over") {
           this.gameStarted = false;
           this.winner = data.winner;
+          this.updateCanvas();
+          this.animationLoop();
+          //remove the canvas
           this.handleGameEnded(data.winner);
-          console.log("[PongRemote] Game over. winner: ", data.winner);
         }
       };
 
@@ -180,59 +182,66 @@ export default {
     },
 
     async handleGameEnded(winner) {
-    if (this.requestSent) return;
-    this.requestSent = true;
-    try {
-      console.log("Game ended. Winner:", winner);
-      // Always fetch both profiles.
-      const localResponse = await API.get("/api/profile/");
-      const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
+  if (this.requestSent) return;
+  this.requestSent = true;
+  try {
+    console.log("Game ended. Winner:", winner);
+    // Fetch both profiles.
+    const localResponse = await API.get("/api/profile/");
+    const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
 
-      if (winner === "player1") {
-        // Player1 is declared winner.
-        if (this.playerRole === "player1") {
-          // Local is player1 and wins.
-          this.winnerName = localResponse.data.username;
-          this.winnerImage = localResponse.data.cover_photo;
-          this.loserName = opponentResponse.data.username;
-          this.loserImage = opponentResponse.data.cover_photo;
-          this.showWinner = true;
-          this.showLoser = false;
-        } else {
-          // Local is player2 and loses.
-          this.winnerName = opponentResponse.data.username; // player1's data (opponent)
-          this.winnerImage = opponentResponse.data.cover_photo;
-          this.loserName = localResponse.data.username;
-          this.loserImage = localResponse.data.cover_photo;
-          this.showWinner = false;
-          this.showLoser = true;
-        }
-      } else if (winner === "player2") {
-        // Player2 is declared winner.
-        if (this.playerRole === "player2") {
-          // Local is player2 and wins.
-          this.winnerName = localResponse.data.username;
-          this.winnerImage = localResponse.data.cover_photo;
-          this.loserName = opponentResponse.data.username;
-          this.loserImage = opponentResponse.data.cover_photo;
-          this.showWinner = true;
-          this.showLoser = false;
-        } else {
-          // Local is player1 and loses.
-          this.winnerName = opponentResponse.data.username; // player2's data (opponent)
-          this.winnerImage = opponentResponse.data.cover_photo;
-          this.loserName = localResponse.data.username;
-          this.loserImage = localResponse.data.cover_photo;
-          this.showWinner = false;
-          this.showLoser = true;
-        }
+    let gameOverData = {};
+    if (winner === "player1") {
+      if (this.playerRole === "player1") {
+        // Local player is player1 and wins.
+        gameOverData = {
+          type: "win",
+          winnerName: localResponse.data.username,
+          winnerImage: localResponse.data.cover_photo,
+          loserName: opponentResponse.data.username,
+          loserImage: opponentResponse.data.cover_photo
+        };
       } else {
-        console.error("Unknown winner:", winner);
+        // Local player is not player1 so loses.
+        gameOverData = {
+          type: "loss",
+          winnerName: opponentResponse.data.username,
+          winnerImage: opponentResponse.data.cover_photo,
+          loserName: localResponse.data.username,
+          loserImage: localResponse.data.cover_photo
+        };
       }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+    } else if (winner === "player2") {
+      if (this.playerRole === "player2") {
+        // Local player is player2 and wins.
+        gameOverData = {
+          type: "win",
+          winnerName: opponentResponse.data.username,
+          winnerImage: opponentResponse.data.cover_photo,
+          loserName: localResponse.data.username,
+          loserImage: localResponse.data.cover_photo
+        };
+      } else {
+        // Local player is not player2 so loses.
+        gameOverData = {
+          type: "loss",
+          winnerName: localResponse.data.username,
+          winnerImage: localResponse.data.cover_photo,
+          loserName: opponentResponse.data.username,
+          loserImage: opponentResponse.data.cover_photo
+        };
+      }
+    } else {
+      console.error("Unknown winner:", winner);
+      return;
     }
-  },
+    // Emit the game-over event with the popup data.
+    this.$emit("game-over", gameOverData);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+},
+
 
 
     sendPlayerMoves() {

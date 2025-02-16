@@ -91,7 +91,7 @@ export default {
         console.log("[Versus] player2.pseudo changed to:", newPseudo);
         if (newPseudo !== 'loading...') {
           console.log("[Versus] Valid opponent found: ", newPseudo);
-          opponentStatus.value = t("opponent-found");
+          opponentStatus.value = t("opponent_found");
           // Wait for the specified duration then call time-up
           setTimeout(() => {
             console.log("[Versus] Emitting time-up after opponent found.");
