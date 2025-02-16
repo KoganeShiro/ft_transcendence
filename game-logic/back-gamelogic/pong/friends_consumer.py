@@ -61,6 +61,52 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
 
+    async def disconnect(self, close_code):
+        """ Gérer la déconnexion des joueurs """
+        game = active_games.get(self.room_group_name)
+
+        if game:
+            if game["game_state"] is None:
+                if self.channel_name == game["player1_socket"]:
+                    logger.info(f"Le créateur {game['player1_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.room_group_name]
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "game_over",
+                            "message": "Le créateur a quitté avant le début de la partie. La partie est annulée.",
+                            "winner": None,
+                        }
+                    )
+                elif self.channel_name == game["player2_socket"]:
+                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.room_group_name]
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "game_over",
+                            "message": "Le joueur 2 a quitté avant le début de la partie. La partie est annulée.",
+                            "winner": None,
+                        }
+                    )
+
+            else:
+                if self.channel_name == game["player1_socket"]:
+                    logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
+                    game["game_state"]["score2"] = 5
+                    game["game_state"]["disconnect1"] = True
+                    winner = "player2"
+                    await self.end_game(winner)
+                elif self.channel_name == game["player2_socket"]:
+                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
+                    game["game_state"]["score1"] = 5
+                    game["game_state"]["disconnect2"] = True
+                    winner = "player1"
+                    await self.end_game(winner)
+
+        else:
+            await self.close() 
+
     async def receive(self, text_data):
         """ Gérer les entrées des joueurs indépendamment """
         text_data_json = json.loads(text_data)
@@ -156,8 +202,16 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             role = 'player1'
 
             initial_game_state = {
-                "ball_x": 0.5, "ball_y": 0.5, "ball_velocity_x": self.initial_ball_velocity_x, "ball_velocity_y": self.initial_ball_velocity_y,
-                "player1_y": 0.5, "player2_y": 0.5, "score1": 0, "score2": 0,
+                "ball_x": 0.5,
+                "ball_y": 0.5, 
+                "ball_velocity_x": self.initial_ball_velocity_x,
+                "ball_velocity_y": self.initial_ball_velocity_y,
+                "player1_y": 0.5,
+                "player2_y": 0.5, 
+                "score1": 0, 
+                "score2": 0, 
+                "disconnect1": False,
+                "disconnect2": False,
             }
             game["game_state"] = initial_game_state
             self.game_state = initial_game_state
@@ -171,7 +225,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             self.game_state = game["game_state"]
             # logger.info(self.name)
             # self.player2_name = self.name
-
 
             player1_name = game["player1_name"]  # Now these will have values
             player2_name = game["player2_name"]

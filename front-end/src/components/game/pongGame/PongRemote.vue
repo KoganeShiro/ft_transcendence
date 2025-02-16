@@ -91,6 +91,7 @@ export default {
           console.log(this.playerRole); //if player 1, we are left, if player 2, we are right
         }
         else if (messageType === "game_over") {
+          console.log(data);
           this.gameStarted = false;
           this.gameOverMessage = data.message;
           this.winner = data.winner;

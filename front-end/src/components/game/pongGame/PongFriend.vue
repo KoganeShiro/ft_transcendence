@@ -211,6 +211,7 @@ connectToGame(gameMode) {
     }
 
     else if (messageType === "game_over") {
+      console.log(data);
       this.gameStarted = false;
       this.gameOverMessage = data.message;
       this.winner = data.winner;
