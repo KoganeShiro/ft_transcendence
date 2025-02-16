@@ -8,6 +8,10 @@ from django.core.exceptions import PermissionDenied
 from rest_framework.decorators import action
 from user_mgm.permissions import IsAPIUser
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 class PongTournamentViewSet(viewsets.ModelViewSet):
     queryset = PongTournament.objects.all().order_by('-timestamp')
     permission_classes = [IsAuthenticated]
@@ -18,6 +22,7 @@ class PongTournamentViewSet(viewsets.ModelViewSet):
         return PongTournamentSerializer
 
     def create(self, request, *args, **kwargs):
+        logging.debug("create tournament")
         self.check_permissions(request)
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -28,6 +33,7 @@ class PongTournamentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
+        logging.debug("update tournament")
         self.check_permissions(request)
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -39,6 +45,7 @@ class PongTournamentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def partial_update(self, request, *args, **kwargs):
+        logging.debug("partial update tournament")
         self.check_permissions(request)
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -56,6 +63,7 @@ class PongViewSet(viewsets.ModelViewSet):
         return PongSerializer  # Use read serializer for output
 
     def create(self, request, *args, **kwargs):
+        logging.debug("create pong")
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")        
@@ -66,7 +74,8 @@ class PongViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     
-    def update(self, request, *args, **kwargs):        
+    def update(self, request, *args, **kwargs):
+        logging.debug("update pong") 
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -78,6 +87,7 @@ class PongViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def partial_update(self, request, *args, **kwargs):
+        logging.debug("partial update pong")
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -93,6 +103,7 @@ class MultiViewSet(viewsets.ModelViewSet):
         return MultiSerializer  # Use read serializer for output
     
     def create(self, request, *args, **kwargs):
+        logging.debug("create multi")
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -103,7 +114,8 @@ class MultiViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     
-    def update(self, request, *args, **kwargs):        
+    def update(self, request, *args, **kwargs):
+        logging.debug("update multi")        
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -115,6 +127,7 @@ class MultiViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def partial_update(self, request, *args, **kwargs):
+        logging.debug("partial update multi")
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.usernamename != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -129,7 +142,8 @@ class TTTViewSet(viewsets.ModelViewSet):
             return TTTWriteSerializer
         return TTTSerializer  # Use read serializer for output
     
-    def create(self, request, *args, **kwargs):        
+    def create(self, request, *args, **kwargs):
+        logging.debug("create ttt")      
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -140,7 +154,8 @@ class TTTViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     
-    def update(self, request, *args, **kwargs):        
+    def update(self, request, *args, **kwargs):
+        logging.debug("update ttt")        
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")        
@@ -152,6 +167,7 @@ class TTTViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def partial_update(self, request, *args, **kwargs):
+        logging.debug("partial update ttt")
         self.check_permissions(request)  # Check permissions explicitly
         if request.user.username != 'api_user':
             raise PermissionDenied("User is not authenticated or not an API user")
@@ -161,6 +177,7 @@ class TTTViewSet(viewsets.ModelViewSet):
 
 class LastFivePongView(viewsets.ViewSet):
     def list(self, request):
+        logging.debug("last five pong")
         games = PongSolo.objects.filter(player1=request.user) | PongSolo.objects.filter(player2=request.user)
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = PongSerializer(last_five_games, many=True)
@@ -183,6 +200,7 @@ class LastFivePongView(viewsets.ViewSet):
 
 class LastFiveMultiView(viewsets.ViewSet):
     def list(self, request):
+        logging.debug("last five multi")
         games = PongMulti.objects.filter(player1=request.user) | PongMulti.objects.filter(player2=request.user) | PongMulti.objects.filter(player3=request.user) | PongMulti.objects.filter(player4=request.user)      
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = MultiSerializer(last_five_games, many=True)
@@ -244,6 +262,7 @@ class LastFiveMultiView(viewsets.ViewSet):
     
 class LastFiveTTTView(viewsets.ViewSet):
     def list(self, request):
+        logging.debug("last five ttt")
         games = TTT.objects.filter(player1=request.user) | TTT.objects.filter(player2=request.user)
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = TTTSerializer(last_five_games, many=True)

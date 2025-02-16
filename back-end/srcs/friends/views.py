@@ -9,9 +9,14 @@ from user_mgm.models import CustomUser
 from django.utils import timezone
 
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_friends(request):
+    logging.debug("user_friends")
     user = request.user
     blocked_users = blocked_User.objects.filter(blocker=user).values_list('blocked_id', flat=True)  
     friends = Friendship.objects.filter(
@@ -37,6 +42,7 @@ def user_friends(request):
 @api_view(['POST']) 
 @permission_classes([IsAuthenticated])
 def block_user(request):
+    logging.debug("block_user")
     username_to_block = request.data.get('username')
     if not username_to_block:
         return Response({'error': 'Username is required'}, status=400)
@@ -56,6 +62,7 @@ def block_user(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def unblock_user(request):
+    logging.debug("unblock_user")
     username_to_unblock = request.data.get('username')
     if not username_to_unblock:
         return Response({'error': 'Username is required'}, status=400)
@@ -78,6 +85,7 @@ def unblock_user(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_friend(request):
+    logging.debug("add_friend")
     username_to_add = request.data.get('username')
     if not username_to_add:
         return Response({'error': 'Username is required'}, status=400)
@@ -96,6 +104,7 @@ def add_friend(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def remove_friend(request):
+    logging.debug("remove_friend")
     username_to_remove = request.data.get('username')
     if not username_to_remove:
         return Response({'error': 'Username is required'}, status=400)
@@ -119,6 +128,7 @@ def remove_friend(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_message(request):
+    logging.debug("send_message")
     receiver_username = request.data.get('receiver')
     message_content = request.data.get('message')
     
@@ -139,6 +149,7 @@ def send_message(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def get_last_15_messages(request):
+    logging.debug("get_last_15_messages")
     other_username = request.data.get('username')
     if not other_username:
         return Response({'error': 'Username is required'}, status=400)

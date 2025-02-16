@@ -18,7 +18,6 @@ from cryptography.fernet import Fernet
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -37,10 +36,6 @@ AUTH_USER_MODEL = 'user_mgm.CustomUser'
 # API Key
 
 API_KEY = os.environ.get('API_KEY')
-
-
-
-# social login
 
 # Add social-auth-app-django settings
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
@@ -81,28 +76,14 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ),
 
-
-
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
-  #   'DEFAULT_RENDERER_CLASSES': (
-  #       'rest_framework.renderers.JSONRenderer',
-  #   ),    
 }
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"  # Optional: Store sessions in cache instead of DB
-#SESSION_COOKIE_AGE = 0  # Make session cookies expire immediately
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Auto-delete session on browser close
-
-
 
 SOCIAL_AUTH_STATE_SESSION = False  # Prevent PSA from storing state in session
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = []  # Ensure no fields are stored in session
 SOCIAL_AUTH_PIPELINE_CACHE_KEY = "psa_pipeline_cache_{uid}"  # Store pipeline in cache
 SOCIAL_AUTH_STORAGE = "social_django.models.DjangoStorage"  # Default DB storage, but can be overridden
 
-SOCIAL_AUTH_PIPELINE = (
-  #  'user_mgm.social_pipeline.clear_session_before_redirect',
+SOCIAL_AUTH_PIPELINE = (  
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
@@ -113,14 +94,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
-    'user_mgm.social_pipeline.generate_jwt_token',
-
-   # 'user_mgm.social_pipeline.generate_jwt_token', 
+    'user_mgm.social_pipeline.generate_jwt_token',  
 )
-
-
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -139,17 +114,11 @@ INSTALLED_APPS = [
  # added for social login
     'social_django', 
     'corsheaders',
+   # for swagger
     'drf_yasg',
-   # 'dj_rest_auth',
-
-    #'user_mgm',
-
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",
-#     "http://" + os.environ.get('HOSTNAME') + ':' + os.environ.get('PORT'),
-# ]
+
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_COOKIE_SECURE = True
@@ -241,30 +210,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-# }
-
-# remove the user details here...
-
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql",
-#        "NAME": "pongdb",
-#        "USER": "postgres",
-#        "PASSWORD": "password",
-#        "HOST": "postgres",        
-#        "PORT": "5432",
-#    }
-#}
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -336,34 +281,3 @@ SOCIAL_AUTH_CREATE_USERS = True
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'DEBUG',
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         'social_django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         '': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
