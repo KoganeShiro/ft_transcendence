@@ -205,6 +205,7 @@ export default {
         });
       };
 
+
       this.gameSocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const messageType = data.type;

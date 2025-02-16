@@ -9,6 +9,7 @@
 from rest_framework import serializers
 from .models import PongSolo, PongMulti, TTT, PongTournament
 from django.contrib.auth.models import User
+from user_mgm.models import CustomUser
 
 class PongTournamentSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -26,10 +27,30 @@ class PongSerializer(serializers.ModelSerializer):
         model = PongSolo
         fields = '__all__'
 
+
+# class PongWriteSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PongSolo
+#         fields = '__all__'
+
+
 class PongWriteSerializer(serializers.ModelSerializer):
+    # accepts usernames instead of user ids
+    # player1 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # player2 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # winner = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # loser = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+
     class Meta:
         model = PongSolo
         fields = '__all__'
+
+
+
+
+
+
+       
 
 class MultiWriteSerializer(serializers.ModelSerializer):
     class Meta:

@@ -94,13 +94,15 @@ class PongConsumer(AsyncWebsocketConsumer):
             "player2_y": 0.5,
             "score1": 0,
             "score2": 0,
+            "disconnect1": False,
+            "disconnect2": False,
         }
         active_games[self.game_id] = {
             "player1_socket": self.channel_name,
             "player2_socket": None,
             "player1_name": None,
             "player2_name": None,
-            "game_state": initial_game_state, # **INITIALISER game_state DANS active_games AVEC initial_game_state (DÉFINI JUSTE AU-DESSUS) !**
+            "game_state": initial_game_state,
         }
         game = active_games.get(self.game_id) # Récupérer le jeu de active_games (maintenant qu'il est créé)
         if game: # Vérification (toujours bonne pratique)
@@ -111,6 +113,56 @@ class PongConsumer(AsyncWebsocketConsumer):
             'role': 'player1',
         }))
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        
+    async def disconnect(self, close_code):
+        """ Gérer la déconnexion des joueurs """
+        game = active_games.get(self.game_id)
+
+        if game:
+            # Si la partie n'a pas encore commencé
+            if game["player2_socket"] is None:  # Si aucun joueur 2 n'est connecté
+                if self.channel_name == game["player1_socket"]:
+                    # Si le créateur (player 1) se déconnecte avant de commencer
+                    logger.info(f"Le créateur {game['player1_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.game_id]  # Supprimer la partie
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "game_over",
+                            "message": "Le créateur a quitté avant le début de la partie. La partie est annulée.",
+                            "winner": None,
+                        }
+                    )
+                # Si le joueur 2 se déconnecte avant que la partie commence
+                elif self.channel_name == game["player2_socket"]:
+                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.game_id]  # Supprimer la partie
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            "type": "game_over",
+                            "message": "Le joueur 2 a quitté avant le début de la partie. La partie est annulée.",
+                            "winner": None,
+                        }
+                    )
+            else:
+                # Si la partie a déjà commencé
+                if self.channel_name == game["player1_socket"]:
+                    logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
+                    game["game_state"]["score2"] = 5  # Donne la victoire au joueur 2
+                    game["game_state"]["disconnect1"] = True  # Marque la déconnexion de player1
+                    winner = "player2"
+                    await self.end_game(winner)  # Terminer la partie et annoncer le gagnant
+                elif self.channel_name == game["player2_socket"]:
+                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
+                    game["game_state"]["score1"] = 5  # Donne la victoire au joueur 1
+                    game["game_state"]["disconnect2"] = True  # Marque la déconnexion de player2
+                    winner = "player1"
+                    await self.end_game(winner)  # Terminer la partie et annoncer le gagnant
+        else:
+            # Si le jeu n'existe pas, fermer simplement la connexion
+            await self.close()
+
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)

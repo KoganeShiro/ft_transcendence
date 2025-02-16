@@ -5,9 +5,7 @@
 echo Run database migrations
 python manage.py migrate
 
-
-
-# Create superuser if not exists
+# Create superuser admin if not exists
 echo "from django.contrib.auth import get_user_model;
 import os;
 User = get_user_model();
@@ -19,18 +17,18 @@ if not User.objects.filter(username=username).exists():
     print(f'Superuser {username} created.')" | python manage.py shell
 
 
-# Create gamesuperiser if not exists
-echo "from django.contrib.auth import get_user_model;
-import os;
-User = get_user_model();
-username = os.getenv('GAMESERVICE_USERNAME', 'gameservice')
-email = os.getenv('GAMESERVICE_EMAIL', 'game@service.com')
-password = os.getenv('GAMESERVICE_PASSWORD', 'gameservicepwd')
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username, email, password)
-    print(f'Gameserviceuser {username} created.')" | python manage.py shell
+# # Create gamesuperiser if not exists
+# echo "from django.contrib.auth import get_user_model;
+# import os;
+# User = get_user_model();
+# username = os.getenv('GAMESERVICE_USERNAME', 'gameservice')
+# email = os.getenv('GAMESERVICE_EMAIL', 'game@service.com')
+# password = os.getenv('GAMESERVICE_PASSWORD', 'gameservicepwd')
+# if not User.objects.filter(username=username).exists():
+#     User.objects.create_superuser(username, email, password)
+#     print(f'Gameserviceuser {username} created.')" | python manage.py shell
 
-# Create gamesuperiser if not exists
+# Create api_user if not exists
 echo "from django.contrib.auth import get_user_model;
 import os;
 User = get_user_model();
@@ -39,15 +37,6 @@ email = 'api_user@api.fr'
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username, email)
     print(f'APIuser {username} created.')" | python manage.py shell
-
-
-
-
-
-
-
-
-
 
 
 # Start the server

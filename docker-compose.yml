@@ -1,4 +1,4 @@
-# Use postgres/example user/password credentials
+# Transcendence
 services:
   nginx:
     build:      
@@ -9,7 +9,8 @@ services:
     ports:      
       - "${PORT}:443"
     depends_on:
-      - back-end
+      - back-end      
+      - game-logic      
     volumes:
       - webserver_data:/usr/share/nginx/html
       - mediafiles:/usr/share/nginx/mediafiles
@@ -30,8 +31,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./back-end/srcs:/usr/src/app
-      # - backend_media:/mediafiles
+      - ./back-end/srcs:/usr/src/app      
       - mediafiles:/mediafiles  
     restart: always
     networks:
@@ -43,7 +43,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"] # change to gunicorn command for production ???
 
   front-end:
     build:      
@@ -91,7 +91,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
 
 
 
@@ -102,13 +102,11 @@ services:
       - "5432"
     env_file:
       - .env
-    restart: always
-    # set shared memory limit when using docker-compose
+    restart: always    
     shm_size: 128mb
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      # - pong
+    networks:      
       - db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -126,6 +124,5 @@ networks:
 
 volumes:
   postgres_data:
-  webserver_data:
- # backend_media:
+  webserver_data: 
   mediafiles:
