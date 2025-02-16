@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     'corsheaders',
    # for swagger
     'drf_yasg',
+    'django_prometheus',
 ]
 
 
@@ -173,6 +174,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -183,6 +185,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'user_mgm.update_last_seen.UpdateLastSeenMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 
 ]
 

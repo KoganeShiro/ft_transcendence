@@ -115,6 +115,41 @@ services:
       retries: 3
       start_period: 10s
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    expose:
+      - "9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - back-end
+      - front-end
+      - game-logic
+    networks:
+      - pong
+      - db
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=https://${HOSTNAME}:${PORT}/prometheus/'
+      
+      
+        
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    expose:
+      - "3000"
+    depends_on:
+      - prometheus
+    env_file:
+      - .env
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+    networks:
+      - pong
+      - db
 
 networks:
   pong:
@@ -126,3 +161,4 @@ volumes:
   postgres_data:
   webserver_data: 
   mediafiles:
+  grafana_data:

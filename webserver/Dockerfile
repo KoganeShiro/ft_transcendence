@@ -12,7 +12,7 @@
 FROM nginx:1.27.4
 
 RUN apt-get update && \  
-    apt-get install -y openssl   
+    apt-get install -y openssl apache2-utils 
 
 COPY webserver/create_ssl_and_start_nginx.sh /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
 RUN chmod +x /docker-entrypoint.d/01-create_ssl_and_start_nginx.sh
