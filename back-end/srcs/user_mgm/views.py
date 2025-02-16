@@ -171,11 +171,6 @@ def refresh_tokens(request):
         return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
-
-
     
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -186,10 +181,7 @@ class Logout(APIView):
         serializer.save()
         response = Response()
         response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
-
-     #   user = request.user        
-     #   user.save()        
+        response.delete_cookie('refresh_token')  
         return response
     
     @permission_classes([IsAuthenticated])
@@ -203,16 +195,14 @@ class Logout(APIView):
         user = request.user
         
         # Blacklist the refresh token
-        try:
-            refresh_token = RefreshToken(refresh_token)
-            refresh_token.blacklist()
-        except Exception as e:
-            # self.fail('bad_token')
+       # try:
+        refresh_token = RefreshToken(refresh_token)
+        if refresh_token.check_blacklist():
             response = Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
             response.delete_cookie('access_token')
             response.delete_cookie('refresh_token')
-            return response
-        
+            return response            
+        refresh_token.blacklist()                
         response = Response({'message': 'Logged out successfully'})
         
         # Delete the access and refresh token cookies
