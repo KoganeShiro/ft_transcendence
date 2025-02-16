@@ -5,7 +5,6 @@ from .views import get_all_users, getProfile, updateProfile, refresh_tokens, get
 
 import logging
 # from .views import callback
-
 logger = logging.getLogger(__name__)
 
 urlpatterns = [    
@@ -30,11 +29,9 @@ urlpatterns = [
     path('stats_increment/<str:lookup_value>/', incrementStats, name='increment-stats'),
     path('stats_prog_update/solo/<str:lookup_value>/', add_solo_progress , name='add_solo_progress'),
     path('stats_prog_update/multi/<str:lookup_value>/', add_multi_progress , name='add_multi_progress'),
-    path('stats_prog_update/ttt/<str:lookup_value>/', add_ttt_progress , name='add_ttt_progress'),
-   # path('profile/update/<str:lookup_value>/', views.updateProfile, name='update-profile'),
+    path('stats_prog_update/ttt/<str:lookup_value>/', add_ttt_progress , name='add_ttt_progress'),  
     path('users/', get_all_users, name='get_all_users'),  # Endpoint for all users
-  #  path('users/', views , name='update-profile'),
-
+  
     #Social Auth  
     path('auth/get_token/', views.social_auth_complete, name='social_auth_complete'),
     path('auth/login42/', views.social_auth_login, name='social_auth_login'),
