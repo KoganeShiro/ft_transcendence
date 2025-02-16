@@ -77,3 +77,7 @@ rm_volumes:
 	else \
 		echo "No volumes to prune."; \
 	fi	
+
+.PHONY: database
+database:
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)

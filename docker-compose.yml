@@ -96,7 +96,7 @@ services:
 
 
   postgres:
-    image: postgres:latest
+    image: postgres:17.3
     container_name: postgres
     expose:
       - "5432"
