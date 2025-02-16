@@ -1,6 +1,6 @@
 <template>
   <div class="pong-game-wrapper">
-    <!-- Popup is managed internally -->
+    <!-- Popup to create or join a room -->
     <div v-if="showPopup" class="modal-overlay">
       <Card class="modal-card">
         <h2 class="modal-title">{{ $t('game-withfriend') }}</h2>
@@ -12,7 +12,7 @@
           </Button>
         </div>
 
-        <!-- Only show the generated code if in create mode and a code exists -->
+        <!-- Display generated code when creating a private room -->
         <div v-if="isCreatingPrivateRoom && privateRoomCode" class="created-match-code">
           <p>{{ $t('match-id') }}</p>
           <div class="code-display">
@@ -57,18 +57,24 @@
         <div class="player-controls">
           <h2 class="mobile-hide">{{ $t('commands') }}</h2>
           <p class="mobile-hide">
-            {{ $t('move-up') }}<span class="span">↑</span>
+            {{ $t('move-up') }}<span class="span">w</span>
           </p>
           <p class="mobile-hide">
-            {{ $t('move-down') }}<span class="span">↓</span>
+            {{ $t('move-down') }}<span class="span">s</span>
           </p>
         </div>
+        <div class="username">
+        <p class="player-left">{{ localPlayer.pseudo }}</p>
+        <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+      </div>
         <canvas
           ref="pongCanvas"
           class="canvas"
           :width="900"
           :height="500"
         ></canvas>
+        <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
+        <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
       </div>
     </div>
   </div>
@@ -79,16 +85,23 @@ import Versus from "@/components/game/Versus.vue";
 import Card from "@/components/atoms/Card.vue";
 import Button from "@/components/atoms/Button.vue";
 import API from '@/api.js';
-
+import WinnerPopup from "@/views/game/winner.vue";
+import LoserPopup from "@/views/game/loser.vue";
 
 export default {
   name: "PongFriend",
-  components: { Versus, Card, Button },
+  components: { Versus, Card, Button, WinnerPopup, LoserPopup },
   data() {
     return {
+      // UI states for the room creation/join popup
       isCreatingRoom: false,
       showPopup: true,
-      showVersus: false,
+      isCreatingPrivateRoom: false,
+      isJoiningPrivateRoom: false,
+      privateRoomCode: null,
+      joinCode: "",
+      isCopied: false,
+      // Game states
       gameSocket: null,
       gameStarted: false,
       gameState: {
@@ -101,7 +114,6 @@ export default {
       },
       playerRole: null,
       gameOverMessage: null,
-      lastSentTime: 0,
       winner: null,
       keysPressed: {
         up: false,
@@ -111,256 +123,311 @@ export default {
       lastFrameTime: 0,
       fps: 0,
       currentGameMode: null,
-      isCreatingPrivateRoom: false,
-      isJoiningPrivateRoom: false,
-      privateRoomCode: null,
-      joinCode: '',
-      isCopied: false,
+      // Match/versus states
+      showVersus: false,
       localPlayer: {
-        pseudo: 'Player1',
-        imageUrl: ''
+        pseudo: "Player1",
+        imageUrl: "",
       },
-      opponentPlayer:  {
-        pseudo: 'Opponent',
-        imageUrl: ''
+      opponentPlayer: {
+        pseudo: "Opponent",
+        imageUrl: "",
       },
+      // Winner/Loser popup states
+      showWinner: false,
+      showLoser: false,
+      winnerName: "",
+      winnerImage: "",
+      loserName: "",
+      loserImage: "",
+      requestSent: false,
     };
   },
   methods: {
-  handleCreate() {
+    handleCreate() {
       if (this.isCreatingRoom) return; // Prevent multiple clicks
       this.isCreatingRoom = true;
       this.showCreatePrivateRoom();
       this.createPrivateRoom();
-  },
-showCreatePrivateRoom() {
-  this.isCreatingPrivateRoom = true;
-  this.isJoiningPrivateRoom = false;
-  this.privateRoomCode = null;
-  this.joinCode = '';
-},
-createPrivateRoom() {
-  this.privateRoomCode = "Generating...";
-  console.log("Creating private room...");
-  this.startGameMode("create_private");
-},
-joinPrivateRoom(event) {
-  if (event && event.preventDefault) event.preventDefault();
-  if (this.joinCode && this.joinCode.trim() !== "") {
-    this.showJoinPrivateRoom();
-    this.startGameMode("join_private");
-  } 
-  else {
-    alert("Veuillez entrer un code de room privée.");
-  }
-},
-// Set UI state for joining a room
-showJoinPrivateRoom() {
-  this.isJoiningPrivateRoom = true;
-  this.isCreatingPrivateRoom = false;
-  // For join, we typically don't display a generated code
-  this.privateRoomCode = "";
-},
-// Save the game mode and connect via WebSocket
-startGameMode(mode) {
-  this.currentGameMode = mode;
-  // console.log("Starting game mode:", mode);
-  this.connectToGame(mode);
-},
-
-connectToGame(gameMode) {
-  if (this.gameSocket) return;
-  
-  const localGameMode = gameMode;
-  const roomName =  "default_room";
-  this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/friendPong/${roomName}/`);
-  this.gameSocket.onopen = () => {
-    API.get('/api/profile/').then(response => {
-    const username = response.data.username;
-    this.localPlayer.pseudo = username;
-    let initMessagePayload = {
-      type: "init", // Indiquer que c'est un message d'initialisation
-      info: {
-        game: localGameMode, // Mode de jeu (create_private ou join_private)
-        playerName: username,
+    },
+    showCreatePrivateRoom() {
+      this.isCreatingPrivateRoom = true;
+      this.isJoiningPrivateRoom = false;
+      this.privateRoomCode = null;
+      this.joinCode = "";
+    },
+    createPrivateRoom() {
+      this.privateRoomCode = "Generating...";
+      console.log("Creating private room...");
+      this.startGameMode("create_private");
+    },
+    joinPrivateRoom(event) {
+      if (event && event.preventDefault) event.preventDefault();
+      if (this.joinCode && this.joinCode.trim() !== "") {
+        this.showJoinPrivateRoom();
+        this.startGameMode("join_private");
+      } else {
+        alert("Veuillez entrer un code de room privée.");
       }
-    };
-    if (gameMode === 'join_private') { // Si mode 'join_private', ajouter le code de join
-      initMessagePayload.info.join_code = this.joinCode;
-    }
-    this.gameSocket.send(JSON.stringify(initMessagePayload)); // **ENVOYER LE MESSAGE JSON "init"**
-  });
-}
-  this.gameSocket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const messageType = data.type;
+    },
+    // Set UI state for joining a room
+    showJoinPrivateRoom() {
+      this.isJoiningPrivateRoom = true;
+      this.isCreatingPrivateRoom = false;
+      this.privateRoomCode = "";
+    },
+    // Start game mode and connect via WebSocket
+    startGameMode(mode) {
+      this.currentGameMode = mode;
+      this.connectToGame(mode);
+    },
+    connectToGame(gameMode) {
+      if (this.gameSocket) return;
+      
+      const localGameMode = gameMode;
+      const roomName = "default_room";
+      this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/friendPong/${roomName}/`);
+      this.gameSocket.onopen = () => {
+        API.get("/api/profile/").then((response) => {
+          const username = response.data.username;
+          this.localPlayer.pseudo = username;
+          let initMessagePayload = {
+            type: "init", // Initialization message
+            info: {
+              game: localGameMode, // "create_private" or "join_private"
+              playerName: username,
+            },
+          };
+          if (gameMode === "join_private") {
+            initMessagePayload.info.join_code = this.joinCode;
+          }
+          this.gameSocket.send(JSON.stringify(initMessagePayload));
+        });
+      };
 
-    if (messageType === "game_update" && this.gameStarted) {
-      this.gameState = data.game_state;
-      this.updateCanvas();
-    } 
-    
-    else if (messageType === "players_ready") {
-      this.gameStarted = true;
-      this.handleMatchReady(data);
-    } 
-    
-    else if (messageType === "role_assignment") {
-      this.playerRole = data.role;
-      console.log(this.playerRole);
-    }
 
-    else if (messageType === "game_over") {
-      console.log(data);
-      this.gameStarted = false;
-      this.gameOverMessage = data.message;
-      this.winner = data.winner;
-    }
+      this.gameSocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const messageType = data.type;
 
-    else if (messageType === "private_room_code") {
-      this.privateRoomCode = data.code; // Stocker le code de room privée reçu du back-end
-    }
-  };
+        if (messageType === "game_update" && this.gameStarted) {
+          this.gameState = data.game_state;
+          this.updateCanvas();
+        } else if (messageType === "players_ready") {
+          this.gameStarted = true;
+          this.handleMatchReady(data);
+        } else if (messageType === "role_assignment") {
+          this.playerRole = data.role;
+          console.log("Assigned role:", this.playerRole);
+        } else if (messageType === "game_over") {
+          this.updateCanvas();
+          this.gameStarted = false;
+          this.gameOverMessage = data.message;
+          this.winner = data.winner;
+          console.log("End of the game, winner:", data.winner);
+          this.handleGameEnded(data.winner);
+        } else if (messageType === "private_room_code") {
+          this.privateRoomCode = data.code;
+        }
+      };
 
-  this.gameSocket.onclose = () => {
-    this.gameSocket = null;
-    this.gameStarted = false; // 🔥 Arrêter le jeu en cas de déconnexion
-  };
-},
-handleMatchReady(payload) {
-  console.log("Attention magie...",payload);
-  if (this.playerRole === "player2") {
-    this.opponentPlayer.pseudo = payload.player1
-  }
-  else {
-    this.opponentPlayer.pseudo = payload.player2
-  }
-  console.log("Oponent : ", this.opponentPlayer.pseudo);
-  this.showPopup = false;
-  this.showVersus = true;
-  console.log("Match ready. Starting game...");
-  setTimeout(() => {
-      this.showVersus = false;
-      this.animationLoop();
-  }, 3000);
-},
-sendPlayerMoves() {
-  if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
-  const moves = {
-    up: this.keysPressed.up,
-    down: this.keysPressed.down,
-  };
-  const message = {
-    type: "moves",
-    player: this.playerRole,
-    moves: moves,
-  };
-  console.log("Sending player moves:", message);
-  this.gameSocket.send(JSON.stringify(message));
-},
-updateGameState(message) {
-  this.gameState = message.game_state; 
-  this.updateCanvas();
-},
-updateCanvas() {
-  if (!this.gameStarted) return; // Ensure the game has started before updating the canvas
-  const canvas = this.$refs.pongCanvas;
-  if (!canvas) {
-  //   console.warn("Canvas not found – it might not be rendered yet.");
-    return;
-  }
+      this.gameSocket.onclose = () => {
+        this.gameSocket = null;
+        this.gameStarted = false; // Stop game on disconnect
+      };
+    },
+    handleMatchReady(payload) {
+      if (this.playerRole === "player2") {
+        this.opponentPlayer.pseudo = payload.player1;
+      } else {
+        this.opponentPlayer.pseudo = payload.player2;
+      }
+      console.log("Opponent:", this.opponentPlayer.pseudo);
+      this.showPopup = false;
+      this.showVersus = true;
+      console.log("Match ready. Starting game...");
+      setTimeout(() => {
+        this.showVersus = false;
+        this.animationLoop();
+      }, 3000);
+    },
+    sendPlayerMoves() {
+      if (!this.gameSocket || this.gameSocket.readyState !== WebSocket.OPEN) return;
+      const moves = {
+        up: this.keysPressed.up,
+        down: this.keysPressed.down,
+      };
+      const message = {
+        type: "moves",
+        player: this.playerRole,
+        moves: moves,
+      };
+      this.gameSocket.send(JSON.stringify(message));
+    },
+    updateCanvas() {
+      const canvas = this.$refs.pongCanvas;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
 
-  // console.log("Updating canvas...");
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-
-  const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
+      const ballRadius = Math.min(canvas.width, canvas.height) * 0.015;
       const paddleMarginHorizontal = canvas.width * 0.03;
       const paddleWidth = canvas.width * 0.013;
       const paddleHeight = canvas.height * 0.1;
       const scoreFontSize = Math.min(canvas.width, canvas.height) * 0.04;
       const scoreMarginTop = scoreFontSize + 10;
 
-      // Dessiner la balle
+      // Draw the ball
       ctx.beginPath();
-      ctx.arc(this.gameState.ball_x * canvas.width, this.gameState.ball_y * canvas.height, ballRadius, 0, Math.PI * 2);
+      ctx.arc(
+        this.gameState.ball_x * canvas.width,
+        this.gameState.ball_y * canvas.height,
+        ballRadius,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
 
-      // Dessiner les paddles (centrés verticalement et positionnés avec marges horizontales)
-      ctx.fillRect(paddleMarginHorizontal, this.gameState.player1_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight);
-      ctx.fillRect(canvas.width - paddleMarginHorizontal - paddleWidth - paddleWidth, this.gameState.player2_y * canvas.height - paddleHeight / 2, paddleWidth, paddleHeight); // Ajustement pour positionner correctement Paddle 2
+      // Draw the paddles
+      ctx.fillRect(
+        paddleMarginHorizontal,
+        this.gameState.player1_y * canvas.height - paddleHeight / 2,
+        paddleWidth,
+        paddleHeight
+      );
+      ctx.fillRect(
+        canvas.width - paddleMarginHorizontal - 2 * paddleWidth,
+        this.gameState.player2_y * canvas.height - paddleHeight / 2,
+        paddleWidth,
+        paddleHeight
+      );
 
-      // Affichage des scores (positionnés avec marge verticale basée sur la taille de la police)
+      // Draw scores
       ctx.font = `${scoreFontSize}px Arial`;
       ctx.fillText(this.gameState.score1, canvas.width / 4, scoreMarginTop);
-      ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
-},
-
-animationLoop() {
-  if (!this.gameStarted) {
-      return;
-  }
-  this.updateCanvas();
-  this.frameCount++;
-  const currentTime = performance.now();
-  const deltaTime = currentTime - this.lastFrameTime;
-  if (deltaTime >= 1000) {
-      this.fps = this.frameCount;
-      this.frameCount = 0;
-      this.lastFrameTime = currentTime;
-  }
-  requestAnimationFrame(this.animationLoop);
-  },
-  handleKeyDown(event) {
+      ctx.fillText(this.gameState.score2, (3 * canvas.width) / 4, scoreMarginTop);
+    },
+    animationLoop() {
+      if (!this.gameStarted) {
+        return;
+      }
+      this.updateCanvas();
+      this.frameCount++;
+      const currentTime = performance.now();
+      const deltaTime = currentTime - this.lastFrameTime;
+      if (deltaTime >= 1000) {
+        this.fps = this.frameCount;
+        this.frameCount = 0;
+        this.lastFrameTime = currentTime;
+      }
+      requestAnimationFrame(this.animationLoop);
+    },
+    handleKeyDown(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp') {
+      if (event.key === "w") {
         this.keysPressed.up = true;
       }
-      if (event.key === 'ArrowDown') {
+      if (event.key === "s") {
         this.keysPressed.down = true;
       }
       this.sendPlayerMoves();
     },
-
     handleKeyUp(event) {
       if (!this.playerRole) return;
-      if (event.key === 'ArrowUp'){
+      if (event.key === "w") {
         this.keysPressed.up = false;
       }
-      if (event.key === 'ArrowDown') {
+      if (event.key === "s") {
         this.keysPressed.down = false;
       }
       this.sendPlayerMoves();
     },
-copyToClipboard() {
-  const el = document.createElement("textarea");
-  el.value = this.privateRoomCode;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  document.body.removeChild(el);
+    copyToClipboard() {
+      const el = document.createElement("textarea");
+      el.value = this.privateRoomCode;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
 
-  this.isCopied = true;
-  setTimeout(() => {
-    this.isCopied = false;
-  }, 1000);
-},
-},
-mounted() {
-window.addEventListener("keydown", this.handleKeyDown);
-window.addEventListener("keyup", this.handleKeyUp);
-  this.animationLoop();
-},
-beforeUnmount() {
-window.removeEventListener("keydown", this.handleKeyDown);
-window.removeEventListener("keyup", this.handleKeyUp);
-if (this.gameSocket) {
-  this.gameSocket.close();
-}
-},
+      this.isCopied = true;
+      setTimeout(() => {
+        this.isCopied = false;
+      }, 1000);
+    },
+    async handleGameEnded(winner) {
+    if (this.requestSent) return;
+    this.requestSent = true;
+    try {
+      console.log("Game ended. Winner:", winner);
+      // Always fetch both profiles.
+      const localResponse = await API.get("/api/profile/");
+      const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
+
+      if (winner === "player1") {
+        // Player1 is declared winner.
+        if (this.playerRole === "player1") {
+          // Local is player1 and wins.
+          this.winnerName = localResponse.data.username;
+          this.winnerImage = localResponse.data.cover_photo;
+          this.loserName = opponentResponse.data.username;
+          this.loserImage = opponentResponse.data.cover_photo;
+          this.showWinner = true;
+          this.showLoser = false;
+        } else {
+          // Local is player2 and loses.
+          this.winnerName = opponentResponse.data.username; // player1's data (opponent)
+          this.winnerImage = opponentResponse.data.cover_photo;
+          this.loserName = localResponse.data.username;
+          this.loserImage = localResponse.data.cover_photo;
+          this.showWinner = false;
+          this.showLoser = true;
+        }
+      } else if (winner === "player2") {
+        // Player2 is declared winner.
+        if (this.playerRole === "player2") {
+          // Local is player2 and wins.
+          this.winnerName = localResponse.data.username;
+          this.winnerImage = localResponse.data.cover_photo;
+          this.loserName = opponentResponse.data.username;
+          this.loserImage = opponentResponse.data.cover_photo;
+          this.showWinner = true;
+          this.showLoser = false;
+        } else {
+          // Local is player1 and loses.
+          this.winnerName = opponentResponse.data.username; // player2's data (opponent)
+          this.winnerImage = opponentResponse.data.cover_photo;
+          this.loserName = localResponse.data.username;
+          this.loserImage = localResponse.data.cover_photo;
+          this.showWinner = false;
+          this.showLoser = true;
+        }
+      } else {
+        console.error("Unknown winner:", winner);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  },
+
+  },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener("keyup", this.handleKeyUp);
+    // Optionally, start the animation loop if needed
+    this.animationLoop();
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
+    window.removeEventListener("keyup", this.handleKeyUp);
+    if (this.gameSocket) {
+      this.gameSocket.close();
+    }
+  },
 };
 </script>
+
 
 
 <style scoped>
@@ -373,28 +440,46 @@ if (this.gameSocket) {
   border: 2px solid var(--background-color);
   border-radius: 8px;
 }
-.player-controls {
-  margin-bottom: 10px;
-}
+
 .pong-page {
   color: #fff;
   position: relative;
 }
 .content {
-  padding: 20px;
+  /* padding: 20px; */
   text-align: center;
 }
 .player-controls {
-  margin: 20px auto;
+  margin: 10px auto;
   width: 30%;
   background-color: rgba(17, 16, 16, 0.53);
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
 }
+
+.username {
+  display: flex;
+  justify-content: space-between;
+}
+
+.player-left, .player-right {
+  font-weight: bold;
+  background-color: rgba(17, 16, 16, 0.53);
+  border-radius: 8px;
+  padding: 0px;
+}
+
+.player-left {
+  margin-left: 50px;
+}
+.player-right {
+  margin-right: 50px;
+}
+
 .game-container {
   margin-top: 20px;
   border-radius: 8px;
-  padding: 10px;
+  /* padding: 10px; */
 }
 .span {
   font-weight: bold;

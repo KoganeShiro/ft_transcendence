@@ -11,6 +11,61 @@ from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, Profil
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
+from django.http import HttpResponse
+from io import BytesIO
+import qrcode
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def setup_2fa(request):
+    logger.debug('Setting up 2FA for user %s', request.user.username)
+    """Setup 2FA for the user by generating a QR code."""
+    user = request.user
+
+    if not user.enc_mfa_secret:
+        user.generate_otp_secret()  # Generate a secret key if not set
+
+    totp = user.get_totp_instance()
+    qr_uri = totp.provisioning_uri(name=user.username, issuer_name="Transcendence")
+
+    # Generate QR code
+    qr = qrcode.make(qr_uri)
+    buffer = BytesIO()
+    qr.save(buffer)
+    buffer.seek(0)
+    user.save()
+
+    return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def enable_2fa(request):
+    logger.debug('Enabling 2FA for user %s', request.user.username)
+    """Activate 2FA for the user."""
+    user = request.user
+    otp = request.data.get("otp")
+    if user.get_totp_instance().verify(otp):
+        user.mfa_enabled = True
+        user.save()
+        return Response({"message": "2FA enabled successfully"})
+    else:
+        return Response({'error': 'Invalid OTP'}, status=400)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def disable_2fa(request):
+    logger.debug('Disabling 2FA for user %s', request.user.username)
+    """Deactivate 2FA for the user."""
+    user = request.user    
+    user.mfa_enabled = False
+    user.save()
+    return Response({"message": "2FA disabled successfully"})
 
 
 #Login User
@@ -18,25 +73,43 @@ class Login(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
     
     def post(self, request, *args, **kwargs):
+        logger.debug('Logging in user %s', request.data['username'])
+        otp = request.data.get("otp")
         response = super().post(request, *args, **kwargs)
         user = CustomUser.objects.get(username=request.data['username'])        
-        user.save()
         tokens = response.data
-        response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")
+        response.set_cookie("access_token", tokens["access"], httponly=True, secure=True, samesite="Lax")        
         response.set_cookie("refresh_token", tokens["refresh"], httponly=True, secure=True, samesite="Lax")
-        response.data = {
-            'username': user.username,
-            'email': user.email,
-            'id': user.id,
-            'is_42': user.is_42,
-            'theme': user.theme,
-            'lang': user.lang
-        }
-
+        if user.mfa_enabled:
+            if user.get_totp_instance().verify(otp):
+                logout(request)  # This removes the session ID cookie
+                response.delete_cookie('sessionid') # This deletes the session ID cookie
+                response.data = {
+                    'username': user.username,
+                    'email': user.email,
+                    'id': user.id,
+                    'is_42': user.is_42,
+                    'theme': user.theme,
+                    'lang': user.lang
+                    }
+                
+                return response
+            else:
+                negresponse = Response({'error': 'Invalid OTP'}, status=400)
+                logout(request)  # This removes the session ID cookie
+                negresponse.delete_cookie('sessionid') # This deletes the session ID cookie
+                return negresponse
+        else:
+            response.data = {
+                'username': user.username,
+                'email': user.email,
+                'id': user.id,
+                'is_42': user.is_42,
+                'theme': user.theme,
+                'lang': user.lang
+            }
         logout(request)  # This removes the session ID cookie
         response.delete_cookie('sessionid') # This deletes the session ID cookie
- 
-
         return response
     
 
@@ -52,6 +125,7 @@ User = get_user_model()
 
 @api_view(['POST', 'GET'])
 def refresh_tokens(request):
+    logger.debug('Refreshing tokens')
     # Get the refresh token from the cookies
     refresh_token = request.COOKIES.get('refresh_token')
     
@@ -87,7 +161,7 @@ def refresh_tokens(request):
             httponly=True, 
             secure=True,  # Ensure HTTPS in production
             samesite='Lax', 
-            max_age=timedelta(hours=1)  # 1-hour expiration
+            max_age=timedelta(hours=12)  # 1-hour expiration
         )
 
         # Set the new refresh token as HttpOnly cookie
@@ -97,7 +171,7 @@ def refresh_tokens(request):
             httponly=True, 
             secure=True,  # Ensure HTTPS in production
             samesite='Lax', 
-            max_age=timedelta(days=7)  # 7-day expiration
+            max_age=timedelta(days=10)  # 7-day expiration
         )
         
         return response
@@ -107,29 +181,23 @@ def refresh_tokens(request):
         return Response({'message': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
-
-
     
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class Logout(APIView):
     def post(self, request):
+        logger.debug('Logging out user (post)')
         serializer = LogoutSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         response = Response()
         response.delete_cookie('access_token')
-        response.delete_cookie('refresh_token')
-
-     #   user = request.user        
-     #   user.save()        
+        response.delete_cookie('refresh_token')  
         return response
     
     @permission_classes([IsAuthenticated])
     def get(self, request):
+        logger.debug('Logging out user (get)')
         access_token = request.COOKIES.get('access_token')
         refresh_token = request.COOKIES.get('refresh_token')
         
@@ -139,12 +207,14 @@ class Logout(APIView):
         user = request.user
         
         # Blacklist the refresh token
-        try:
-            refresh_token = RefreshToken(refresh_token)
-            refresh_token.blacklist()
-        except Exception as e:
-            self.fail('bad_token')
-        
+       # try:
+        refresh_token = RefreshToken(refresh_token)
+        if refresh_token.check_blacklist():
+            response = Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            response.delete_cookie('access_token')
+            response.delete_cookie('refresh_token')
+            return response            
+        refresh_token.blacklist()                
         response = Response({'message': 'Logged out successfully'})
         
         # Delete the access and refresh token cookies
@@ -159,6 +229,7 @@ from social_django.models import UserSocialAuth
 class deleteAccount(APIView):    
     @permission_classes([IsAuthenticated])
     def get(self, request):
+        logger.debug('Anonymizing account')
         access_token = request.COOKIES.get('access_token')
         refresh_token = request.COOKIES.get('refresh_token')
         
@@ -205,17 +276,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-# #api/profile  and api/profile/update
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def getProfile(request):
-#     user = request.user
-#     serializer = ProfileSerializer(user, many=False)
-#     return Response(serializer.data)
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getProfile(request, lookup_value=None):
+    logger.debug('Fetching profile for user %s', lookup_value)
     """
     Fetch user profile using either user ID or username.
     """
@@ -239,12 +303,10 @@ def getProfile(request, lookup_value=None):
     }
     return Response(preparedData)
 
-
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getStats(request, lookup_value=None):
+    logger.debug('Fetching stats for user %s', lookup_value)
     """
     Fetch user profile using either user ID or username.
     """
@@ -305,6 +367,7 @@ from .serializers import StatsUpdateSerializer
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def updateStats(request, lookup_value):
+    logger.debug('Updating stats for user %s', lookup_value)
     """
     Fetch user profile using either user ID or username.
     """
@@ -327,6 +390,7 @@ from .serializers import StatsIncrementSerializer
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def incrementStats(request, lookup_value):
+    logger.debug('Incrementing stats for user %s', lookup_value)
     """
     Fetch user profile using either user ID or username.
     """
@@ -372,6 +436,7 @@ import json
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_solo_progress(request, lookup_value):
+    logger.debug('Updating progress for user %s', lookup_value)
     try:
         #if request.user == None:
         if request.user.username == 'api_user':
@@ -405,6 +470,7 @@ import json
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_multi_progress(request, lookup_value):
+    logger.debug('Updating progress for user %s', lookup_value)
     try:
         #if request.user == None:
         if request.user.username == 'api_user':
@@ -439,6 +505,7 @@ import json
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_ttt_progress(request, lookup_value):
+    logger.debug('Updating progress for user %s', lookup_value)
     try:
         #if request.user == None:
         if request.user.username == 'api_user':
@@ -467,18 +534,10 @@ def add_ttt_progress(request, lookup_value):
 
 
 
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-# def updateProfile(request):
-#     user = request.user
-#     serializer = ProfileSerializer(user, data=request.data, partial=True)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def updateProfile(request):
+    logger.debug('Updating profile for user %s', request.user.username)
     user = request.user    
     serializer = ProfileUpdateSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
@@ -494,24 +553,6 @@ def updateProfile(request):
         return Response(data)
     return Response(serializer.errors, status=400)
 
-# @api_view(['PUT', 'PATCH'])
-# @permission_classes([IsAuthenticated])
-# def updateProfile(request, lookup_value=None):
-#     """
-#     Update user profile using either user ID or username.
-#     """
-#     # If no lookup value is provided, default to the current logged-in user
-#     if lookup_value is None:
-#         user = request.user
-#     else:
-#         user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
-
-#     serializer = ProfileSerializer(user, data=request.data, partial=True)  # Allow partial updates
-#     if serializer.is_valid():
-#         serializer.save()  # Save the updated profile data
-#         return Response(serializer.data)
-#     return Response(serializer.errors, status=400)
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -521,6 +562,7 @@ from .serializers import UserSerializer  # Your custom serializer for users
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  # Ensure the user is authenticated to access this data
 def get_all_users(request):
+    logger.debug('Fetching all users')
     """
     Get all users from the CustomUser model and return their serialized data.
     """
@@ -542,6 +584,7 @@ from rest_framework.decorators import api_view
 @api_view(['GET'])
 @permission_classes([AllowAny])  # This endpoint should also be public
 def social_auth_complete(request):
+    logger.debug('Completing social auth')
     
     """
     Retrieve the JWT tokens stored in the pipeline and return as JSON.
@@ -578,6 +621,7 @@ logger = getLogger(__name__)
 @permission_classes([AllowAny])  # Make sure this is accessible to all users
 @api_view(['GET'])
 def social_auth_login(request):
+    logger.debug('Redirect user for social auth')
     logout(request)  # This removes the session ID cookie
     logger.info('Logging out user before social auth')
     return redirect('social:begin', '42')

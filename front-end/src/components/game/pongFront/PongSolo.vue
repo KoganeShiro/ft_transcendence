@@ -21,7 +21,7 @@
       <!-- Versus overlay displayed when showVersus is true -->
       <Versus
       v-if="showVersus"
-      :player2="'AI'"
+      :player2="opponentPlayer"
       @time-up="handleTimeUp"
       class="versus-overlay"
     />
@@ -54,6 +54,10 @@
         loserName: '',
         loserImage: '',
         requestSent: false,
+        opponentPlayer: {
+          pseudo: "AI",
+          imageUrl: "",
+        },
       };
     },
     mounted() {

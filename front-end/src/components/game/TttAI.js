@@ -33,16 +33,16 @@ export function getAIMove(board, moves, currentPlayer) {
       return win;
     };
 
-    // Check if AI can win in the next move
+    // Check if the opponent can win in the next move, and block them
     for (const move of availableMoves) {
-      if (isWinningMove(board, currentPlayer, move.row, move.col)) {
+      if (isWinningMove(board, opponent, move.row, move.col)) {
         return move;
       }
     }
 
-    // Check if the opponent can win in the next move, and block them
+    // Check if AI can win in the next move
     for (const move of availableMoves) {
-      if (isWinningMove(board, opponent, move.row, move.col)) {
+      if (isWinningMove(board, currentPlayer, move.row, move.col)) {
         return move;
       }
     }
