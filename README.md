@@ -406,6 +406,8 @@ get last 15 messages
 
 - [ ] Fix les bugs de collision
 
+- [ ] Friend seems to always call the api even if i am not in the friend page
+
 - [?] Call the back for the game
 - [ ] Matchmaking
 - [ ] Tournament

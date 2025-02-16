@@ -111,6 +111,16 @@
     "in": "in",
     "remove": "Entfernen",
     "unblock": "Entsperren",
-    "opponent_found": "Gegner gefunden !"
+    "opponent_found": "Gegner gefunden !",
+    "otp": "OTP (Zwei-Faktor-Authentifizierung)",
+    "enter-otp": "Geben Sie den OTP-Code ein",
+    "twoFactorAuthentication": "Zwei-Faktor-Authentifizierung",
+    "2faEnabled": "2FA aktiviert",
+    "2faDisabled": "2FA deaktiviert",
+    "scanQrCode": "Scannen Sie den QR-Code",
+    "enterCode": "Geben Sie den Code ein",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "activate": "Aktivieren"
   }
   

@@ -113,6 +113,16 @@
     "in": "dans",
     "remove": "Supprimer",
     "unblock": "Débloquer",
-    "opponent_found": "Adversaire trouvé !"
+    "opponent_found": "Adversaire trouvé !",
+    "otp": "OTP (double authentification)",
+    "enter-otp": "Entrez le code OTP",
+    "twoFactorAuthentication": "Authentification à deux facteurs",
+    "2faEnabled": "2FA activé",
+    "2faDisabled": "2FA désactivé",
+    "scanQrCode": "Scannez le code QR",
+    "enterCode": "Entrez le code",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "activate": "Activer"
   }
   

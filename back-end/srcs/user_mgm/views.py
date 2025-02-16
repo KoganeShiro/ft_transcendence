@@ -300,6 +300,7 @@ def getProfile(request, lookup_value=None):
         'is_42': serializer.data['is_42'],                    
         'theme': serializer.data['theme'],
         'lang': serializer.data['lang'],
+        'mfa_enabled': serializer.data['mfa_enabled'],
     }
     return Response(preparedData)
 

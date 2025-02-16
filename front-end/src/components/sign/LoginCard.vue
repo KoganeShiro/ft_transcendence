@@ -16,6 +16,12 @@
           :label="$t('password')"
           :placeholder="$t('enter-password')"
         />
+        <TextField
+          id="otp"
+          v-model="otp"
+          :label="$t('otp')"
+          :placeholder="$t('enter-otp')"
+        />
       </InputGroup>
       <ButtonGroup class="button-group">
         <Button variant="primary" class="login-button" @click="onLogin">{{ $t("login") }}</Button>
@@ -56,6 +62,7 @@ export default {
       const payload = {
         username: this.username,
         password: this.password,
+        otp: this.otp,
       };
 
       try {
