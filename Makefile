@@ -20,6 +20,7 @@ help:
 	@echo "  logs           View logs from services"	
 	@echo "  clean          Remove all unused Docker resources"
 	@echo "  fclean         Remove all unused Docker resources and volumes"
+	@echo "  rm_volumes     Remove all unused Docker volumes"
 
 
 .PHONY: build
