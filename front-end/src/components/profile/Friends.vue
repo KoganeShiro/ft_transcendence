@@ -79,12 +79,23 @@ export default {
       isLoading: false,
       friends: [],
       activeChatFriend: null,
+      fetchFriendsInterval: null,
+      isBlocking: false,
+      isUnblocking: false,
+      isRemoving: false,
     };
   },
   mounted() {
     // Fetch the initial friend list.
     this.fetchFriends();
+    this.fetchFriendsInterval = setInterval(this.fetchFriends, 50000);
   },
+  beforeDestroy() {
+  // Clear the interval when the component is destroyed.
+  if (this.fetchFriendsInterval) {
+    clearInterval(this.fetchFriendsInterval);
+  }
+},
   methods: {
     // Helper method to fetch and update the friend list.
     fetchFriends() {
@@ -96,7 +107,7 @@ export default {
             id: index,
             name: friend.username,
             online: friend.online_status,
-            blocked: false, // Default value; adjust if your backend provides this.
+            blocked: friend.is_blocked,
           }));
         })
         .catch(error => {
@@ -120,8 +131,10 @@ export default {
         });
     },
     removeFriend(index) {
+      if (this.isRemoving) return;
+      this.isRemoving = true;
+
       const friend = this.friends[index];
-      // POST to /api/friends/remove_friend/ with the friend's username.
       API.post('/api/friends/remove_friend/', { username: friend.name })
         .then(() => {
           console.log("Removed friend:", friend.name);
@@ -130,11 +143,16 @@ export default {
         })
         .catch(error => {
           console.error("Error removing friend:", error);
+        })
+        .finally(() => {
+          this.isRemoving = false;
         });
     },
     block(index) {
+      if (this.isBlocking) return;
+      this.isBlocking = true;
+
       const friend = this.friends[index];
-      // POST to /api/friends/block_user/ with the friend's username.
       API.post('/api/friends/block_user/', { username: friend.name })
         .then(() => {
           console.log("Blocked friend:", friend.name);
@@ -143,11 +161,16 @@ export default {
         })
         .catch(error => {
           console.error("Error blocking friend:", error);
+        })
+        .finally(() => {
+          this.isBlocking = false;
         });
     },
     unblock(index) {
+      if (this.isUnblocking) return;
+      this.isUnblocking = true;
+
       const friend = this.friends[index];
-      // POST to /api/friends/unblock_user/ with the friend's username.
       API.post('/api/friends/unblock_user/', { username: friend.name })
         .then(() => {
           console.log("Unblocked friend:", friend.name);
@@ -156,6 +179,9 @@ export default {
         })
         .catch(error => {
           console.error("Error unblocking friend:", error);
+        })
+        .finally(() => {
+          this.isUnblocking = false;
         });
     },
     openChat(friend) {

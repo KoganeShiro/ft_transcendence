@@ -393,20 +393,18 @@ get last 15 messages
 - [x] Check the padding so there is no scroll or change to w/s
 - [x] Part 2 Versus (on remote because loading)
 - [x] Add the winner/loser component on versus friend + remote
+- [x] Test if remove, cannot add friend anymore
+- [x] Check for block and unblock
+- [x] Put the date + hh:mm
+- [x] Change new rank to rank progression
+- [x] Reload to know the status change
+- [x] Limiter les char des messages ?
+- [x] Check we call of the api to only call it when i am on the chat
 
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
-
-- [x] Test if remove, cannot add friend anymore
-- [ ] Check for block and unblock
-
-
-- [ ] Reload to know the status change
-- [ ] Limiter les char des messages ?
 - [ ] Fix les bugs de collision
-
-- [ ] Check we call of the api to only call it when i am on the chat
 
 - [?] Call the back for the game
 - [ ] Matchmaking
