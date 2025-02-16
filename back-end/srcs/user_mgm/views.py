@@ -151,7 +151,7 @@ def refresh_tokens(request):
             httponly=True, 
             secure=True,  # Ensure HTTPS in production
             samesite='Lax', 
-            max_age=timedelta(hours=1)  # 1-hour expiration
+            max_age=timedelta(hours=12)  # 1-hour expiration
         )
 
         # Set the new refresh token as HttpOnly cookie
@@ -161,7 +161,7 @@ def refresh_tokens(request):
             httponly=True, 
             secure=True,  # Ensure HTTPS in production
             samesite='Lax', 
-            max_age=timedelta(days=7)  # 7-day expiration
+            max_age=timedelta(days=10)  # 7-day expiration
         )
         
         return response
