@@ -391,6 +391,8 @@ get last 15 messages
 - [x] Let the user know who they are in remote + with friend
 - [x] Add the friends component to have the chat in the play with game
 - [x] Check the padding so there is no scroll or change to w/s
+- [x] Part 2 Versus (on remote because loading)
+- [x] Add the winner/loser component on versus friend + remote
 
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
@@ -399,8 +401,6 @@ get last 15 messages
 - [x] Test if remove, cannot add friend anymore
 - [ ] Check for block and unblock
 
-- [-] Part 2 Versus (on remote because loading)
-- [/] Add the winner/loser component on versus friend + remote
 
 - [ ] Reload to know the status change
 - [ ] Limiter les char des messages ?

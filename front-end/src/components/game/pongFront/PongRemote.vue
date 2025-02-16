@@ -1,30 +1,3 @@
-<!-- <template>
-	<div class="pong-page">
-	  <Versus
-		v-if="showVersus"
-		:player1="localPlayer"
-		:player2="opponentPlayer"
-		@time-up="handleTimeUp"
-	  />
-	  
-	  <div v-else class="content">
-		<div class="player-controls">
-		  <h2 class="mobile-hide">{{ $t('commands') }}</h2>
-		  <p class="mobile-hide">{{ $t('move-up') }}<span class="span">↑</span></p>
-		  <p class="mobile-hide">{{ $t('move-down') }} <span class="span">↓</span></p>
-		</div>
-		<div class="username">
-		  <p class="player-left">{{ localPlayer.pseudo }}</p>
-		  <p class="player-right">{{ opponentPlayer.pseudo }}</p>
-		</div>
-		<div class="game-container">
-		  <PongRemote @players-update="updatePlayers" @opponent-found="handleOpponentFound" />
-		  <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
-		  <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />
-		</div>
-	  </div>
-	</div>
-  </template> -->
 
   <template>
 	<div class="pong-page">
@@ -80,12 +53,15 @@
 			this.winnerName = gameOverData.winnerName;
 			this.winnerImage = gameOverData.winnerImage;
 			this.showWinner = true;
+			this.showLoser = false;
 		} else if (gameOverData.type === 'loss') {
 			this.loserName = gameOverData.loserName;
 			this.loserImage = gameOverData.loserImage;
+			this.showWinner = false;
 			this.showLoser = true;
 		}
 	},
+
 
 	},
   };

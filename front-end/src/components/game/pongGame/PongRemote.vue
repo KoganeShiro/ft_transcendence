@@ -1,13 +1,3 @@
-<!-- <template>
-  <div>
-    <canvas 
-      ref="pongCanvas"
-      class="canvas"
-      :width="900"
-      :height="500">
-    </canvas>
-  </div>
-</template> -->
 
 <template>
   <div class="pong-container">
@@ -154,9 +144,6 @@ export default {
         } else if (messageType === "game_over") {
           this.gameStarted = false;
           this.winner = data.winner;
-          this.updateCanvas();
-          this.animationLoop();
-          //remove the canvas
           this.handleGameEnded(data.winner);
         }
       };
@@ -186,14 +173,15 @@ export default {
   this.requestSent = true;
   try {
     console.log("Game ended. Winner:", winner);
-    // Fetch both profiles.
+    // Always fetch both profiles.
     const localResponse = await API.get("/api/profile/");
     const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
 
     let gameOverData = {};
+    // Use the player's role to determine if the local player won or lost.
     if (winner === "player1") {
       if (this.playerRole === "player1") {
-        // Local player is player1 and wins.
+        // Local wins.
         gameOverData = {
           type: "win",
           winnerName: localResponse.data.username,
@@ -202,7 +190,7 @@ export default {
           loserImage: opponentResponse.data.cover_photo
         };
       } else {
-        // Local player is not player1 so loses.
+        // Local loses.
         gameOverData = {
           type: "loss",
           winnerName: opponentResponse.data.username,
@@ -213,22 +201,22 @@ export default {
       }
     } else if (winner === "player2") {
       if (this.playerRole === "player2") {
-        // Local player is player2 and wins.
+        // Local wins.
         gameOverData = {
           type: "win",
-          winnerName: opponentResponse.data.username,
-          winnerImage: opponentResponse.data.cover_photo,
-          loserName: localResponse.data.username,
-          loserImage: localResponse.data.cover_photo
-        };
-      } else {
-        // Local player is not player2 so loses.
-        gameOverData = {
-          type: "loss",
           winnerName: localResponse.data.username,
           winnerImage: localResponse.data.cover_photo,
           loserName: opponentResponse.data.username,
           loserImage: opponentResponse.data.cover_photo
+        };
+      } else {
+        // Local loses.
+        gameOverData = {
+          type: "loss",
+          winnerName: opponentResponse.data.username,
+          winnerImage: opponentResponse.data.cover_photo,
+          loserName: localResponse.data.username,
+          loserImage: localResponse.data.cover_photo
         };
       }
     } else {
@@ -241,6 +229,7 @@ export default {
     console.error("Error fetching user data:", error);
   }
 },
+
 
 
 
@@ -272,6 +261,7 @@ export default {
       ctx.fillText(this.gameState.score2, 3 * canvas.width / 4, scoreMarginTop);
     },
     animationLoop() {
+      if (this.gameStarted == false) return;
       this.updateCanvas();
       this.frameCount++;
       const currentTime = performance.now();
