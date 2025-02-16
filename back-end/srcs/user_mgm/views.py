@@ -207,7 +207,11 @@ class Logout(APIView):
             refresh_token = RefreshToken(refresh_token)
             refresh_token.blacklist()
         except Exception as e:
-            self.fail('bad_token')
+            # self.fail('bad_token')
+            response = Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            response.delete_cookie('access_token')
+            response.delete_cookie('refresh_token')
+            return response
         
         response = Response({'message': 'Logged out successfully'})
         

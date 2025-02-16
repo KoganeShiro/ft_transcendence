@@ -36,10 +36,10 @@ class PongSerializer(serializers.ModelSerializer):
 
 class PongWriteSerializer(serializers.ModelSerializer):
     # accepts usernames instead of user ids
-    player1 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
-    player2 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
-    winner = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
-    loser = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # player1 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # player2 = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # winner = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
+    # loser = serializers.SlugRelatedField(queryset=CustomUser.objects.all(), slug_field='username')
 
     class Meta:
         model = PongSolo

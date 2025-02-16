@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
   # mfa_verified = models.BooleanField(default=False)
    enc_mfa_secret = models.BinaryField(blank=True, null=True)
 
-   stat_pong_solo_rank = models.IntegerField(default=0)
+   stat_pong_solo_rank = models.IntegerField(default=1000)
    stat_pong_solo_progress = ArrayField(models.IntegerField(), default=list)
    stat_pong_solo_wins_tot = models.IntegerField(default=0)
    stat_pong_solo_loss_tot = models.IntegerField(default=0)
@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
    stat_pong_solo_wins_tot_max10 = models.IntegerField(default=0)
    stat_pong_solo_loss_tot_max10 = models.IntegerField(default=0)
 
-   stat_pong_multi_rank = models.IntegerField(default=0)
+   stat_pong_multi_rank = models.IntegerField(default=1000)
    stat_pong_multi_progress = ArrayField(models.IntegerField(), default=list)
    stat_pong_multi_wins_tot = models.IntegerField(default=0)
    stat_pong_multi_loss_tot = models.IntegerField(default=0)
@@ -45,7 +45,7 @@ class CustomUser(AbstractUser):
    stat_pong_multi_wins_tot_max10 = models.IntegerField(default=0)
    stat_pong_multi_loss_tot_max10 = models.IntegerField(default=0)
 
-   stat_ttt_rank = models.IntegerField(default=0)
+   stat_ttt_rank = models.IntegerField(default=1000)
    stat_ttt_progress = ArrayField(models.IntegerField(), default=list)
    stat_ttt_wins_tot = models.IntegerField(default=0)
    stat_ttt_loss_tot = models.IntegerField(default=0)
