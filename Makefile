@@ -14,24 +14,26 @@ help:
 	@echo "Usage: make [target]"
 	@echo "Available targets:"
 	@echo "  build          Build the Docker images"
-	@echo "  up             Start services in detached mode"
-	@echo "  down           Stop and remove containers, networks, and volumes"
+	@echo "  up             Build and Start services"
+	@echo "  down           Stop and remove containers, networks"
 	@echo "  restart        Restart the services"
-	@echo "  logs           View logs from services"	
+	@echo "  logs           View logs from services in detached mode"	
 	@echo "  clean          Remove all unused Docker resources"
 	@echo "  fclean         Remove all unused Docker resources and volumes"
 	@echo "  rm_volumes     Remove all unused Docker volumes"
 
 
-.PHONY: build
-build: 
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build
 
 # Start the services in detached mode
 .PHONY: up
 up: build
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d
 	@echo "go to: https://$(HOSTNAME):$(PORT) 🤩"
+
+
+.PHONY: build
+build: 
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build
 
 # Stop and remove services
 .PHONY: down
