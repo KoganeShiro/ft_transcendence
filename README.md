@@ -400,20 +400,20 @@ get last 15 messages
 - [x] Reload to know the status change
 - [x] Limiter les char des messages ?
 - [x] Check we call of the api to only call it when i am on the chat
+- [x] Add new text field in login
+- [x] Add front for 2fa in account
+- [x] Fix les bugs de collision
 
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
-- [ ] Fix les bugs de collision
-
+- [ ] Fix the decalage on the canva
 - [ ] Friend seems to always call the api even if i am not in the friend page
 
-- [?] Call the back for the game
 - [ ] Matchmaking
 - [ ] Tournament
 
-- [ ] Add new text field in login
-- [ ] Add front for 2fa in account
+- [ ] Remove rank for ttt
 
 - [ ] New front for ttt in remote ?
 - [ ] Modify the lang and the theme to put it in the database
