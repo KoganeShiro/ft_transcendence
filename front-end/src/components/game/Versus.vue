@@ -105,7 +105,7 @@ export default {
             console.error("Error fetching player data:", error);
           });
       }
-      opponentStatus.value = 'Opponent found!';
+      opponentStatus.value = t("opponent_found");
       setTimeout(() => {
         show.value = false;
       }, props.duration * 1000);

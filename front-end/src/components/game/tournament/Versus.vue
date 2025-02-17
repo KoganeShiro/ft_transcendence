@@ -9,8 +9,8 @@
           <!-- Player 1 Avatar using the locally managed user profile -->
           <div class="player">
             <AvatarAtom
-              :pseudo="localPlayer1.pseudo"
-              :imageUrl="localPlayer1.imageUrl"
+              :pseudo="player1.name"
+              :imageUrl="player1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
               class="animate-avatar"
@@ -23,8 +23,8 @@
           <!-- Player 2 Avatar (opponent) -->
           <div class="player">
             <AvatarAtom
-              :imageUrl="opponent.imageUrl"
-              :pseudo="opponent.pseudo"
+              :pseudo="player2.name"
+              :imageUrl="player2.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
               class="animate-avatar"
@@ -37,12 +37,11 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
-import defaultAvatar from '@/assets/searching.webp';
+import defaultAvatar from '@/assets/profile.png';
 import guestAvatar from '@/assets/profile2.png';
-import API from '@/api.js';
 
 export default {
   name: 'Versus',
@@ -51,14 +50,14 @@ export default {
     player1: {
       type: Object,
       default: () => ({
-        pseudo: '',
+        name: '',
         imageUrl: defaultAvatar,
       }),
     },
     player2: {
       type: Object,
       default: () => ({
-        pseudo: '',
+        name: '',
         imageUrl: guestAvatar,
       }),
     },
@@ -70,24 +69,29 @@ export default {
   setup(props, { emit }) {
     const show = ref(true);
     const { t } = useI18n();
-    const opponentStatus = ref(t("opponent-found"));
+    const opponentStatus = ref(t("opponent_found"));
+    console.log("Player 1:", props.player1);
+    console.log("Player 2:", props.player2);
 
     const emitTimeUp = () => {
       emit('time-up');
     };
 
+    // Start a timer on mount. After `duration` seconds, hide the component.
+    onMounted(() => {
+      setTimeout(() => {
+        show.value = false;
+      }, props.duration * 1000);
+    });
+
     return {
       show,
       opponentStatus,
-      localPlayer1,
-      opponent,
       emitTimeUp,
     };
   },
 };
 </script>
-
-
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {

@@ -418,6 +418,8 @@ get last 15 messages
 - [ ] New front for ttt in remote ?
 - [ ] Modify the lang and the theme to put it in the database
 
+- [ ] For the responsive, we are playing the "opponent" part
+
 - [ ] Pong AI
 
 - [ ] Implement power up

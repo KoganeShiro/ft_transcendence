@@ -1,10 +1,10 @@
 <template>
   <div class="match">
-    <TextBox :modelValue="match.player1" :modifiable="false" class="player player1" />
+    <TextBox :modelValue="match.player1.name" :modifiable="false" class="player player1" />
     <div class="vs-container">
       <span class="vs">VS</span>
     </div>
-    <TextBox :modelValue="match.player2" :modifiable="false" class="player player2" />
+    <TextBox :modelValue="match.player2.name" :modifiable="false" class="player player2" />
   </div>
 </template>
 
