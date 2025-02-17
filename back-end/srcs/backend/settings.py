@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('HASHER_CODE')
 OTP_ENC_KEY = os.environ.get('OTP_ENC_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUGMODE')
 
 ALLOWED_HOSTS = ['*']
 
@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     'corsheaders',
    # for swagger
     'drf_yasg',
+    'django_prometheus',
 ]
 
 
@@ -173,6 +174,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -183,6 +185,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'user_mgm.update_last_seen.UpdateLastSeenMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 
 ]
 
@@ -214,7 +217,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get('POSTGRES_DB'),
-        "USER": os.environ.get('POSTGRES_USER'),
+        "USER": os.environ.get('POSTGRES_USER'),        
         "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
         "HOST": "postgres",        
         "PORT": "5432",

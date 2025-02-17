@@ -1,3 +1,12 @@
+## ToDO before final submission
+- [ ] Remove env
+- [ ] Compile frontend
+- [ ] enable production serveurs for gamelogic and backend
+- [ ] backend debug false
+- [ ] chqnge docker compose
+- [ ] change dockerfile webserver
+
+
 ## MY TODO
 
 - [x] Design for mobile

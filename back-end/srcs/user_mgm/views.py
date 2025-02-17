@@ -204,27 +204,25 @@ class Logout(APIView):
         if not access_token or not refresh_token:
             return Response({'message': 'You are not logged in'}, status=status.HTTP_400_BAD_REQUEST)
         
-        user = request.user
+        user = request.user        
         
         # Blacklist the refresh token
        # try:
         refresh_token = RefreshToken(refresh_token)
         if refresh_token.check_blacklist():
-            response = Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            response = Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)                        
             response.delete_cookie('access_token')
             response.delete_cookie('refresh_token')
             return response            
         refresh_token.blacklist()                
-        response = Response({'message': 'Logged out successfully'})
-        
+        response = Response({'message': 'Logged out successfully'})        
         # Delete the access and refresh token cookies
         response.delete_cookie('access_token')
         response.delete_cookie('refresh_token')
-        
         return response
 
-from social_django.models import UserSocialAuth
 
+from social_django.models import UserSocialAuth
 
 class deleteAccount(APIView):    
     @permission_classes([IsAuthenticated])
@@ -300,6 +298,7 @@ def getProfile(request, lookup_value=None):
         'is_42': serializer.data['is_42'],                    
         'theme': serializer.data['theme'],
         'lang': serializer.data['lang'],
+        'mfa_enabled': serializer.data['mfa_enabled'],
     }
     return Response(preparedData)
 
