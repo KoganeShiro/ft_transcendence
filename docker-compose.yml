@@ -8,6 +8,8 @@ services:
       - .env
     ports:      
       - "${PORT}:443"
+    expose:
+      - "8080"
     depends_on:
       - back-end      
       - game-logic      
@@ -105,7 +107,8 @@ services:
     restart: always    
     shm_size: 128mb
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data          
+      - ./postgres:/docker-entrypoint-initdb.d
     networks:      
       - db
     healthcheck:
@@ -114,6 +117,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
 
   prometheus:
     image: prom/prometheus:latest
@@ -126,12 +130,13 @@ services:
       - back-end
       - front-end
       - game-logic
+      - nginx
     networks:
       - pong
       - db
     command: 
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=https://${HOSTNAME}:${PORT}/prometheus/'
+#      - '--web.external-url=https://${HOSTNAME}:${PORT}/prometheus/'
       
       
         
@@ -144,9 +149,43 @@ services:
       - prometheus
     env_file:
       - .env
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_PATHS_CONFIG=/etc/grafana/grafana.ini
     volumes:
-      - grafana_data:/var/lib/grafana
+      #- grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./grafana/dashboards/:/etc/grafana/dashboards/
+      - ./grafana/custom_grafana.ini:/etc/grafana/grafana.ini
+
     restart: always
+    networks:
+      - pong
+      - db
+  
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx_exporter
+    command:
+    - "-nginx.scrape-uri=http://nginx:8080/status"
+    expose:
+    - "9113"
+    networks:
+    - pong
+    depends_on:
+    - nginx
+  
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
+    expose:
+      - "9187"
+    depends_on:
+      - postgres
+    command: '--no-collector.stat_bgwriter'
     networks:
       - pong
       - db

@@ -7,6 +7,14 @@ scrape_configs:
       - targets: ['back-end:8000']
     metrics_path: api/metrics
 
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres_exporter:9187']
+
   # - job_name: 'postgres'
   #   static_configs:
   #     - targets: ['postgres:5432']
