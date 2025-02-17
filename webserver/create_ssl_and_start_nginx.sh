@@ -18,15 +18,6 @@ else
     echo "Certificate already exists in /etc/nginx/certs/ft_transcendence.crt"
 fi
 
-# Create .htpasswd file for basic authentication
-# if [ -n "$PROMET_USER" ] && [ -n "$PROMET_PASSWORD" ]; then
-#     echo "Creating .htpasswd file for basic authentication"
-#     htpasswd -bc /etc/nginx/.htpasswd $PROMET_USER $PROMET_PASSWORD
-# else
-#     echo "PROMET_USER and PROMET_PASSWORD environment variables must be set"
-#     exit 1
-# fi
-
 
 
 

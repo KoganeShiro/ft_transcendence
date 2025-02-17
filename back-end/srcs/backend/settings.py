@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('HASHER_CODE')
 OTP_ENC_KEY = os.environ.get('OTP_ENC_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUGMODE')
 
 ALLOWED_HOSTS = ['*']
 
