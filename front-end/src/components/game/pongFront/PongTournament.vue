@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n';
 import WaitingPlayers from '@/components/game/tournament/WaitingPlayers.vue';
 import Matchmaking from '@/components/game/tournament/Matchmaking.vue';
 import PongGame from '@/components/game/pongGame/PongLocal.vue';
@@ -60,6 +61,10 @@ import WinnerPopup from "@/components/game/tournament/winnerpopup.vue";
 
 export default {
   components: { WaitingPlayers, Matchmaking, PongGame, TournamentWinner, Versus, WinnerPopup },
+  setup() {
+    const { t } = useI18n();
+    return { t };
+  },
   data() {
     return {
       currentStep: 'waiting',
@@ -78,11 +83,10 @@ export default {
       loading: false,
     };
   },
-
   computed: {
     // Returns the correct matches array based on the current round.
     activeMatches() {
-      return this.currentRound === 1 ? this.matches : this.currentMatches;
+      return this.matches;
     }
   },
   methods: {
@@ -93,7 +97,7 @@ export default {
     onUpdatePlayerNames(playerNames) {
       // Map each name into an object with a "name" property.
       this.players = playerNames.map(name => ({ name }));
-      console.log("Updated player names:", this.players);
+      // console.log("Updated player names:", this.players);
     },
     shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -103,26 +107,20 @@ export default {
     },
     createRandomMatches() {
       if (this.loading) {
-        console.log("createRandomMatches is already in progress");
         return;
       }
-      console.log("createRandomMatches called");
       this.loading = true;
       this.shuffleArray(this.players);
       this.matches = [
         { id: 1, player1: this.players[0], player2: this.players[1], completed: false, timeLeft: 5 },
         { id: 2, player1: this.players[2], player2: this.players[3], completed: false, timeLeft: 5 }
       ];
-      console.log(this.players[0].name, 'vs', this.players[1].name);
-      console.log(this.players[2].name, 'vs', this.players[3].name);
+      // console.log(this.players[0].name, 'vs', this.players[1].name);
+      // console.log(this.players[2].name, 'vs', this.players[3].name);
     },
     onMatchStart() {
       // Use activeMatches for the current round.
       if (this.activeMatches.length > 0 && this.currentMatchIndex < this.activeMatches.length) {
-        console.log('Match started:', this.activeMatches[this.currentMatchIndex]);
-        console.log('Current round:', this.currentRound);
-        console.log(this.activeMatches[this.currentMatchIndex]?.player1);
-        console.log(this.activeMatches[this.currentMatchIndex]?.player2);
         this.currentStep = 'versus';
       } else {
         console.error('Invalid activeMatches or currentMatchIndex');
@@ -131,51 +129,57 @@ export default {
     onVersusTimeUp() {
       this.currentStep = 'game';
     },
-    onGameEnded(matchWinner) {
-      //weird, the winner isn't goods
-      console.log('Match winner:', matchWinner);
-      if (matchWinner === 'Opponent') {
-        console.log('Opponent');
-        matchWinner = this.activeMatches[this.currentMatchIndex].player2.name;
+    onGameEnded(matchWinnerIndicator) {
+      // console.log('Match winner indicator:', matchWinnerIndicator);
+      let winnerName = "";
+      let loserName = "";
+      const currentMatch = this.activeMatches[this.currentMatchIndex];
+      if (matchWinnerIndicator === 'Opponent') {
+        winnerName = currentMatch.player2.name;
+        loserName = currentMatch.player1.name;
+      } else {
+        winnerName = currentMatch.player1.name;
+        loserName = currentMatch.player2.name;
       }
-      else {
-        matchWinner = this.activeMatches[this.currentMatchIndex].player1.name;
-      }
-      this.matchResults.push(matchWinner);
-      // Store this winner for display in the popup.
-      this.currentMatchWinner = { name: matchWinner };
-      // Show the winner popup.
+      this.matchResults.push(winnerName);
+      this.currentMatchWinner = { name: winnerName };
       this.currentStep = 'winnerPopup';
     },
-
-    // Called when the winner popup is dismissed (via a button click or timer).
     onWinnerPopupDismiss() {
+      const eliminated = { name: this.t("eliminated") };
       if (this.currentRound === 1) {
         // In round 1, there are 2 matches.
-        if (this.currentMatchIndex < this.activeMatches.length - 1) {
+        if (this.currentMatchIndex < this.matches.length - 1) {
           // There is another match in round 1.
+          if (this.matchResults[0] === this.matches[this.currentMatchIndex].player1.name) {
+            this.matches[this.currentMatchIndex].player2 = eliminated;
+          } else {
+            this.matches[this.currentMatchIndex].player1 = eliminated;
+          }
+          this.matches[this.currentMatchIndex].completed = true;
+          // Move to the next match.
           this.currentMatchIndex++;
           this.currentStep = 'matchmaking';
         } else {
-          // Both round 1 matches are done.
-          // Set up the final match using the two winners.
-          this.currentMatches = [
-            { 
-              id: 3, 
-              player1: { name: this.matchResults[0] },
-              player2: { name: this.matchResults[1] },
-              completed: false,
-              timeLeft: 5
-            }
-          ];
-          // Switch to round 2.
+          // Both matches in round 1 are done.
+          // Create the final match using the two winners stored in matchResults.
+          this.matches = [
+          { 
+            id: 3, 
+            player1: { name: this.matchResults[0] },
+            player2: { name: this.matchResults[1] },
+            completed: false,
+            timeLeft: 5
+          }
+        ];
+
           this.currentRound = 2;
+          // Reset index so that the final match is at index 0.
           this.currentMatchIndex = 0;
-          // Go back to matchmaking to start the final match.
           this.currentStep = 'matchmaking';
         }
       } else if (this.currentRound === 2) {
-        // In round 2, after the final match, the winner (the third result) is the tournament winner.
+        // In round 2, after the final match, the tournament winner is declared.
         this.winner = this.matchResults[2];
         this.currentStep = 'tournamentWinner';
       }

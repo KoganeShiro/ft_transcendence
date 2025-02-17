@@ -403,26 +403,28 @@ get last 15 messages
 - [x] Add new text field in login
 - [x] Add front for 2fa in account
 - [x] Fix les bugs de collision
-
+- [x] Matchmaking
+- [x] Tournament
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 - [ ] Fix the decalage on the canva
 - [ ] Friend seems to always call the api even if i am not in the friend page
 
-- [ ] Matchmaking
-- [ ] Tournament
 
 - [ ] Remove rank for ttt
 
-- [ ] New front for ttt in remote ?
+- [ ] Make a README to explain what modules, how to launch (+ tuto)
 - [ ] Modify the lang and the theme to put it in the database
 
 - [ ] For the responsive, we are playing the "opponent" part
 
 - [ ] Pong AI
 
-- [ ] Implement power up
+- [ ] Implement power up ?
+
+
+
 
 - [ ] Play with 4 players logic (should be similar to another player logic)
 - [ ] More than 2 players game page (x2)

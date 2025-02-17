@@ -122,6 +122,8 @@
     "confirm": "Bestätigen",
     "cancel": "Abbrechen",
     "activate": "Aktivieren",
-    "continue": "Fortsetzen"
+    "continue": "Fortsetzen",
+    "tournament-winner": "Turniergewinner !!",
+    "eliminated": "Sie wurden eliminiert"
   }
   

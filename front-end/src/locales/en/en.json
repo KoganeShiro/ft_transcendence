@@ -122,6 +122,8 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "activate": "Activate",
-    "continue": "Continue"
+    "continue": "Continue",
+    "tournament-winner": "Tournament Winner !!",
+    "eliminated": "Eliminated"
 }
   
