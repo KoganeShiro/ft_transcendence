@@ -324,24 +324,66 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_y"] = 1
                 self.game_state["ball_velocity_y"] = -self.game_state["ball_velocity_y"]
 
-            # Gestion des collisions avec les paddles
-            if self.game_state["ball_x"] <= 0.05:
-                # print("touch left")
-                if self.game_state["ball_velocity_x"] < 0:
-                    if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
-                        self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
-                        self.game_state["rally"] += 1
+            # Détection des collisions avec les paddles (avec AABB)
+            ball_rect = {  # Boîte englobante de la balle
+                "x": self.game_state["ball_x"] * 900 - 7,  # Ajuster 900 et 7 si nécessaire
+                "y": self.game_state["ball_y"] * 500 - 7,  # Ajuster 500 et 7 si nécessaire
+                "width": 14,  # Diamètre de la balle
+                "height": 14,  # Diamètre de la balle
+            }
 
-            elif self.game_state["ball_x"] >= 0.95:
-                # print("touch right")
-                if self.game_state["ball_velocity_x"] > 0:
-                    if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
-                        self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
-                        self.game_state["rally"] += 1
+            paddle1_rect = {  # Boîte englobante du paddle gauche
+                "x": 0.05 * 900,  # Marge horizontale
+                "y": self.game_state["player1_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            paddle2_rect = {  # Boîte englobante du paddle droit
+                "x": 0.95 * 900 - 10,  # Marge horizontale + largeur du paddle
+                "y": self.game_state["player2_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            def detect_collision(rect1, rect2):  # Fonction de détection AABB
+                return (
+                    rect1["x"] < rect2["x"] + rect2["width"] and
+                    rect1["x"] + rect1["width"] > rect2["x"] and
+                    rect1["y"] < rect2["y"] + rect2["height"] and
+                    rect1["y"] + rect1["height"] > rect2["y"]
+                )
+
+            if detect_collision(ball_rect, paddle1_rect) and self.game_state["ball_velocity_x"] < 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+
+            elif detect_collision(ball_rect, paddle2_rect) and self.game_state["ball_velocity_x"] > 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+                    
+            # # Gestion des collisions avec les paddles
+            # if self.game_state["ball_x"] <= 0.05:
+            #     # print("touch left")
+            #     if self.game_state["ball_velocity_x"] < 0:
+            #         if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+            #             self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+            #             self.game_state["rally"] += 1
+
+            # elif self.game_state["ball_x"] >= 0.95:
+            #     # print("touch right")
+            #     if self.game_state["ball_velocity_x"] > 0:
+            #         if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+            #             self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+            #             self.game_state["rally"] += 1
 
             # Gestion des scores
             if self.game_state["ball_x"] <= 0:
@@ -463,6 +505,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         # url2 = "http://back-end:8000/api/profile/gkubina/" #
         url3 = "http://back-end:8000/api/stats_increment/gkubina/" #
 
+        user1_stats = f"http://back-end:8000/api/stats/{player1}/"
+        user2_stats = f"http://back-end:8000/api/stats/{player1}/"
         url_user1 = f"http://back-end:8000/api/profile/{player1}/"
         url_user2 = f"http://back-end:8000/api/profile/{player2}/"
         url_update_user1 = "http://back-end:8000/api/stats_increment/{player1}/"

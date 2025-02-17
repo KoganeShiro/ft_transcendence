@@ -60,6 +60,41 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
+    def update_player_stats(self, player):
+        game = active_games.get(self.game_id)
+        if game:
+            if player == "player1":
+                score = game["game_state"]["score1"]
+                rally = game["game_state"]["rally_player1"]
+                stats = game.get("player1_stats")
+                
+                # Mise à jour des statistiques en fonction du rally
+                if rally < 5:
+                    stats["won_under5"] += 1 if score > 0 else 0
+                    stats["lost_under5"] += 1 if score == 0 else 0
+                elif rally < 10:
+                    stats["won_under10"] += 1 if score > 0 else 0
+                    stats["lost_under10"] += 1 if score == 0 else 0
+                else:
+                    stats["won_upper10"] += 1 if score > 0 else 0
+                    stats["lost_upper10"] += 1 if score == 0 else 0
+
+        
+            elif player == "player2":
+                score = game["game_state"]["score2"]
+                rally = game["game_state"]["rally_player2"]
+                stats = game.get("player2_stats")
+                
+                # Mise à jour des statistiques en fonction du rally
+                if rally < 5:
+                    stats["won_under5"] += 1 if score > 0 else 0
+                    stats["lost_under5"] += 1 if score == 0 else 0
+                elif rally < 10:
+                    stats["won_under10"] += 1 if score > 0 else 0
+                    stats["lost_under10"] += 1 if score == 0 else 0
+                else:
+                    stats["won_upper10"] += 1 if score > 0 else 0
+                    stats["lost_upper10"] += 1 if score == 0 else 0
 
     async def disconnect(self, close_code):
         """ Gérer la déconnexion des joueurs """
@@ -212,6 +247,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 "score2": 0, 
                 "disconnect1": False,
                 "disconnect2": False,
+                "rally": 0,
             }
             game["game_state"] = initial_game_state
             self.game_state = initial_game_state
@@ -288,6 +324,8 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
     async def game_loop(self):
         previous_time = time.time()
+        game_state = active_games.get(self.game_id)
+
 
         while True:
             current_time = time.time()
@@ -309,28 +347,72 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_y"] = 1
                 self.game_state["ball_velocity_y"] = -self.game_state["ball_velocity_y"]
 
-            # Gestion des collisions avec les paddles
-            if self.game_state["ball_x"] <= 0.05:
-                # print("touch left")
-                if self.game_state["ball_velocity_x"] < 0:
-                    if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
-                        self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
 
-            elif self.game_state["ball_x"] >= 0.95:
-                # print("touch right")
-                if self.game_state["ball_velocity_x"] > 0:
-                    if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
-                        self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
+             # Détection des collisions avec les paddles (avec AABB)
+            ball_rect = {  # Boîte englobante de la balle
+                "x": self.game_state["ball_x"] * 900 - 7,  # Ajuster 900 et 7 si nécessaire
+                "y": self.game_state["ball_y"] * 500 - 7,  # Ajuster 500 et 7 si nécessaire
+                "width": 14,  # Diamètre de la balle
+                "height": 14,  # Diamètre de la balle
+            }
+
+            paddle1_rect = {  # Boîte englobante du paddle gauche
+                "x": 0.05 * 900,  # Marge horizontale
+                "y": self.game_state["player1_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            paddle2_rect = {  # Boîte englobante du paddle droit
+                "x": 0.95 * 900 - 10,  # Marge horizontale + largeur du paddle
+                "y": self.game_state["player2_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            def detect_collision(rect1, rect2):  # Fonction de détection AABB
+                return (
+                    rect1["x"] < rect2["x"] + rect2["width"] and
+                    rect1["x"] + rect1["width"] > rect2["x"] and
+                    rect1["y"] < rect2["y"] + rect2["height"] and
+                    rect1["y"] + rect1["height"] > rect2["y"]
+                )
+
+            if detect_collision(ball_rect, paddle1_rect) and self.game_state["ball_velocity_x"] < 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+
+            elif detect_collision(ball_rect, paddle2_rect) and self.game_state["ball_velocity_x"] > 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+
+            # # Gestion des collisions avec les paddles
+            # if self.game_state["ball_x"] <= 0.05:
+            #     # print("touch left")
+            #     if self.game_state["ball_velocity_x"] < 0:
+            #         if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+            #             self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
+
+            # elif self.game_state["ball_x"] >= 0.95:
+            #     # print("touch right")
+            #     if self.game_state["ball_velocity_x"] > 0:
+            #         if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+            #             self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
 
             # Gestion des scores
             if self.game_state["ball_x"] <= 0:
                 self.game_state["score2"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
                 self.reset_ball(1)
+                game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score2"] >= 5:
@@ -340,7 +422,9 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
             elif self.game_state["ball_x"] >= 1:
                 self.game_state["score1"] += 1
+                self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
                 self.reset_ball(-1)
+                game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score1"] >= 5:

@@ -131,7 +131,7 @@ export default {
     updateGame(deltaTime) {
       if (!this.isMobile && !this.isTablette) {
         // Desktop: update vertical paddle positions using keys
-        const paddleSpeed = 0.01;
+        const paddleSpeed = 0.005;
         if (this.keysPressed.up_left)
           this.gameState.player1_y = Math.max(this.gameState.player1_y - paddleSpeed, 0);
         if (this.keysPressed.down_left)
