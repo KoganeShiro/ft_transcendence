@@ -384,13 +384,13 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         # print(f"🟢 {self.game_state}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
 
 
-    def calculate_ball_angle(self, ball_y, paddle_y):
-            # Calculer l'écart entre la balle et le centre du paddle
-        distance_from_center = ball_y - paddle_y
+    # def calculate_ball_angle(self, ball_y, paddle_y):
+    #         # Calculer l'écart entre la balle et le centre du paddle
+    #     distance_from_center = ball_y - paddle_y
 
-            # Plus l'écart est grand, plus l'angle de rebond sera large
-        angle = distance_from_center * 0.1  # Ajuster ce coefficient pour affiner l'angle
-        return angle
+    #         # Plus l'écart est grand, plus l'angle de rebond sera large
+    #     angle = distance_from_center * 0.1  # Ajuster ce coefficient pour affiner l'angle
+    #     return angle
     
     
     async def players_ready(self, event):
@@ -405,26 +405,24 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         }))
     
     
-    async def game_over(self, event): # <--- AJOUTEZ CETTE FONCTION DE GESTION (HANDLER) POUR game_over
+    async def game_over(self, event): 
         """ Gérer le message 'game_over' diffusé au groupe """
-        game_over_message = event['message'] # Récupérer le message de fin de partie de l'event
-        winner = event['winner'] # Récupérer le nom du vainqueur de l'event
+        game_over_message = event['message'] 
+        winner = event['winner'] 
 
         message = {
             "type": "game_over",
-            "message": game_over_message, # Renvoyer le message de fin de partie au front-end
-            "winner": winner # Renvoyer le nom du vainqueur au front-end
+            "message": game_over_message, 
+            "winner": winner 
         }
-        # ENVOYER le message 'game_over' (avec le message et le vainqueur) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
         await self.send(text_data=json.dumps(message))
     
     
     async def game_update(self, event):
         """ Gérer le message 'game_update' diffusé au groupe """
-        game_state = event['game_state'] # Récupérer l'état du jeu du message
+        game_state = event['game_state']
         message = {
             "type": "game_update",
             "game_state": game_state
         }
-        # ENVOYER le message 'game_update' (avec l'état du jeu) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
         await self.send(text_data=json.dumps(message))

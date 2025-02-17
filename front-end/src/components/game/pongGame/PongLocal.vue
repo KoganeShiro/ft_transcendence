@@ -36,7 +36,7 @@ export default {
       player1_x: 0.5,
       ballSpeedFactor: 30,
       initialBallSpeed: 30,
-      maxBallSpeed: 100,
+      maxBallSpeed: 80,
       // Desktop key flags remain for non‑mobile mode.
       keysPressed: {
         up_left: false,
