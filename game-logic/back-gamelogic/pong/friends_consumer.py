@@ -60,41 +60,40 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-    def update_player_stats(self, player):
+    def update_player_stats(self, winner, loser):
         game = active_games.get(self.game_id)
         if game:
-            if player == "player1":
-                score = game["game_state"]["score1"]
-                rally = game["game_state"]["rally_player1"]
+            if winner == "player1":
+                rally = self.game_state["rally"]
                 stats = game.get("player1_stats")
-                
-                # Mise à jour des statistiques en fonction du rally
-                if rally < 5:
-                    stats["won_under5"] += 1 if score > 0 else 0
-                    stats["lost_under5"] += 1 if score == 0 else 0
-                elif rally < 10:
-                    stats["won_under10"] += 1 if score > 0 else 0
-                    stats["lost_under10"] += 1 if score == 0 else 0
-                else:
-                    stats["won_upper10"] += 1 if score > 0 else 0
-                    stats["lost_upper10"] += 1 if score == 0 else 0
-
-        
-            elif player == "player2":
-                score = game["game_state"]["score2"]
-                rally = game["game_state"]["rally_player2"]
+            elif winner == "player2":
+                rally = self.game_state["rally"]
                 stats = game.get("player2_stats")
-                
-                # Mise à jour des statistiques en fonction du rally
-                if rally < 5:
-                    stats["won_under5"] += 1 if score > 0 else 0
-                    stats["lost_under5"] += 1 if score == 0 else 0
-                elif rally < 10:
-                    stats["won_under10"] += 1 if score > 0 else 0
-                    stats["lost_under10"] += 1 if score == 0 else 0
-                else:
-                    stats["won_upper10"] += 1 if score > 0 else 0
-                    stats["lost_upper10"] += 1 if score == 0 else 0
+
+            if rally < 5:
+                stats["won_under5"] += 1
+            elif rally < 10:
+                stats["won_under10"] += 1
+            else:
+                stats["won_upper10"] += 1
+
+            if loser == "player1":
+                rally = self.game_state["rally"]
+                stats = game.get("player1_stats")
+            elif loser == "player2":
+                rally = self.game_state["rally"]
+                stats = game.get("player2_stats")
+
+            if rally < 5:
+                stats["lost_under5"] += 1
+            elif rally < 10:
+                stats["lost_under10"] += 1
+            else:
+                stats["lost_upper10"] += 1
+        stats1 = game.get("player1_stats")
+        stats2 = game.get("player2_stats")
+        logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
+
 
     async def disconnect(self, close_code):
         """ Gérer la déconnexion des joueurs """
@@ -411,6 +410,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             if self.game_state["ball_x"] <= 0:
                 self.game_state["score2"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
+                self.update_player_stats("player2", "player1")
                 self.reset_ball(1)
                 game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
@@ -423,6 +423,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             elif self.game_state["ball_x"] >= 1:
                 self.game_state["score1"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
+                self.update_player_stats("player1", "player2")
                 self.reset_ball(-1)
                 game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])

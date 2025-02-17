@@ -39,7 +39,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.player2_name = None
         self.name = None
         self.rally = 0
-
         #definition des stats 
         self.game_statistic = {
             "won_under5": 0,
@@ -49,6 +48,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             "won_upper10": 0,
             "lost_upper10": 0,
         }
+
         
 
     async def connect(self):
@@ -73,18 +73,18 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        "type": "players_ready",  # Nouveau type de message pour signaler que 2 joueurs sont prêts
-                        "message": "Deux joueurs connectés, la partie peut commencer !" # Message optionnel
+                        "type": "players_ready",
+                        "message": "Deux joueurs connectés, la partie peut commencer !"
                     }
                 )
                 
                 await self.start_game()
-                return  # Stop ici pour éviter de recréer une partie
+                return 
 
         # Si aucune partie en attente, créer une nouvelle
-        self.game_id = str(uuid.uuid4())  # Uniquement si pas de partie existante
+        self.game_id = str(uuid.uuid4()) 
         self.room_group_name = f"pong_{self.game_id}"
-        initial_game_state = { # Définir l'état initial du jeu **ICI** (dans connect(), pour les nouvelles parties)
+        initial_game_state = {
             "ball_x": 0.5,
             "ball_y": 0.5,
             "ball_velocity_x": self.initial_ball_velocity_x,
@@ -102,56 +102,57 @@ class PongConsumer(AsyncWebsocketConsumer):
             "player2_socket": None,
             "player1_name": None,
             "player2_name": None,
+            "rally": 0,
             "game_state": initial_game_state,
             "player1_stats": self.game_statistic.copy(),
             "player2_stats": self.game_statistic.copy(),
         }
-        game = active_games.get(self.game_id) # Récupérer le jeu de active_games (maintenant qu'il est créé)
-        if game: # Vérification (toujours bonne pratique)
-            self.game_state = game.get("game_state") # **INITIALISER CORRECTEMENT self.game_state EN RÉCUPÉRANT LA VERSION DE active_games !**
+        game = active_games.get(self.game_id) 
+        if game: 
+            self.game_state = game.get("game_state") 
         self.player1_socket = self.channel_name
         await self.send(text_data=json.dumps({
-            'type': 'role_assignment', # Type de message optionnel, mais bonne pratique
+            'type': 'role_assignment', 
             'role': 'player1',
         }))
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
 
-    def update_player_stats(self, player):
+    def update_player_stats(self, winner, loser):
         game = active_games.get(self.game_id)
         if game:
-            if player == "player1":
-                score = game["game_state"]["score1"]
-                rally = game["game_state"]["rally_player1"]
+            # Mise à jour des stats du gagnant
+            if winner == "player1":
+                rally = self.game_state["rally"]
                 stats = game.get("player1_stats")
-                
-                # Mise à jour des statistiques en fonction du rally
-                if rally < 5:
-                    stats["won_under5"] += 1 if score > 0 else 0
-                    stats["lost_under5"] += 1 if score == 0 else 0
-                elif rally < 10:
-                    stats["won_under10"] += 1 if score > 0 else 0
-                    stats["lost_under10"] += 1 if score == 0 else 0
-                else:
-                    stats["won_upper10"] += 1 if score > 0 else 0
-                    stats["lost_upper10"] += 1 if score == 0 else 0
-
-        
-            elif player == "player2":
-                score = game["game_state"]["score2"]
-                rally = game["game_state"]["rally_player2"]
+            elif winner == "player2":
+                rally = self.game_state["rally"]
                 stats = game.get("player2_stats")
-                
-                # Mise à jour des statistiques en fonction du rally
-                if rally < 5:
-                    stats["won_under5"] += 1 if score > 0 else 0
-                    stats["lost_under5"] += 1 if score == 0 else 0
-                elif rally < 10:
-                    stats["won_under10"] += 1 if score > 0 else 0
-                    stats["lost_under10"] += 1 if score == 0 else 0
-                else:
-                    stats["won_upper10"] += 1 if score > 0 else 0
-                    stats["lost_upper10"] += 1 if score == 0 else 0
+
+            if rally < 5:
+                stats["won_under5"] += 1
+            elif rally < 10:
+                stats["won_under10"] += 1
+            else:
+                stats["won_upper10"] += 1
+
+            # Mise à jour des stats du perdant
+            if loser == "player1":
+                rally = self.game_state["rally"]
+                stats = game.get("player1_stats")
+            elif loser == "player2":
+                rally = self.game_state["rally"]
+                stats = game.get("player2_stats")
+
+            if rally < 5:
+                stats["lost_under5"] += 1
+            elif rally < 10:
+                stats["lost_under10"] += 1
+            else:
+                stats["lost_upper10"] += 1
+        stats1 = game.get("player1_stats")
+        stats2 = game.get("player2_stats")
+        logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
 
 
     async def disconnect(self, close_code):
@@ -280,24 +281,18 @@ class PongConsumer(AsyncWebsocketConsumer):
 
  
     async def handle_player_moves(self, move, player):
-
         """ Gérer les mouvements des joueurs de manière asynchrone """
         if player == "player1":
-            # print(f"Player1 BEFORE {self.game_state}")
             if move.get("up", False):
                 self.game_state["player1_y"] = max(self.game_state["player1_y"] - self.paddle_speed, 0)
             elif move.get("down", False):
                 self.game_state["player1_y"] = min(self.game_state["player1_y"] + self.paddle_speed, 1)
-            # print(f"Player1 AFTER {self.game_state}")
-
 
         elif player == "player2":
-            # print(f"Player2 BEFORE {self.game_state}")
             if move.get("up", False):
                 self.game_state["player2_y"] = max(self.game_state["player2_y"] - self.paddle_speed, 0)
             elif move.get("down", False):
                 self.game_state["player2_y"] = min(self.game_state["player2_y"] + self.paddle_speed, 1)
-            # print(f"Player2 AFTER {self.game_state}")
 
 
     async def game_loop(self):
@@ -365,32 +360,14 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
                 self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
                 self.game_state["rally"] += 1
-                    
-            # # Gestion des collisions avec les paddles
-            # if self.game_state["ball_x"] <= 0.05:
-            #     # print("touch left")
-            #     if self.game_state["ball_velocity_x"] < 0:
-            #         if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
-            #             self.game_state["ball_velocity_x"] *= -1
-            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
-            #             self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
-            #             self.game_state["rally"] += 1
-
-            # elif self.game_state["ball_x"] >= 0.95:
-            #     # print("touch right")
-            #     if self.game_state["ball_velocity_x"] > 0:
-            #         if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
-            #             self.game_state["ball_velocity_x"] *= -1
-            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
-            #             self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
-            #             self.game_state["rally"] += 1
 
             # Gestion des scores
             if self.game_state["ball_x"] <= 0:
                 self.game_state["score2"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
                 self.reset_ball(1)
-                game_state["rally"] = 0
+                self.update_player_stats("player2", "player1")
+                self.game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score2"] >= 5:
@@ -402,7 +379,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                 self.game_state["score1"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
                 self.reset_ball(-1)
-                game_state["rally"] = 0
+                self.update_player_stats("player1", "player2")
+                self.game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score1"] >= 5:
@@ -506,15 +484,25 @@ class PongConsumer(AsyncWebsocketConsumer):
         url3 = "http://back-end:8000/api/stats_increment/gkubina/" #
 
         user1_stats = f"http://back-end:8000/api/stats/{player1}/"
-        user2_stats = f"http://back-end:8000/api/stats/{player1}/"
+        user2_stats = f"http://back-end:8000/api/stats/{player2}/"
         url_user1 = f"http://back-end:8000/api/profile/{player1}/"
         url_user2 = f"http://back-end:8000/api/profile/{player2}/"
-        url_update_user1 = "http://back-end:8000/api/stats_increment/{player1}/"
-        url_update_user2 = "http://back-end:8000/api/stats_increment/{player2}/"
+        url_update_user1 = f"http://back-end:8000/api/stats_increment/{player1}/"
+        url_update_user2 = f"http://back-end:8000/api/stats_increment/{player2}/"
         
         headers = {
             "X-API-KEY": API_KEY
         }
+        stats1 = requests.get(user1_stats, headers=headers)
+        stats2 = requests.get(user2_stats, headers=headers)
+        if stats1.status_code == 200:
+            stats1 = stats1.json()
+            logger.info(f"DATA of {player1}: {stats1}")
+        if stats2.status_code == 200:
+            stats2 = stats2.json()
+            logger.info(f"DATA of {player2}: {stats2}")
+        
+
         response1 = requests.get(url_user1, headers=headers)
         response2 = requests.get(url_user2, headers=headers)
         data1 = None
@@ -522,9 +510,16 @@ class PongConsumer(AsyncWebsocketConsumer):
         if response1.status_code == 200:
             data1 = response1.json()
             logger.info(f"DATA of {player1}: {data1}")
+
+            current_rank1 = data1.get('stats', {}).get('Pong', {}).get('currentRank', 0)  # Valeur par défaut 0
+            logger.info(f"Rank of {player1}: {current_rank1}")
+
         if response2.status_code == 200:
             data2 = response2.json()
             logger.info(f"DATA of {player2}: {data2}")
+
+            current_rank2 = data2.get('stats', {}).get('Pong', {}).get('currentRank', 0)  # Valeur par défaut 0
+            logger.info(f"Rank of {player2}: {current_rank2}")
 
         # {'id': 4, 
         #  'username': 'daleliev',
@@ -554,8 +549,8 @@ class PongConsumer(AsyncWebsocketConsumer):
             return (R_A_prime)
         
         # Classements initiaux
-        R_joueur_1 = 1500
-        R_joueur_2 = 1600
+        R_joueur_1 = current_rank1
+        R_joueur_2 = current_rank2
 
         # Facteur K
         diff = 0
@@ -577,46 +572,102 @@ class PongConsumer(AsyncWebsocketConsumer):
             K = 35
         elif (5 - diff == 3):
             K = 30
-        elif (5 - diff == 3):
+        elif (5 - diff == 2):
             K = 20
-        elif (5 - diff == 3):
+        elif (5 - diff == 1):
             K = 10
 
-        # Le joueur 1 gagne
         R_joueur_1_prime = calculer_elo(R_joueur_1, R_joueur_2, K, S_joueur_1)
-
-        # Le joueur 2 perd
-        S_joueur_2 = 0
         R_joueur_2_prime = calculer_elo(R_joueur_2, R_joueur_1, K, S_joueur_2)
+        R_joueur_1_prime = round(R_joueur_1_prime)
+        R_joueur_2_prime = round(R_joueur_2_prime)
 
+        if (R_joueur_1_prime < 0):
+            R_joueur_1_prime = 0
+        if (R_joueur_2_prime < 0):
+            R_joueur_2_prime = 0
         logger.info(f"Nouveau classement du joueur 1 : {player1} {R_joueur_1_prime}")
         logger.info(f"Nouveau classement du joueur 2 : {player2} {R_joueur_2_prime}")
 
 
         # # response = requests.get(url, headers=headers)
         # logger.info("Return: ", response.status_code , response.json())
-
+        winner = None
+        loser = None
+        if score1 > score2:
+            winner = data1.get("id")
+            loser = data2.get("id")
+        else:
+            winner = data2.get("id")
+            loser = data1.get("id")
         
-        # game_data = {
-        #         "player1_score": score1,
-        #         "player2_score": score2,
-        #     #  "rank_player1_begin": 10,
-        #     #  "rank_player2_begin": 10,
-        #         "rank_player1_change": -10,
-        #         "rank_player2_change": 10,
-        #         "type": "solo",
-        #         "player1": data1.get("id"),
-        #         "player2": data2.get("id"),
-        #         "winner": 3,
-        #         "loser": 2
-        #     }
+        game_data = {
+                "player1_score": score1,
+                "player2_score": score2,
+                "rank_player1_change": R_joueur_1_prime - R_joueur_1,
+                "rank_player2_change": R_joueur_2_prime - R_joueur_2,
+                "type": "solo",
+                "player1": data1.get("id"),
+                "player2": data2.get("id"),
+                "winner": winner,
+                "loser": loser,
+        }
+        response = requests.post(url, headers=headers, json=game_data)
+        response = response.json()
+        logger.info(f"game_data : {response}")
+        
+        
+        win1 = 0
+        win2 = 0
+        loss1 = 0
+        loss2 = 0
+        if winner == data1.get("id"):
+            win1 = 1
+            loss2 = 1
+        else:
+            loss1 = 1
+            win2 = 1
 
-        # def prog_data():
-        #     return {
-        #         "stat_pong_solo_rank": -10,
-        #         "stat_pong_solo_progress": -10
-        #     }
-
+        stats1 = game.get("player1_stats")
+        fields1 = {
+            "stat_pong_solo_rank" : R_joueur_1_prime - R_joueur_1, 
+            "stat_pong_solo_progress" : R_joueur_1_prime - R_joueur_1, 
+            "stat_pong_solo_wins_tot" : win1, 
+            "stat_pong_solo_loss_tot" : loss1, 
+            "stat_pong_solo_tournament_wins" : 0, 
+            "stat_pong_solo_tournament_loss" : 0, 
+            "stat_pong_solo_wins_tot_min5" : stats1["won_under5"], 
+            "stat_pong_solo_loss_tot_min5" : stats1["lost_under5"], 
+            "stat_pong_solo_wins_tot_min10" : stats1["won_under10"], 
+            "stat_pong_solo_loss_tot_min10" : stats1["lost_under10"], 
+            "stat_pong_solo_wins_tot_max10" : stats1["won_upper10"], 
+            "stat_pong_solo_loss_tot_max10" : stats1["lost_upper10"], 
+        }
+        response1 = requests.patch(url_update_user1, headers=headers, json=fields1)
+        response1 = response1.json()
+        logger.info(f"fields1 : {fields1}")
+        logger.info(f"response1 : {response1}")
+        
+        stats2 = game.get("player2_stats")
+        fields2 = {
+            "stat_pong_solo_rank" : R_joueur_2_prime - R_joueur_2, 
+            "stat_pong_solo_progress" : R_joueur_2_prime - R_joueur_2, 
+            "stat_pong_solo_wins_tot" : win2, 
+            "stat_pong_solo_loss_tot" : loss2, 
+            "stat_pong_solo_tournament_wins" : 0, 
+            "stat_pong_solo_tournament_loss" : 0, 
+            "stat_pong_solo_wins_tot_min5" : stats2["won_under5"], 
+            "stat_pong_solo_loss_tot_min5" : stats2["lost_under5"], 
+            "stat_pong_solo_wins_tot_min10" : stats2["won_under10"], 
+            "stat_pong_solo_loss_tot_min10" : stats2["lost_under10"], 
+            "stat_pong_solo_wins_tot_max10" : stats2["won_upper10"], 
+            "stat_pong_solo_loss_tot_max10" : stats2["lost_upper10"], 
+        }
+        logger.info(f"fields2 : {fields2}")
+        response2 = requests.patch(url_update_user2, headers=headers, json=fields2)
+        response2 = response2.json()
+        logger.info(f"response2 : {response2}")
+        # logger.info(f"FINIFINIFINIFINI {fields1} ; {fields2}")
 
 
 
@@ -624,7 +675,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         # gamedata["player1"] = response.json().get('id')
         # print (gamedata)
 
-        # response = requests.post(url, headers=headers, json=gamedata)
 
 
         # # response = requests.get(url, headers=headers)
@@ -632,7 +682,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         # if response.status_code >= 200:
         #     print("Return: ", response.status_code , response.json())
 
-        # response = requests.patch(url3, headers=headers, json=prog_data())
 
 
         # # response = requests.get(url, headers=headers)
