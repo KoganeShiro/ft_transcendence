@@ -45,7 +45,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"] # change to gunicorn command for production ???
+   # command: ["python", "manage.py", "runserver", "0.0.0.0:8000"] # change to gunicorn command for production ???
 
   front-end:
     build:      
@@ -93,7 +93,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
+   # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
 
 
 
@@ -133,11 +133,8 @@ services:
       - nginx
     networks:
       - pong
-      - db
     command: 
-      - '--config.file=/etc/prometheus/prometheus.yml'
-#      - '--web.external-url=https://${HOSTNAME}:${PORT}/prometheus/'
-      
+      - '--config.file=/etc/prometheus/prometheus.yml'     
       
         
   grafana:
@@ -152,8 +149,7 @@ services:
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_PATHS_CONFIG=/etc/grafana/grafana.ini
-    volumes:
-      #- grafana_data:/var/lib/grafana
+    volumes:      
       - ./grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - ./grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
       - ./grafana/dashboards/:/etc/grafana/dashboards/
@@ -162,7 +158,6 @@ services:
     restart: always
     networks:
       - pong
-      - db
   
   nginx-exporter:
     image: nginx/nginx-prometheus-exporter:latest
@@ -200,4 +195,3 @@ volumes:
   postgres_data:
   webserver_data: 
   mediafiles:
-  grafana_data:
