@@ -90,6 +90,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
       this.$emit('updatePlayerNames', this.playerNames);
+      this.loading = false;
     }
   },
   // watch: {

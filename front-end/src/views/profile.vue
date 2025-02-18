@@ -11,7 +11,7 @@
 
         <!-- Pseudo Sidebar -->
         <PseudoSidebar
-          :menuItems="menuItems"
+          :menuItems="translatedMenuItems"
           :activeItem="activeTab"
           @update:activeItem="setActiveTab"
         />
@@ -60,11 +60,6 @@ export default {
   },
   data() {
     return {
-      menuItems: [
-        { key: "stats", label: this.$t('stats'), route: "#stats" },
-        { key: "history", label: this.$t('history'), route: "#history" },
-        { key: "friends", label: this.$t('friends'), route: "#friends" },
-      ],
       activeTab: localStorage.getItem('activeTab') || "stats",
       username: '',
       cover_photo: '',
@@ -80,6 +75,26 @@ export default {
       changeTheme,
       changeLanguage,
     };
+  },
+  watch: {
+    activeTab(newTab) {
+      if (newTab === 'friends') {
+        // this.fetchFriends();
+        this.fetchFriendsInterval = setInterval(this.fetchFriends, 30000);
+      } else {
+        clearInterval(this.fetchFriendsInterval);
+        this.fetchFriendsInterval = null;
+      }
+    }
+  },
+  computed: {
+    translatedMenuItems() {
+      return [
+        { key: "stats", label: this.$t('stats'), route: "#stats" },
+        { key: "history", label: this.$t('history'), route: "#history" },
+        { key: "friends", label: this.$t('friends'), route: "#friends" },
+      ];
+    }
   },
   created() {
     this.getProfile();
@@ -101,6 +116,25 @@ export default {
       } catch (error) {
         console.error("Error fetching username:", error);
       }
+    },
+    async fetchFriends() {
+      this.isLoading = true;
+      await API.get('/api/friends/user_friends/')
+        .then(response => {
+          // Map the API response to your local friend structure.
+          this.friends = response.data.map((friend, index) => ({
+            id: index,
+            name: friend.username,
+            online: friend.online_status,
+            blocked: friend.is_blocked,
+          }));
+        })
+        .catch(error => {
+          console.error("Error fetching friends:", error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };

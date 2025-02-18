@@ -214,22 +214,26 @@ get last 15 messages
 - [x] Tournament
 - [x] Remove rank for ttt
 - [x] Stats start at match 0
+- [x] Friend seems to always call the api even if i am not in the friend page
+
+- [x] Check if modify, the name is update in tournament
+- [x] Add the name of the player in-game in tournament
 
 - [x] Modify the lang and the theme to put it in the database
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 - [-] Fix the decalage on the canva
-- [ ] Friend seems to always call the api even if i am not in the friend page
-
-- [ ] Check if modify, the name is update in tournament
-- [ ] Add the name of the player in-game in tournament
 
 - [ ] Remove all the console.log
 
-- [ ] Add otp if we disable it
+- [ ] Add otp code if we disable it
 
-- [ ] Pong AI
+- [ ] User delete can still make API call
+
+- [ ] Fix the name of the player in remote
+
+- [x] Pong AI
 - [ ] Add hit box on local
 - [ ] Add data for with friend and ttt ai
 - [ ] Make a README to explain what modules, how to launch (+ tuto)

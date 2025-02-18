@@ -45,6 +45,7 @@ export default {
         down_right: false,
       },
       gameLoop: null,
+      isAI: true,
     };
   },
   mounted() {
@@ -99,15 +100,19 @@ export default {
     // Existing keyboard events for desktop remain unchanged.
     handleKeyDown(event) {
       // console.log("Key down:", event.key);
-      if (event.key === "ArrowUp");
-      if (event.key === "ArrowDown");
+      if (this.isAI) {
+        if (event.key === "ArrowUp") this.keysPressed.up_right = true;
+        if (event.key === "ArrowDown") this.keysPressed.down_right = true;
+      }
       if (event.key === "w" || event.key === "W") this.keysPressed.up_left = true;
       if (event.key === "s" || event.key === "S") this.keysPressed.down_left = true;
     },
     handleKeyUp(event) {
       // console.log("Key up:", event.key);
-      if (event.key === "ArrowUp");
-      if (event.key === "ArrowDown");
+      if (this.isAI) {
+        if (event.key === "ArrowUp") this.keysPressed.up_right = false;
+        if (event.key === "ArrowDown") this.keysPressed.down_right = false;
+      }
       if (event.key === "w" || event.key === "W") this.keysPressed.up_left = false;
       if (event.key === "s" || event.key === "S") this.keysPressed.down_left = false;
     },

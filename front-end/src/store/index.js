@@ -15,20 +15,18 @@ export default createStore({
   },
   actions: {
     changeTheme({ commit }, theme) {
-      if (theme.toLowerCase() === 'light' || theme.toLowerCase() === 'dark'
-            || theme.toLowerCase() === 'ocean' || theme.toLowerCase() === 'forest'
-            || theme.toLowerCase() === 'volcano' || theme.toLowerCase() === 'Teapot') {
+      const validThemes = ['light', 'dark', 'ocean', 'forest', 'volcano', 'teapot'];
+      if (validThemes.includes(theme.toLowerCase())) {
         commit('setTheme', theme);
-      }
-      else {
+      } else {
         commit('setTheme', 'dark');
       }
     },
     changeLanguage({ commit }, lang) {
-      if (lang.toLowerCase() === 'en' || lang.toLowerCase() === 'fr' || lang.toLowerCase() === 'de') {
+      const validLanguages = ['en', 'fr', 'de'];
+      if (validLanguages.includes(lang.toLowerCase())) {
         commit('setLanguage', lang);
-      }
-      else {
+      } else {
         commit('setLanguage', 'en');
       }
     },
