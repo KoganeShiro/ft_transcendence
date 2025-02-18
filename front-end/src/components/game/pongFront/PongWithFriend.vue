@@ -1,8 +1,9 @@
 <template>
   <div class="pong-page">
-    <PongGame ref="pongGame" @gameEnded="handleGameEnded" />
+    <!-- Listen for the custom event here -->
+    <PongGame ref="pongGame" @hideMessageIcon="hideMessageIcon" />
     <!-- Clickable message icon -->
-    <div class="message-icon" @click="togglePopup">💬</div>
+    <div v-if="showMessageIcon" class="message-icon" @click="togglePopup">💬</div>
     <!-- Friend Page Popup -->
     <Transition name="popup">
       <div v-if="showPopup" class="friend-popup">
@@ -25,15 +26,20 @@ export default {
   data() {
     return {
       showPopup: false,
+      showMessageIcon: true,
     };
   },
   methods: {
     togglePopup() {
       this.showPopup = !this.showPopup;
     },
+    hideMessageIcon() {
+      this.showMessageIcon = false;
+    }
   },
 };
 </script>
+
 
 <style scoped>
 .pong-page {

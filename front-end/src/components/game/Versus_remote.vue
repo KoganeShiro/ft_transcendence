@@ -89,7 +89,7 @@ export default {
       () => props.player2.pseudo,
       async (newPseudo) => {
         console.log("[Versus] player2.pseudo changed to:", newPseudo);
-        if (newPseudo !== 'loading...') {
+        if (newPseudo !== 'loading...' && newPseudo !== null) {
           console.log("[Versus] Valid opponent found: ", newPseudo);
           opponentStatus.value = t("opponent_found");
           // Wait for the specified duration then call time-up

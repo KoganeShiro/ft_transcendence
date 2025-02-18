@@ -64,8 +64,8 @@
           </p>
         </div>
         <div class="username">
-        <p class="player-left">{{ localPlayer.pseudo }}</p>
-        <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+        <p class="player-left">{{ leftPlayer }}</p>
+        <p class="player-right">{{ rightPlayer }}</p>
       </div>
         <canvas
           ref="pongCanvas"
@@ -133,6 +133,8 @@ export default {
         pseudo: "Opponent",
         imageUrl: "",
       },
+      leftPlayer: '',
+      rightPlayer: '',
       // Winner/Loser popup states
       showWinner: false,
       showLoser: false,
@@ -145,8 +147,9 @@ export default {
   },
   methods: {
     handleCreate() {
-      if (this.isCreatingRoom) return; // Prevent multiple clicks
+      if (this.isCreatingRoom) return;
       this.isCreatingRoom = true;
+      this.$emit('hideMessageIcon');
       this.showCreatePrivateRoom();
       this.createPrivateRoom();
     },
@@ -164,6 +167,7 @@ export default {
     joinPrivateRoom(event) {
       if (event && event.preventDefault) event.preventDefault();
       if (this.joinCode && this.joinCode.trim() !== "") {
+        this.$emit('hideMessageIcon');
         this.showJoinPrivateRoom();
         this.startGameMode("join_private");
       } else {
@@ -241,6 +245,13 @@ export default {
         this.opponentPlayer.pseudo = payload.player1;
       } else {
         this.opponentPlayer.pseudo = payload.player2;
+      }
+      if (this.playerRole === "player1") {
+        this.leftPlayer = this.localPlayer.pseudo;
+        this.rightPlayer = this.opponentPlayer.pseudo;
+      } else {
+        this.leftPlayer = this.opponentPlayer.pseudo;
+        this.rightPlayer = this.localPlayer.pseudo;
       }
       console.log("Opponent:", this.opponentPlayer.pseudo);
       this.showPopup = false;
