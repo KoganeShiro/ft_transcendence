@@ -17,8 +17,8 @@ export default {
       isMobile: false,
       isTablette: false,
       // Adjusted canvas dimensions: default for desktop; will be changed for mobile.
-      canvasWidth: 900,
-      canvasHeight: 500,
+      canvasWidth: 896,
+      canvasHeight: 496,
       // Core game state (used for ball and score)
       gameState: {
         ball_x: 0.5,

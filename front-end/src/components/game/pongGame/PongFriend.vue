@@ -70,8 +70,8 @@
         <canvas
           ref="pongCanvas"
           class="canvas"
-          :width="900"
-          :height="500"
+          :width="896"
+          :height="496"
         ></canvas>
         <WinnerPopup v-if="showWinner" :winnerName="winnerName" :winnerImage="winnerImage" />
         <LoserPopup v-if="showLoser" :loserName="loserName" :loserImage="loserImage" />

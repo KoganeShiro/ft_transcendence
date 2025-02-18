@@ -51,6 +51,9 @@ export default {
         this.isLoggingOut = false;
       }
     },
+    ongoback() {
+      this.$router.push("/profile");
+    }
   },
 };
 </script>
