@@ -89,12 +89,12 @@ services:
     restart: always
     networks:
       - pong
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
    # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
 
 
