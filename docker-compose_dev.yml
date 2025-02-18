@@ -16,6 +16,7 @@ services:
     volumes:
       - webserver_data:/usr/share/nginx/html
       - mediafiles:/usr/share/nginx/mediafiles
+      - staticfiles:/usr/share/nginx/staticfiles
     restart: always
     networks:
       - pong
@@ -34,7 +35,8 @@ services:
         condition: service_healthy
     volumes:
       - ./back-end/srcs:/usr/src/app      
-      - mediafiles:/mediafiles  
+      - mediafiles:/mediafiles
+      - staticfiles:/staticfiles  
     restart: always
     networks:
       - pong
@@ -87,12 +89,12 @@ services:
     restart: always
     networks:
       - pong
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:8001/ || exit 1"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 10s
    # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
 
 
@@ -195,3 +197,4 @@ volumes:
   postgres_data:
   webserver_data: 
   mediafiles:
+  staticfiles:

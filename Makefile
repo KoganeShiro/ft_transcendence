@@ -21,6 +21,7 @@ help:
 	@echo "  clean          Remove all unused Docker resources"
 	@echo "  fclean         Remove all unused Docker resources and volumes"
 	@echo "  rm_volumes     Remove all unused Docker volumes"
+	@echo "  database       Connect to the postgres database"
 
 
 
