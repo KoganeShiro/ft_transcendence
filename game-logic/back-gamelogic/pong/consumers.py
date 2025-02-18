@@ -153,7 +153,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 stats["lost_upper10"] += 1
         stats1 = game.get("player1_stats")
         stats2 = game.get("player2_stats")
-        logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
+        # logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
 
 
     async def disconnect(self, close_code):
@@ -161,12 +161,10 @@ class PongConsumer(AsyncWebsocketConsumer):
         game = active_games.get(self.game_id)
 
         if game:
-            # Si la partie n'a pas encore commencé
-            if game["player2_socket"] is None:  # Si aucun joueur 2 n'est connecté
+            if game["player2_socket"] is None: 
                 if self.channel_name == game["player1_socket"]:
-                    # Si le créateur (player 1) se déconnecte avant de commencer
-                    logger.info(f"Le créateur {game['player1_name']} s'est déconnecté avant le début du match. La partie est annulée.")
-                    del active_games[self.game_id]  # Supprimer la partie
+                    # logger.info(f"Le créateur {game['player1_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.game_id] 
                     await self.channel_layer.group_send(
                         self.room_group_name,
                         {
@@ -175,10 +173,9 @@ class PongConsumer(AsyncWebsocketConsumer):
                             "winner": None,
                         }
                     )
-                # Si le joueur 2 se déconnecte avant que la partie commence
                 elif self.channel_name == game["player2_socket"]:
-                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté avant le début du match. La partie est annulée.")
-                    del active_games[self.game_id]  # Supprimer la partie
+                    # logger.info(f"Le joueur {game['player2_name']} s'est déconnecté avant le début du match. La partie est annulée.")
+                    del active_games[self.game_id]  
                     await self.channel_layer.group_send(
                         self.room_group_name,
                         {
@@ -190,19 +187,18 @@ class PongConsumer(AsyncWebsocketConsumer):
             else:
                 # Si la partie a déjà commencé
                 if self.channel_name == game["player1_socket"]:
-                    logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
-                    game["game_state"]["score2"] = 5  # Donne la victoire au joueur 2
-                    game["game_state"]["disconnect1"] = True  # Marque la déconnexion de player1
+                    # logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
+                    game["game_state"]["score2"] = 5  
+                    game["game_state"]["disconnect1"] = True  
                     winner = "player2"
                     await self.end_game(winner, game["game_state"], game['player1_name'], game['player2_name'])                
                 elif self.channel_name == game["player2_socket"]:
-                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
-                    game["game_state"]["score1"] = 5  # Donne la victoire au joueur 1
-                    game["game_state"]["disconnect2"] = True  # Marque la déconnexion de player2
+                    # logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
+                    game["game_state"]["score1"] = 5  
+                    game["game_state"]["disconnect2"] = True  
                     winner = "player1"
                     await self.end_game(winner, game["game_state"], game['player1_name'], game['player2_name'])       
         else:
-            # Si le jeu n'existe pas, fermer simplement la connexion
             await self.close()
 
 
@@ -216,7 +212,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         if info:  # Si on reçoit un message avec les infos du joueur (nom)
                 self.name = info.get('playerName')
-                logger.debug(f"Joueur {self.channel_name} a envoyé son nom : {self.name}")
+                # logger.debug(f"Joueur {self.channel_name} a envoyé son nom : {self.name}")
 
                 game = active_games.get(self.game_id)
                 if game:
@@ -230,7 +226,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                         player1_name = game["player1_name"]
                         player2_name = game["player2_name"]
 
-                        logger.debug(f"Les deux joueurs sont connectés : {player1_name} et {player2_name}")
+                        # logger.debug(f"Les deux joueurs sont connectés : {player1_name} et {player2_name}")
 
                         await self.channel_layer.group_send(
                             self.room_group_name,
@@ -373,7 +369,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 if self.game_state["score2"] >= 5:
                     winner = "player2"
-                    await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
+                    await self.end_game(winner, self.game_state, self.player1_name, self.player2_name)  
                     return 
 
             elif self.game_state["ball_x"] >= 1:
@@ -386,7 +382,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                 if self.game_state["score1"] >= 5:
                     winner = "player1"
-                    await self.end_game(winner) # APPELER LA FONCTION end_game POUR ARRÊTER LE JEU ET ANNONCER LE VAINQUEUR
+                    await self.end_game(winner, self.game_state, self.player1_name, self.player2_name)
                     return 
 
             await self.update_game_state()
@@ -413,9 +409,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                 "player2_name": player2_name,
             }
         )
-        # self.send_to_database()
-        # return
-        # print(f"Partie terminée ! Vainqueur : {winner}")
         
 
     async def update_game_state(self):
@@ -427,7 +420,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.room_group_name,  # Nom du groupe auquel envoyer le message
             message  # Le message à envoyer
         )
-        # print(f"🟢 {self.game_state}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
 
 
     def calculate_ball_angle(self, ball_y, paddle_y):
@@ -466,7 +458,12 @@ class PongConsumer(AsyncWebsocketConsumer):
         game_state = event.get("game_state")
         player1_name = event.get("player1_name")
         player2_name = event.get("player2_name")
-        self.send_to_database(game_state, player1_name, player2_name)
+        if player1_name and player2_name:
+            self.send_to_database(game_state, player1_name, player2_name)
+        else:
+            # logger.warning("Noms de joueurs non définis.  Enregistrement dans la base de données ignoré.")
+            # del active_games[self.game_id]  # Supprimer la partie même si l'enregistrement échoue
+            self.gameEnded = False
     
     
     async def game_update(self, event):
@@ -483,10 +480,11 @@ class PongConsumer(AsyncWebsocketConsumer):
     def send_to_database(self, game_state, player1_name, player2_name):
         if self.gameEnded is False: # Double sécurité
             return
-        self.gameEnded = False
-        logger.error(f"---------------------------------------------------------")
-        logger.error(f"GAME = {self.game_id}")
-        logger.error(f"---------------------------------------------------------")
+        
+        self.gameEnded = True
+        # logger.error(f"---------------------------------------------------------")
+        # logger.error(f"GAME = {self.game_id}")
+        # logger.error(f"---------------------------------------------------------")
         game = active_games.get(self.game_id)
         # game_state = game.get("game_state")
 
@@ -494,6 +492,11 @@ class PongConsumer(AsyncWebsocketConsumer):
         player2 = player2_name
         score1 = game_state.get("score1")
         score2 = game_state.get("score2")
+        headers = {
+            "X-API-KEY": API_KEY
+        }
+        url_user1 = f"http://back-end:8000/api/profile/{player1}/"
+        url_user2 = f"http://back-end:8000/api/profile/{player2}/"
         # logger.info(f"SCORE : {score1} / {score2}")
         url = "http://back-end:8000/api/games/pong/"  #
         # url2 = "http://back-end:8000/api/profile/gkubina/" #
@@ -501,14 +504,9 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         user1_stats = f"http://back-end:8000/api/stats/{player1}/"
         user2_stats = f"http://back-end:8000/api/stats/{player2}/"
-        url_user1 = f"http://back-end:8000/api/profile/{player1}/"
-        url_user2 = f"http://back-end:8000/api/profile/{player2}/"
         url_update_user1 = f"http://back-end:8000/api/stats_increment/{player1}/"
         url_update_user2 = f"http://back-end:8000/api/stats_increment/{player2}/"
         
-        headers = {
-            "X-API-KEY": API_KEY
-        }
         stats1 = requests.get(user1_stats, headers=headers)
         stats2 = requests.get(user2_stats, headers=headers)
         if stats1.status_code == 200:
@@ -559,7 +557,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             Returns:
                 Le nouveau classement Elo du joueur A.
             """
-            logger.info(f"s:{S}")
+            # logger.info(f"s:{S}")
             E_A = 1 / (1 + 10 ** ((R_B - R_A) / 400))
             R_A_prime = R_A + K * (S - E_A)
             return (R_A_prime)
@@ -602,8 +600,8 @@ class PongConsumer(AsyncWebsocketConsumer):
             R_joueur_1_prime = 0
         if (R_joueur_2_prime < 0):
             R_joueur_2_prime = 0
-        logger.info(f"Nouveau classement du joueur 1 : {player1} {R_joueur_1}->{R_joueur_1_prime}")
-        logger.info(f"Nouveau classement du joueur 2 : {player2} {R_joueur_2}->{R_joueur_2_prime}")
+        # logger.info(f"Nouveau classement du joueur 1 : {player1} {R_joueur_1}->{R_joueur_1_prime}")
+        # logger.info(f"Nouveau classement du joueur 2 : {player2} {R_joueur_2}->{R_joueur_2_prime}")
 
 
         # # response = requests.get(url, headers=headers)
@@ -647,7 +645,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         stats1 = game.get("player1_stats")
         fields1 = {
             "stat_pong_solo_rank" : R_joueur_1_prime - R_joueur_1, 
-            "stat_pong_solo_progress" : R_joueur_1_prime - R_joueur_1, 
+            "stat_pong_solo_progress" : R_joueur_1_prime, 
             "stat_pong_solo_wins_tot" : win1, 
             "stat_pong_solo_loss_tot" : loss1, 
             "stat_pong_solo_tournament_wins" : 0, 
@@ -667,7 +665,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         stats2 = game.get("player2_stats")
         fields2 = {
             "stat_pong_solo_rank" : R_joueur_2_prime - R_joueur_2, 
-            "stat_pong_solo_progress" : R_joueur_2_prime - R_joueur_2, 
+            "stat_pong_solo_progress" : R_joueur_2_prime, 
             "stat_pong_solo_wins_tot" : win2, 
             "stat_pong_solo_loss_tot" : loss2, 
             "stat_pong_solo_tournament_wins" : 0, 
@@ -687,6 +685,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         # logger.info(f"FINIFINIFINIFINI {fields1} ; {fields2}")
 
         del active_games[self.game_id]
+        self.gameEnded = False
 
         # gamedata = game_data()
         # gamedata["player1"] = response.json().get('id')
