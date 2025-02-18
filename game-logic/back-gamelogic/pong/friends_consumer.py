@@ -60,6 +60,40 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
+    def update_player_stats(self, winner, loser):
+        game = active_games.get(self.game_id)
+        if game:
+            if winner == "player1":
+                rally = self.game_state["rally"]
+                stats = game.get("player1_stats")
+            elif winner == "player2":
+                rally = self.game_state["rally"]
+                stats = game.get("player2_stats")
+
+            if rally < 5:
+                stats["won_under5"] += 1
+            elif rally < 10:
+                stats["won_under10"] += 1
+            else:
+                stats["won_upper10"] += 1
+
+            if loser == "player1":
+                rally = self.game_state["rally"]
+                stats = game.get("player1_stats")
+            elif loser == "player2":
+                rally = self.game_state["rally"]
+                stats = game.get("player2_stats")
+
+            if rally < 5:
+                stats["lost_under5"] += 1
+            elif rally < 10:
+                stats["lost_under10"] += 1
+            else:
+                stats["lost_upper10"] += 1
+        stats1 = game.get("player1_stats")
+        stats2 = game.get("player2_stats")
+        logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
+
 
     async def disconnect(self, close_code):
         """ Gérer la déconnexion des joueurs """
@@ -212,6 +246,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 "score2": 0, 
                 "disconnect1": False,
                 "disconnect2": False,
+                "rally": 0,
             }
             game["game_state"] = initial_game_state
             self.game_state = initial_game_state
@@ -288,6 +323,8 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
     async def game_loop(self):
         previous_time = time.time()
+        game_state = active_games.get(self.game_id)
+
 
         while True:
             current_time = time.time()
@@ -309,28 +346,73 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 self.game_state["ball_y"] = 1
                 self.game_state["ball_velocity_y"] = -self.game_state["ball_velocity_y"]
 
-            # Gestion des collisions avec les paddles
-            if self.game_state["ball_x"] <= 0.05:
-                # print("touch left")
-                if self.game_state["ball_velocity_x"] < 0:
-                    if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
-                        self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
 
-            elif self.game_state["ball_x"] >= 0.95:
-                # print("touch right")
-                if self.game_state["ball_velocity_x"] > 0:
-                    if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
-                        self.game_state["ball_velocity_x"] *= -1
-                        self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
-                        self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
+             # Détection des collisions avec les paddles (avec AABB)
+            ball_rect = {  # Boîte englobante de la balle
+                "x": self.game_state["ball_x"] * 900 - 7,  # Ajuster 900 et 7 si nécessaire
+                "y": self.game_state["ball_y"] * 500 - 7,  # Ajuster 500 et 7 si nécessaire
+                "width": 14,  # Diamètre de la balle
+                "height": 14,  # Diamètre de la balle
+            }
+
+            paddle1_rect = {  # Boîte englobante du paddle gauche
+                "x": 0.05 * 900,  # Marge horizontale
+                "y": self.game_state["player1_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            paddle2_rect = {  # Boîte englobante du paddle droit
+                "x": 0.95 * 900 - 10,  # Marge horizontale + largeur du paddle
+                "y": self.game_state["player2_y"] * 500 - 30,  # Centré verticalement
+                "width": 10,  # Largeur du paddle
+                "height": 60,  # Hauteur du paddle
+            }
+
+            def detect_collision(rect1, rect2):  # Fonction de détection AABB
+                return (
+                    rect1["x"] < rect2["x"] + rect2["width"] and
+                    rect1["x"] + rect1["width"] > rect2["x"] and
+                    rect1["y"] < rect2["y"] + rect2["height"] and
+                    rect1["y"] + rect1["height"] > rect2["y"]
+                )
+
+            if detect_collision(ball_rect, paddle1_rect) and self.game_state["ball_velocity_x"] < 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+
+            elif detect_collision(ball_rect, paddle2_rect) and self.game_state["ball_velocity_x"] > 0:
+                self.game_state["ball_velocity_x"] *= -1
+                self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+                self.ball_speed_factor = min(60, self.ball_speed_factor + 5)
+                self.game_state["rally"] += 1
+
+            # # Gestion des collisions avec les paddles
+            # if self.game_state["ball_x"] <= 0.05:
+            #     # print("touch left")
+            #     if self.game_state["ball_velocity_x"] < 0:
+            #         if (self.game_state["player1_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player1_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player1_y"]) * 0.1
+            #             self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
+
+            # elif self.game_state["ball_x"] >= 0.95:
+            #     # print("touch right")
+            #     if self.game_state["ball_velocity_x"] > 0:
+            #         if (self.game_state["player2_y"] - 0.1 <= self.game_state["ball_y"] <= self.game_state["player2_y"] + 0.1):
+            #             self.game_state["ball_velocity_x"] *= -1
+            #             self.game_state["ball_velocity_y"] = (self.game_state["ball_y"] - self.game_state["player2_y"]) * 0.1
+            #             self.ball_speed_factor = min(80, self.ball_speed_factor + 5)
 
             # Gestion des scores
             if self.game_state["ball_x"] <= 0:
                 self.game_state["score2"] += 1
                 self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
+                self.update_player_stats("player2", "player1")
                 self.reset_ball(1)
+                game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = -abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score2"] >= 5:
@@ -340,7 +422,10 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
             elif self.game_state["ball_x"] >= 1:
                 self.game_state["score1"] += 1
+                self.score_tab.append([self.game_state["score1"], self.game_state["score2"]])
+                self.update_player_stats("player1", "player2")
                 self.reset_ball(-1)
+                game_state["rally"] = 0
                 self.game_state["ball_velocity_x"] = abs(self.game_state["ball_velocity_x"])
 
                 if self.game_state["score1"] >= 5:
@@ -384,13 +469,13 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         # print(f"🟢 {self.game_state}") # LOG DE RÉCEPTION CÔTÉ SERVEUR
 
 
-    def calculate_ball_angle(self, ball_y, paddle_y):
-            # Calculer l'écart entre la balle et le centre du paddle
-        distance_from_center = ball_y - paddle_y
+    # def calculate_ball_angle(self, ball_y, paddle_y):
+    #         # Calculer l'écart entre la balle et le centre du paddle
+    #     distance_from_center = ball_y - paddle_y
 
-            # Plus l'écart est grand, plus l'angle de rebond sera large
-        angle = distance_from_center * 0.1  # Ajuster ce coefficient pour affiner l'angle
-        return angle
+    #         # Plus l'écart est grand, plus l'angle de rebond sera large
+    #     angle = distance_from_center * 0.1  # Ajuster ce coefficient pour affiner l'angle
+    #     return angle
     
     
     async def players_ready(self, event):
@@ -405,26 +490,24 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         }))
     
     
-    async def game_over(self, event): # <--- AJOUTEZ CETTE FONCTION DE GESTION (HANDLER) POUR game_over
+    async def game_over(self, event): 
         """ Gérer le message 'game_over' diffusé au groupe """
-        game_over_message = event['message'] # Récupérer le message de fin de partie de l'event
-        winner = event['winner'] # Récupérer le nom du vainqueur de l'event
+        game_over_message = event['message'] 
+        winner = event['winner'] 
 
         message = {
             "type": "game_over",
-            "message": game_over_message, # Renvoyer le message de fin de partie au front-end
-            "winner": winner # Renvoyer le nom du vainqueur au front-end
+            "message": game_over_message, 
+            "winner": winner 
         }
-        # ENVOYER le message 'game_over' (avec le message et le vainqueur) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
         await self.send(text_data=json.dumps(message))
     
     
     async def game_update(self, event):
         """ Gérer le message 'game_update' diffusé au groupe """
-        game_state = event['game_state'] # Récupérer l'état du jeu du message
+        game_state = event['game_state']
         message = {
             "type": "game_update",
             "game_state": game_state
         }
-        # ENVOYER le message 'game_update' (avec l'état du jeu) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
         await self.send(text_data=json.dumps(message))
