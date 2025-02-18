@@ -27,7 +27,8 @@ SECRET_KEY = os.environ.get('HASHER_CODE')
 OTP_ENC_KEY = os.environ.get('OTP_ENC_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUGMODE')
+
+DEBUG = os.environ.get('DEBUGMODE', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
@@ -261,10 +262,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # for testing purposes
 # MEDIA_URL = '/media/'
 MEDIA_ROOT = ('/mediafiles')
+STATIC_ROOT = ('/staticfiles')
 
 # for production
 MEDIA_URL = "/media/"

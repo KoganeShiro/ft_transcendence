@@ -16,6 +16,7 @@ services:
     volumes:
       - webserver_data:/usr/share/nginx/html
       - mediafiles:/usr/share/nginx/mediafiles
+      - staticfiles:/usr/share/nginx/staticfiles
     restart: always
     networks:
       - pong
@@ -34,7 +35,8 @@ services:
         condition: service_healthy
     volumes:
       - ./back-end/srcs:/usr/src/app      
-      - mediafiles:/mediafiles  
+      - mediafiles:/mediafiles 
+      - staticfiles:/staticfiles   
     restart: always
     networks:
       - pong
@@ -195,3 +197,4 @@ volumes:
   postgres_data:
   webserver_data: 
   mediafiles:
+  staticfiles:

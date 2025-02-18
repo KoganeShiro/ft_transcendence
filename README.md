@@ -7,6 +7,15 @@
 - [ ] change dockerfile webserver
 
 
+For front:
+
+POST
+check refresh token:
+	https://c1r6p9.42lehavre.fr:1443/pong/undefined/api/login/refresh/
+
+check logout:
+        button "misclicked" does not work
+
 ## MY TODO
 
 - [x] Design for mobile
