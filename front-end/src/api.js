@@ -20,7 +20,7 @@ api.interceptors.response.use(
       try {
         // Attempt to refresh the token by posting to the refresh endpoint.
         await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/api/login/refresh/`,
+          `/api/login/refresh/`,
           {},
           { withCredentials: true }
         );

@@ -1,44 +1,75 @@
-<!-- MatchItem.vue -->
 <template>
-    <div class="match">
-      <TextBox :modelValue="match.player1" :modifiable="false" class="field" />
-      <span class="vs">vs</span>
-      <TextBox :modelValue="match.player2" :modifiable="false" class="field" />
+  <div class="match">
+    <TextBox :modelValue="match.player1.name" :modifiable="false" class="player player1" />
+    <div class="vs-container">
+      <span class="vs">VS</span>
     </div>
-  </template>
-  
-  <script>
-  import TextBox from "@/components/atoms/ModifyInformations.vue";
-  export default {
-    name: "MatchItem",
-    components: { TextBox },
-    props: {
-      match: { type: Object, required: true }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .match {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
-    padding: 15px;
-    border-radius: 8px;
-    background: rgba(99, 99, 99, 0.1);
-  }
-  .vs {
-    font-weight: bold;
-    font-size: 1.2em;
-    color: var(--text-color);
-    margin-bottom: 10px;
-  }
-  .timer, .status {
-    font-weight: bold;
-    font-size: 1rem;
-  }
+    <TextBox :modelValue="match.player2.name" :modifiable="false" class="player player2" />
+  </div>
+</template>
 
-  </style>
+<script>
+import TextBox from "@/components/atoms/ModifyInformations.vue";
+export default {
+  name: "MatchItem",
+  components: { TextBox },
+  props: {
+    match: { type: Object, required: true }
+  }
+};
+</script>
+
+<style scoped>
+.match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(var(--card-color), var(--card-color-light));
+  box-shadow: 3px 3px 6px var(--sidebar-color), -3px -3px 6px var(--sidebar-color);
+  transition: all 0.3s ease;
+}
+
+.match:hover {
+  transform: translateY(-3px);
+}
+
+.player {
+  flex: 1;
+  max-width: 45%;
+}
+
+.player1 {
+  text-align: right;
+}
+
+.player2 {
+  text-align: left;
+}
+
+.vs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff6b6bb6, #ff8e8eab);
+  margin-right: 10px;
+}
+
+.vs {
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .vs-container {
+  margin-right: 7px;
+}
+}
+
+</style>

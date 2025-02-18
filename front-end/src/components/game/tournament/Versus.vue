@@ -9,8 +9,8 @@
           <!-- Player 1 Avatar using the locally managed user profile -->
           <div class="player">
             <AvatarAtom
-              :pseudo="localPlayer1.pseudo"
-              :imageUrl="localPlayer1.imageUrl"
+              :pseudo="player1.name"
+              :imageUrl="player1.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
               class="animate-avatar"
@@ -23,8 +23,8 @@
           <!-- Player 2 Avatar (opponent) -->
           <div class="player">
             <AvatarAtom
-              :imageUrl="opponent.imageUrl"
-              :pseudo="opponent.pseudo"
+              :pseudo="player2.name"
+              :imageUrl="player2.imageUrl"
               :showPseudo="true"
               pseudoPosition="bottom"
               class="animate-avatar"
@@ -37,12 +37,11 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AvatarAtom from '@/components/atoms/Avatar.vue';
-import defaultAvatar from '@/assets/searching.webp';
+import defaultAvatar from '@/assets/profile.png';
 import guestAvatar from '@/assets/profile2.png';
-import API from '@/api.js';
 
 export default {
   name: 'Versus',
@@ -51,15 +50,15 @@ export default {
     player1: {
       type: Object,
       default: () => ({
-        pseudo: 'Player 1',
+        name: '',
         imageUrl: defaultAvatar,
       }),
     },
     player2: {
       type: Object,
       default: () => ({
-        pseudo: 'Opponent',
-        imageUrl: defaultAvatar,
+        name: '',
+        imageUrl: guestAvatar,
       }),
     },
     duration: {
@@ -70,77 +69,29 @@ export default {
   setup(props, { emit }) {
     const show = ref(true);
     const { t } = useI18n();
-    const opponentStatus = ref(t("search-opponent"));
-
-    // Local reactive copy for player1 info
-    const localPlayer1 = ref({
-      pseudo: props.player1.pseudo,
-      imageUrl: props.player1.imageUrl,
-      link: props.player1.link,
-    });
-
-    // Local opponent object we want to keep in sync with props.player2
-    const opponent = ref({
-      pseudo: 'loading...',
-      imageUrl: defaultAvatar,
-      link: ''
-    });
-
-    // Function to update the opponent info
-    function updateOpponent(playerData) {
-      opponent.value.pseudo = playerData.pseudo || 'Opponent';
-      opponent.value.link = playerData.link;
-      opponent.value.imageUrl = playerData.imageUrl || guestAvatar;
-      
-      // Optionally fetch updated profile info if needed
-      if (opponent.value.pseudo && opponent.value.pseudo !== 'AI'
-            && opponent.value.pseudo !== 'Guest' && opponent.value.pseudo !== 'Opponent') {
-        API.get(`/api/profile/${playerData.pseudo}`)
-          .then(response => {
-            const { username, cover_photo } = response.data;
-            opponent.value.pseudo = username;
-            opponent.value.imageUrl = cover_photo;
-          })
-          .catch(error => {
-            console.error("Error fetching player data:", error);
-          });
-      }
-      opponentStatus.value = t("opponent_found");
-      setTimeout(() => {
-        show.value = false;
-      }, props.duration * 1000);
-    }
-
-    // Initial fetch for localPlayer1
-    onMounted(async () => {
-      try {
-        const response = await API.get('/api/profile/');
-        const { username, cover_photo } = response.data;
-        localPlayer1.value.pseudo = username;
-        localPlayer1.value.imageUrl = cover_photo;
-      } catch (error) {
-        console.error("Error fetching player data:", error);
-      }
-      // Initialize opponent info from prop on mount
-      updateOpponent(props.player2);
-    });
+    const opponentStatus = ref(t("opponent_found"));
+    console.log("Player 1:", props.player1);
+    console.log("Player 2:", props.player2);
 
     const emitTimeUp = () => {
       emit('time-up');
     };
 
+    // Start a timer on mount. After `duration` seconds, hide the component.
+    onMounted(() => {
+      setTimeout(() => {
+        show.value = false;
+      }, props.duration * 1000);
+    });
+
     return {
       show,
       opponentStatus,
-      localPlayer1,
-      opponent,
       emitTimeUp,
     };
   },
 };
 </script>
-
-
 
 <style scoped>
 .fade-enter-active, .fade-leave-active {

@@ -73,7 +73,7 @@ export default {
           const response = await API.get('/api/profile/');
           const { username, cover_photo } = response.data;
           console.log("handleGameEnded: winner =", winner);
-          if (winner === "Player 1") {
+          if (winner === "Player") {
             this.winnerName = username;
             this.winnerImage = cover_photo;
             this.showWinner = true;

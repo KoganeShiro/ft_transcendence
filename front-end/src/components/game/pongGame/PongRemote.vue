@@ -20,8 +20,8 @@
     <canvas 
       ref="pongCanvas"
       class="canvas"
-      :width="900"
-      :height="500">
+      :width="896"
+      :height="496">
     </canvas>
   </div>
   </div>

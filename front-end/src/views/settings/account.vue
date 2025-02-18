@@ -32,6 +32,8 @@
         />
       </div>
     </div>
+    <!-- 2fa component -->
+     <TWOFA v-if="!is42" :user="user" />
     <div class="button-section">
       <ButtonAtom 
         variant="attention" 
@@ -54,6 +56,7 @@ import API from '@/api.js';
 import EditableAvatar from "@/components/settings/ModifyAvatar.vue";
 import EditableTextField from "@/components/atoms/ModifyInformations.vue";
 import ButtonAtom from "@/components/atoms/Button.vue";
+import TWOFA from "@/components/settings/2fa.vue";
 
 export default {
   name: "AccountCard",
@@ -61,6 +64,7 @@ export default {
     EditableAvatar,
     EditableTextField,
     ButtonAtom,
+    TWOFA,
   },
   data() {
     return {
@@ -69,6 +73,7 @@ export default {
         password: "",
         avatar: "",
         cover_photo: "",
+        mfa_enabled: false,
       },
       loading: false,
       avatarFile: null,
@@ -82,10 +87,12 @@ export default {
       API.get("/api/profile/")
         .then(response => {
           const data = response.data;
+          console.log("Account data fetched successfully:", data);
           this.user.name = data.username;
           this.user.cover_photo = data.cover_photo;
           this.user.password = "*************";
           this.is42 = data.is_42;
+          this.user.mfa_enabled = data.mfa_enabled;
         })
         .catch(error => {
           console.error("Error fetching account data:", error);
