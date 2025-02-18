@@ -17,8 +17,8 @@ export default {
       isMobile: false,
       isTablette: false,
       // Adjusted canvas dimensions: default for desktop; will be changed for mobile.
-      canvasWidth: 900,
-      canvasHeight: 500,
+      canvasWidth: 896,
+      canvasHeight: 496,
       // Core game state (used for ball and score)
       gameState: {
         ball_x: 0.5,
@@ -36,7 +36,7 @@ export default {
       player1_x: 0.5,
       ballSpeedFactor: 30,
       initialBallSpeed: 30,
-      maxBallSpeed: 100,
+      maxBallSpeed: 80,
       // Desktop key flags remain for non‑mobile mode.
       keysPressed: {
         up_left: false,
@@ -131,7 +131,7 @@ export default {
     updateGame(deltaTime) {
       if (!this.isMobile && !this.isTablette) {
         // Desktop: update vertical paddle positions using keys
-        const paddleSpeed = 0.01;
+        const paddleSpeed = 0.005;
         if (this.keysPressed.up_left)
           this.gameState.player1_y = Math.max(this.gameState.player1_y - paddleSpeed, 0);
         if (this.keysPressed.down_left)
@@ -310,11 +310,11 @@ export default {
     endGame() {
       let winner = "";
       if (!this.isMobile && !this.isTablette) {
-        winner = this.gameState.score1 > this.gameState.score2 ? "Player 1" : "Player 2";
-      } else {
         winner = this.gameState.score1 > this.gameState.score2 ? "Player" : "Opponent";
+      } else {
+        winner = this.gameState.score1 > this.gameState.score2 ? "Opponent" : "Player";
       }
-      // console.log("Game ended. Winner:", winner);
+      console.log("Game ended. Winner:", winner);
       this.$emit("gameEnded", winner);
     },
 

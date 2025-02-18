@@ -63,7 +63,7 @@ export default {
         { key: "history", label: this.$t('history'), route: "#history" },
         { key: "friends", label: this.$t('friends'), route: "#friends" },
       ],
-      activeTab: localStorage.getItem('activeTab') || "stats", // Default tab
+      activeTab: localStorage.getItem('activeTab') || "stats",
       username: '',
       cover_photo: '',
     };
@@ -73,8 +73,8 @@ export default {
   },
   methods: {
     setActiveTab(tab) {
-      this.activeTab = tab;
-      localStorage.setItem('activeTab', tab); // Save the active tab to local storage
+      this.activeTab = tab || "stats";
+      localStorage.setItem('activeTab', tab);
     },
     async getProfile() {
       try {

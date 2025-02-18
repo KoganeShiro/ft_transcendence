@@ -8,9 +8,9 @@
         <div class="stat-item">
           <strong>{{ $t("total-game") }}</strong> {{ stats.totalMatches || " N/A" }}
         </div>
-        <div class="stat-item">
+        <!-- <div class="stat-item">
           <strong>{{ $t("tournament-won") }}</strong> {{ stats.tournamentWins || " N/A" }}
-        </div>
+        </div> -->
       </div>
       
       <div class="charts-container">

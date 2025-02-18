@@ -56,6 +56,8 @@ export default {
       pollingInterval: null,
       lastReceivedMessageId: null,
       isActive: true,
+      isFetchingMessages: false,
+      isGetAvatar: false,
     };
   },
   mounted() {
@@ -69,6 +71,9 @@ export default {
   },
   methods: {
     getAvatar() {
+      if (this.isGetAvatar) return;
+      this.isGetAvatar = true;
+
       API.get(`/api/profile/${this.friend.name}`)
         .then(response => {
           if (response.data && response.data.cover_photo) {
@@ -80,11 +85,15 @@ export default {
         .catch(error => {
           console.error("Error fetching friend's cover photo:", error);
           this.friend.avatar = Avatar;
+        })
+        .finally(() => {
+          this.isGetAvatar = false;
         });
     },
     // Fetch the last 15 messages for this friend.
     fetchMessages() {
-      // if (this.isActive == false) return;
+      if (this.isFetchingMessages) return;
+      this.isFetchingMessages = true;
       API.post(`/api/friends/get_last_15_messages/`, { username: this.friend.name })
       .then(response => {
         const newMessages = response.data.map(msg => ({
@@ -107,15 +116,21 @@ export default {
       })
       .catch(error => {
         console.error("Error fetching messages:", error);
+      })
+      .finally(() => {
+        this.isFetchingMessages = false;
       });
   },
 
     // Format ISO timestamp to a readable string.
     formattedTimestamp(ts) {
-      return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-    },
+      return new Date(ts).toLocaleDateString() + ' ' + new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });    },
     sendMessage() {
       if (!this.newMessage.trim()) return;
+      //block the user at 160 characters
+      if (this.newMessage.length > 160) {
+        this.newMessage = this.newMessage.slice(0, 160);
+      }
 
       // For messages sent by the current user, set sender as "me".
       const message = {

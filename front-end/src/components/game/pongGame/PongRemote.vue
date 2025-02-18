@@ -20,8 +20,8 @@
     <canvas 
       ref="pongCanvas"
       class="canvas"
-      :width="900"
-      :height="500">
+      :width="896"
+      :height="496">
     </canvas>
   </div>
   </div>
@@ -67,6 +67,9 @@ export default {
   methods: {
     connectToGame() {
       if (this.gameSocket) return;
+      //call API -> check if online -> YES : continue else Return(login)
+      
+      
       this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
 
       this.gameSocket.onopen = () => {
@@ -169,66 +172,74 @@ export default {
     },
 
     async handleGameEnded(winner) {
-  if (this.requestSent) return;
-  this.requestSent = true;
-  try {
-    console.log("Game ended. Winner:", winner);
-    // Always fetch both profiles.
-    const localResponse = await API.get("/api/profile/");
-    const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
+      if (this.requestSent) return;
+      this.requestSent = true;
+      try {
+        console.log("Game ended. Winner:", winner);
+        // Always fetch both profiles.
+        const localResponse = await API.get("/api/profile/");
+        const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);
 
-    let gameOverData = {};
-    // Use the player's role to determine if the local player won or lost.
-    if (winner === "player1") {
-      if (this.playerRole === "player1") {
-        // Local wins.
-        gameOverData = {
-          type: "win",
-          winnerName: localResponse.data.username,
-          winnerImage: localResponse.data.cover_photo,
-          loserName: opponentResponse.data.username,
-          loserImage: opponentResponse.data.cover_photo
-        };
-      } else {
-        // Local loses.
-        gameOverData = {
-          type: "loss",
-          winnerName: opponentResponse.data.username,
-          winnerImage: opponentResponse.data.cover_photo,
-          loserName: localResponse.data.username,
-          loserImage: localResponse.data.cover_photo
-        };
+        let gameOverData = {};
+        // Use the player's role to determine if the local player won or lost.
+        if (winner === "player1") {
+          if (this.playerRole === "player1") {
+            // Local wins.
+            gameOverData = {
+              type: "win",
+              winnerName: localResponse.data.username,
+              winnerImage: localResponse.data.cover_photo,
+              loserName: opponentResponse.data.username,
+              loserImage: opponentResponse.data.cover_photo
+            };
+          } else {
+            // Local loses.
+            gameOverData = {
+              type: "loss",
+              winnerName: opponentResponse.data.username,
+              winnerImage: opponentResponse.data.cover_photo,
+              loserName: localResponse.data.username,
+              loserImage: localResponse.data.cover_photo
+            };
+          }
+        } else if (winner === "player2") {
+          if (this.playerRole === "player2") {
+            // Local wins.
+            gameOverData = {
+              type: "win",
+              winnerName: localResponse.data.username,
+              winnerImage: localResponse.data.cover_photo,
+              loserName: opponentResponse.data.username,
+              loserImage: opponentResponse.data.cover_photo
+            };
+          } else {
+            // Local loses.
+            gameOverData = {
+              type: "loss",
+              winnerName: opponentResponse.data.username,
+              winnerImage: opponentResponse.data.cover_photo,
+              loserName: localResponse.data.username,
+              loserImage: localResponse.data.cover_photo
+            };
+          }
+        } else {
+          console.error("Unknown winner:", winner);
+          return;
+        }
+        // Emit the game-over event with the popup data.
+        this.$emit("game-over", gameOverData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    } else if (winner === "player2") {
-      if (this.playerRole === "player2") {
-        // Local wins.
-        gameOverData = {
-          type: "win",
-          winnerName: localResponse.data.username,
-          winnerImage: localResponse.data.cover_photo,
-          loserName: opponentResponse.data.username,
-          loserImage: opponentResponse.data.cover_photo
-        };
-      } else {
-        // Local loses.
-        gameOverData = {
-          type: "loss",
-          winnerName: opponentResponse.data.username,
-          winnerImage: opponentResponse.data.cover_photo,
-          loserName: localResponse.data.username,
-          loserImage: localResponse.data.cover_photo
-        };
+      finally {
+        this.requestSent = false;
       }
-    } else {
-      console.error("Unknown winner:", winner);
-      return;
-    }
-    // Emit the game-over event with the popup data.
-    this.$emit("game-over", gameOverData);
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
-},
+      if (this.gameSocket) { // Fermer le WebSocket
+        this.gameSocket.close();
+        this.gameSocket = null; // Important : mettre gameSocket à null après la fermeture
+        this.gameStarted = false; // Réinitialiser gameStarted
+      }
+    },
 
 
 
@@ -286,6 +297,7 @@ export default {
       this.sendPlayerMoves();
     },
   },
+
   mounted() {
     this.connectToGame();
     window.addEventListener('keydown', this.handleKeyDown);

@@ -411,103 +411,82 @@ get last 15 messages
 - [x] Check the padding so there is no scroll or change to w/s
 - [x] Part 2 Versus (on remote because loading)
 - [x] Add the winner/loser component on versus friend + remote
-
+- [x] Test if remove, cannot add friend anymore
+- [x] Check for block and unblock
+- [x] Put the date + hh:mm
+- [x] Change new rank to rank progression
+- [x] Reload to know the status change
+- [x] Limiter les char des messages ?
+- [x] Check we call of the api to only call it when i am on the chat
+- [x] Add new text field in login
+- [x] Add front for 2fa in account
+- [x] Fix les bugs de collision
+- [x] Matchmaking
+- [x] Tournament
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
+- [-] Fix the decalage on the canva
+- [ ] Friend seems to always call the api even if i am not in the friend page
 
-- [x] Test if remove, cannot add friend anymore
-- [ ] Check for block and unblock
+- [ ] Remove rank for ttt
 
-
-- [ ] Reload to know the status change
-- [ ] Limiter les char des messages ?
-- [ ] Fix les bugs de collision
-
-- [ ] Check we call of the api to only call it when i am on the chat
-
-- [?] Call the back for the game
-- [ ] Matchmaking
-- [ ] Tournament
-
-- [ ] Add new text field in login
-- [ ] Add front for 2fa in account
-
-- [ ] New front for ttt in remote ?
 - [ ] Modify the lang and the theme to put it in the database
-
 - [ ] Pong AI
+- [ ] Add hit box on local
+- [ ] Add data for with friend and ttt ai
+- [ ] Make a README to explain what modules, how to launch (+ tuto)
 
-- [ ] Implement power up
+TEST
+        register
+        login (not right password + not right username)
+        put the lang in french to see if there is things i forgot to translate
+        logout
+        login
+        activate the 2fa
+        change the profile picture
+        logout
+        login with the 2fa
+        disable the 2fa
+        logout
+        login
+        modify the username
+        logout
+        login
+        modify the password
+        logout
+        login
 
-- [ ] Play with 4 players logic (should be similar to another player logic)
-- [ ] More than 2 players game page (x2)
+        open another browser
+
+        register with 42
+        add the user you create as friend
+        block
+        unblock
+        remove
+        add
+        send message
+
+        play against the friend in friend
+        play against it in random
+        check if the stats is update
+        check if the history is update
+
+        play against ai for ttt
+        check if the stats is update
+        check if the history is update
+
+        delete an account
+        check if we can connect with it
 
 
-[](https://www.w3schools.com/js/js_graphics_chartjs.asp)
-
-(Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
-
-# Ft_Transcendence
-
-### Table of Content
-
-## Introduction
-This project is the final projet of the 42 common core. As the subject states, we have the possibility to choose up to 7 major modules to complete it.
-I did this project with [@Lapinew](https://github.com/Lapinew) and [@gkubina](https://github.com/gkubina).
-
-TL;DR, This is a web application built using the Django framework. It features a server-side implementation of the classic Pong game, designed with a microservices architecture using docker. The application supports remote players, user management, authentication, and multiple languages and themes. Additionally, it includes advanced features such as AI opponents, live chat, and multiplayer support (4 players in the same game).
-
-## Description
-**Major Modules**
-- Framework: The project is built using the Django framework.
-- Server-Side Pong: Replaces the basic Pong game with a server-side implementation and provides an API.
-- Microservices Architecture: The backend is designed as microservices to enhance scalability and maintainability.
-- Remote Players: Supports gameplay with remote players.
-- User Management: Includes standard user management, authentication, and user handling across tournaments.
-- Remote Authentication: Implements remote authentication to enhance gameplay and user experience.
-- Additional Game: Adds another game with user history and matchmaking features.
-- AI Opponent: Introduces an AI opponent for single-player mode.
-- Live Chat: Integrates a live chat feature for real-time communication.
-- Multiplayer Support: Supports more than two players in the same game.
-
-**Minor Modules**
-- Database: Uses PostgreSQL for the backend database.
-- Multiple Language Support: Supports multiple languages to cater to a diverse user base.
-- User and Game Stats Dashboards: Provides dashboards for user and game statistics.
-- Game Customization Options: Allows users to customize game settings.
-- Device Support: Ensures compatibility across all devices.
+- [ ] For the responsive, we are playing the "opponent" part
 
 
-## The Project
-put screenshot + "tuto"
+- [ ] Implement power up ?
 
-## Quick Start
-```
-git clone git@github.com:KoganeShiro/ft_transcendence.git
-cd ft_transcendence
-```
 
-## Usage
-If you don't have make or docker and docker-compose installed, you should in order to compile and run this project
 
-If you did, then you can make and follow the instruction !
-
-```
-make build
-make up
-```
-
-- [?] Call the back for the game
-- [ ] Matchmaking
-- [ ] Tournament
-
-- [ ] New front for ttt in remote ?
-- [ ] Modify the lang and the theme to put it in the database
-
-- [ ] Pong AI
-
-- [ ] Implement power up
 
 - [ ] Play with 4 players logic (should be similar to another player logic)
 - [ ] More than 2 players game page (x2)

@@ -99,8 +99,8 @@
     "opponent_score": "Score de l'adversaire",
     "your_rank_begin": "Votre classement",
     "opponent_rank_begin": "Classement de l'adversaire",
-    "your_rank_change": "Votre nouveau classement",
-    "opponent_rank_change": "Le nouveau classement de l'adversaire",
+    "your_rank_change": "Votre progression dans le classement",
+    "opponent_rank_change": "La progression dans le classement de votre adversaire",
     "your_nb_move": "Votre nombre de coups",
     "opponent_nb_move": "Nombre de coups de l'adversaire",
     "timestamp": "Date",
@@ -113,6 +113,19 @@
     "in": "dans",
     "remove": "Supprimer",
     "unblock": "Débloquer",
-    "opponent_found": "Adversaire trouvé !"
+    "opponent_found": "Adversaire trouvé !",
+    "otp": "OTP (double authentification)",
+    "enter-otp": "Entrez le code OTP",
+    "twoFactorAuthentication": "Authentification à deux facteurs",
+    "2faEnabled": "2FA activé",
+    "2faDisabled": "2FA désactivé",
+    "scanQrCode": "Scannez le code QR",
+    "enterCode": "Entrez le code",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "activate": "Activer",
+    "continue": "Continuer",
+    "tournament-winner": "Gagnant du tournoi !!",
+    "eliminated": "Éliminé"
   }
   
