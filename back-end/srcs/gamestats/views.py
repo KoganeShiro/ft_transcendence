@@ -282,6 +282,3 @@ class LastFiveTTTView(viewsets.ViewSet):
             game['opponent_rank'] = game['rank_player1_begin'] if game['player2'] == request.user.username else game['rank_player2_begin']
 
         return Response(data)
-
-
-
