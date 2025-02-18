@@ -126,6 +126,11 @@
     "activate": "Activer",
     "continue": "Continuer",
     "tournament-winner": "Gagnant du tournoi !!",
-    "eliminated": "Éliminé"
+    "eliminated": "Éliminé",
+    "42-login-failed": "La connexion avec 42 a échoué, veuillez réessayer",
+    "42-account-cannot-be-modified": "Un compte 42 ne peut pas être modifié",
+    "error-saving-profile": "Erreur lors de l'enregistrement du profil",
+    "enter-your-new-username": "Entrez votre nouveau nom d'utilisateur",
+    "enter-your-new-password": "Entrez votre nouveau mot de passe"
   }
   

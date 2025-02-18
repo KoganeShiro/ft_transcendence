@@ -1,46 +1,47 @@
-import { createStore } from "vuex";
-import invitations from './invitation';
-import game from './game';
+import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    theme: localStorage.getItem("theme") || "dark",
-    lang: localStorage.getItem("lang") || "en"
+    theme: 'light',
+    lang: 'en',
   },
   mutations: {
-    setLang(state, lang) {
-      state.lang = lang;
-      localStorage.setItem("lang", lang);
-
-      import("@/plugins/i18n").then(({ default: i18n }) => {
-        i18n.global.locale = lang;
-      });
-    },
     setTheme(state, theme) {
-      console.log("Setting theme:", theme);
       state.theme = theme;
-      localStorage.setItem("theme", theme);
-      document.body.setAttribute("data-theme", theme);
-    }
+    },
+    setLanguage(state, lang) {
+      state.lang = lang;
+    },
   },
   actions: {
-    changeLang({ commit }, lang) {
-      commit("setLang", lang);
-    },
     changeTheme({ commit }, theme) {
-      commit("setTheme", theme);
+      if (theme.toLowerCase() === 'light' || theme.toLowerCase() === 'dark'
+            || theme.toLowerCase() === 'ocean' || theme.toLowerCase() === 'forest'
+            || theme.toLowerCase() === 'volcano' || theme.toLowerCase() === 'Teapot') {
+        commit('setTheme', theme);
+      }
+      else {
+        commit('setTheme', 'dark');
+      }
+    },
+    changeLanguage({ commit }, lang) {
+      if (lang.toLowerCase() === 'en' || lang.toLowerCase() === 'fr' || lang.toLowerCase() === 'de') {
+        commit('setLanguage', lang);
+      }
+      else {
+        commit('setLanguage', 'en');
+      }
     },
     initializeApp({ commit }) {
-      console.log("initializeApp action called");
-      //  can commit mutations or dispatch other actions
-    }
+      // Initialize the app with default settings or fetch initial data
+      const theme = localStorage.getItem('theme') || 'dark';
+      const lang = localStorage.getItem('lang') || 'en';
+      commit('setTheme', theme);
+      commit('setLanguage', lang);
+    },
   },
   getters: {
-    selectedLanguage: (state) => state.lang,
-    selectedTheme: (state) => state.theme
+    selectedTheme: state => state.theme,
+    selectedLanguage: state => state.lang,
   },
-  modules: {
-    invitations,
-    game
-  }
 });

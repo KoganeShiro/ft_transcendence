@@ -18,9 +18,9 @@
             {{ $t('disable2fa') }}
           </ButtonAtom>
         </div>
-        <div class="qr-section">
+        <!-- <div class="qr-section">
           <img :src="qrCode" alt="2FA QR Code" class="qr-code-image" />
-        </div>
+        </div> -->
       </div>
 
       <!-- When 2FA is not enabled, show the activate button and enable flow -->
@@ -87,7 +87,8 @@ export default {
   },
   computed: {
     is2faEnabled() {
-      console.log("is2faEnabled:", this.user && this.user.mfa_enabled);
+      if (!this.user) return;
+      // console.log("is2faEnabled:", this.user && this.user.mfa_enabled);
       return this.user && this.user.mfa_enabled;
     }
   },

@@ -6,217 +6,6 @@
 - [ ] chqnge docker compose
 - [ ] change dockerfile webserver
 
-
-For front:
-
-POST
-check refresh token:
-	https://c1r6p9.42lehavre.fr:1443/pong/undefined/api/login/refresh/
-
-check logout:
-        button "misclicked" does not work
-
-## MY TODO
-
-- [x] Design for mobile
-- [x] card component
-- [x] Text input field component
-- [x] Login page (IMPORTANT)
-- [x] Register page (IMPORTANT)
-- [x] Logout page (MIDDLE)
-
-- [x] Finish the .json terms and service file EN
-- [x] Finish the .json private policy EN
-- [x] Finish the .json terms and service file FR
-- [x] Finish the .json private policy FR (need to review)
-- [x] Finish the .json terms and service file DE
-- [x] Finish the .json private policy DE (need to review)
-
-
-- [x] Profile page (MIDDLE)
-- [x] (got the structure of it, stats component + history + friends)
-
-- [x] Start Language page to be able to change language (MIDDLE)
-- [x] Settings sidebar component (MIDDLE)
-
-- [x] Credits page
-
-
-- [x] Game choice page (MIDDLE)
-- [x] Game mode page (MIDDLE)
-- [x] Pong page (IMPORTANT)
-
-- [x] Searching opponent page
-
-- [x] Create tournament or Join tournament
-- [x] Waiting for players
-- [x] Matchmaking page (IMPORTANT)
-
-- [x] Already fill text field component where i can modify it
-- [x] Account page (IMPORTANT)
-- [x] Make the sidebar of the Parameter mobile friendly
-
-- [x] Tic Tac Toe page (IMPORTANT)
-- [x] Tic Tac Toe game page (IMPORTANT)
-
-- [x] Add in mode choice, 4 players games
-
-- [x] Make the multi player icon
-- [x] Start Appearence page to be able to change theme (MIDDLE)
-- [x] Add Teapot theme to have power up
-- [x] Add in Avatar component the possibility to modify the image
-
-- [x] Make sure the lenght of the text boxed doesn't exeed 25 char
-- [x] In friend, add a chat component
-- [x] In friend, add a way to tell if the friend is online
-
-- [x] Pop up to play with another player
-
-- [x] Add the tournament id when creating the tournament
-- [x] Make a component notification of tournament
-
-- [x] Expand match info pop up
-
-- [x] New mode, private match
-
-- [x] Add the private match component on tic tac toe
-- [x] !!! Make the tournament matchmaking page to game better !!!
-
-- [x] If user is connected with 42, cannot modify their account information
-
-
-- [x] Register --> send to the back username, password + avatar (default)
-        --> password no problem without having it hashed in the front
-- [x] Login --> send to the back username + password
-
-- [x] Account, possibility to change the username + password
-
-- [x] How do we add a friend ?
-        We add a friend by username, if we don't want block
-- [x] Need friends list + their status (online or offline)
-- [x] Need the friend icon + chat history
-- [x] If click on the friend's icon --> json with the var to complete the profile (hide pseudo sidebar)
-
-- [x] For history .json file with the last x match id
-        need to make another call the know if the user won or loose and against who (* by matches).
-        If we click on it, should expand with more information
-         Another call API (on the match that was clicked)
-
-- [x] For stats in .json file (one call)
-        - Rank actuel (pong, multi et ttc)
-
-        - int tab (progression --> in rank) ---> make a graph (nb de match abscisse et nb of point ordonner) => Line Graphs
-
-        - nb game win, nb game lost => Doughnut Charts
-        - nb total de match
-
-        - nb win tournament
-
-        - nb de point gagne inferieur a 5 echange
-        - nb de point gagne inferieur a 10 echange
-        - nb de point gagne inferieur a +10 echange
-                same for lose point
-                        ==> one Bar Charts
-
-- [x] Games logic with following pages...
-
-- [x] Can register
-- [x] Can login
-- [x] Can logout
-- [x] Can connect using 42
-
-- [x] Call the back for stats
-
-- [x] Add a component for the chat
-
-- [x] Call the back for account --> PATCH request to modify informations + avatar
-        - [x] Can modify avatar
-        - [x] Can modify username
-        - [x] Can modify password
-        - [x] Can delete account
-
-- [x] Logic of the friend profile, make another page ??
-
-- [-] Make sure that in tournament the player cannot go elsewhere
-- [x] Are you sure you want to leave the tournament component
-
-- [x] Make the pong game responsive ==> may start searching for how to make the AI
-- [x] Play against guest (local) logic
-- [x] Play against AI logic (on local)
-
-- [x] Play against another player logic --> 
-- [x] Play against a friend (private match) logic -- >
-   - [x] Invite logic (for private match)
-
-- [x] Tournament logic
-- [x] Make each part into container
-
-- [x] Update the Versus component to call the back
-- [x] Fix the winner/loser component in pong solo
-- [x] Add the winner/loser component to ttt
-- [x] Call the back for history (5 last battles for each "games")
-
-- [x] Make the Tic Tac Toe AI
-
-- [x] Update the game with friend component
-        Should click on create game and then get the code, so you could send it to your friend (keep into memory where you are)
-
-
-to hardcode games --> https://localhost:1443/api/games/ttt/
-                        https://localhost:1443/api/games/pong/
-
-to see stats --> https://localhost:1443/api/stats/<username>
-
-{"username" : "moi"}
-  /*
-   - /api/friends/block_user/
-   - /api/friends/unblock_user/
-   - /api/friends/remove_user/
-   - /api/friends/add_user/
-   - /api/friends/get_last_15_messages/
-   - /api/friends/send_message/
-  */
-
-{"receiver" : "moi",
-"message" : "hey, want to play pong together ?"}
-
-get last 15 messages
-
-{
-   {
-      "id": 5,
-      "sender": "moi",
-      "receiver": "cejin",
-      "message": "great ! How about you ? something interesting ?",
-      "timestamp": "2025-02-14T08:16:38.869318+01:00"
-   }
-   {
-      "id": 4,
-      "sender": "moi",
-      "receiver": "cejin",
-      "message": "hey there, how is it going ?",
-      "timestamp": "2025-02-14T08:15:39.869318+01:00"
-   }
-}
-- [x] Call the back for friends list (max of 10 ?)
-- [x] Call the back for adding friends
-- [x] Call the back for removing friends
-- [x] Call the back for the chat
-- [x] Call the back for sending msg
-- [x] Check if we can play with friend
-
-
-- [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
-
-
-- [ ] Check for block and unblock
-- [x] Test if remove, cannot add friend anymore
-
-- [ ] Let the user know who they are in remote + with friend
-- [ ] Part 2 Versus (on remote because loading)
-- [ ] Add the winner/loser component on versus friend + remote
-
-- [ ] Add the friends component to have the chat in the play with game
 ## MY TODO
 
 - [x] Design for mobile
@@ -423,34 +212,43 @@ get last 15 messages
 - [x] Fix les bugs de collision
 - [x] Matchmaking
 - [x] Tournament
+- [x] Remove rank for ttt
+- [x] Stats start at match 0
+
+- [x] Modify the lang and the theme to put it in the database
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 - [-] Fix the decalage on the canva
 - [ ] Friend seems to always call the api even if i am not in the friend page
 
-- [ ] Remove rank for ttt
+- [ ] Check if modify, the name is update in tournament
+- [ ] Add the name of the player in-game in tournament
 
-- [ ] Modify the lang and the theme to put it in the database
+- [ ] Remove all the console.log
+
+- [ ] Add otp if we disable it
+
 - [ ] Pong AI
 - [ ] Add hit box on local
 - [ ] Add data for with friend and ttt ai
 - [ ] Make a README to explain what modules, how to launch (+ tuto)
 
 TEST
-        register
-        login (not right password + not right username)
+        register ✅
+        login (not right password + not right username) ✅
         put the lang in french to see if there is things i forgot to translate
-        logout
-        login
+        logout ✅
+        login ✅
+        cannot modify username to a username already existant ✅
         activate the 2fa
-        change the profile picture
+        change the profile picture ✅
         logout
         login with the 2fa
         disable the 2fa
         logout
         login
-        modify the username
+        modify the username ✅
         logout
         login
         modify the password
@@ -485,7 +283,7 @@ TEST
 
 - [ ] Implement power up ?
 
-
+Error message are not explicit enough
 
 
 - [ ] Play with 4 players logic (should be similar to another player logic)
@@ -496,9 +294,16 @@ TEST
 
 (Presentation du "produit", Les jeux, Les services, Les commandes (how/notice), Tout est details (user-friendly))
 
+
 # Ft_Transcendence
 
 ### Table of Content
+- [Introduction](#introduction)
+- [Description](#description)
+- [The Project](#the-project)
+- [Quick start](#quick-start)
+- [Usage](#usage)
+
 
 ## Introduction
 This project is the final projet of the 42 common core. As the subject states, we have the possibility to choose up to 7 major modules to complete it.

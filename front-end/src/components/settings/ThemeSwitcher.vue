@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
+import API from '@/api.js';
 import ThemeButton from "@/components/settings/Themes.vue";
 import ocean from "@/assets/ocean.webp";
 import forest from "@/assets/forest.jpg";
@@ -23,6 +24,7 @@ import volcano from "@/assets/volcano.jpg";
 import sun from "@/assets/sun.jpg";
 import moon from "@/assets/moon.jpg";
 import teapot from "@/assets/teapot.jpg";
+import { useTheme } from '@/components/useTheme.js';
 
 export default {
   name: "ThemeSwitcher",
@@ -41,6 +43,12 @@ export default {
       ]
     };
   },
+  setup() {
+    const { changeTheme } = useTheme();
+    return {
+      changeTheme
+    };
+  },
   computed: {
     ...mapGetters(["selectedTheme"]),
     currentTheme() {
@@ -48,11 +56,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["changeTheme"]),
-    switchTheme(themeName) {
+    async switchTheme(themeName) {
       if (themeName.toLowerCase() !== this.currentTheme.toLowerCase()) {
-        this.changeTheme(themeName.toLowerCase());
-        this.$emit("theme-changed", themeName);
+        try {
+          await API.patch('/api/profile_update/', { theme: themeName });
+          this.changeTheme(themeName.toLowerCase());
+          this.$emit("theme-changed", themeName);
+        } catch (error) {
+          console.error("Error updating theme:", error);
+        }
       }
     }
   }

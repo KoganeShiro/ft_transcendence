@@ -31,17 +31,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { useI18n } from "vue-i18n";
+import { mapGetters } from "vuex";
 import ButtonAtom from "@/components/atoms/Button.vue";
+import API from '@/api.js';
+import { useLanguage } from '@/components/useLanguage.js';
 
 export default {
   components: {
     ButtonAtom,
   },
   setup() {
-    const { locale } = useI18n();
-    return { locale };
+    const { changeLanguage } = useLanguage();
+    return {
+      changeLanguage
+    };
   },
   computed: {
     ...mapGetters(["selectedLanguage"]),
@@ -50,17 +53,19 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["changeLang"]),
-    switchLang(lang) {
+    async switchLang(lang) {
       if (lang !== this.currentLang) {
-        this.changeLang(lang);
-        this.locale = lang;
+        try {
+          await API.patch('/api/profile_update/', { lang: lang });
+          this.changeLanguage(lang);
+        } catch (error) {
+          console.error("Error updating language:", error);
+        }
       }
     }
   }
 };
 </script>
-
 
 <style scoped>
 .lang-btn-container {
@@ -108,5 +113,4 @@ export default {
     margin-right: 15px;
   }
 }
-
 </style>

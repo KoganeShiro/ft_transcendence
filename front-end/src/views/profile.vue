@@ -37,7 +37,6 @@
 
 <script>
 import API from '@/api.js';
-import axios from 'axios';
 import PseudoSidebar from "@/components/profile/PseudoSidebar.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
@@ -45,6 +44,9 @@ import ProfileStats from "@/components/profile/Stats.vue";
 import ProfileHistory from "@/components/profile/History.vue";
 import ProfileFriends from "@/components/profile/Friends.vue";
 import AvatarComponent from "@/components/atoms/Avatar.vue";
+import { useTheme } from '../components/useTheme';
+import { useLanguage } from '../components/useLanguage';
+import { useStore } from 'vuex';
 
 export default {
   components: {
@@ -68,6 +70,17 @@ export default {
       cover_photo: '',
     };
   },
+  setup() {
+    const store = useStore();
+    const { changeTheme } = useTheme();
+    const { changeLanguage } = useLanguage();
+
+    return {
+      store,
+      changeTheme,
+      changeLanguage,
+    };
+  },
   created() {
     this.getProfile();
   },
@@ -78,9 +91,13 @@ export default {
     },
     async getProfile() {
       try {
-        const response = await axios.get('/api/profile/');
+        const response = await API.get('/api/profile/');
         this.username = response.data.username;
         this.cover_photo = response.data.cover_photo;
+        this.changeTheme(response.data.theme.toLowerCase());
+        console.log('Theme:', response.data.theme.toLowerCase());
+        this.changeLanguage(response.data.lang);
+        console.log('Language:', response.data.lang);
       } catch (error) {
         console.error("Error fetching username:", error);
       }
