@@ -29,6 +29,8 @@ import defaultXImage from "@/assets/x.svg";
 import defaultOImage from "@/assets/o.svg";
 // Import the AI module which provides the getAIMove function.
 import { getAIMove } from "@/components/game/TttAI.js";
+import { getProfile, getAI, postGameResult, patchGameStats } from "@/components/game/ttt_api_call.js";
+console.log("getProfile", getProfile);
 
 export default {
   name: "TicTacToeGame",
@@ -121,6 +123,49 @@ export default {
       }
     }
 
+    async function calling_api(a) {
+      try {
+        const userProfile = await getProfile();
+        const aiProfile = await getAI();
+
+        console.log("User profile: ", userProfile.id);
+        console.log("AI profile: ", aiProfile.id);
+
+        // Overwrite the winner with the respective profile id based on the winning symbol.
+        if (state.board[a.row][a.col] === "X") {
+          state.winner = userProfile.id;
+        } else {
+          state.winner = aiProfile.id;
+        }
+
+        console.log("Winner: ", state.winner);
+        console.log("AI moves: ", state.AIMoves);
+        console.log("Player moves: ", state.myMoves);
+
+        // Post the game result
+        await postGameResult(userProfile.id, aiProfile.id, state.winner, state.myMoves, state.AIMoves);
+
+        let moves_nb;
+        if (state.myMoves <= 5) {
+          moves_nb = 5;
+        } else if (state.myMoves <= 10) {
+          moves_nb = 10;
+        } else {
+          moves_nb = 15;
+        }
+        console.log("moves_nb: ", moves_nb);
+
+        // Patch game statistics based on the winner
+        if (state.winner === userProfile.id) {
+          await patchGameStats(1, `win_${moves_nb}`);
+        } else {
+          await patchGameStats(0, `loss_${moves_nb}`);
+        }
+      } catch (error) {
+        console.error("Error handling game result:", error);
+      }
+    }
+
     // Function to check for a winning pattern.
     function checkWinner() {
       const winPatterns = [
@@ -146,18 +191,11 @@ export default {
         ) {
           state.gameOver = true;
           state.message = `${state.board[a.row][a.col]} Wins!`;
-          if (state.board[a.row][a.col] === "X") {
-            state.winner = "X"; //the player
-          } else {
-            state.winner = "O"; //the ai
+
+          if (props.mode === "solo") {
+            calling_api(a);
           }
-          //make a call api to get the user and ai id
-          //call post /api/games/ttt/
-          //then patch call /api/stats_ttt/
-          // win 1, lose 0
-          console.log("Winner: ", state.winner);
-          console.log("ai move: ", state.AIMoves);
-          console.log("my move: ", state.myMoves);
+
           emit('game-ended', state.board[a.row][a.col]);
           return true;
         }

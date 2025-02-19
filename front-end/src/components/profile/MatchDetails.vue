@@ -61,6 +61,7 @@
 
 <script>
 import { format } from 'date-fns';
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -86,13 +87,14 @@ export default {
   },
   computed: {
     summaryText() {
+      const { t } = useI18n();
       let result = this.match.winner;
       if (this.match.won === false) {
         // console.log("match.won: ", this.match.won);
-        result = "loose";
+        result = t("losing");
       }
       else {
-        result = "win";
+        result = t("winning");
       }      
       if (this.match.player1 === this.match.opponent) {
         let tmpPlayer = this.match.player1;
