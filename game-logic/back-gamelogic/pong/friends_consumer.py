@@ -47,6 +47,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
         self.player2_socket = None
         self.score_tab = [[0, 0]]
         self.ready_event = asyncio.Event() 
+        self.paddle_height_normalized = 25 / 500
 
         #definition des stats 
         self.game_statistic = {
@@ -99,7 +100,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 stats["lost_upper10"] += 1
         stats1 = game.get("player1_stats")
         stats2 = game.get("player2_stats")
-        logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
+        # logger.info(f"Player 1 : {stats1} ; player2 {stats2}")
 
 
     async def disconnect(self, close_code):
@@ -284,7 +285,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             player1_name = game["player1_name"] 
             player2_name = game["player2_name"]
 
-            logger.info(f"A L'ENVOIE : {player1_name} : {player2_name}")
+            # logger.info(f"A L'ENVOIE : {player1_name} : {player2_name}")
 
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -320,20 +321,20 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
  
     async def handle_player_moves(self, move, player):
-        logger.info(f"IN THE MOVES {player} : {move}")
+        # logger.info(f"IN THE MOVES {player} : {move}")
         """ Gérer les mouvements des joueurs de manière asynchrone """
         if player == "player1":
             if move.get("up", False):
-                self.game_state["player1_y"] = max(self.game_state["player1_y"] - self.paddle_speed, 0)
+                self.game_state["player1_y"] = max(self.game_state["player1_y"] - self.paddle_speed, 0 + self.paddle_height_normalized)
             elif move.get("down", False):
-                self.game_state["player1_y"] = min(self.game_state["player1_y"] + self.paddle_speed, 1)
+                self.game_state["player1_y"] = min(self.game_state["player1_y"] + self.paddle_speed, 1 - self.paddle_height_normalized)
 
 
         elif player == "player2":
             if move.get("up", False):
-                self.game_state["player2_y"] = max(self.game_state["player2_y"] - self.paddle_speed, 0)
+                self.game_state["player2_y"] = max(self.game_state["player2_y"] - self.paddle_speed, 0 + self.paddle_height_normalized)
             elif move.get("down", False):
-                self.game_state["player2_y"] = min(self.game_state["player2_y"] + self.paddle_speed, 1)
+                self.game_state["player2_y"] = min(self.game_state["player2_y"] + self.paddle_speed, 1 - self.paddle_height_normalized)
 
 
     async def game_loop(self):
@@ -441,14 +442,12 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
 
     async def end_game(self, winner, game_state, player1_name, player2_name):
         """ Arrêter la boucle de jeu et annoncer le vainqueur """
-        logger.info("AVANT")
         if self.game_loop_task: 
             self.game_loop_task.cancel() 
             try:
                 await self.game_loop_task 
             except asyncio.CancelledError:
                 pass 
-        logger.info("APRES")
         # Envoyer un message "game_over" à tous les joueurs du groupe pour annoncer le vainqueur
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -461,7 +460,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 "player2_name": player2_name,
             }
         )
-        logger.info("A LA FIN")
 
         
 
@@ -555,9 +553,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
             return
         
         self.gameEnded = True
-        # logger.error(f"---------------------------------------------------------")
-        # logger.error(f"GAME = {self.game_id}")
-        # logger.error(f"---------------------------------------------------------")
         with game_lock:
             game = active_games.get(self.room_group_name)
             # game_state = game.get("game_state")
@@ -571,7 +566,6 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 }
                 url_user1 = f"http://back-end:8000/api/profile/{player1}/"
                 url_user2 = f"http://back-end:8000/api/profile/{player2}/"
-                # logger.info(f"SCORE : {score1} / {score2}")
                 url = "http://back-end:8000/api/games/pong/"  #
                 # url2 = "http://back-end:8000/api/profile/gkubina/" #
                 url3 = "http://back-end:8000/api/stats_increment/gkubina/" #
@@ -585,10 +579,8 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 stats2 = requests.get(user2_stats, headers=headers)
                 if stats1.status_code == 200:
                     stats1 = stats1.json()
-                    # logger.info(f"DATA of {player1}: {stats1}")
                 if stats2.status_code == 200:
                     stats2 = stats2.json()
-                    # logger.info(f"DATA of {player2}: {stats2}")
                 
 
                 response1 = requests.get(url_user1, headers=headers)
@@ -597,17 +589,17 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                 data2 = None
                 if response1.status_code == 200:
                     data1 = response1.json()
-                    logger.info(f"DATA of {player1}: {data1}")
+                    # logger.info(f"DATA of {player1}: {data1}")
 
                     current_rank1 = data1.get('currentRank', 0)
-                    logger.info(f"Rank of {player1}: {current_rank1}")
+                    # logger.info(f"Rank of {player1}: {current_rank1}")
 
                 if response2.status_code == 200:
                     data2 = response2.json()
-                    logger.info(f"DATA of {player2}: {data2}")
+                    # logger.info(f"DATA of {player2}: {data2}")
 
                     current_rank2 = data2.get('currentRank', 0)
-                    logger.info(f"Rank of {player2}: {current_rank2}")
+                    # logger.info(f"Rank of {player2}: {current_rank2}")
 
                 # {'id': 4, 
                 #  'username': 'daleliev',
@@ -652,7 +644,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                     diff = score1
                     S_joueur_1 = 0
                     S_joueur_2 = 1
-                logger.info(f"SCORE1 {score1} SCORE2 {score2}")
+                # logger.info(f"SCORE1 {score1} SCORE2 {score2}")
 
                 K = 0
                 if (5 - diff == 5):
@@ -752,7 +744,7 @@ class FriendPongConsumer(AsyncWebsocketConsumer):
                     "stat_pong_solo_wins_tot_max10" : stats2["won_upper10"], 
                     "stat_pong_solo_loss_tot_max10" : stats2["lost_upper10"], 
                 }
-                logger.info(f"fields2 : {fields2}")
+                # logger.info(f"fields2 : {fields2}")
                 response2 = requests.patch(url_update_user2, headers=headers, json=fields2)
                 response2 = response2.json()
 
