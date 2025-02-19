@@ -17,11 +17,11 @@
         <div v-if="localGameType === 'pong'">
           <div class="detail-item">
             <span class="label">{{ $t("your_score") }}:</span>
-            {{ gameDetails.player1_score }}
+            {{ this.match.my_score }}
           </div>
           <div class="detail-item">
             <span class="label">{{ $t("opponent_score") }}:</span>
-            {{ gameDetails.player2_score }}
+            {{ this.match.opponent_score }}
           </div>
         </div>
         <div v-if="localGameType === 'ttt'">
@@ -36,19 +36,19 @@
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("your_rank_begin") }}:</span>
-          {{ gameDetails.rank_player1_begin }}
+          {{ this.match.rank_player1_begin }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("opponent_rank_begin") }}:</span>
-          {{ gameDetails.rank_player2_begin }}
+          {{ this.match.rank_player2_begin }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("your_rank_change") }}:</span>
-          {{ gameDetails.rank_player1_change }}
+          {{ this.match.rank_player1_change }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("opponent_rank_change") }}:</span>
-          {{ gameDetails.rank_player2_change }}
+          {{ this.match.rank_player2_change }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("timestamp") }}:</span>
@@ -86,13 +86,37 @@ export default {
   },
   computed: {
     summaryText() {
-      const result = this.match.winner ? 'win' : 'lose';
-      //modify so the opponent is the opponent name in the api, the other is the player name
-      if (this.match.player1 === this.match.opponent) {
-        let tmp = this.match.player1;
-        this.match.player1 = this.match.player2;
-        this.match.player2 = tmp;
+      let result = this.match.winner;
+      if (this.match.won === false) {
+        // console.log("match.won: ", this.match.won);
+        result = "loose";
       }
+      else {
+        result = "win";
+      }      
+      if (this.match.player1 === this.match.opponent) {
+        let tmpPlayer = this.match.player1;
+        this.match.player1 = this.match.player2;
+        this.match.player2 = tmpPlayer;
+
+        let tmpRankBegin = this.match.rank_player1_begin;
+        this.match.rank_player1_begin = this.match.rank_player2_begin;
+        this.match.rank_player2_begin = tmpRankBegin;
+
+        // console.log("tmpRankBegin p1: ", this.match.rank_player1_begin);
+        // console.log("tmpRankBegin p2: ", this.match.rank_player2_begin);
+
+        let tmpRankChange = this.match.rank_player1_change;
+        this.match.rank_player1_change = this.match.rank_player2_change;
+        this.match.rank_player2_change = tmpRankChange;
+
+        // console.log("tmpRankChange p1: ", this.match.rank_player1_change);
+        // console.log("tmpRankChange p2: ", this.match.rank_player2_change);
+
+    }
+      // console.log("my score: ", this.match.my_score);
+      // console.log("opponent score: ", this.match.opponent_score);
+      // console.log("winner: ", this.match.winner);
         return `${this.match.player1} vs ${this.match.player2}: ${result}`;
     },
     formattedTimestamp() {

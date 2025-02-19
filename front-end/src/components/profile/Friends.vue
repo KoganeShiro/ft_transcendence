@@ -124,6 +124,7 @@ export default {
         })
         .catch(error => {
           console.error("Error adding friend:", error);
+          window.alert(this.$t("error-add-friend"));
         });
     },
     removeFriend(index) {

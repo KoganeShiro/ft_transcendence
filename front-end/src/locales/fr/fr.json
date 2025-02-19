@@ -132,6 +132,12 @@
     "error-saving-profile": "Erreur lors de l'enregistrement du profil",
     "enter-your-new-username": "Entrez votre nouveau nom d'utilisateur",
     "enter-your-new-password": "Entrez votre nouveau mot de passe",
-    "enter-code": "Entrez le code de la partie"
+    "enter-code": "Entrez le code de la partie",
+    "error-add-friend": "Erreur lors de l'ajout d'un ami, peut-être que le joueur n'existe pas ?",
+    "error-setting-up-2fa": "Erreur lors de la configuration de 2FA",
+    "disable2fa": "Désactiver la 2FA",
+    "error-enabling-2fa": "Erreur lors de l'activation de 2FA",
+    "error-disabling-2fa": "Erreur lors de la désactivation de 2FA",
+    "win-on-x-moves": "Gagner en x coups"
   }
   

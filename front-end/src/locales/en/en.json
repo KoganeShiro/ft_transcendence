@@ -130,6 +130,12 @@
     "error-saving-profile": "Error saving profile",
     "enter-your-new-username": "Enter your new username",
     "enter-your-new-password": "Enter your new password",
-    "enter-code": "Enter the game code"
+    "enter-code": "Enter the game code",
+    "error-add-friend": "Error adding friend, maybe they don't exist?",
+    "error-setting-up-2fa": "Error setting up 2FA",
+    "disable2fa": "Disable 2FA",
+    "error-enabling-2fa": "Error enabling 2FA",
+    "error-disabling-2fa": "Error disabling 2FA",
+    "win-on-x-moves": "Win on x moves"
 }
   
