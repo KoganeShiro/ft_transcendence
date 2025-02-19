@@ -25,6 +25,8 @@ RUN mkdir -p /usr/share/nginx/staticfiles
 RUN chown -R www-data:www-data /usr/share/nginx/staticfiles
 RUN chmod -R 755 /usr/share/nginx/staticfiles
 
+
+
 COPY webserver/nginx-dev.conf /etc/nginx/nginx.conf
 
 COPY webserver/favicon.ico /usr/share/nginx/favicon.ico
