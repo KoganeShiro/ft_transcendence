@@ -11,6 +11,7 @@ RUN pip install gunicorn
 COPY back-end/entrypoint.sh . 
 
 RUN mkdir /mediafiles
+RUN mkdir /staticfiles
 
 WORKDIR /usr/src/app
 EXPOSE 8000

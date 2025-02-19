@@ -95,7 +95,8 @@ services:
     #   timeout: 10s
     #   retries: 3
     #   start_period: 10s
-   # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
+
 
 
 
