@@ -124,6 +124,12 @@
     "activate": "Aktivieren",
     "continue": "Fortsetzen",
     "tournament-winner": "Turniergewinner !!",
-    "eliminated": "Sie wurden eliminiert"
+    "eliminated": "Sie wurden eliminiert",
+    "42-login-failed": "Anmeldung bei 42 fehlgeschlagen, bitte versuchen Sie es erneut",
+    "42-account-cannot-be-modified": "42-Konto kann nicht geändert werden",
+    "error-saving-profile": "Fehler beim Speichern des Profils",
+    "enter-your-new-username": "Geben Sie Ihren neuen Benutzernamen ein",
+    "enter-your-new-password": "Geben Sie Ihr neues Passwort ein",
+    "enter-code": "Geben Sie den Spielcode ein"
   }
   

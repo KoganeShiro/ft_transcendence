@@ -14,8 +14,8 @@
       <p class="mobile-hide">{{ $t('move-down') }} <span class="span">s</span></p>
     </div>
     <div class="username">
-      <p class="player-left">{{ localPlayer.pseudo }}</p>
-      <p class="player-right">{{ opponentPlayer.pseudo }}</p>
+      <p class="player-left">{{ leftPlayer }}</p>
+      <p class="player-right">{{ rightPlayer }}</p>
     </div>
     <canvas 
       ref="pongCanvas"
@@ -52,6 +52,8 @@ export default {
       keysPressed: { up: false, down: false },
       localPlayer: { pseudo: "Player1", imageUrl: "" },
       opponentPlayer: { pseudo: "loading...", imageUrl: "" },
+      leftPlayer: '',
+      rightPlayer: '',
       frameCount: 0,
       lastFrameTime: 0,
       fps: 0,
@@ -142,6 +144,15 @@ export default {
               this.handleOpponentFound();
             });
           this.gameStarted = true;
+          if (this.playerRole === "player1") {
+            console.log("[test] Player roles: local=player1, opponent=player2");
+            this.leftPlayer = this.localPlayer.pseudo;
+            this.rightPlayer = this.opponentPlayer.pseudo;
+          } else {
+            console.log("[test] Player roles: local=player2, opponent=player1");
+            this.leftPlayer = this.opponentPlayer.pseudo;
+            this.rightPlayer = this.localPlayer.pseudo;
+          }
         } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
           console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);

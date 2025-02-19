@@ -19,18 +19,22 @@
       :player2="activeMatches[currentMatchIndex]?.player2"
       @time-up="onVersusTimeUp"
     />
-    <div class="player-controls" v-if="currentStep === 'game'" >
-        <div class="left-cmd">
-          <h2 class="mobile-hide">{{ $t('commands') }}</h2>
-          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
-          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
-        </div>
-        <div class="right-cmd">
-          <h2 class="mobile-hide">{{ $t('commands') }}</h2>
-          <p class="mobile-hide">{{ $t('move-up') }}<span class="span">↑</span></p>
-          <p class="mobile-hide">{{ $t('move-down') }} <span class="span">↓</span></p>
-        </div>
+    <div class="content" v-if="currentStep === 'game'">
+    <div class="player-controls">
+      <div class="left-cmd">
+        <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+        <p class="mobile-hide">{{ $t('move-up') }}<span class="span">W</span></p>
+        <p class="mobile-hide">{{ $t('move-down') }} <span class="span">S</span></p>
+        <p class="player-left">{{ activeMatches[currentMatchIndex]?.player1.name }}</p>
       </div>
+      <div class="right-cmd">
+        <h2 class="mobile-hide">{{ $t('commands') }}</h2>
+        <p class="mobile-hide">{{ $t('move-up') }}<span class="span">↑</span></p>
+        <p class="mobile-hide">{{ $t('move-down') }} <span class="span">↓</span></p>
+        <p class="player-right">{{ activeMatches[currentMatchIndex]?.player2.name }}</p>
+      </div>
+    </div>
+  </div>
 
     <PongGame class="game-container"
       v-if="currentStep === 'game'" 
@@ -202,6 +206,7 @@ export default {
   background-color: #11101088;
   width: 30%;
   margin-left: 7%;
+  text-align: center; /* Center align text */
 }
 
 .right-cmd {
@@ -210,6 +215,7 @@ export default {
   background-color: #11101088;
   width: 30%;
   margin-left: 25%;
+  text-align: center; /* Center align text */
 }
 
 .content {
@@ -221,6 +227,27 @@ export default {
   border-radius: 8px;
   padding: 10px;
   background-color: none;
+}
+
+.username {
+  display: flex;
+  justify-content: space-between;
+}
+
+.player-left, .player-right {
+  font-weight: bold;
+  background-color: rgba(17, 16, 16, 0.53);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px; /* Add margin to separate from commands */
+}
+
+.player-left {
+  margin-left: 0; /* Remove margin-left */
+}
+
+.player-right {
+  margin-right: 0; /* Remove margin-right */
 }
 
 @media screen and (max-width: 810px) {

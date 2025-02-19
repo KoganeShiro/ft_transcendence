@@ -18,7 +18,7 @@
         <EditableTextField 
           v-model="user.name" 
           :modifiable="true" 
-          placeholder="Enter your-new-username"
+          :placeholder="$t(placeholderUsername)"
           @save="saveProfile"
         />
       </div>
@@ -27,7 +27,7 @@
         <EditableTextField 
           v-model="user.password" 
           :modifiable="true" 
-          placeholder="Enter your-new-password" 
+          :placeholder="$t(placeholderPassword)" 
           @save="saveProfile"
         />
       </div>
@@ -77,6 +77,9 @@ export default {
       },
       loading: false,
       avatarFile: null,
+      is42: false,
+      placeholderUsername: 'enter-your-new-username',
+      placeholderPassword: 'enter-your-new-password'
     };
   },
   methods: {
@@ -87,7 +90,7 @@ export default {
       API.get("/api/profile/")
         .then(response => {
           const data = response.data;
-          console.log("Account data fetched successfully:", data);
+          // console.log("Account data fetched successfully:", data);
           this.user.name = data.username;
           this.user.cover_photo = data.cover_photo;
           this.user.password = "*************";
@@ -172,14 +175,14 @@ export default {
       }
       
       request.then(response => {
-          console.log("Profile saved successfully:", response.data);
+          // console.log("Profile saved successfully:", response.data);
           this.avatarFile = null;
           this.loading = false;
           this.user.password = "*************";
       })
       .catch(error => {
-          console.error("Error saving profile:", error);
-          alert(this.$t("error_saving_profile"));
+          // console.error("Error saving profile:", error);
+          alert(this.$t("error-saving-profile"));
           this.loading = false;
           this.initAccount();
       });
@@ -198,7 +201,7 @@ export default {
             this.loading = false;
           })
           .catch(error => {
-            console.error("Error deleting account:", error);
+            // console.error("Error deleting account:", error);
             alert(this.$t("error-deleting-account"));
             this.loading = false;
           });

@@ -11,7 +11,7 @@
 
         <!-- Pseudo Sidebar -->
         <PseudoSidebar
-          :menuItems="menuItems"
+          :menuItems="translatedMenuItems"
           :activeItem="activeTab"
           @update:activeItem="setActiveTab"
         />
@@ -37,7 +37,6 @@
 
 <script>
 import API from '@/api.js';
-import axios from 'axios';
 import PseudoSidebar from "@/components/profile/PseudoSidebar.vue";
 import HeaderOrganism from "@/components/header/navbar.vue";
 import FooterOrganism from "@/components/footer.vue";
@@ -45,6 +44,9 @@ import ProfileStats from "@/components/profile/Stats.vue";
 import ProfileHistory from "@/components/profile/History.vue";
 import ProfileFriends from "@/components/profile/Friends.vue";
 import AvatarComponent from "@/components/atoms/Avatar.vue";
+import { useTheme } from '../components/useTheme';
+import { useLanguage } from '../components/useLanguage';
+import { useStore } from 'vuex';
 
 export default {
   components: {
@@ -58,15 +60,41 @@ export default {
   },
   data() {
     return {
-      menuItems: [
-        { key: "stats", label: this.$t('stats'), route: "#stats" },
-        { key: "history", label: this.$t('history'), route: "#history" },
-        { key: "friends", label: this.$t('friends'), route: "#friends" },
-      ],
       activeTab: localStorage.getItem('activeTab') || "stats",
       username: '',
       cover_photo: '',
     };
+  },
+  setup() {
+    const store = useStore();
+    const { changeTheme } = useTheme();
+    const { changeLanguage } = useLanguage();
+
+    return {
+      store,
+      changeTheme,
+      changeLanguage,
+    };
+  },
+  watch: {
+    activeTab(newTab) {
+      if (newTab === 'friends') {
+        // this.fetchFriends();
+        this.fetchFriendsInterval = setInterval(this.fetchFriends, 30000);
+      } else {
+        clearInterval(this.fetchFriendsInterval);
+        this.fetchFriendsInterval = null;
+      }
+    }
+  },
+  computed: {
+    translatedMenuItems() {
+      return [
+        { key: "stats", label: this.$t('stats'), route: "#stats" },
+        { key: "history", label: this.$t('history'), route: "#history" },
+        { key: "friends", label: this.$t('friends'), route: "#friends" },
+      ];
+    }
   },
   created() {
     this.getProfile();
@@ -78,12 +106,36 @@ export default {
     },
     async getProfile() {
       try {
-        const response = await axios.get('/api/profile/');
+        const response = await API.get('/api/profile/');
         this.username = response.data.username;
         this.cover_photo = response.data.cover_photo;
+        this.changeTheme(response.data.theme.toLowerCase());
+        console.log('Theme:', response.data.theme.toLowerCase());
+        const { changeLanguage } = useLanguage();
+        changeLanguage(response.data.lang);
+        console.log('Language:', response.data.lang);
       } catch (error) {
         console.error("Error fetching username:", error);
       }
+    },
+    async fetchFriends() {
+      this.isLoading = true;
+      await API.get('/api/friends/user_friends/')
+        .then(response => {
+          // Map the API response to your local friend structure.
+          this.friends = response.data.map((friend, index) => ({
+            id: index,
+            name: friend.username,
+            online: friend.online_status,
+            blocked: friend.is_blocked,
+          }));
+        })
+        .catch(error => {
+          console.error("Error fetching friends:", error);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };

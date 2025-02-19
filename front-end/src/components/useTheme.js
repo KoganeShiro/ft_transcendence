@@ -5,6 +5,7 @@ export function useTheme() {
 
   const changeTheme = (theme) => {
     store.dispatch('changeTheme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
   };
 
   return {

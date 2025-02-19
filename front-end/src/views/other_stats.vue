@@ -1,8 +1,8 @@
 <template>
     <div class="stats-container">
-      <h1>Stats</h1>
-      <div v-if="loading">Loading stats...</div>
-      <div v-else-if="Object.keys(stats).length === 0">No stats available.</div>
+      <h1>{{ $t('stats')}}</h1>
+      <div v-if="loading">loading...</div>
+      <!-- <div v-else-if="Object.keys(stats).length === 0">No stats available.</div> -->
       <div v-else>
         <div v-for="(gameStats, gameType) in stats.stats" :key="gameType">
           <GameStatsCard :gameType="gameType" :stats="gameStats" />

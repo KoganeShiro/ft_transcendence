@@ -51,6 +51,7 @@ export default {
     return {
       username: "",
       password: "",
+      otp: "",
       loading: false,
     };
   },
@@ -77,8 +78,8 @@ export default {
         // document.cookie = `refresh=${response.data.refresh}; path=/`;
         this.$router.push("/profile");
       } catch (error) {
-        console.error("Login failed:", error);
-        alert("Login failed. Please try again.");
+        // console.error("Login failed:", error);
+        alert("42-login-failed");
       } finally {
         this.loading = false;
       }
@@ -98,8 +99,8 @@ export default {
         // document.cookie = `refresh=${response.data.refresh}; path=/`;
         // this.$router.push("/profile");
       } catch (error) {
-        console.error("42 Login failed:", error);
-        alert("42 Login failed. Please try again.");
+        // console.error("42 Login failed:", error);
+        alert("42-login-failed");
       } finally {
         this.loading = false;
       }

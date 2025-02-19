@@ -4,6 +4,7 @@
 
 echo Run database migrations
 python manage.py migrate
+python manage.py collectstatic
 
 # Create superuser admin if not exists
 echo "from django.contrib.auth import get_user_model;
