@@ -166,10 +166,10 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-        console.log("Registration successful:", response.data);
+        // console.log("Registration successful:", response.data);
         this.$router.push("/login");
       } catch (error) {
-        console.error("Registration failed:", error);
+        // console.error("Registration failed:", error);
         //make a better error message if the user already exist
         alert("Registration failed. Please try again.");
       } finally {
@@ -191,7 +191,7 @@ export default {
         // document.cookie = `refresh=${response.data.refresh}; path=/`;
         // this.$router.push("/profile");
       } catch (error) {
-        console.error("42 Login failed:", error);
+        // console.error("42 Login failed:", error);
         alert("42 Login failed. Please try again.");
       } finally {
         this.loading = false;

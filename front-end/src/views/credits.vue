@@ -28,9 +28,9 @@
         <a href="https://github.com/KoganeShiro/ft_transcendence" target="_blank" rel="noopener noreferrer">
           {{ $t("github") }}
           <span class="stars">
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
-            <span class="star">&#9733;</span>
+            <span class="star">✨</span>
+            <span class="star">✨</span>
+            <span class="star">✨</span>
           </span>
         </a>
       </div>
@@ -138,6 +138,35 @@ export default {
   animation-delay: 0.3s;
 }
 
+.ks, .dl, .gk {
+  transition: transform 2s linear;
+}
+
+.ks:hover, .dl:hover, .gk:hover {
+  transform: rotateY(360deg);
+}
+
+.ks {
+  animation-delay: 0s, 5s;
+}
+
+.dl {
+  animation-delay: 1s, 6s;
+}
+
+.gk {
+  animation-delay: 2s, 7s;
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
 @keyframes star-float {
   from {
     transform: translateY(0);
@@ -153,15 +182,6 @@ export default {
   }
   to {
     transform: rotateY(360deg);
-  }
-}
-
-@keyframes move-left-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-10px);
   }
 }
 

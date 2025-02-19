@@ -124,6 +124,12 @@
     "activate": "Activate",
     "continue": "Continue",
     "tournament-winner": "Tournament Winner !!",
-    "eliminated": "Eliminated"
+    "eliminated": "Eliminated",
+    "42-login-failed": "Login with 42 failed, please try again",
+    "42-account-cannot-be-modified": "42 account cannot be modified",
+    "error-saving-profile": "Error saving profile",
+    "enter-your-new-username": "Enter your new username",
+    "enter-your-new-password": "Enter your new password",
+    "enter-code": "Enter the game code"
 }
   

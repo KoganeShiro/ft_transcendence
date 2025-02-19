@@ -88,13 +88,11 @@ export default {
   mounted() {
     // Fetch the initial friend list.
     this.fetchFriends();
-    this.fetchFriendsInterval = setInterval(this.fetchFriends, 50000);
   },
   beforeDestroy() {
   // Clear the interval when the component is destroyed.
-  if (this.fetchFriendsInterval) {
-    clearInterval(this.fetchFriendsInterval);
-  }
+  clearInterval(this.fetchFriendsInterval);
+  this.fetchFriendsInterval = null;
 },
   methods: {
     // Helper method to fetch and update the friend list.
@@ -118,12 +116,10 @@ export default {
         });
     },
     addFriend(newFriend) {
-      console.log("Adding friend:", newFriend);
-      // POST to /api/friends/add_friend/ with the friend's username.
+      // console.log("Adding friend:", newFriend);
       API.post('/api/friends/add_friend/', { username: newFriend.name })
         .then(() => {
-          console.log("Friend added:", newFriend.name);
-          // Refresh the friend list after adding.
+          // console.log("Friend added:", newFriend.name);
           this.fetchFriends();
         })
         .catch(error => {
@@ -137,7 +133,7 @@ export default {
       const friend = this.friends[index];
       API.post('/api/friends/remove_friend/', { username: friend.name })
         .then(() => {
-          console.log("Removed friend:", friend.name);
+          // console.log("Removed friend:", friend.name);
           // Refresh the friend list after removal.
           this.fetchFriends();
         })
@@ -155,7 +151,7 @@ export default {
       const friend = this.friends[index];
       API.post('/api/friends/block_user/', { username: friend.name })
         .then(() => {
-          console.log("Blocked friend:", friend.name);
+          // console.log("Blocked friend:", friend.name);
           // Refresh the friend list after blocking.
           this.fetchFriends();
         })
@@ -173,7 +169,7 @@ export default {
       const friend = this.friends[index];
       API.post('/api/friends/unblock_user/', { username: friend.name })
         .then(() => {
-          console.log("Unblocked friend:", friend.name);
+          // console.log("Unblocked friend:", friend.name);
           // Refresh the friend list after unblocking.
           this.fetchFriends();
         })

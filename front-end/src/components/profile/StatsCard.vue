@@ -2,7 +2,7 @@
     <div class="game-stats-card">
       <h2>{{ gameType }}</h2>
       <div class="stats-list">
-        <div class="stat-item">
+        <div v-if="gameType !== 'Tic Tac Toe'" class="stat-item">
           <strong>{{ $t("current-rank") }}</strong> {{ stats.currentRank || ' N/A' }}
         </div>
         <div class="stat-item">
@@ -56,15 +56,15 @@
     computed: {
       rankProgressionData() {
         if (!this.stats || !Array.isArray(this.stats.rankProgression)) {
-          console.warn('Missing or invalid rankProgression data for', this.gameType, this.stats);
+          // console.warn('Missing or invalid rankProgression data for', this.gameType, this.stats);
           return { labels: [], datasets: [] };
         }
         console.log("stats", this.stats);
         const progression = this.stats.rankProgression;
-        console.log("progres :", progression);
-        console.debug("Rank Progression for", this.gameType, progression);
+        //console.log("progres :", progression);
+        //console.debug("Rank Progression for", this.gameType, progression);
         return {
-          labels: progression.map((_, index) => `Match ${index + 1}`),
+          labels: progression.map((_, index) => `Match ${index}`),
           datasets: [{
             label: 'rank-points',
             data: progression,
@@ -78,9 +78,9 @@
         const wins = this.stats.wins !== undefined ? this.stats.wins : 0;
         const losses = this.stats.losses !== undefined ? this.stats.losses : 0;
         if (wins === 0 && losses === 0) {
-          console.warn('No win/loss data for', this.gameType, this.stats);
+          // console.warn('No win/loss data for', this.gameType, this.stats);
         }
-        console.debug("Win/Loss for", this.gameType, { wins, losses });
+        // console.debug("Win/Loss for", this.gameType, { wins, losses });
         return {
           labels: ['Wins', 'Losses'],
           datasets: [{
@@ -97,10 +97,10 @@
         const pointsLostUnder10 = this.stats.pointsLostUnder10Exchanges || 0;
         const pointsLostOver10 = this.stats.pointsLostOver10Exchanges || 0;
         
-        console.debug("Point Exchange for", this.gameType, {
-          pointsWonUnder5, pointsWonUnder10, pointsWonOver10,
-          pointsLostUnder5, pointsLostUnder10, pointsLostOver10
-        });
+        // console.debug("Point Exchange for", this.gameType, {
+        //   pointsWonUnder5, pointsWonUnder10, pointsWonOver10,
+        //   pointsLostUnder5, pointsLostUnder10, pointsLostOver10
+        // });
         
         return {
           labels: ['< 5 exchanges', '5-10 exchanges', '> 10 exchanges'],

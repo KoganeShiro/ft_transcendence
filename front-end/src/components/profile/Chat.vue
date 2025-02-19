@@ -146,7 +146,7 @@ export default {
         message: this.newMessage,
       })
         .then(response => {
-          console.log("Message sent successfully:", response.data);
+          // console.log("Message sent successfully:", response.data);
           this.scrollToBottom();
         })
         .catch(error => {
