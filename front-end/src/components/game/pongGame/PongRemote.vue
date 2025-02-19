@@ -182,8 +182,8 @@ export default {
       const player2 = data.player2_name[0];
       const score1 = data.score1[0];
       const score2 = data.score2[0];
-      const stats1 = data.stats1[0];
-      const stats2 = data.stats2[0];
+      stats1 = data.stats1[0]; //change georg remove const
+      stats2 = data.stats2[0]; // change georg remove const
       const url_user1 = `http://back-end:8000/api/profile/${player1}/`;
       const url_user2 = `http://back-end:8000/api/profile/${player2}/`;
       const user1_stats = `http://back-end:8000/api/stats/${player1}/`;
