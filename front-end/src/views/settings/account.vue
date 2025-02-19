@@ -73,6 +73,7 @@ export default {
         password: "",
         avatar: "",
         cover_photo: "",
+        mfa_state: "not_init",
         mfa_enabled: false,
       },
       loading: false,
@@ -96,6 +97,7 @@ export default {
           this.user.password = "*************";
           this.is42 = data.is_42;
           this.user.mfa_enabled = data.mfa_enabled;
+          this.user.mfa_state = "init";
         })
         .catch(error => {
           console.error("Error fetching account data:", error);

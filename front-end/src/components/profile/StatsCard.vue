@@ -14,7 +14,7 @@
       </div>
       
       <div class="charts-container">
-        <div class="chart">
+        <div class="chart" v-if="gameType !== 'Tic Tac Toe'" >
           <h3>{{ $t("rank-progress") }}</h3>
           <Line :data="rankProgressionData" :options="chartOptions" />
         </div>
@@ -22,9 +22,13 @@
           <h3>{{ $t("win/loss-ratio") }}</h3>
           <Doughnut :data="winLossData" :options="chartOptions" />
         </div>
-        <div v-if="gameType !== 'Tic Tac Toe'" class="chart">
+        <div class="chart" v-if="gameType !== 'Tic Tac Toe'">
           <h3>{{ $t("point-exchange") }}</h3>
           <Bar :data="pointExchangeData" :options="chartOptions" />
+        </div>
+        <div class="chart" v-if="gameType === 'Tic Tac Toe'">
+          <h3>{{ $t("win-on-x-moves") }}</h3>
+          <Bar :data="moveExchangeData" :options="chartOptions" />
         </div>
       </div>
     </div>
@@ -112,6 +116,30 @@
             },
             {
               label: 'Points Lost',
+              data: [pointsLostUnder5, pointsLostUnder10, pointsLostOver10],
+              backgroundColor: '#FF6384'
+            }
+          ]
+        }
+      },
+      moveExchangeData() {
+        const pointsWonUnder5 = this.stats.pointsWonUnder5Exchanges || 0;
+        const pointsWonUnder10 = this.stats.pointsWonUnder10Exchanges || 0;
+        const pointsWonOver10 = this.stats.pointsWonOver10Exchanges || 0;
+        const pointsLostUnder5 = this.stats.pointsLostUnder5Exchanges || 0;
+        const pointsLostUnder10 = this.stats.pointsLostUnder10Exchanges || 0;
+        const pointsLostOver10 = this.stats.pointsLostOver10Exchanges || 0;
+        
+        return {
+          labels: ['< 5 moves', '5-10 moves', '> 10 moves'],
+          datasets: [
+            {
+              label: 'Moves to Won',
+              data: [pointsWonUnder5, pointsWonUnder10, pointsWonOver10],
+              backgroundColor: '#36A2EB'
+            },
+            {
+              label: 'Moves to Lost',
               data: [pointsLostUnder5, pointsLostUnder10, pointsLostOver10],
               backgroundColor: '#FF6384'
             }

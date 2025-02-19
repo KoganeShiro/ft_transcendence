@@ -39,7 +39,7 @@
         const username = this.route.params.username;
         const response = await API.get('/api/stats/' + username);
         this.stats = response.data;
-        console.log('Stats:', this.stats);
+        // console.log('Stats:', this.stats);
         this.loading = false;
       } catch (error) {
         console.error('Error fetching stats:', error);

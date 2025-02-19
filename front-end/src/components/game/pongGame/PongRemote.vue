@@ -75,12 +75,12 @@ export default {
       this.gameSocket = new WebSocket(`wss://${window.location.host}/ws/pong/`);
 
       this.gameSocket.onopen = () => {
-        console.log("[PongRemote] WebSocket connected.");
+        // console.log("[PongRemote] WebSocket connected.");
         // Fetch local profile data
         API.get('/api/profile/')
           .then(response => {
             const username = response.data.username;
-            console.log("[PongRemote] Local profile received:", response.data);
+            // console.log("[PongRemote] Local profile received:", response.data);
             this.localPlayer.pseudo = username;
             this.$emit('players-update', {
               localPlayer: this.localPlayer,
@@ -104,7 +104,7 @@ export default {
           this.updateCanvas();
         } 
         else if (messageType === "players_ready") {
-          console.log("[PongRemote] players_ready received:", data);
+          // console.log("[PongRemote] players_ready received:", data);
           let opponentUsername = "";
           // Use playerRole to determine opponent username (fallback if role missing)
           if (this.playerRole === "player1") {
@@ -112,16 +112,16 @@ export default {
           } else {
             opponentUsername = data.player1 || data.player2;
           }
-          console.log("[PongRemote] Opponent username received:", opponentUsername);
+          // console.log("[PongRemote] Opponent username received:", opponentUsername);
           this.opponentPlayer.pseudo = opponentUsername;
           if (opponentUsername === "loading...") {
-            console.log("[PongRemote] Opponent not found yet, waiting...");
+            // console.log("[PongRemote] Opponent not found yet, waiting...");
             return;
           }
-          console.log("[PongRemote] Calling API to get opponent profile for:", opponentUsername);
+          // console.log("[PongRemote] Calling API to get opponent profile for:", opponentUsername);
           API.get(`/api/profile/${opponentUsername}`)
             .then(response => {
-              console.log("[PongRemote] Opponent profile received:", response.data);
+              // console.log("[PongRemote] Opponent profile received:", response.data);
               this.opponentPlayer.pseudo = response.data.username;
               this.opponentPlayer.imageUrl = response.data.cover_photo;
               // Emit updated players data if needed
@@ -133,7 +133,7 @@ export default {
               this.handleOpponentFound();
             })
             .catch(err => {
-              console.error("[PongRemote] Error fetching opponent profile:", err);
+              // console.error("[PongRemote] Error fetching opponent profile:", err);
               // Fallback: use the received username with no image
               this.opponentPlayer.pseudo = opponentUsername;
               this.opponentPlayer.imageUrl = defaultAvatar;
@@ -145,17 +145,17 @@ export default {
             });
           this.gameStarted = true;
           if (this.playerRole === "player1") {
-            console.log("[test] Player roles: local=player1, opponent=player2");
+            // console.log("[test] Player roles: local=player1, opponent=player2");
             this.leftPlayer = this.localPlayer.pseudo;
             this.rightPlayer = this.opponentPlayer.pseudo;
           } else {
-            console.log("[test] Player roles: local=player2, opponent=player1");
+            // console.log("[test] Player roles: local=player2, opponent=player1");
             this.leftPlayer = this.opponentPlayer.pseudo;
             this.rightPlayer = this.localPlayer.pseudo;
           }
         } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
-          console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
+          // console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
         } 
         else if (messageType === "game_over") {
           this.gameStarted = false;
@@ -165,20 +165,20 @@ export default {
       };
 
       this.gameSocket.onclose = () => {
-        console.log("[PongRemote] WebSocket closed.");
+        // console.log("[PongRemote] WebSocket closed.");
         this.gameSocket = null;
         this.gameStarted = false;
       };
     },
     handleOpponentFound() {
-      console.log("[PongRemote] Opponent found, will hide Versus overlay after delay.");
+      // console.log("[PongRemote] Opponent found, will hide Versus overlay after delay.");
       // Delay hiding Versus overlay by 3 seconds (adjust as needed)
       setTimeout(() => {
         this.handleTimeUp();
       }, 3000);
     },
     handleTimeUp() {
-      console.log("[PongRemote] Versus time-up, hiding overlay.");
+      // console.log("[PongRemote] Versus time-up, hiding overlay.");
       this.showVersus = false;
       // Optionally emit an event to the parent if needed:
       this.$emit('opponent-found');
@@ -188,7 +188,7 @@ export default {
       if (this.requestSent) return;
       this.requestSent = true;
       try {
-        console.log("Game ended. Winner:", winner);
+        // console.log("Game ended. Winner:", winner);
         // Always fetch both profiles.
         const localResponse = await API.get("/api/profile/");
         const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);

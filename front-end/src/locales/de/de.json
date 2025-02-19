@@ -130,6 +130,12 @@
     "error-saving-profile": "Fehler beim Speichern des Profils",
     "enter-your-new-username": "Geben Sie Ihren neuen Benutzernamen ein",
     "enter-your-new-password": "Geben Sie Ihr neues Passwort ein",
-    "enter-code": "Geben Sie den Spielcode ein"
+    "enter-code": "Geben Sie den Spielcode ein",
+    "error-add-friend": "Fehler beim Hinzufügen eines Freundes, vielleicht existiert der Spieler nicht?",
+    "error-setting-up-2fa": "Fehler beim Einrichten von 2FA",
+    "disable2fa": "2FA deaktivieren",
+    "error-enabling-2fa": "Fehler beim Aktivieren von 2FA",
+    "error-disabling-2fa": "Fehler beim Deaktivieren von 2FA",
+    "win-on-x-moves": "Gewinnen Sie in x Zügen"
   }
   
