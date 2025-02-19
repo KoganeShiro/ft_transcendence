@@ -246,25 +246,25 @@ TEST
         put the lang in french to see if there is things i forgot to translate
         logout ✅
         login ✅
-        cannot modify username to a username already existant ✅
-        activate the 2fa
+        cannot modify username to a username already  existant ✅
+        activate the 2fa ✅
         change the profile picture ✅
-        logout
-        login with the 2fa
-        disable the 2fa
-        logout
-        login
+        logout ✅
+        login with the 2fa ✅
+        disable the 2fa ✅
+        logout ✅
+        login ✅
         modify the username ✅
-        logout
-        login
-        modify the password
-        logout
-        login
+        logout ✅
+        login ✅
+        modify the password ✅
+        logout ✅
+        login ✅
 
         open another browser
 
-        register with 42
-        add the user you create as friend
+        register with 42 ✅
+        add the user you create as friend ✅
         block
         unblock
         remove

@@ -42,9 +42,10 @@ Additionally, it includes advanced features such as AI opponents locally and liv
 *The OTP is not mandatory, if you didn't activate it you don't have to put anything in it*
 ![login-page](./readme/login-page.png)
 ##### Profile (stat) page
-
+![stats-page](./readme/stats.png)
+![profile-phone-page](./readme/profile-phone.png)
 ###### history
-
+![history-page](./readme/history.png)
 ###### friends
 ![friend-chat-page](./readme/friends.png)
 ##### Settings (account) page
@@ -59,7 +60,7 @@ Additionally, it includes advanced features such as AI opponents locally and liv
 ##### Play page
 ![choose-game-page](./readme/choose-game.png)
 ##### Pong modes page
-*You can either play against an AI (solo), play against someone randomly, play against someone that is beside you, play against a friend in a private room remotely or in a local tournament of four people*
+*You can either play against an AI (solo), play against someone that is beside you, play against a friend in a private room remotely or in a local tournament of four people*
 ![pong-mode-page](./readme/pong-mode.png)
 ##### Play with friend
 ![play-withfriend-page](./readme/play-withfriend.png)
