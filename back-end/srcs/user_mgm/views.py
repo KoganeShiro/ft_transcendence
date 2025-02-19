@@ -432,6 +432,25 @@ def incrementStats(request, lookup_value):
 	return Response(serializer.errors, status=400)
 
 
+from .serializers import TTTStatsUpdateSerializer
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def stats_ttt(request):
+	logger.debug('Incrementing TTT stats for user %s', request.user.username)
+	"""
+	Fetch user profile using either user ID or username.
+	"""
+	user = request.user
+	serializer = TTTStatsUpdateSerializer(user, data=request.data, partial=True)
+	if not serializer.is_valid():
+		return Response(serializer.errors, status=400)	
+	serializer.save()
+	return Response(serializer.data)
+
+
+	
+
 
 
 

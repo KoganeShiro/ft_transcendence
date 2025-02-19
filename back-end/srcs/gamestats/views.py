@@ -145,8 +145,9 @@ class TTTViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         logging.debug("create ttt")      
         self.check_permissions(request)  # Check permissions explicitly
-        if request.user.username != 'api_user':
-            raise PermissionDenied("User is not authenticated or not an API user")
+        # if request.user.username != 'api_user':
+        #     raise PermissionDenied("User is not authenticated or not an API user")
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -278,7 +279,7 @@ class LastFiveTTTView(viewsets.ViewSet):
                 game['won'] = False
             game['my_turn'] = game['player1_turn'] if game['player1'] == request.user.username else game['player2_turn']
             game['opponent_turn'] = game['player1_turn'] if game['player2'] == request.user.username else game['player2_turn']
-            game['my_rank'] = game['rank_player1_begin'] if game['player1'] == request.user.username else game['rank_player2_begin']
-            game['opponent_rank'] = game['rank_player1_begin'] if game['player2'] == request.user.username else game['rank_player2_begin']
+            # game['my_rank'] = game['rank_player1_begin'] if game['player1'] == request.user.username else game['rank_player2_begin']
+            # game['opponent_rank'] = game['rank_player1_begin'] if game['player2'] == request.user.username else game['rank_player2_begin']
 
         return Response(data)
