@@ -161,8 +161,6 @@ export default {
           // console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
         } 
         else if (messageType === "game_over") {
-          console.log(data.player2_name[0])
-          console.log("data :", data);
           this.gameStarted = false;
           this.winner = data.winner;
           this.handleGameEnded(data.winner);
@@ -181,17 +179,11 @@ export default {
 
     handle_stats(data){
       const player1 = this.localPlayer.pseudo;
-      console.log(player1);
       const player2 = data.player2_name[0];
-      console.log(player2);
       const score1 = data.score1[0];
-      console.log(score1);
       const score2 = data.score2[0];
-      console.log(score2);
       const stats1 = data.stats1[0];
-      console.log(stats1);
       const stats2 = data.stats2[0];
-      console.log(stats2);
       const url_user1 = `http://back-end:8000/api/profile/${player1}/`;
       const url_user2 = `http://back-end:8000/api/profile/${player2}/`;
       const user1_stats = `http://back-end:8000/api/stats/${player1}/`;

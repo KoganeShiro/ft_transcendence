@@ -34,9 +34,9 @@ export default {
       },
       // New state for mobile: the player paddle’s horizontal position.
       player1_x: 0.5,
-      ballSpeedFactor: 20,
-      initialBallSpeed: 20,
-      maxBallSpeed: 70,
+      ballSpeedFactor: 30,
+      initialBallSpeed: 30,
+      maxBallSpeed: 80,
       // Desktop key flags remain for non‑mobile mode.
       keysPressed: {
         up_left: false,
@@ -149,13 +149,13 @@ export default {
         // Desktop: update vertical paddle positions using keys
         const paddleSpeed = 0.01;
         if (this.keysPressed.up_left)
-          this.gameState.player1_y = Math.max(this.gameState.player1_y - paddleSpeed, 0);
+          this.gameState.player1_y = Math.max(this.gameState.player1_y - paddleSpeed, 0 + 0.06);
         if (this.keysPressed.down_left)
-          this.gameState.player1_y = Math.min(this.gameState.player1_y + paddleSpeed, 1);
+          this.gameState.player1_y = Math.min(this.gameState.player1_y + paddleSpeed, 1 - 0.05);
         if (this.keysPressed.up_right)
-          this.gameState.player2_y = Math.max(this.gameState.player2_y - paddleSpeed, 0);
+          this.gameState.player2_y = Math.max(this.gameState.player2_y - paddleSpeed, 0 + 0.06);
         if (this.keysPressed.down_right)
-          this.gameState.player2_y = Math.min(this.gameState.player2_y + paddleSpeed, 1);
+          this.gameState.player2_y = Math.min(this.gameState.player2_y + paddleSpeed, 1 - 0.05);
       }
       // Update ball position (applies to both modes)
       this.gameState.ball_x += this.gameState.ball_velocity_x * deltaTime * this.ballSpeedFactor;
