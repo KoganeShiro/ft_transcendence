@@ -165,6 +165,45 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+class TTTStatsUpdateSerializer(serializers.ModelSerializer):    
+
+    class Meta:
+        model = CustomUser
+        fields = ('stat_ttt_rank', 'stat_ttt_wins_tot', 'stat_ttt_loss_tot', 'stat_ttt_wins_av_movm', 'stat_ttt_loss_av_movm', 'stat_ttt_wins_tot_min5', 'stat_ttt_loss_tot_min5', 'stat_ttt_wins_tot_min10', 'stat_ttt_loss_tot_min10', 'stat_ttt_wins_tot_max10', 'stat_ttt_loss_tot_max10')
+
+    def update(self, instance, validated_data):
+        """
+        Allow partial updates by checking for each field individually.
+        """
+        for attr, value in validated_data.items():
+            if attr == 'stat_ttt_wins_tot_min5':
+                instance.stat_ttt_wins_tot_min5 += value
+            elif attr == 'stat_ttt_loss_tot_min5':
+                instance.stat_ttt_loss_tot_min5 += value
+            elif attr == 'stat_ttt_wins_tot_min10':
+                instance.stat_ttt_wins_tot_min10 += value
+            elif attr == 'stat_ttt_loss_tot_min10':
+                instance.stat_ttt_loss_tot_min10 += value
+            elif attr == 'stat_ttt_wins_tot_max10':
+                instance.stat_ttt_wins_tot_max10 += value
+            elif attr == 'stat_ttt_loss_tot_max10':
+                instance.stat_ttt_loss_tot_max10 += value
+            elif attr == 'stat_ttt_wins_tot':
+                instance.stat_ttt_wins_tot += value
+            elif attr == 'stat_ttt_loss_tot':
+                instance.stat_ttt_loss_tot += value
+        instance.save()
+        return instance
+       
+    
+
+
+
+
 
 from rest_framework import serializers
 from .models import CustomUser

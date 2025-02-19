@@ -4,7 +4,7 @@
 
 echo Run database migrations
 python manage.py migrate
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 
 # Create superuser admin if not exists
 echo "from django.contrib.auth import get_user_model;
@@ -38,6 +38,17 @@ email = 'api_user@api.fr'
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username, email)
     print(f'APIuser {username} created.')" | python manage.py shell
+
+# Create AI if not exists
+
+echo "from django.contrib.auth import get_user_model;
+import os;
+User = get_user_model();
+username = 'AI'
+email = 'AI@ai.fr'
+if not User.objects.filter(username=username).exists():
+    User.objects.create_superuser(username, email)
+    print(f'AI user {username} created.')" | python manage.py shell
 
 
 # Start the server

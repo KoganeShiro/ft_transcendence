@@ -57,10 +57,10 @@ class MultiWriteSerializer(serializers.ModelSerializer):
         model = PongMulti
         fields = '__all__'
  
-class TTTWriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TTT
-        fields = '__all__'
+# class TTTWriteSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = TTT
+#         fields = '__all__'
 
 
 class MultiSerializer(serializers.ModelSerializer):
