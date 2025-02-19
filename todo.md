@@ -228,10 +228,9 @@ get last 15 messages
 - [x] Pong AI
 - [-] Fix the decalage on the canva
 
-- [ ] Add the profile and history page + phone
 - [ ] Make a small walkthrough video
 
-- [ ] Remove all the console.log
+- [-] Remove all the console.log
 - [x] if create a room in play with friend shouldn't be able to join one
 - [ ] Add data for with friend and ttt ai
 
@@ -247,13 +246,14 @@ TEST
         logout ✅
         login ✅
         cannot modify username to a username already  existant ✅
-        activate the 2fa ✅
+        activate the 2fa 
         change the profile picture ✅
         logout ✅
-        login with the 2fa ✅
-        disable the 2fa ✅
-        logout ✅
-        login ✅
+
+        login with the 2fa 
+        disable the 2fa 
+        logout 
+        login 
         modify the username ✅
         logout ✅
         login ✅

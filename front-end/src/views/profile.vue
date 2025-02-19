@@ -76,17 +76,6 @@ export default {
       changeLanguage,
     };
   },
-  watch: {
-    activeTab(newTab) {
-      if (newTab === 'friends') {
-        // this.fetchFriends();
-        this.fetchFriendsInterval = setInterval(this.fetchFriends, 30000);
-      } else {
-        clearInterval(this.fetchFriendsInterval);
-        this.fetchFriendsInterval = null;
-      }
-    }
-  },
   computed: {
     translatedMenuItems() {
       return [
@@ -102,6 +91,14 @@ export default {
   methods: {
     setActiveTab(tab) {
       this.activeTab = tab || "stats";
+      // console.log('activeTab:', this.activeTab);
+      if (this.activeTab === 'friends') {
+        this.fetchFriendsInterval = setInterval(this.fetchFriends, 3000);
+      } else {
+        // console.log('clearInterval');
+        clearInterval(this.fetchFriendsInterval);
+        this.fetchFriendsInterval = null;
+      }
       localStorage.setItem('activeTab', tab);
     },
     async getProfile() {

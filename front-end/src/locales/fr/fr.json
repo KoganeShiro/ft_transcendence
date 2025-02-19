@@ -107,7 +107,6 @@
     "winner": "Gagnant",
     "loser": "Perdant",
     "search-opponent": "Rechercher un adversaire",
-    "matchmaking": "Recherche d'adversaire",
     "starting-tournament": "Démarrage du tournoi",
     "until-start": " seconds avant le début du match",
     "in": "dans",
@@ -138,6 +137,7 @@
     "disable2fa": "Désactiver la 2FA",
     "error-enabling-2fa": "Erreur lors de l'activation de 2FA",
     "error-disabling-2fa": "Erreur lors de la désactivation de 2FA",
-    "win-on-x-moves": "Gagner en x coups"
+    "win-on-x-moves": "Gagner en x coups",
+    "matchmaking": "Matchmaking (Appareillage)"
   }
   

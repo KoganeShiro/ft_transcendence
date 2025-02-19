@@ -8,11 +8,11 @@
       <div v-if="isOpen" class="details">
         <div class="detail-item">
           <span class="label">{{ $t("winner") }}:</span>
-          {{ gameDetails.winner }}
+          {{ this.match.winner }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("loser") }}:</span>
-          {{ gameDetails.loser }}
+          {{ this.match.loser }}
         </div>
         <div v-if="localGameType === 'pong'">
           <div class="detail-item">
