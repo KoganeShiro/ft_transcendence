@@ -131,6 +131,7 @@
     "42-account-cannot-be-modified": "Un compte 42 ne peut pas être modifié",
     "error-saving-profile": "Erreur lors de l'enregistrement du profil",
     "enter-your-new-username": "Entrez votre nouveau nom d'utilisateur",
-    "enter-your-new-password": "Entrez votre nouveau mot de passe"
+    "enter-your-new-password": "Entrez votre nouveau mot de passe",
+    "enter-code": "Entrez le code de la partie"
   }
   

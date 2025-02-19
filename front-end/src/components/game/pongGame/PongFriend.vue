@@ -33,10 +33,11 @@
           <input
             v-model="joinCode"
             type="text"
-            placeholder="Enter match code"
+            :placeholder="$t('enter-code')"
             class="match-code-input"
+            :disabled="isCreatingPrivateRoom"
           />
-          <Button class="btn" variant="primary" @click="joinPrivateRoom">
+          <Button class="btn" variant="primary" @click="joinPrivateRoom" :disabled="isCreatingPrivateRoom">
             {{ $t('join-game') }}
           </Button>
         </div>
@@ -149,7 +150,6 @@ export default {
     handleCreate() {
       if (this.isCreatingRoom) return;
       this.isCreatingRoom = true;
-      this.$emit('hideMessageIcon');
       this.showCreatePrivateRoom();
       this.createPrivateRoom();
     },
@@ -254,6 +254,7 @@ export default {
         this.rightPlayer = this.localPlayer.pseudo;
       }
       console.log("Opponent:", this.opponentPlayer.pseudo);
+      this.$emit('hideMessageIcon');
       this.showPopup = false;
       this.showVersus = true;
       console.log("Match ready. Starting game...");

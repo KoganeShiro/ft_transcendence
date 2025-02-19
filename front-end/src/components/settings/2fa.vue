@@ -11,6 +11,12 @@
       <div v-if="is2faEnabled">
         <p>{{ $t('2faEnabled') }}</p>
         <div class="buttons-row">
+          <TextField
+            id="otp"
+            v-model="otp"
+            :label="$t('otp')"
+            :placeholder="$t('enter-otp')"
+          />
           <ButtonAtom 
             variant="primary" 
             @click="disable2FA"
@@ -145,10 +151,9 @@ export default {
       if (this.loading) return;
       this.loading = true;
       try {
-        await API.post("/api/disable_2fa/");
+        await API.post("/api/disable_2fa/", { otp: this.otp });
         this.$emit('update:mfa_enable', false);
         this.user.mfa_enabled = false;
-        toggleQR();
       } catch (error) {
         console.error("Error disabling 2FA:", error);
         alert(this.$t('error_disabling_2fa'));
@@ -193,13 +198,6 @@ export default {
 .loading {
   text-align: center;
   font-size: 1.2rem;
-}
-
-.status-message {
-  font-size: 18px;
-  color: #28a745;
-  margin-bottom: 15px;
-  text-align: center;
 }
 
 .button-container {

@@ -111,7 +111,8 @@ export default {
         this.cover_photo = response.data.cover_photo;
         this.changeTheme(response.data.theme.toLowerCase());
         console.log('Theme:', response.data.theme.toLowerCase());
-        this.changeLanguage(response.data.lang);
+        const { changeLanguage } = useLanguage();
+        changeLanguage(response.data.lang);
         console.log('Language:', response.data.lang);
       } catch (error) {
         console.error("Error fetching username:", error);
