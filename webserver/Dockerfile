@@ -27,7 +27,7 @@ RUN chmod -R 755 /usr/share/nginx/staticfiles
 
 
 
-COPY webserver/nginx.conf /etc/nginx/nginx.conf
+COPY webserver/nginx-dev.conf /etc/nginx/nginx.conf
 
 COPY webserver/favicon.ico /usr/share/nginx/favicon.ico
 
