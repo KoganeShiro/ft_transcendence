@@ -344,7 +344,7 @@ export default {
       } else {
         winner = this.gameState.score1 > this.gameState.score2 ? "Opponent" : "Player";
       }
-      console.log("Game ended. Winner:", winner);
+      // console.log("Game ended. Winner:", winner);
       this.$emit("gameEnded", winner);
     },
 

@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     onThemeChanged(themeName) {
-      console.log("Theme changed to:", themeName);
+      // console.log("Theme changed to:", themeName);
       // Additional logic can be added here if needed.
     },
   },

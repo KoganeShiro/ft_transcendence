@@ -65,15 +65,15 @@
       this.$nextTick(() => {
         const pongGameInstance = this.$refs.pongGameComponent;
         if (pongGameInstance) {
-          console.log("PongGame instance available, commands can be used.");
+          // console.log("PongGame instance available, commands can be used.");
         } else {
-          console.error("PongGame instance is not defined");
+          // console.error("PongGame instance is not defined");
         }
       });
   
       // Wait for an opponent, then call onOpponentFound:
       setTimeout(() => {
-        console.log("Opponent found, starting game loop.");
+        // console.log("Opponent found, starting game loop.");
         this.onOpponentFound();
       }, 3000);
     },
@@ -84,10 +84,10 @@
         const pongGameInstance = this.$refs.pongGameComponent;
         if (pongGameInstance) {
           pongGameInstance.startGameLoop();
-          console.log("onOpponentFound: PongGame instance available, game can start.");
+          // console.log("onOpponentFound: PongGame instance available, game can start.");
           // Start the AI opponent:
           PongAI.start(pongGameInstance);
-          console.log("PongAI.start() called.");
+          // console.log("PongAI.start() called.");
         }
       },
       handleTimeUp() {

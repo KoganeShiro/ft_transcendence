@@ -24,9 +24,6 @@
             {{ $t('disable2fa') }}
           </ButtonAtom>
         </div>
-        <!-- <div class="qr-section">
-          <img :src="qrCode" alt="2FA QR Code" class="qr-code-image" />
-        </div> -->
       </div>
 
       <!-- When 2FA is not enabled, show the activate button and enable flow -->
@@ -88,14 +85,15 @@ export default {
       qrCode: null,
       otp: "",
       loading: false,
-      showQR: false
+      showQR: false,
     };
   },
   computed: {
     is2faEnabled() {
-      if (!this.user) return;
-      // console.log("is2faEnabled:", this.user && this.user.mfa_enabled);
-      return this.user && this.user.mfa_enabled;
+      if (!this.user) return 'not_init';
+      if (this.user.mfa_state === "not_init") return 'not_init';
+      // console.log("is2faEnabled:", this.user.mfa_enabled);
+      return (this.user && this.user.mfa_enabled);
     }
   },
   methods: {
@@ -110,8 +108,7 @@ export default {
         };
         reader.readAsDataURL(response.data);
       } catch (error) {
-        console.error("Error setting up 2FA:", error);
-        alert(this.$t('error_setting_up_2fa'));
+        alert(this.$t('error-setting-up-2fa'));
       } finally {
         this.loading = false;
       }
@@ -122,10 +119,10 @@ export default {
         this.setup2FA();
       }
       this.showQR = !this.showQR;
-      console.log("showQR:", this.showQR);
       return this.showQR;
     },
     async enable2FA() {
+      if (this.is2faEnabled === true || this.is2faEnabled === 'not_init') return;
       if (!this.otp) {
         alert(this.$t('enter-otp'));
         return;
@@ -134,15 +131,13 @@ export default {
       this.loading = true;
       try {
         await API.post("/api/enable_2fa/", { otp: this.otp });
-        console.log("2FA enabled successfully:", this.otp);
         this.$emit('update:mfa_enable', true);
         this.qrCode = null;
         this.otp = "";
         this.showQR = false;
         this.user.mfa_enabled = true;
       } catch (error) {
-        console.error("Error enabling 2FA:", error);
-        alert(this.$t('error_enabling_2fa'));
+        alert(this.$t('error-enabling-2fa'));
       } finally {
         this.loading = false;
       }
@@ -155,8 +150,7 @@ export default {
         this.$emit('update:mfa_enable', false);
         this.user.mfa_enabled = false;
       } catch (error) {
-        console.error("Error disabling 2FA:", error);
-        alert(this.$t('error_disabling_2fa'));
+        alert(this.$t('error-disabling-2fa'));
       } finally {
         this.loading = false;
       }
@@ -168,7 +162,7 @@ export default {
     }
   },
   mounted() {
-    if (this.is2faEnabled) {
+    if (!this.is2faEnabled) {
       this.setup2FA();
     }
   }
@@ -179,8 +173,7 @@ export default {
 .twofa-component {
   border-radius: 8px;
   margin: 30px 0;
-  padding: 25px;
-  font-family: 'Arial', sans-serif;
+  padding: 20px;
 }
 
 .twofa-title {

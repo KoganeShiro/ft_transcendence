@@ -41,6 +41,12 @@ export default {
     xImage: { type: String, default: () => defaultXImage },
     oImage: { type: String, default: () => defaultOImage },
   },
+
+  /*
+  * Need to know how many moves each players has made.
+  * Need to know who win
+  */
+
   setup(props, { emit }) {
     // Game state
     const state = reactive({
@@ -95,7 +101,7 @@ export default {
       // In solo mode, if it's now the AI's turn, schedule the AI move.
       if (props.mode === "solo" && state.currentPlayer === "O" && !state.gameOver) {
         // This log explains why the AI is making its move:
-        console.log("AI move triggered because it's now AI's turn in solo mode.");
+        // console.log("AI move triggered because it's now AI's turn in solo mode.");
         setTimeout(() => {
           const aiMove = getAIMove(state.board, state.moves, state.currentPlayer);
           if (aiMove) {

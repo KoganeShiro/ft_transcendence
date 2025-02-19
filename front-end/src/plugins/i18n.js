@@ -7,7 +7,8 @@ import frTerms from "@/locales/fr/terms.json";
 import frPrivacy from "@/locales/fr/privacy.json";
 import deTerms from "@/locales/de/terms.json";
 import dePrivacy from "@/locales/de/privacy.json";
-import en from "@/locales/en/en.json"; // General translations
+// General translations
+import en from "@/locales/en/en.json";
 import fr from "@/locales/fr/fr.json";
 import de from "@/locales/de/de.json";
 

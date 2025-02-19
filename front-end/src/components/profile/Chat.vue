@@ -83,7 +83,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error("Error fetching friend's cover photo:", error);
+          // console.error("Error fetching friend's cover photo:", error);
           this.friend.avatar = Avatar;
         })
         .finally(() => {

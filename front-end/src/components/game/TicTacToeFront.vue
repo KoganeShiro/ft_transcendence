@@ -39,7 +39,7 @@ export default {
   setup() {
     const route = useRoute();
     const mode = computed(() => route.params.mode);
-    console.log(mode.value);
+    // console.log(mode.value);
     const opponentPlayer = computed(() => {
       const player = {
         pseudo: "Opponent",
@@ -91,7 +91,7 @@ export default {
       try {
         const response = await API.get('/api/profile/');
         const { username, cover_photo } = response.data;
-        console.log("handleGameEnded: winner =", winner);
+        // console.log("handleGameEnded: winner =", winner);
         if (winner === "X") {
           this.winnerName = username;
           this.winnerImage = cover_photo;

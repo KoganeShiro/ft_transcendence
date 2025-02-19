@@ -81,25 +81,25 @@ export default {
       } catch (error) {
         console.error("Error fetching player data:", error);
       }
-      console.log("[Versus] Mounted with initial opponent:", props.player2);
+      // console.log("[Versus] Mounted with initial opponent:", props.player2);
     });
 
     // Watch changes on player2.pseudo
     watch(
       () => props.player2.pseudo,
       async (newPseudo) => {
-        console.log("[Versus] player2.pseudo changed to:", newPseudo);
+        // console.log("[Versus] player2.pseudo changed to:", newPseudo);
         if (newPseudo !== 'loading...' && newPseudo !== null) {
-          console.log("[Versus] Valid opponent found: ", newPseudo);
+          // console.log("[Versus] Valid opponent found: ", newPseudo);
           opponentStatus.value = t("opponent_found");
           // Wait for the specified duration then call time-up
           setTimeout(() => {
-            console.log("[Versus] Emitting time-up after opponent found.");
+            // console.log("[Versus] Emitting time-up after opponent found.");
             show.value = false;
             emit('time-up');
           }, props.duration * 1000);
         } else {
-          console.log("[Versus] Still waiting for a valid opponent.");
+          // console.log("[Versus] Still waiting for a valid opponent.");
         }
       }
     );

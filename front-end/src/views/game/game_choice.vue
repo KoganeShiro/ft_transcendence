@@ -56,7 +56,7 @@ export default {
     const router = useRouter();
     const store = useStore();
     const currentTheme = computed(() => store.state.theme || 'moon');
-    console.log(currentTheme.value);
+    // console.log(currentTheme.value);
 
     const cards = computed(() => [
       { 
@@ -74,10 +74,10 @@ export default {
 
     const handleGameChoice = (gameName) => {
       if (gameName === "Pong") {
-        console.log("Pong selected");
+        // console.log("Pong selected");
         router.push({ path: "/select-mode", query: { game: gameName } });
       } else if (gameName === "Tic Tac Toe") {
-        console.log("Tic Tac Toe selected");
+        // console.log("Tic Tac Toe selected");
         router.push({ path: "/select-tic-mode", query: { game: gameName } });
       }
     };

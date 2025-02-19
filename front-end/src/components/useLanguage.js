@@ -1,16 +1,14 @@
-import { useI18n } from 'vue-i18n';
-import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n'
 
 export function useLanguage() {
-  const store = useStore();
-  const { locale } = useI18n({ useScope: 'global' });
+  const { locale } = useI18n({ useScope: 'global' })
 
   const changeLanguage = (lang) => {
-    store.dispatch('changeLanguage', lang);
-    locale.value = lang;
-  };
+    // console.log("Changing language to", lang)
+    locale.value = lang
+  }
 
   return {
     changeLanguage
-  };
+  }
 }
