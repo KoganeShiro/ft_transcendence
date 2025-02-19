@@ -25,7 +25,7 @@ active_games = {}
 class PongConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.game_id = str(uuid.uuid4())  # Générer un ID unique pour chaque partie
+        # self.game_id = None  # Générer un ID unique pour chaque partie
         self.room_group_name = "" #f"pong_{self.game_id}"  # Créer un groupe unique pour chaque partie
         self.game_loop_task = None  
         self.initial_ball_speed = 10
@@ -69,7 +69,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 # Ajouter le joueur au groupe et démarrer la partie
                 await self.channel_layer.group_add(self.room_group_name, self.channel_name)
                 await self.send(text_data=json.dumps({
-                    'type': 'role_assignment', # Type de message optionnel, mais bonne pratique
+                    'type': 'role_assignment',
                     'role': 'player2',
                 }))
                 
@@ -105,6 +105,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             "player2_socket": None,
             "player1_name": None,
             "player2_name": None,
+            "game_end": False,
             "rally": 0,
             "game_state": initial_game_state,
             "player1_stats": self.game_statistic.copy(),
@@ -392,7 +393,13 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.game_loop_task
             except asyncio.CancelledError:
                 pass 
-
+            
+        game = active_games.get(self.game_id)
+        if game:
+            score1 = game_state.get("score1")  
+            score2 = game_state.get("score2")  
+            player1_stats = game.get("player1_stats")
+            player2_stats = game.get("player2_stats")
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -402,6 +409,10 @@ class PongConsumer(AsyncWebsocketConsumer):
                 "game_state": game_state, 
                 "player1_name": player1_name,
                 "player2_name": player2_name,
+                "score1": score1,
+                "score2": score2,
+                "player1_stats": player1_stats,
+                "player2_stats": player2_stats,
             }
         )
         
@@ -433,11 +444,23 @@ class PongConsumer(AsyncWebsocketConsumer):
         """ Gérer le message 'game_over' diffusé au groupe """
         game_over_message = event['message'] 
         winner = event['winner'] 
+        player1_name = event['player1_name'],
+        player2_name = event['player2_name'],
+        score1 = event['score1'],
+        score2 = event['score2'],
+        player1_stats = event['player1_stats'],
+        player2_stats = event['player2_stats'],
 
         message = {
             "type": "game_over",
             "message": game_over_message, 
-            "winner": winner 
+            "winner": winner,
+            "player1_name": player1_name,
+            "player2_name": player2_name,
+            "score1": score1,
+            "score2": score2,
+            "player1_stats": player1_stats,
+            "player2_stats": player2_stats,            
         }
         await self.send(text_data=json.dumps(message))
         self.gameEnded = True

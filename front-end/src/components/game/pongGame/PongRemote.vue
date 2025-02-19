@@ -31,6 +31,8 @@
 import API from '@/api.js';
 import Versus from '@/components/game/Versus_remote.vue';
 import defaultAvatar from '@/assets/profile.png';
+// API_KEY = os.environ.get('API_KEY')
+
 
 export default {
   name: 'PongRemote',
@@ -153,14 +155,20 @@ export default {
             this.leftPlayer = this.opponentPlayer.pseudo;
             this.rightPlayer = this.localPlayer.pseudo;
           }
-        } else if (messageType === "role_assignment") {
+        } 
+        else if (messageType === "role_assignment") {
           this.playerRole = data.role;
           console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
         } 
         else if (messageType === "game_over") {
+          console.log(data.player2_name[0])
+          console.log("data :", data);
           this.gameStarted = false;
           this.winner = data.winner;
           this.handleGameEnded(data.winner);
+          if (this.localPlayer.pseudo != data.player2_name[0]) {
+            this.handle_stats(data);
+          }
         }
       };
 
@@ -170,6 +178,33 @@ export default {
         this.gameStarted = false;
       };
     },
+
+    handle_stats(data){
+      const player1 = this.localPlayer.pseudo;
+      console.log(player1);
+      const player2 = data.player2_name[0];
+      console.log(player2);
+      const score1 = data.score1[0];
+      console.log(score1);
+      const score2 = data.score2[0];
+      console.log(score2);
+      const stats1 = data.stats1[0];
+      console.log(stats1);
+      const stats2 = data.stats2[0];
+      console.log(stats2);
+      const url_user1 = `http://back-end:8000/api/profile/${player1}/`;
+      const url_user2 = `http://back-end:8000/api/profile/${player2}/`;
+      const user1_stats = `http://back-end:8000/api/stats/${player1}/`;
+      const user2_stats = `http://back-end:8000/api/stats/${player2}/`;
+      const url_update_user1 = `http://back-end:8000/api/stats_increment/${player1}/`
+      const url_update_user2 = `http://back-end:8000/api/stats_increment/${player2}/`
+      
+      stats1 = requests.get(user1_stats, headers=headers)
+      stats2 = requests.get(user2_stats, headers=headers)
+      if (stats1.status_code == 200) stats1 = stats1.json();
+      if (stats2.status_code == 200) stats2 = stats2.json();
+    },
+
     handleOpponentFound() {
       console.log("[PongRemote] Opponent found, will hide Versus overlay after delay.");
       // Delay hiding Versus overlay by 3 seconds (adjust as needed)
