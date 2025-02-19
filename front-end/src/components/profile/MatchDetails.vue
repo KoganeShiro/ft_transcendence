@@ -27,11 +27,11 @@
         <div v-if="localGameType === 'ttt'">
           <div class="detail-item">
             <span class="label">{{ $t("your_nb_move") }}:</span>
-            {{ this.match.player1_turn }}
+            {{ this.match.my_turn }}
           </div>
           <div class="detail-item">
             <span class="label">{{ $t("opponent_nb_move") }}:</span>
-            {{ this.match.player2_turn }}
+            {{ this.match.opponent_turn }}
           </div>
         </div>
         <div class="detail-item" v-if="localGameType === 'pong'">

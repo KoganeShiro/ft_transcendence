@@ -222,6 +222,7 @@ get last 15 messages
 - [x] Modify the lang and the theme to put it in the database
 - [x] Fix the name of the player in remote
 - [x] Add otp code if we disable it ?
+- [x] Add hit box on local
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
@@ -234,9 +235,8 @@ get last 15 messages
 - [x] if create a room in play with friend shouldn't be able to join one
 - [ ] Add data for with friend and ttt ai
 
-- [ ] User delete can still make API call
 
-- [ ] Add hit box on local
+- [ ] User delete can still make API call
 - [ ] Make a README to explain what modules, how to launch (+ tuto)
 
 TEST

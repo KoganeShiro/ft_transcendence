@@ -151,6 +151,10 @@ export default {
           } else {
             state.winner = "O"; //the ai
           }
+          //make a call api to get the user and ai id
+          //call post /api/games/ttt/
+          //then patch call /api/stats_ttt/
+          // win 1, lose 0
           console.log("Winner: ", state.winner);
           console.log("ai move: ", state.AIMoves);
           console.log("my move: ", state.myMoves);
