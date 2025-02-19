@@ -138,6 +138,8 @@
     "error-enabling-2fa": "Erreur lors de l'activation de 2FA",
     "error-disabling-2fa": "Erreur lors de la désactivation de 2FA",
     "win-on-x-moves": "Gagner en x coups",
-    "matchmaking": "Matchmaking (Appareillage)"
+    "matchmaking": "Matchmaking (Appareillage)",
+    "winning": "Victoire",
+    "losing": "Défaite"
   }
   

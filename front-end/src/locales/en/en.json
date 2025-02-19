@@ -137,6 +137,8 @@
     "error-enabling-2fa": "Error enabling 2FA",
     "error-disabling-2fa": "Error disabling 2FA",
     "win-on-x-moves": "Win on x moves",
-    "matchmaking": "Matchmaking"
+    "matchmaking": "Matchmaking",
+    "winning": "Win",
+    "losing": "Lose"
 }
   

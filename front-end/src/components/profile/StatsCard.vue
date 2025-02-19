@@ -123,12 +123,12 @@
         }
       },
       moveExchangeData() {
-        const pointsWonUnder5 = this.stats.pointsWonUnder5Exchanges || 0;
-        const pointsWonUnder10 = this.stats.pointsWonUnder10Exchanges || 0;
-        const pointsWonOver10 = this.stats.pointsWonOver10Exchanges || 0;
-        const pointsLostUnder5 = this.stats.pointsLostUnder5Exchanges || 0;
-        const pointsLostUnder10 = this.stats.pointsLostUnder10Exchanges || 0;
-        const pointsLostOver10 = this.stats.pointsLostOver10Exchanges || 0;
+        const pointsWonUnder5 = this.stats.pointsWonUnder5Moves || 0;
+        const pointsWonUnder10 = this.stats.pointsWonUnder10Moves || 0;
+        const pointsWonOver10 = this.stats.pointsWonOver10Moves || 0;
+        const pointsLostUnder5 = this.stats.pointsLostUnder5Moves || 0;
+        const pointsLostUnder10 = this.stats.pointsLostUnder10Moves || 0;
+        const pointsLostOver10 = this.stats.pointsLostOver10Moves || 0;
         
         return {
           labels: ['< 5 moves', '5-10 moves', '> 10 moves'],

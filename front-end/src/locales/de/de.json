@@ -137,6 +137,8 @@
     "error-enabling-2fa": "Fehler beim Aktivieren von 2FA",
     "error-disabling-2fa": "Fehler beim Deaktivieren von 2FA",
     "win-on-x-moves": "Gewinnen Sie in x Zügen",
-    "matchmaking": "Matchmaking (Paarbildung)"
+    "matchmaking": "Matchmaking (Paarbildung)",
+    "winning": "Gewinnen",
+    "losing": "Verlieren"
   }
   

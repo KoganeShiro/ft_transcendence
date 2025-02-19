@@ -365,7 +365,15 @@ def getStats(request, lookup_value=None):
 		  'losses': serializer.data['stat_ttt_loss_tot'],
 		  'rankProgression': serializer.data['stat_ttt_progress'],
 		  'averageMovesPerWin': serializer.data['stat_ttt_wins_av_movm'],
-		  'averageMovesPerLoss': serializer.data['stat_ttt_loss_av_movm']                                                          
+		  'averageMovesPerLoss': serializer.data['stat_ttt_loss_av_movm'],
+		  'pointsWonUnder5Moves': serializer.data['stat_ttt_wins_tot_min5'],
+		  'pointsWonUnder10Moves': serializer.data['stat_ttt_wins_tot_min10'],
+		  'pointsWonOver10Moves': serializer.data['stat_ttt_wins_tot_max10'],
+		  'pointsLostUnder5Moves': serializer.data['stat_ttt_loss_tot_min5'],
+		  'pointsLostUnder10Moves': serializer.data['stat_ttt_loss_tot_min10'],
+		  'pointsLostOver10Moves': serializer.data['stat_ttt_loss_tot_max10']
+		  
+
 		}
 	  }
 

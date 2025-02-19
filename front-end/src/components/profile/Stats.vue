@@ -3,8 +3,11 @@
     <h1>{{$t("stats")}}</h1>
     <div v-if="loading">{{$t("loading")}}</div>
     <div v-else>
-      <div v-for="(gameStats, gameType) in stats.stats" :key="gameType">
-        <GameStatsCard :gameType="gameType" :stats="gameStats" />
+      <div v-if="stats.stats && stats.stats.Pong">
+        <GameStatsCard gameType="Pong" :stats="stats.stats.Pong" />
+      </div>
+      <div v-if="stats.stats && stats.stats['Tic Tac Toe']">
+        <GameStatsCard gameType="Tic Tac Toe" :stats="stats.stats['Tic Tac Toe']" />
       </div>
     </div>
   </div>
@@ -20,7 +23,12 @@ export default {
   },
   data() {
     return {
-      stats: {},
+      stats: {
+        stats: {
+          Pong: null,
+          'Tic Tac Toe': null
+        }
+      },
       loading: false,
     }
   },
@@ -31,7 +39,9 @@ export default {
     try {
       const response = await API.get('/api/stats/');
       this.stats = response.data;
-      //console.log('Stats:', this.stats);
+      console.log('Stats:', this.stats);
+      console.log('Pong stats:', this.stats.stats.Pong);
+      console.log('Tic Tac Toe stats:', this.stats.stats['Tic Tac Toe']);
       this.loading = false;
     } catch (error) {
       console.error('Error fetching stats:', error);
