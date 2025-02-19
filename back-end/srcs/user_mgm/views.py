@@ -287,31 +287,32 @@ class RegisterView(generics.CreateAPIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getProfile(request, lookup_value=None):
-	logger.debug('Fetching profile for user %s', lookup_value)
-	"""
-	Fetch user profile using either user ID or username.
-	"""
-	if lookup_value is None:  # Default to the current user if no lookup is provided
-		user = request.user
-	else:
-		user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
+    logger.debug('Fetching profile for user %s', lookup_value)
+    """
+    Fetch user profile using either user ID or username.
+    """
+    if lookup_value is None:  # Default to the current user if no lookup is provided
+        user = request.user
+    else:
+        user = get_object_or_404(CustomUser, username=lookup_value)  # Lookup by username
 
-	serializer = ProfileSerializer(user, many=False)
-	isOnline = user.last_seen > timezone.now() - timezone.timedelta(minutes=5)
-	preparedData = {
-		'id': serializer.data['id'],
-		'username': serializer.data['username'],
-		'cover_photo': serializer.data['cover_photo'],
-		'online': isOnline,
-		'last_seen': serializer.data['last_seen'],
-		'is_active': serializer.data['is_active'],
-		'is_42': serializer.data['is_42'],                    
-		'theme': serializer.data['theme'],
-		'lang': serializer.data['lang'],
-		'mfa_enabled': serializer.data['mfa_enabled'],
-		'currentRank': serializer.data['stat_pong_solo_rank'],
-	}
-	return Response(preparedData)
+    serializer = ProfileSerializer(user, many=False)
+    isOnline = user.last_seen > timezone.now() - timezone.timedelta(minutes=5)
+    preparedData = {
+        'id': serializer.data['id'],
+        'username': serializer.data['username'],
+        'cover_photo': serializer.data['cover_photo'],
+        'online': isOnline,
+        'last_seen': serializer.data['last_seen'],
+        'is_active': serializer.data['is_active'],
+        'is_42': serializer.data['is_42'],                    
+        'theme': serializer.data['theme'],
+        'lang': serializer.data['lang'],
+        'mfa_enabled': serializer.data['mfa_enabled'],
+        'currentRank': serializer.data['stat_pong_solo_rank'],
+    }
+    return Response(preparedData)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
