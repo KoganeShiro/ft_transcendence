@@ -8,11 +8,11 @@
       <div v-if="isOpen" class="details">
         <div class="detail-item">
           <span class="label">{{ $t("winner") }}:</span>
-          {{ gameDetails.winner }}
+          {{ this.match.winner }}
         </div>
         <div class="detail-item">
           <span class="label">{{ $t("loser") }}:</span>
-          {{ gameDetails.loser }}
+          {{ this.match.loser }}
         </div>
         <div v-if="localGameType === 'pong'">
           <div class="detail-item">
@@ -27,26 +27,26 @@
         <div v-if="localGameType === 'ttt'">
           <div class="detail-item">
             <span class="label">{{ $t("your_nb_move") }}:</span>
-            {{ gameDetails.player1_turn }}
+            {{ this.match.my_turn }}
           </div>
           <div class="detail-item">
             <span class="label">{{ $t("opponent_nb_move") }}:</span>
-            {{ gameDetails.player2_turn }}
+            {{ this.match.opponent_turn }}
           </div>
         </div>
-        <div class="detail-item">
+        <div class="detail-item" v-if="localGameType === 'pong'">
           <span class="label">{{ $t("your_rank_begin") }}:</span>
           {{ this.match.rank_player1_begin }}
         </div>
-        <div class="detail-item">
+        <div class="detail-item" v-if="localGameType === 'pong'">
           <span class="label">{{ $t("opponent_rank_begin") }}:</span>
           {{ this.match.rank_player2_begin }}
         </div>
-        <div class="detail-item">
+        <div class="detail-item" v-if="localGameType === 'pong'">
           <span class="label">{{ $t("your_rank_change") }}:</span>
           {{ this.match.rank_player1_change }}
         </div>
-        <div class="detail-item">
+        <div class="detail-item" v-if="localGameType === 'pong'">
           <span class="label">{{ $t("opponent_rank_change") }}:</span>
           {{ this.match.rank_player2_change }}
         </div>

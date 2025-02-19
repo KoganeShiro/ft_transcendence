@@ -54,6 +54,12 @@ class CustomUser(AbstractUser):
    stat_ttt_loss_tot = models.IntegerField(default=0)
    stat_ttt_wins_av_movm = models.IntegerField(default=0)
    stat_ttt_loss_av_movm = models.IntegerField(default=0)
+   stat_ttt_wins_tot_min5 = models.IntegerField(default=0)
+   stat_ttt_loss_tot_min5 = models.IntegerField(default=0)
+   stat_ttt_wins_tot_min10 = models.IntegerField(default=0)
+   stat_ttt_loss_tot_min10 = models.IntegerField(default=0)
+   stat_ttt_wins_tot_max10 = models.IntegerField(default=0)
+   stat_ttt_loss_tot_max10 = models.IntegerField(default=0)
 
    def generate_otp_secret(self):
         """Generate a new OTP secret key."""

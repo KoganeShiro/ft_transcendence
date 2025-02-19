@@ -222,22 +222,21 @@ get last 15 messages
 - [x] Modify the lang and the theme to put it in the database
 - [x] Fix the name of the player in remote
 - [x] Add otp code if we disable it ?
+- [x] Add hit box on local
 
 - [ ] See if you have a cookie, Ask for refresh token, Send request with the refresh token in the header on logout, remove all cookie session
 
 - [x] Pong AI
 - [-] Fix the decalage on the canva
 
-- [ ] Add the profile and history page + phone
 - [ ] Make a small walkthrough video
 
-- [ ] Remove all the console.log
+- [-] Remove all the console.log
 - [x] if create a room in play with friend shouldn't be able to join one
 - [ ] Add data for with friend and ttt ai
 
-- [ ] User delete can still make API call
 
-- [ ] Add hit box on local
+- [ ] User delete can still make API call
 - [ ] Make a README to explain what modules, how to launch (+ tuto)
 
 TEST
@@ -246,25 +245,26 @@ TEST
         put the lang in french to see if there is things i forgot to translate
         logout ✅
         login ✅
-        cannot modify username to a username already existant ✅
-        activate the 2fa
+        cannot modify username to a username already  existant ✅
+        activate the 2fa 
         change the profile picture ✅
-        logout
-        login with the 2fa
-        disable the 2fa
-        logout
-        login
+        logout ✅
+
+        login with the 2fa 
+        disable the 2fa 
+        logout 
+        login 
         modify the username ✅
-        logout
-        login
-        modify the password
-        logout
-        login
+        logout ✅
+        login ✅
+        modify the password ✅
+        logout ✅
+        login ✅
 
         open another browser
 
-        register with 42
-        add the user you create as friend
+        register with 42 ✅
+        add the user you create as friend ✅
         block
         unblock
         remove

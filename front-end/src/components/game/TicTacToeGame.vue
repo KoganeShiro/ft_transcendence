@@ -60,6 +60,9 @@ export default {
       currentPlayer: "X",
       gameOver: false,
       message: "",
+      myMoves: 0,
+      AIMoves: 0,
+      winner: '',
     });
 
     // Computed property to show a "twinkle" effect when 3 moves exist.
@@ -91,6 +94,12 @@ export default {
       // Place the new move.
       state.board[row][col] = state.currentPlayer;
       state.moves[state.currentPlayer].push({ row, col });
+
+      if (state.currentPlayer === "X") {
+        state.myMoves++;
+      } else {
+        state.AIMoves++;
+      }
 
       // Check for a winner.
       if (checkWinner()) return;
@@ -137,6 +146,18 @@ export default {
         ) {
           state.gameOver = true;
           state.message = `${state.board[a.row][a.col]} Wins!`;
+          if (state.board[a.row][a.col] === "X") {
+            state.winner = "X"; //the player
+          } else {
+            state.winner = "O"; //the ai
+          }
+          //make a call api to get the user and ai id
+          //call post /api/games/ttt/
+          //then patch call /api/stats_ttt/
+          // win 1, lose 0
+          console.log("Winner: ", state.winner);
+          console.log("ai move: ", state.AIMoves);
+          console.log("my move: ", state.myMoves);
           emit('game-ended', state.board[a.row][a.col]);
           return true;
         }
@@ -153,6 +174,9 @@ export default {
       useImages: props.useImages,
       xImage: props.xImage,
       oImage: props.oImage,
+      myMoves: state.myMoves,
+      AIMoves: state.AIMoves,
+      winner: state.winner,
     };
   },
 };

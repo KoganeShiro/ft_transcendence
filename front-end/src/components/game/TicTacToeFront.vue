@@ -68,7 +68,7 @@ export default {
       loserImage: '',
       requestSent: false,
       opponentPlayer: {
-        pseudo: "Opponent",
+        pseudo: "",
         imageUrl: "",
       },
     };
