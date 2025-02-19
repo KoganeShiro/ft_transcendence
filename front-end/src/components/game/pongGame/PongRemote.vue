@@ -102,7 +102,8 @@ export default {
         if (messageType === "game_update") {
           this.gameState = data.game_state;
           this.updateCanvas();
-        } else if (messageType === "players_ready") {
+        } 
+        else if (messageType === "players_ready") {
           console.log("[PongRemote] players_ready received:", data);
           let opponentUsername = "";
           // Use playerRole to determine opponent username (fallback if role missing)
@@ -155,7 +156,8 @@ export default {
         } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
           console.log("[PongRemote] role_assignment received. Player role is:", this.playerRole);
-        } else if (messageType === "game_over") {
+        } 
+        else if (messageType === "game_over") {
           this.gameStarted = false;
           this.winner = data.winner;
           this.handleGameEnded(data.winner);
