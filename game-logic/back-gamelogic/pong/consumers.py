@@ -7,6 +7,8 @@ import uuid
 import logging
 import requests
 import os
+import threading
+
 
 API_KEY = os.environ.get('API_KEY')
 
@@ -18,7 +20,7 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
+game_lock = threading.Lock()
 active_games = {}
 class PongConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -122,7 +124,6 @@ class PongConsumer(AsyncWebsocketConsumer):
     def update_player_stats(self, winner, loser):
         game = active_games.get(self.game_id)
         if game:
-            # Mise à jour des stats du gagnant
             if winner == "player1":
                 rally = self.game_state["rally"]
                 stats = game.get("player1_stats")
@@ -137,7 +138,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             else:
                 stats["won_upper10"] += 1
 
-            # Mise à jour des stats du perdant
             if loser == "player1":
                 rally = self.game_state["rally"]
                 stats = game.get("player1_stats")
@@ -159,9 +159,8 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         """ Gérer la déconnexion des joueurs """
         game = active_games.get(self.game_id)
-
         if game:
-            if game["player2_socket"] is None: 
+            if game["game_state"] is None: 
                 if self.channel_name == game["player1_socket"]:
                     # logger.info(f"Le créateur {game['player1_name']} s'est déconnecté avant le début du match. La partie est annulée.")
                     del active_games[self.game_id] 
@@ -187,13 +186,13 @@ class PongConsumer(AsyncWebsocketConsumer):
             else:
                 # Si la partie a déjà commencé
                 if self.channel_name == game["player1_socket"]:
-                    # logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
+                    logger.info(f"Le joueur {game['player1_name']} s'est déconnecté en cours de jeu. Le joueur 2 gagne.")
                     game["game_state"]["score2"] = 5  
                     game["game_state"]["disconnect1"] = True  
                     winner = "player2"
                     await self.end_game(winner, game["game_state"], game['player1_name'], game['player2_name'])                
                 elif self.channel_name == game["player2_socket"]:
-                    # logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
+                    logger.info(f"Le joueur {game['player2_name']} s'est déconnecté en cours de jeu. Le joueur 1 gagne.")
                     game["game_state"]["score1"] = 5  
                     game["game_state"]["disconnect2"] = True  
                     winner = "player1"
@@ -210,9 +209,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         moves = 'null'
         player = 'null'
 
-        if info:  # Si on reçoit un message avec les infos du joueur (nom)
+        if info:  
                 self.name = info.get('playerName')
-                # logger.debug(f"Joueur {self.channel_name} a envoyé son nom : {self.name}")
 
                 game = active_games.get(self.game_id)
                 if game:
@@ -225,8 +223,6 @@ class PongConsumer(AsyncWebsocketConsumer):
 
                         player1_name = game["player1_name"]
                         player2_name = game["player2_name"]
-
-                        # logger.debug(f"Les deux joueurs sont connectés : {player1_name} et {player2_name}")
 
                         await self.channel_layer.group_send(
                             self.room_group_name,
@@ -390,14 +386,13 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def end_game(self, winner, game_state, player1_name, player2_name):
         """ Arrêter la boucle de jeu et annoncer le vainqueur """
-        if self.game_loop_task: # Vérifier si la game_loop_task existe et est en cours
-            self.game_loop_task.cancel() # Annuler la game_loop_task pour arrêter la boucle de jeu
+        if self.game_loop_task: 
+            self.game_loop_task.cancel() 
             try:
-                await self.game_loop_task # Attendre que la tâche soit bien annulée (bonne pratique)
+                await self.game_loop_task
             except asyncio.CancelledError:
-                pass # Tâche annulée, c'est normal
+                pass 
 
-        # Envoyer un message "game_over" à tous les joueurs du groupe pour annoncer le vainqueur
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -417,19 +412,10 @@ class PongConsumer(AsyncWebsocketConsumer):
                 "game_state": self.game_state
         }
         await self.channel_layer.group_send(
-            self.room_group_name,  # Nom du groupe auquel envoyer le message
-            message  # Le message à envoyer
+            self.room_group_name,  
+            message  
         )
 
-
-    def calculate_ball_angle(self, ball_y, paddle_y):
-            # Calculer l'écart entre la balle et le centre du paddle
-        distance_from_center = ball_y - paddle_y
-
-            # Plus l'écart est grand, plus l'angle de rebond sera large
-        angle = distance_from_center * 0.1  # Ajuster ce coefficient pour affiner l'angle
-        return angle
-    
     
     async def players_ready(self, event):
         message = event.get('message')
@@ -461,19 +447,16 @@ class PongConsumer(AsyncWebsocketConsumer):
         if player1_name and player2_name:
             self.send_to_database(game_state, player1_name, player2_name)
         else:
-            # logger.warning("Noms de joueurs non définis.  Enregistrement dans la base de données ignoré.")
-            # del active_games[self.game_id]  # Supprimer la partie même si l'enregistrement échoue
             self.gameEnded = False
     
     
     async def game_update(self, event):
         """ Gérer le message 'game_update' diffusé au groupe """
-        game_state = event['game_state'] # Récupérer l'état du jeu du message
+        game_state = event['game_state'] 
         message = {
             "type": "game_update",
             "game_state": game_state
         }
-        # ENVOYER le message 'game_update' (avec l'état du jeu) au CLIENT WEBSOCKET CONNECTÉ à CE CONSUMER (en utilisant self.send())
         await self.send(text_data=json.dumps(message))
 
         
@@ -482,227 +465,195 @@ class PongConsumer(AsyncWebsocketConsumer):
             return
         
         self.gameEnded = True
-        # logger.error(f"---------------------------------------------------------")
-        # logger.error(f"GAME = {self.game_id}")
-        # logger.error(f"---------------------------------------------------------")
-        game = active_games.get(self.game_id)
-        # game_state = game.get("game_state")
+        with game_lock:
+            game = active_games.get(self.game_id)
+            if game :
+                # game_state = game.get("game_state")
 
-        player1 = player1_name
-        player2 = player2_name
-        score1 = game_state.get("score1")
-        score2 = game_state.get("score2")
-        headers = {
-            "X-API-KEY": API_KEY
-        }
-        url_user1 = f"http://back-end:8000/api/profile/{player1}/"
-        url_user2 = f"http://back-end:8000/api/profile/{player2}/"
-        # logger.info(f"SCORE : {score1} / {score2}")
-        url = "http://back-end:8000/api/games/pong/"  #
-        # url2 = "http://back-end:8000/api/profile/gkubina/" #
-        url3 = "http://back-end:8000/api/stats_increment/gkubina/" #
+                player1 = player1_name
+                player2 = player2_name
+                score1 = game_state.get("score1")
+                score2 = game_state.get("score2")
+                # logger.info(f"S1 {score1} S2{score2}")
+                headers = {
+                    "X-API-KEY": API_KEY
+                }
+                url_user1 = f"http://back-end:8000/api/profile/{player1}/"
+                url_user2 = f"http://back-end:8000/api/profile/{player2}/"
+                # logger.info(f"SCORE : {score1} / {score2}")
+                url = "http://back-end:8000/api/games/pong/"  #
+                # url2 = "http://back-end:8000/api/profile/gkubina/" #
+                url3 = "http://back-end:8000/api/stats_increment/gkubina/" #
 
-        user1_stats = f"http://back-end:8000/api/stats/{player1}/"
-        user2_stats = f"http://back-end:8000/api/stats/{player2}/"
-        url_update_user1 = f"http://back-end:8000/api/stats_increment/{player1}/"
-        url_update_user2 = f"http://back-end:8000/api/stats_increment/{player2}/"
-        
-        stats1 = requests.get(user1_stats, headers=headers)
-        stats2 = requests.get(user2_stats, headers=headers)
-        if stats1.status_code == 200:
-            stats1 = stats1.json()
-            # logger.info(f"DATA of {player1}: {stats1}")
-        if stats2.status_code == 200:
-            stats2 = stats2.json()
-            # logger.info(f"DATA of {player2}: {stats2}")
-        
+                user1_stats = f"http://back-end:8000/api/stats/{player1}/"
+                user2_stats = f"http://back-end:8000/api/stats/{player2}/"
+                url_update_user1 = f"http://back-end:8000/api/stats_increment/{player1}/"
+                url_update_user2 = f"http://back-end:8000/api/stats_increment/{player2}/"
+                
+                stats1 = requests.get(user1_stats, headers=headers)
+                stats2 = requests.get(user2_stats, headers=headers)
+                if stats1.status_code == 200:
+                    stats1 = stats1.json()
+                    # logger.info(f"DATA of {player1}: {stats1}")
+                if stats2.status_code == 200:
+                    stats2 = stats2.json()
+                    # logger.info(f"DATA of {player2}: {stats2}")
+                
 
-        response1 = requests.get(url_user1, headers=headers)
-        response2 = requests.get(url_user2, headers=headers)
-        data1 = None
-        data2 = None
-        if response1.status_code == 200:
-            data1 = response1.json()
-            # logger.info(f"DATA of {player1}: {data1}")
+                response1 = requests.get(url_user1, headers=headers)
+                response2 = requests.get(url_user2, headers=headers)
+                data1 = None
+                data2 = None
+                if response1.status_code == 200:
+                    data1 = response1.json()
+                    # logger.info(f"DATA of {player1}: {data1}")
 
-            current_rank1 = data1.get('stats', {}).get('Pong', {}).get('currentRank', 0)  # Valeur par défaut 0
-            # logger.info(f"Rank of {player1}: {current_rank1}")
+                    current_rank1 = data1.get('currentRank', 0)
+                    # logger.info(f"Rank of {player1}: {current_rank1}")
 
-        if response2.status_code == 200:
-            data2 = response2.json()
-            # logger.info(f"DATA of {player2}: {data2}")
+                if response2.status_code == 200:
+                    data2 = response2.json()
+                    # logger.info(f"DATA of {player2}: {data2}")
 
-            current_rank2 = data2.get('stats', {}).get('Pong', {}).get('currentRank', 0)  # Valeur par défaut 0
-            # logger.info(f"Rank of {player2}: {current_rank2}")
+                    current_rank2 = data2.get('currentRank', 0)
+                    # logger.info(f"Rank of {player2}: {current_rank2}")
 
-        # {'id': 4, 
-        #  'username': 'daleliev',
-        #  'cover_photo': '/media/profile_image/daleliev.jpg',
-        #  'online': True, 
-        #  'last_seen': '2025-02-16T19:05:46.685229+01:00',
-        #  'is_active': True, 
-        #  'is_42': True,
-        #  'theme': 'dark', 
-        #  'lang': 'en'}
-        
-        def calculer_elo(R_A, R_B, K, S):
-            """Calcule le nouveau classement Elo du joueur A.
+            
+                def calculer_elo(R_A, R_B, K, S):
+                    """Calcule le nouveau classement Elo du joueur A.
 
-            Args:
-                R_A: Classement actuel du joueur A.
-                R_B: Classement actuel du joueur B.
-                K: Facteur K.
-                S: Score de la partie pour le joueur A (1, 0.5 ou 0).
+                    Args:
+                        R_A: Classement actuel du joueur A.
+                        R_B: Classement actuel du joueur B.
+                        K: Facteur K.
+                        S: Score de la partie pour le joueur A (1, 0.5 ou 0).
 
-            Returns:
-                Le nouveau classement Elo du joueur A.
-            """
-            # logger.info(f"s:{S}")
-            E_A = 1 / (1 + 10 ** ((R_B - R_A) / 400))
-            R_A_prime = R_A + K * (S - E_A)
-            return (R_A_prime)
-        
-        # Classements initiaux
-        R_joueur_1 = current_rank1
-        R_joueur_2 = current_rank2
+                    Returns:
+                        Le nouveau classement Elo du joueur A.
+                    """
+                    # logger.info(f"s:{S} ra: {R_A} rb:{R_B} k:{K}")
+                    E_A = 1 / (1 + 10 ** ((R_B - R_A) / 400))
+                    # logger.info(f"EA = {E_A}")
+                    R_A_prime = R_A + K * (S - E_A)
+                    # logger.info(f"R_A' = {E_A}")
+                    return (R_A_prime)
+                
+                # Classements initiaux
+                R_joueur_1 = current_rank1
+                R_joueur_2 = current_rank2
 
-        # Facteur K
-        diff = 0
-        S_joueur_1 = 0
-        S_joueur_2 = 0
-        if (score1 == 5) :
-            diff = score2
-            S_joueur_1 = 1
-            S_joueur_2 = 0
-        else :
-            diff = score1
-            S_joueur_1 = 0
-            S_joueur_2 = 1
-        
-        K = 0
-        if (5 - diff == 5):
-            K = 40
-        elif (5 - diff == 4):
-            K = 35
-        elif (5 - diff == 3):
-            K = 30
-        elif (5 - diff == 2):
-            K = 20
-        elif (5 - diff == 1):
-            K = 10
+                winner = data1.get("id") if score1 > score2 else data2.get("id")
+                loser = data2.get("id") if score1 > score2 else data1.get("id")
+                # Facteur K
+                diff = 0
+                if (score1 == 5) :
+                    diff = score2
+                else:
+                    diff = score1
+                S_joueur_1 = 0
+                S_joueur_2 = 0
+                if data1.get("id") == winner:  # Comparer les IDs
+                    S_joueur_1 = 1  # Victoire du joueur 1
+                    S_joueur_2 = 0  # Défaite du joueur 2
+                elif data2.get("id") == winner:  # Comparer les IDs
+                    S_joueur_1 = 0  # Défaite du joueur 1
+                    S_joueur_2 = 1  # Victoire du joueur 
+                logger.info(f"SCORE1 {score1} SCORE2 {score2}")
+                K = 0
+                if (5 - diff == 5):
+                    K = 40
+                elif (5 - diff == 4):
+                    K = 35
+                elif (5 - diff == 3):
+                    K = 30
+                elif (5 - diff == 2):
+                    K = 20
+                elif (5 - diff == 1):
+                    K = 10
 
-        R_joueur_1_prime = calculer_elo(R_joueur_1, R_joueur_2, K, S_joueur_1)
-        R_joueur_2_prime = calculer_elo(R_joueur_2, R_joueur_1, K, S_joueur_2)
-        R_joueur_1_prime = round(R_joueur_1_prime)
-        R_joueur_2_prime = round(R_joueur_2_prime)
+                R_joueur_1_prime = calculer_elo(R_joueur_1, R_joueur_2, K, S_joueur_1)
+                R_joueur_2_prime = calculer_elo(R_joueur_2, R_joueur_1, K, S_joueur_2)
+                R_joueur_1_prime = round(R_joueur_1_prime)
+                R_joueur_2_prime = round(R_joueur_2_prime)
 
-        if (R_joueur_1_prime < 0):
-            R_joueur_1_prime = 0
-        if (R_joueur_2_prime < 0):
-            R_joueur_2_prime = 0
-        # logger.info(f"Nouveau classement du joueur 1 : {player1} {R_joueur_1}->{R_joueur_1_prime}")
-        # logger.info(f"Nouveau classement du joueur 2 : {player2} {R_joueur_2}->{R_joueur_2_prime}")
+                if (R_joueur_1_prime < 0):
+                    R_joueur_1_prime = 0
+                if (R_joueur_2_prime < 0):
+                    R_joueur_2_prime = 0
 
 
-        # # response = requests.get(url, headers=headers)
-        # logger.info("Return: ", response.status_code , response.json())
-        winner = None
-        loser = None
-        if score1 > score2:
-            winner = data1.get("id")
-            loser = data2.get("id")
-        else:
-            winner = data2.get("id")
-            loser = data1.get("id")
-        
-        game_data = {
-                "player1_score": score1,
-                "player2_score": score2,
-                "rank_player1_change": R_joueur_1_prime - R_joueur_1,
-                "rank_player2_change": R_joueur_2_prime - R_joueur_2,
-                "type": "solo",
-                "player1": data1.get("id"),
-                "player2": data2.get("id"),
-                "winner": winner,
-                "loser": loser,
-        }
-        response = requests.post(url, headers=headers, json=game_data)
-        response = response.json()
-        # logger.info(f"game_data : {response}")
-        
-        
-        win1 = 0
-        win2 = 0
-        loss1 = 0
-        loss2 = 0
-        if winner == data1.get("id"):
-            win1 = 1
-            loss2 = 1
-        else:
-            loss1 = 1
-            win2 = 1
+                
+                game_data = {
+                        "player1_score": score1,
+                        "player2_score": score2,
+                        "rank_player1_change": R_joueur_1_prime - R_joueur_1,
+                        "rank_player2_change": R_joueur_2_prime - R_joueur_2,
+                        "type": "solo",
+                        "player1": data1.get("id"),
+                        "player2": data2.get("id"),
+                        "winner": winner,
+                        "loser": loser,
+                }
+                response = requests.post(url, headers=headers, json=game_data)
+                response = response.json()
+                # logger.info(f"game_data : {response}")
+                
+                
+                win1 = 0
+                win2 = 0
+                loss1 = 0
+                loss2 = 0
+                if winner == data1.get("id"):
+                    win1 = 1
+                    loss2 = 1
+                else:
+                    loss1 = 1
+                    win2 = 1
 
-        stats1 = game.get("player1_stats")
-        fields1 = {
-            "stat_pong_solo_rank" : R_joueur_1_prime - R_joueur_1, 
-            "stat_pong_solo_progress" : R_joueur_1_prime, 
-            "stat_pong_solo_wins_tot" : win1, 
-            "stat_pong_solo_loss_tot" : loss1, 
-            "stat_pong_solo_tournament_wins" : 0, 
-            "stat_pong_solo_tournament_loss" : 0, 
-            "stat_pong_solo_wins_tot_min5" : stats1["won_under5"], 
-            "stat_pong_solo_loss_tot_min5" : stats1["lost_under5"], 
-            "stat_pong_solo_wins_tot_min10" : stats1["won_under10"], 
-            "stat_pong_solo_loss_tot_min10" : stats1["lost_under10"], 
-            "stat_pong_solo_wins_tot_max10" : stats1["won_upper10"], 
-            "stat_pong_solo_loss_tot_max10" : stats1["lost_upper10"], 
-        }
-        response1 = requests.patch(url_update_user1, headers=headers, json=fields1)
-        response1 = response1.json()
-        # logger.info(f"fields1 : {fields1}")
-        # logger.info(f"response1 : {response1}")
-        
-        stats2 = game.get("player2_stats")
-        fields2 = {
-            "stat_pong_solo_rank" : R_joueur_2_prime - R_joueur_2, 
-            "stat_pong_solo_progress" : R_joueur_2_prime, 
-            "stat_pong_solo_wins_tot" : win2, 
-            "stat_pong_solo_loss_tot" : loss2, 
-            "stat_pong_solo_tournament_wins" : 0, 
-            "stat_pong_solo_tournament_loss" : 0, 
-            "stat_pong_solo_wins_tot_min5" : stats2["won_under5"], 
-            "stat_pong_solo_loss_tot_min5" : stats2["lost_under5"], 
-            "stat_pong_solo_wins_tot_min10" : stats2["won_under10"], 
-            "stat_pong_solo_loss_tot_min10" : stats2["lost_under10"], 
-            "stat_pong_solo_wins_tot_max10" : stats2["won_upper10"], 
-            "stat_pong_solo_loss_tot_max10" : stats2["lost_upper10"], 
-        }
-        # logger.info(f"fields2 : {fields2}")
-        response2 = requests.patch(url_update_user2, headers=headers, json=fields2)
-        response2 = response2.json()
-        
-        # logger.info(f"response2 : {response2}")
-        # logger.info(f"FINIFINIFINIFINI {fields1} ; {fields2}")
+                stats1 = game.get("player1_stats")
+                fields1 = {
+                    "stat_pong_solo_rank" : R_joueur_1_prime - R_joueur_1, 
+                    "stat_pong_solo_progress" : R_joueur_1_prime, 
+                    "stat_pong_solo_wins_tot" : win1, 
+                    "stat_pong_solo_loss_tot" : loss1, 
+                    "stat_pong_solo_tournament_wins" : 0, 
+                    "stat_pong_solo_tournament_loss" : 0, 
+                    "stat_pong_solo_wins_tot_min5" : stats1["won_under5"], 
+                    "stat_pong_solo_loss_tot_min5" : stats1["lost_under5"], 
+                    "stat_pong_solo_wins_tot_min10" : stats1["won_under10"], 
+                    "stat_pong_solo_loss_tot_min10" : stats1["lost_under10"], 
+                    "stat_pong_solo_wins_tot_max10" : stats1["won_upper10"], 
+                    "stat_pong_solo_loss_tot_max10" : stats1["lost_upper10"], 
+                }
+                response1 = requests.patch(url_update_user1, headers=headers, json=fields1)
+                response1 = response1.json()
+                # logger.info(f"fields1 : {fields1}")
+                # logger.info(f"response1 : {response1}")
+                
+                stats2 = game.get("player2_stats")
+                fields2 = {
+                    "stat_pong_solo_rank" : R_joueur_2_prime - R_joueur_2, 
+                    "stat_pong_solo_progress" : R_joueur_2_prime, 
+                    "stat_pong_solo_wins_tot" : win2, 
+                    "stat_pong_solo_loss_tot" : loss2, 
+                    "stat_pong_solo_tournament_wins" : 0, 
+                    "stat_pong_solo_tournament_loss" : 0, 
+                    "stat_pong_solo_wins_tot_min5" : stats2["won_under5"], 
+                    "stat_pong_solo_loss_tot_min5" : stats2["lost_under5"], 
+                    "stat_pong_solo_wins_tot_min10" : stats2["won_under10"], 
+                    "stat_pong_solo_loss_tot_min10" : stats2["lost_under10"], 
+                    "stat_pong_solo_wins_tot_max10" : stats2["won_upper10"], 
+                    "stat_pong_solo_loss_tot_max10" : stats2["lost_upper10"], 
+                }
+                logger.info(f"fields2 : {fields2}")
+                response2 = requests.patch(url_update_user2, headers=headers, json=fields2)
+                response2 = response2.json()
+                
+                # logger.info(f"response2 : {response2}")
+                # logger.info(f"FINIFINIFINIFINI {fields1} ; {fields2}")
 
-        del active_games[self.game_id]
+                del active_games[self.game_id]
+            else:
+                return
         self.gameEnded = False
-
-        # gamedata = game_data()
-        # gamedata["player1"] = response.json().get('id')
-        # print (gamedata)
-
-
-
-        # # response = requests.get(url, headers=headers)
-
-        # if response.status_code >= 200:
-        #     print("Return: ", response.status_code , response.json())
-
-
-
-        # # response = requests.get(url, headers=headers)
-
-        # if response.status_code >= 200:
-        #     print("Return: ", response.status_code , response.json())
-
 

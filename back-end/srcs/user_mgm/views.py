@@ -299,6 +299,7 @@ def getProfile(request, lookup_value=None):
         'theme': serializer.data['theme'],
         'lang': serializer.data['lang'],
         'mfa_enabled': serializer.data['mfa_enabled'],
+        'currentRank': serializer.data['stat_pong_solo_rank'],
     }
     return Response(preparedData)
 

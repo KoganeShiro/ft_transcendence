@@ -59,7 +59,9 @@
           console.warn('Missing or invalid rankProgression data for', this.gameType, this.stats);
           return { labels: [], datasets: [] };
         }
+        console.log("stats", this.stats);
         const progression = this.stats.rankProgression;
+        console.log("progres :", progression);
         console.debug("Rank Progression for", this.gameType, progression);
         return {
           labels: progression.map((_, index) => `Match ${index + 1}`),
