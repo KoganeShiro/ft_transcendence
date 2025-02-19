@@ -34,9 +34,9 @@ export default {
       },
       // New state for mobile: the player paddle’s horizontal position.
       player1_x: 0.5,
-      ballSpeedFactor: 30,
-      initialBallSpeed: 30,
-      maxBallSpeed: 100,
+      ballSpeedFactor: 20,
+      initialBallSpeed: 20,
+      maxBallSpeed: 70,
       // Desktop key flags remain for non‑mobile mode.
       keysPressed: {
         up_left: false,
@@ -44,6 +44,12 @@ export default {
         up_right: false,
         down_right: false,
       },
+      paddleWidth: 10,
+      paddleHeight: 60,
+      paddleHalfWidthMobile: 30,
+      paddleHeightMobile: 10,
+      ballRadius: 7,
+      ballDirection: { x: 0.01, y: 0 },
       gameLoop: null,
       isAI: true,
     };
@@ -164,66 +170,91 @@ export default {
         // Mobile: bounce ball off left/right sides
         if (this.gameState.ball_x <= 0 || this.gameState.ball_x >= 1) {
           this.gameState.ball_velocity_x *= -1;
+          this.gameState.ball_velocity_x += 5;
         }
       }
       this.checkPaddleCollision();
       this.checkScore();
     },
+
     checkPaddleCollision() {
+      const ballRadius = 7; // Rayon de la balle
+      const ballRect = {
+        x: this.gameState.ball_x * this.canvasWidth - ballRadius,
+        y: this.gameState.ball_y * this.canvasHeight - ballRadius,
+        width: ballRadius * 2,
+        height: ballRadius * 2,
+      };
+
       if (!this.isMobile && !this.isTablette) {
-        // Desktop collision: paddles on the left and right.
-        if (
-          this.gameState.ball_x <= 0.05 &&
-          this.gameState.player1_y - 0.1 <= this.gameState.ball_y &&
-          this.gameState.ball_y <= this.gameState.player1_y + 0.1
-        ) {
-          this.gameState.ball_velocity_x *= -1;
-          this.gameState.ball_velocity_y = (this.gameState.ball_y - this.gameState.player1_y) * 0.1;
-          this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          // console.log("Desktop collision: Player 1 hit.");
+        // Desktop Collision
+        const paddle1Rect = {
+          x: 20,
+          y: this.gameState.player1_y * this.canvasHeight - this.paddleHeight / 2,
+          width: this.paddleWidth,
+          height: this.paddleHeight,
+        };
+
+        const paddle2Rect = {
+          x: this.canvasWidth - 30,
+          y: this.gameState.player2_y * this.canvasHeight - this.paddleHeight / 2,
+          width: this.paddleWidth,
+          height: this.paddleHeight,
+        };
+
+        if (this.detectCollision(ballRect, paddle1Rect) && this.gameState.ball_velocity_x < 0) {
+          this.handleBallCollision(ballRect, paddle1Rect);
         }
-        if (
-          this.gameState.ball_x >= 0.95 &&
-          this.gameState.player2_y - 0.1 <= this.gameState.ball_y &&
-          this.gameState.ball_y <= this.gameState.player2_y + 0.1
-        ) {
-          this.gameState.ball_velocity_x *= -1;
-          this.gameState.ball_velocity_y = (this.gameState.ball_y - this.gameState.player2_y) * 0.1;
-          this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          // console.log("Desktop collision: Player 2 hit.");
+
+        if (this.detectCollision(ballRect, paddle2Rect) && this.gameState.ball_velocity_x > 0) {
+          this.handleBallCollision(ballRect, paddle2Rect);
         }
       } else {
-        // Mobile collision:
-        // Assume player's paddle is at the bottom and moves horizontally (using player1_x)
-        const paddleHalfWidth = 0.1; // normalized half-width (for a paddle covering 20% of the canvas)
-        // Player paddle collision (bottom of the screen)
-        if (
-          this.gameState.ball_y >= 0.95 &&
-          this.gameState.ball_x >= this.player1_x - paddleHalfWidth &&
-          this.gameState.ball_x <= this.player1_x + paddleHalfWidth
-        ) {
-          // Bounce the ball upward
-          this.gameState.ball_velocity_y *= -1;
-          // Optionally adjust horizontal velocity based on hit position
-          this.gameState.ball_velocity_x = (this.gameState.ball_x - this.player1_x) * 0.1;
-          this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          // console.log("Mobile collision: Player paddle hit.");
+        // Mobile Collision
+        const paddle1Rect = {
+          x: this.player1_x * this.canvasWidth - this.paddleHalfWidthMobile,
+          y: this.canvasHeight - 30 - this.paddleHeightMobile, // Position du paddle en bas
+          width: this.paddleHalfWidthMobile * 2,
+          height: this.paddleHeightMobile,
+        };
+
+        const opponentRect = {
+          x: this.canvasWidth * 0.5 - this.paddleHalfWidthMobile,
+          y: 20, // Position du paddle en haut
+          width: this.paddleHalfWidthMobile * 2,
+          height: this.paddleHeightMobile,
+        };
+
+        if (this.detectCollision(ballRect, paddle1Rect) && this.gameState.ball_velocity_y > 0) {
+            this.handleBallCollision(ballRect, paddle1Rect, 'y');
         }
-        // Simple opponent paddle at the top (centered horizontally)
-        const opponentPaddleX = 0.5;
-        if (
-          this.gameState.ball_y <= 0.05 &&
-          this.gameState.ball_x >= opponentPaddleX - paddleHalfWidth &&
-          this.gameState.ball_x <= opponentPaddleX + paddleHalfWidth
-        ) {
-          // Bounce the ball downward
-          this.gameState.ball_velocity_y *= -1;
-          this.gameState.ball_velocity_x = (this.gameState.ball_x - opponentPaddleX) * 0.1;
-          this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
-          // console.log("Mobile collision: Opponent paddle hit.");
+
+        if (this.detectCollision(ballRect, opponentRect) && this.gameState.ball_velocity_y < 0) {
+            this.handleBallCollision(ballRect, opponentRect, 'y');
         }
       }
     },
+
+    detectCollision(rect1, rect2) {
+      return (
+        rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+      );
+    },
+
+    handleBallCollision(ballRect, paddleRect, axis = 'x') {
+      if (axis === 'x') {
+        this.gameState.ball_velocity_x *= -1;
+        this.gameState.ball_velocity_y = (ballRect.y + ballRect.height / 2 - (paddleRect.y + paddleRect.height / 2)) * 0.1 / this.canvasHeight;
+      } else if (axis === 'y') {
+        this.gameState.ball_velocity_y *= -1;
+        this.gameState.ball_velocity_x = (ballRect.x + ballRect.width / 2 - (paddleRect.x + paddleRect.width / 2)) * 0.1 / this.canvasWidth;
+      }
+      this.ballSpeedFactor = Math.min(this.maxBallSpeed, this.ballSpeedFactor + 5);
+    },
+
     checkScore() {
       // Desktop scoring: when ball goes off left or right edges.
       if (!this.isMobile && !this.isTablette) {
@@ -294,8 +325,8 @@ export default {
 
       if (!this.isMobile && !this.isTablette) {
         // Desktop: draw vertical paddles on left and right
-        ctx.fillRect(20, this.gameState.player1_y * canvas.height - 30, 10, 60);
-        ctx.fillRect(canvas.width - 30, this.gameState.player2_y * canvas.height - 30, 10, 60);
+        ctx.fillRect(20, this.gameState.player1_y * canvas.height - this.paddleHeight / 2, this.paddleWidth, this.paddleHeight);
+        ctx.fillRect(canvas.width - 30, this.gameState.player2_y * canvas.height - this.paddleHeight / 2, this.paddleWidth, this.paddleHeight);
         // Draw scores
         ctx.font = "30px Arial";
         ctx.fillText(this.gameState.score1, canvas.width / 4, 30);
