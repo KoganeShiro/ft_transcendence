@@ -108,9 +108,9 @@ export default {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           this.gameDetails = await response.json();
-          console.log('Game details:', this.gameDetails);
+          // console.log('Game details:', this.gameDetails);
         } catch (error) {
-          console.error('Error fetching game details:', error);
+          // console.error('Error fetching game details:', error);
           this.gameDetails = {
             winner: 'N/A',
             loser: 'N/A',

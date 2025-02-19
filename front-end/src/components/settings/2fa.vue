@@ -122,7 +122,7 @@ export default {
         this.setup2FA();
       }
       this.showQR = !this.showQR;
-      console.log("showQR:", this.showQR);
+      // console.log("showQR:", this.showQR);
       return this.showQR;
     },
     async enable2FA() {
@@ -134,7 +134,7 @@ export default {
       this.loading = true;
       try {
         await API.post("/api/enable_2fa/", { otp: this.otp });
-        console.log("2FA enabled successfully:", this.otp);
+        // console.log("2FA enabled successfully:", this.otp);
         this.$emit('update:mfa_enable', true);
         this.qrCode = null;
         this.otp = "";

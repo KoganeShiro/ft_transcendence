@@ -1,45 +1,46 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
+import invitations from './invitation';
+import game from './game';
 
 export default createStore({
   state: {
-    theme: 'dark',
-    lang: 'en',
+    theme: localStorage.getItem("theme") || "dark",
+    lang: localStorage.getItem("lang") || "en"
   },
   mutations: {
-    setTheme(state, theme) {
-      state.theme = theme;
-    },
-    setLanguage(state, lang) {
+    setLang(state, lang) {
       state.lang = lang;
+      localStorage.setItem("lang", lang);
+
+      import("@/plugins/i18n").then(({ default: i18n }) => {
+        i18n.global.locale = lang;
+      });
     },
+    setTheme(state, theme) {
+      // console.log("Setting theme:", theme);
+      state.theme = theme;
+      localStorage.setItem("theme", theme);
+      document.body.setAttribute("data-theme", theme);
+    }
   },
   actions: {
-    changeTheme({ commit }, theme) {
-      const validThemes = ['light', 'dark', 'ocean', 'forest', 'volcano', 'teapot'];
-      if (validThemes.includes(theme.toLowerCase())) {
-        commit('setTheme', theme);
-      } else {
-        commit('setTheme', 'dark');
-      }
+    changeLang({ commit }, lang) {
+      commit("setLang", lang);
     },
-    changeLanguage({ commit }, lang) {
-      const validLanguages = ['en', 'fr', 'de'];
-      if (validLanguages.includes(lang.toLowerCase())) {
-        commit('setLanguage', lang);
-      } else {
-        commit('setLanguage', 'en');
-      }
+    changeTheme({ commit }, theme) {
+      commit("setTheme", theme);
     },
     initializeApp({ commit }) {
-      // Initialize the app with default settings or fetch initial data
-      const theme = localStorage.getItem('theme') || 'dark';
-      const lang = localStorage.getItem('lang') || 'en';
-      commit('setTheme', theme);
-      commit('setLanguage', lang);
-    },
+      // console.log("initializeApp action called");
+      //  can commit mutations or dispatch other actions
+    }
   },
   getters: {
-    selectedTheme: state => state.theme,
-    selectedLanguage: state => state.lang,
+    selectedLanguage: (state) => state.lang,
+    selectedTheme: (state) => state.theme
   },
+  modules: {
+    invitations,
+    game
+  }
 });

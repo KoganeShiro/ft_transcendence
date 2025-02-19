@@ -161,7 +161,7 @@ export default {
     },
     createPrivateRoom() {
       this.privateRoomCode = "Generating...";
-      console.log("Creating private room...");
+      // console.log("Creating private room...");
       this.startGameMode("create_private");
     },
     joinPrivateRoom(event) {
@@ -222,13 +222,13 @@ export default {
           this.handleMatchReady(data);
         } else if (messageType === "role_assignment") {
           this.playerRole = data.role;
-          console.log("Assigned role:", this.playerRole);
+          // console.log("Assigned role:", this.playerRole);
         } else if (messageType === "game_over") {
           this.updateCanvas();
           this.gameStarted = false;
           this.gameOverMessage = data.message;
           this.winner = data.winner;
-          console.log("End of the game, winner:", data.winner);
+          // console.log("End of the game, winner:", data.winner);
           this.handleGameEnded(data.winner);
         } else if (messageType === "private_room_code") {
           this.privateRoomCode = data.code;
@@ -253,11 +253,11 @@ export default {
         this.leftPlayer = this.opponentPlayer.pseudo;
         this.rightPlayer = this.localPlayer.pseudo;
       }
-      console.log("Opponent:", this.opponentPlayer.pseudo);
+      // console.log("Opponent:", this.opponentPlayer.pseudo);
       this.$emit('hideMessageIcon');
       this.showPopup = false;
       this.showVersus = true;
-      console.log("Match ready. Starting game...");
+      // console.log("Match ready. Starting game...");
       setTimeout(() => {
         this.showVersus = false;
         this.animationLoop();
@@ -372,7 +372,7 @@ export default {
     if (this.requestSent) return;
     this.requestSent = true;
     try {
-      console.log("Game ended. Winner:", winner);
+      // console.log("Game ended. Winner:", winner);
       // Always fetch both profiles.
       const localResponse = await API.get("/api/profile/");
       const opponentResponse = await API.get(`/api/profile/${this.opponentPlayer.pseudo}`);

@@ -69,14 +69,14 @@ export default {
       API.get("/api/profile/")
         .then(response => {
           const data = response.data;
-          console.log("Account data fetched successfully:", data);
+          // console.log("Account data fetched successfully:", data);
           this.user.name = data.username;
           this.user.cover_photo = data.cover_photo;
           this.playerNames[0] = this.user.name;
           this.$emit('updatePlayerNames', this.playerNames);
         })
         .catch(error => {
-          console.error("Error fetching account data:", error);
+          // console.error("Error fetching account data:", error);
         })
         .finally(() => {
           this.loading = false;

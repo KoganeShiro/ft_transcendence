@@ -70,8 +70,8 @@ export default {
     const show = ref(true);
     const { t } = useI18n();
     const opponentStatus = ref(t("opponent_found"));
-    console.log("Player 1:", props.player1);
-    console.log("Player 2:", props.player2);
+    // console.log("Player 1:", props.player1);
+    // console.log("Player 2:", props.player2);
 
     const emitTimeUp = () => {
       emit('time-up');

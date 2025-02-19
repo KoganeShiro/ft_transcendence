@@ -48,7 +48,7 @@ export default {
     const route = useRoute();
 
     const mode = computed(() => {
-      console.log("Route params:", route.params);
+      // console.log("Route params:", route.params);
       return route.params.mode;
     });
 

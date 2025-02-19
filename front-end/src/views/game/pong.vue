@@ -76,7 +76,7 @@ export default {
       // Fallback
       return mode.value.charAt(0).toUpperCase() + mode.value.slice(1);
     });
-    console.log(mode.value);
+    // console.log(mode.value);
     // Decide which component to render based on the mode.
     const currentComponent = computed(() => {
       switch (mode.value) {
