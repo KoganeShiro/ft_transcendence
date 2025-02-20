@@ -177,8 +177,11 @@ class TTTViewSet(viewsets.ModelViewSet):
     
 
 class LastFivePongView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated] 
+
     def list(self, request):
         logging.debug("last five pong")
+        self.check_permissions(request)  # Check permissions explicitly
         games = PongSolo.objects.filter(player1=request.user) | PongSolo.objects.filter(player2=request.user)
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = PongSerializer(last_five_games, many=True)
@@ -200,8 +203,11 @@ class LastFivePongView(viewsets.ViewSet):
         return Response(data)
 
 class LastFiveMultiView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated] 
+
     def list(self, request):
         logging.debug("last five multi")
+        self.check_permissions(request)  # Check permissions explicitly
         games = PongMulti.objects.filter(player1=request.user) | PongMulti.objects.filter(player2=request.user) | PongMulti.objects.filter(player3=request.user) | PongMulti.objects.filter(player4=request.user)      
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = MultiSerializer(last_five_games, many=True)
@@ -262,8 +268,11 @@ class LastFiveMultiView(viewsets.ViewSet):
         return Response(data)
     
 class LastFiveTTTView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated] 
+
     def list(self, request):
         logging.debug("last five ttt")
+        self.check_permissions(request)  # Check permissions explicitly
         games = TTT.objects.filter(player1=request.user) | TTT.objects.filter(player2=request.user)
         last_five_games = games.order_by('-timestamp')[:5]
         serializer = TTTSerializer(last_five_games, many=True)
