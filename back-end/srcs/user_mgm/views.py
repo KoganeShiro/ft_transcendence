@@ -193,7 +193,7 @@ def refresh_tokens(request):
 
 	
 from rest_framework_simplejwt.tokens import RefreshToken
-
+@permission_classes([IsAuthenticated])
 class Logout(APIView):
 	def post(self, request):
 		logger.debug('Logging out user (post)')
@@ -205,7 +205,7 @@ class Logout(APIView):
 		response.delete_cookie('refresh_token')  
 		return response
 	
-	@permission_classes([IsAuthenticated])
+	#@permission_classes([IsAuthenticated])
 	def get(self, request):
 		logger.debug('Logging out user (get)')
 		access_token = request.COOKIES.get('access_token')
@@ -233,9 +233,8 @@ class Logout(APIView):
 
 
 from social_django.models import UserSocialAuth
-
-class deleteAccount(APIView):    
-	@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
+class deleteAccount(APIView):    	
 	def get(self, request):
 		logger.debug('Anonymizing account')
 		access_token = request.COOKIES.get('access_token')
@@ -287,7 +286,7 @@ class RegisterView(generics.CreateAPIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getProfile(request, lookup_value=None):
-    logger.debug('Fetching profile for user %s', lookup_value)
+    logger.debug('Fetching profile for user %s (none means myself)', lookup_value)
     """
     Fetch user profile using either user ID or username.
     """

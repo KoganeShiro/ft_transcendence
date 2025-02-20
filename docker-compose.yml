@@ -35,8 +35,8 @@ services:
         condition: service_healthy
     volumes:
       - ./back-end/srcs:/usr/src/app      
-      - mediafiles:/mediafiles
-      - staticfiles:/staticfiles  
+      - mediafiles:/mediafiles 
+      - staticfiles:/staticfiles   
     restart: always
     networks:
       - pong
@@ -49,28 +49,28 @@ services:
       start_period: 10s
    # command: ["python", "manage.py", "runserver", "0.0.0.0:8000"] # change to gunicorn command for production ???
 
-  front-end:
-    build:      
-      dockerfile: front-end/Dockerfile
-    container_name: front-end
-    expose:      
-      - "5173"
-    env_file:
-      - .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./front-end:/app  
-    restart: always
-    networks:
-      - pong
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+  # front-end:
+  #   build:      
+  #     dockerfile: front-end/Dockerfile
+  #   container_name: front-end
+  #   expose:      
+  #     - "5173"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./front-end:/app  
+  #   restart: always
+  #   networks:
+  #     - pong
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:5173/ || exit 1"]
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 10s
 
 
   game-logic:
@@ -95,7 +95,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-   # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] # change to daphne or gunicorn in production ???
+  # command: ["python", "manage.py", "runserver", "0.0.0.0:8001"] 
 
 
 
@@ -130,7 +130,7 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - back-end
-      - front-end
+   #   - front-end
       - game-logic
       - nginx
     networks:
