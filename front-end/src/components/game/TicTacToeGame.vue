@@ -30,7 +30,7 @@ import defaultOImage from "@/assets/o.svg";
 // Import the AI module which provides the getAIMove function.
 import { getAIMove } from "@/components/game/TttAI.js";
 import { getProfile, getAI, postGameResult, patchGameStats } from "@/components/game/ttt_api_call.js";
-console.log("getProfile", getProfile);
+// console.log("getProfile", getProfile);
 
 export default {
   name: "TicTacToeGame",
@@ -128,8 +128,8 @@ export default {
         const userProfile = await getProfile();
         const aiProfile = await getAI();
 
-        console.log("User profile: ", userProfile.id);
-        console.log("AI profile: ", aiProfile.id);
+        // console.log("User profile: ", userProfile.id);
+        // console.log("AI profile: ", aiProfile.id);
 
         // Overwrite the winner with the respective profile id based on the winning symbol.
         if (state.board[a.row][a.col] === "X") {
@@ -138,9 +138,9 @@ export default {
           state.winner = aiProfile.id;
         }
 
-        console.log("Winner: ", state.winner);
-        console.log("AI moves: ", state.AIMoves);
-        console.log("Player moves: ", state.myMoves);
+        // console.log("Winner: ", state.winner);
+        // console.log("AI moves: ", state.AIMoves);
+        // console.log("Player moves: ", state.myMoves);
 
         // Post the game result
         await postGameResult(userProfile.id, aiProfile.id, state.winner, state.myMoves, state.AIMoves);
@@ -153,7 +153,7 @@ export default {
         } else {
           moves_nb = 15;
         }
-        console.log("moves_nb: ", moves_nb);
+        // console.log("moves_nb: ", moves_nb);
 
         // Patch game statistics based on the winner
         if (state.winner === userProfile.id) {

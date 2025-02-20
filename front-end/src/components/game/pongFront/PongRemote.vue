@@ -40,15 +40,15 @@
 	},
 	methods: {
 	  updatePlayers({ localPlayer, opponentPlayer }) {
-		console.log("[RemoteFront] updatePlayers:", localPlayer, opponentPlayer);
+		// console.log("[RemoteFront] updatePlayers:", localPlayer, opponentPlayer);
 		this.localPlayer = localPlayer;
 		this.opponentPlayer = opponentPlayer;
 	  },
 	  handleOpponentFound() {
-		console.log("[RemoteFront] Opponent found event received.");
+		// console.log("[RemoteFront] Opponent found event received.");
 	  },
 	  handleGameOver(gameOverData) {
-		console.log("[RemoteFront] Game over event received:", gameOverData);
+		// console.log("[RemoteFront] Game over event received:", gameOverData);
 		if (gameOverData.type === 'win') {
 			this.winnerName = gameOverData.winnerName;
 			this.winnerImage = gameOverData.winnerImage;
