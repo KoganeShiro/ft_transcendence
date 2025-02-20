@@ -39,9 +39,9 @@ export default {
     try {
       const response = await API.get('/api/stats/');
       this.stats = response.data;
-      console.log('Stats:', this.stats);
-      console.log('Pong stats:', this.stats.stats.Pong);
-      console.log('Tic Tac Toe stats:', this.stats.stats['Tic Tac Toe']);
+      // console.log('Stats:', this.stats);
+      // console.log('Pong stats:', this.stats.stats.Pong);
+      // console.log('Tic Tac Toe stats:', this.stats.stats['Tic Tac Toe']);
       this.loading = false;
     } catch (error) {
       console.error('Error fetching stats:', error);

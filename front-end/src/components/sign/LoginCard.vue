@@ -79,7 +79,7 @@ export default {
         this.$router.push("/profile");
       } catch (error) {
         // console.error("Login failed:", error);
-        alert("42-login-failed");
+        alert("login-failed");
       } finally {
         this.loading = false;
       }
