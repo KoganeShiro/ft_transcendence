@@ -20,3 +20,6 @@ back-end/lib64/*
 *.rdb
 /back-end/srcs/transcendence/*
 
+# Ignore .env
+.env
+

@@ -93,7 +93,7 @@ export default {
       this.activeTab = tab || "stats";
       // console.log('activeTab:', this.activeTab);
       if (this.activeTab === 'friends') {
-        this.fetchFriendsInterval = setInterval(this.fetchFriends, 3000);
+        this.fetchFriendsInterval = setInterval(this.fetchFriends, 50000);
       } else {
         // console.log('clearInterval');
         clearInterval(this.fetchFriendsInterval);
